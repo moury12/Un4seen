@@ -1,0 +1,9 @@
+export 'controllers/auth_controller.dart';
+export 'bindings/auth_binding.dart';
+export 'pages/login_page.dart';
+export 'pages/register_page.dart';
+export 'pages/otp_verification_page.dart';
+export 'pages/email_confirmation_page.dart';
+export 'pages/reset_password_page.dart';
+export 'pages/setup_profile_page.dart';
+export 'pages/setup_ride_page.dart';
