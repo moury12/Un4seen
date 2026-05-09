@@ -15,7 +15,7 @@ class AppStaticStrings {
   static const String orContinueWith = 'or continue with';
   static const String dontHaveAccountRegister = "Don't have an account? Register";
   static const String continueWithGoogle = 'Continue with Google';
-
+static const String getStarted = 'Get Started';
   static const String createAccount = 'Create Account';
   static const String joinSyndicate = 'Join the Un4seen Syndicate today';
   static const String fullName = 'Full Name';
@@ -33,6 +33,10 @@ class AppStaticStrings {
   static const String verifyCode = 'Verify Code';
 
   static const String emailConfirmation = 'Email Confirmation';
+  static const String thisIsWhereRidersGetRewarded = 'This Is Where Riders Get Rewarded.';
+  static const String theExclusiveWorldwideMotorcycleCommunityBuiltForRidersByRiders = 'The exclusive worldwide motorcycle community built for riders, by riders.';
+  static const String byContinuingYouAgreeToOurTermsOfServiceAndPrivacyPolicy = 'By continuing, you agree to our Terms of Service and Privacy Policy.';
+  static const String rideShareEarnWin = 'Ride. Share. Earn. Win.';
   static const String enterEmailVerification = 'Enter Your email for verification';
   static const String sendVerificationCode = 'Send Verification Code';
 

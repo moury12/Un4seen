@@ -5,7 +5,8 @@ class AppImages {
 
   static const String bikeShadow = '$basePath/bike_shadow_img.svg';
   static const String logo = '$basePath/logo.png';
-  static const String splash = '$basePath/splash_img.svg';
+  static const String splash = '$basePath/splash_img.png';
+  static const String bgImg = 'assets/images/background_img.png';
 }
 
 class AppIcons {
