@@ -201,22 +201,22 @@ class ProfilePage extends StatelessWidget {
               ProfileMenuTile(
                 title: AppStaticStrings.myOrders,
                 icon: AppIcons.cell,
-                onTap: () => Get.toNamed(AppRoutes.orders),
+                onTap: () => context.push(AppRoutes.orders),
               ),
               ProfileMenuTile(
                 title: AppStaticStrings.manageSubscription,
                 icon: AppIcons.subscription,
-                onTap: () => Get.toNamed(AppRoutes.subscription),
+                onTap: () => context.push(AppRoutes.subscription),
               ),
               ProfileMenuTile(
                 title: AppStaticStrings.savedStories,
                 icon: AppIcons.bookmark,
-                onTap: () => Get.toNamed(AppRoutes.savedStories),
+                onTap: () => context.push(AppRoutes.savedStories),
               ),
               ProfileMenuTile(
                 title: AppStaticStrings.savedBikeProfiles,
                 icon: AppIcons.bookmark,
-                onTap: () => Get.toNamed(AppRoutes.bikeProfiles),
+                onTap: () => context.push(AppRoutes.bikeProfiles),
               ),
               ProfileMenuTile(
                 title: AppStaticStrings.testRider,

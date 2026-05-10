@@ -1,70 +1,56 @@
 import 'package:flutter/material.dart';
-import '../../../../core/theme/app_colors.dart';
+import 'package:un4seen/src/features/stories/presentation/widgets/story_card.dart';
 import '../../../../core/utils/app_strings.dart';
-import '../../../../core/widgets/custom_scaffold.dart';
 
 class SavedStoriesPage extends StatelessWidget {
   const SavedStoriesPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return CustomScaffold(
+    return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text(AppStaticStrings.savedStories),
-        backgroundColor: Colors.transparent,
+        title: const Text(
+          AppStaticStrings.savedStories,
+          style: TextStyle(
+            color: Color(0xFF1A1A2E),
+            fontWeight: FontWeight.bold,
+            fontSize: 24,
+          ),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.white,
         elevation: 0,
-        foregroundColor: Colors.white,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Color(0xFF1A1A2E)),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
       body: GridView.builder(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(16),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          crossAxisSpacing: 15,
-          mainAxisSpacing: 15,
-          childAspectRatio: 0.8,
+          crossAxisSpacing: 12,
+          mainAxisSpacing: 12,
+          childAspectRatio: 0.65,
         ),
         itemCount: 4,
         itemBuilder: (context, index) {
-          return _buildStoryCard();
+          // Alternating slant direction based on column
+          final isLeftColumn = index % 2 == 0;
+          return StoryCard(
+            isLeft: isLeftColumn,
+            imageUrl: _sampleImages[index % _sampleImages.length],
+          );
         },
       ),
     );
   }
-
-  Widget _buildStoryCard() {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.kPrimaryColor.withOpacity(0.3)),
-        image: const DecorationImage(
-          image: NetworkImage('https://via.placeholder.com/300'),
-          fit: BoxFit.cover,
-        ),
-      ),
-      child: Stack(
-        children: [
-          Positioned(
-            bottom: 10,
-            left: 10,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              decoration: BoxDecoration(
-                color: Colors.black54,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: const Text(
-                'Sitting Pretty',
-                style: TextStyle(color: Colors.white, fontSize: 10),
-              ),
-            ),
-          ),
-          const Positioned(
-            top: 10,
-            right: 10,
-            child: Icon(Icons.bookmark, color: AppColors.kPrimaryColor, size: 20),
-          ),
-        ],
-      ),
-    );
-  }
 }
+
+const List<String> _sampleImages = [
+  'https://images.unsplash.com/photo-1558981403-c5f91bbde3ad?q=80&w=300&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1591123120675-6f7f1aae0e5b?q=80&w=300&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1599819811279-d5ad9cccf838?q=80&w=300&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1614165933026-075a46032248?q=80&w=300&auto=format&fit=crop',
+];

@@ -6,19 +6,8 @@ import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import '../../../../core/core_export.dart';
 import '../../../../core/widgets/custom_shape.dart';
 
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get/get.dart';
-import '../../../../core/theme/app_colors.dart';
-import '../../../../core/utils/app_constants.dart';
-import '../../../../core/utils/app_images.dart';
-import '../../../../core/utils/app_strings.dart';
-import '../../../../core/widgets/custom_shape.dart';
-
 class PointsBalanceCardWidget extends StatelessWidget {
-  const PointsBalanceCardWidget({
-    super.key,
-  });
+  const PointsBalanceCardWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +21,7 @@ class PointsBalanceCardWidget extends StatelessWidget {
         ],
       ), // boxBorder: Border.all(color: AppColors.kPrimaryColor, width: 1),
       padding: AppPadding.getPadding24(context),
-    
+
       child: Stack(
         children: [
           // Bike shadow image — top right watermark
@@ -41,7 +30,7 @@ class PointsBalanceCardWidget extends StatelessWidget {
             top: 0,
             child: Image.asset(AppImages.bikeShadow, height: 70),
           ),
-    
+
           Column(
             spacing: 2,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -66,7 +55,7 @@ class PointsBalanceCardWidget extends StatelessWidget {
                 ],
               ),
               space4H,
-    
+
               // Points value
               const Text(
                 '2,850',
@@ -77,9 +66,9 @@ class PointsBalanceCardWidget extends StatelessWidget {
                   height: 1.0,
                 ),
               ),
-    
+
               space4H,
-    
+
               // Birthday bonus pill
               Container(
                 padding: const EdgeInsets.symmetric(
