@@ -11,6 +11,7 @@ class AppRoutes {
   static const String setupRide = '/setup-ride';
   
   static const String home    = '/home';
+  static const String navigation = '/navigation';
   static const String profile = '/profile';
   static const String detail  = '/detail/:id';
 }

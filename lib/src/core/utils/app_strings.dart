@@ -79,4 +79,8 @@ static const String getStarted = 'Get Started';
   static const String delete = 'Delete';
   static const String retry = 'Retry';
   static const String submit = 'Submit';
+  static const String competitions = 'Competitions';
+  static const String giveaway = 'Giveaway';
+  static const String points = 'Points';
+  static const String stories = 'Stories';
 }

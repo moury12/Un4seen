@@ -11,6 +11,7 @@ import '../../features/auth/presentation/pages/email_confirmation_page.dart';
 import '../../features/auth/presentation/pages/reset_password_page.dart';
 import '../../features/auth/presentation/pages/setup_profile_page.dart';
 import '../../features/auth/presentation/pages/setup_ride_page.dart';
+import '../../features/navigation/presentation/pages/navigation_page.dart';
 
 class AppRouter {
   AppRouter._();
@@ -65,6 +66,11 @@ class AppRouter {
         path: AppRoutes.setupRide,
         name: 'setupRide',
         builder: (context, state) => const SetupRidePage(),
+      ),
+      GoRoute(
+        path: AppRoutes.navigation,
+        name: 'navigation',
+        builder: (context, state) => const NavigationPage(),
       ),
       GoRoute(
         path: AppRoutes.home,

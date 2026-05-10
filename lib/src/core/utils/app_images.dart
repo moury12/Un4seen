@@ -33,6 +33,7 @@ class AppIcons {
   static const String fb = '$basePath/fb_icon.svg';
   static const String fire = '$basePath/fire_icon.svg';
   static const String flag = '$basePath/flag_icon.svg';
+  static const String home = '$basePath/home_icon.svg';
   static const String gallery = '$basePath/gallery_icon.svg';
   static const String giveaway = '$basePath/giveaway_icon.svg';
   static const String google = '$basePath/google_icon.svg';

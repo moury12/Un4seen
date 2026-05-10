@@ -9,6 +9,12 @@ export 'core/core_export.dart';
 // Features – presentation exports
 export 'features/auth/presentation/auth_presentation_export.dart';
 export 'features/home/home_export.dart';
+export 'features/competitions/competitions_export.dart';
+export 'features/giveaway/giveaway_export.dart';
+export 'features/points/points_export.dart';
+export 'features/stories/stories_export.dart';
+export 'features/profile/profile_export.dart';
+export 'features/navigation/navigation_export.dart';
 
 // Routes
 export 'core/routes/app_router.dart';

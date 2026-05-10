@@ -90,6 +90,8 @@ class LoginPage extends StatelessWidget {
                   text: AppStaticStrings.login,
                   isLoading: ctrl.isLoading,
                   onPressed: () {
+                    context.go(AppRoutes.navigation);
+
                     // ctrl.login();
                   },
                 ),
