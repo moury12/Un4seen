@@ -9,6 +9,9 @@ import 'src/features/giveaway/presentation/bindings/giveaway_binding.dart';
 import 'src/features/points/presentation/bindings/points_binding.dart';
 import 'src/features/stories/presentation/bindings/stories_binding.dart';
 import 'src/features/profile/presentation/bindings/profile_binding.dart';
+import 'src/features/orders/presentation/bindings/orders_binding.dart';
+import 'src/features/subscription/presentation/bindings/subscription_binding.dart';
+import 'src/features/bike_profiles/presentation/bindings/bike_profiles_binding.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,6 +32,9 @@ class MyApp extends StatelessWidget {
     PointsBinding().dependencies();
     StoriesBinding().dependencies();
     ProfileBinding().dependencies();
+    OrdersBinding().dependencies();
+    SubscriptionBinding().dependencies();
+    BikeProfilesBinding().dependencies();
 
     return MaterialApp.router(
       title: 'Flutter Demo',

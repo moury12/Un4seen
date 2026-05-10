@@ -12,6 +12,10 @@ import '../../features/auth/presentation/pages/reset_password_page.dart';
 import '../../features/auth/presentation/pages/setup_profile_page.dart';
 import '../../features/auth/presentation/pages/setup_ride_page.dart';
 import '../../features/navigation/presentation/pages/navigation_page.dart';
+import '../../features/orders/presentation/pages/orders_page.dart';
+import '../../features/subscription/presentation/pages/subscription_page.dart';
+import '../../features/stories/presentation/pages/saved_stories_page.dart';
+import '../../features/bike_profiles/presentation/pages/bike_profiles_page.dart';
 
 class AppRouter {
   AppRouter._();
@@ -71,6 +75,26 @@ class AppRouter {
         path: AppRoutes.navigation,
         name: 'navigation',
         builder: (context, state) => const NavigationPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.orders,
+        name: 'orders',
+        builder: (context, state) => const OrdersPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.subscription,
+        name: 'subscription',
+        builder: (context, state) => const SubscriptionPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.savedStories,
+        name: 'savedStories',
+        builder: (context, state) => const SavedStoriesPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.bikeProfiles,
+        name: 'bikeProfiles',
+        builder: (context, state) => const SavedBikeProfilesPage(),
       ),
       GoRoute(
         path: AppRoutes.home,

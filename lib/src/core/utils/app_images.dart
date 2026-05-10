@@ -3,10 +3,11 @@ class AppImages {
 
   static const String basePath = 'assets/images';
 
-  static const String bikeShadow = '$basePath/bike_shadow_img.svg';
+  static const String bikeShadow = '$basePath/bike_shadow_img.png';
   static const String logo = '$basePath/logo.png';
   static const String splash = '$basePath/splash_img.png';
-  static const String bgImg = 'assets/images/background_img.png';
+  static const String bgImg = '$basePath/background_img.png';
+  static const String darkBgImg = '$basePath/dark_bg_img.png';
 }
 
 class AppIcons {

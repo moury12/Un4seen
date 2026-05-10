@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_auto_size_text/flutter_auto_size_text.dart';
 
 enum TextVariant {
   displayLarge, displayMedium, displaySmall,
@@ -74,12 +75,14 @@ class CustomText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
+    return AutoSizeText(
       text,
       textAlign: textAlign,
       maxLines: maxLines,
       overflow: overflow,
       softWrap: softWrap,
+      minFontSize: 8,
+      maxFontSize: fontSize,
       style: style ?? _resolveStyle(context),
     );
   }

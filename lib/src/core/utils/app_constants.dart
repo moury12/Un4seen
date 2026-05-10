@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 // ── Radius ──────────────────────────────────────────────
 const double appRadius   = 12.0;
 const double appRadius16 = 16.0;
+const double appRadius6 = 6;
 
 // ── Spacing widgets ──────────────────────────────────────
 const SizedBox space2H  = SizedBox(height: 2);
@@ -20,10 +21,13 @@ const SizedBox space16W = SizedBox(width: 16);
 class AppPadding {
   AppPadding._();
 
-  static EdgeInsets getPadding8(BuildContext ctx)    => const EdgeInsets.all(8);
-  static EdgeInsets getPadding12(BuildContext ctx)   => const EdgeInsets.all(12);
-  static EdgeInsets getPadding16(BuildContext ctx)   => const EdgeInsets.all(16);
-  static EdgeInsets getPadding24(BuildContext ctx)   => const EdgeInsets.all(24);
-  static EdgeInsets getPadding12H(BuildContext ctx)  => const EdgeInsets.symmetric(horizontal: 12);
-  static EdgeInsets getPaddingH12V4(BuildContext ctx)=> const EdgeInsets.symmetric(horizontal: 12, vertical: 4);
+  static EdgeInsets getPadding8(BuildContext context)    => const EdgeInsets.all(8);
+  static EdgeInsets getPadding4(BuildContext context)    => const EdgeInsets.all(4);
+  static EdgeInsets getPadding6(BuildContext context)    => const EdgeInsets.all(6);
+
+  static EdgeInsets getPadding12(BuildContext context)   => const EdgeInsets.all(12);
+  static EdgeInsets getPadding16(BuildContext context)   => const EdgeInsets.all(16);
+  static EdgeInsets getPadding24(BuildContext context)   => const EdgeInsets.all(24);
+  static EdgeInsets getPadding12H(BuildContext context)  => const EdgeInsets.symmetric(horizontal: 12);
+  static EdgeInsets getPaddingH12V4(BuildContext context)=> const EdgeInsets.symmetric(horizontal: 12, vertical: 4);
 }

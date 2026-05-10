@@ -13,5 +13,9 @@ class AppRoutes {
   static const String home    = '/home';
   static const String navigation = '/navigation';
   static const String profile = '/profile';
+  static const String orders  = '/orders';
+  static const String subscription = '/subscription';
+  static const String savedStories = '/saved-stories';
+  static const String bikeProfiles = '/bike-profiles';
   static const String detail  = '/detail/:id';
 }
