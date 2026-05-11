@@ -26,12 +26,22 @@ class ProfileDropdownWidget extends StatelessWidget {
         child: DropdownButton<String>(
           value: value,
           isExpanded: true,
-          dropdownColor: AppColors.kSurfaceColor,
-          icon: const Icon(Icons.keyboard_arrow_down, color: Colors.white70, size: 18),
+          dropdownColor: AppColors.kWhiteTextColor,
+          icon: const Icon(
+            Icons.keyboard_arrow_down,
+            color: AppColors.kTextColor,
+            size: 18,
+          ),
           items: options.map((String item) {
             return DropdownMenuItem<String>(
               value: item,
-              child: Text(item, style: const TextStyle(fontSize: 12, color: Colors.white)),
+              child: Text(
+                item,
+                style: const TextStyle(
+                  fontSize: 12,
+                  color: AppColors.kTextColor,
+                ),
+              ),
             );
           }).toList(),
           onChanged: onChanged,

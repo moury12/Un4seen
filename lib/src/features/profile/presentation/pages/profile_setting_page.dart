@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:un4seen/src/core/core_export.dart';
-import 'package:un4seen/src/core/widgets/custom_text_field.dart';
 import '../controllers/profile_controller.dart';
 import '../widgets/field_label_widget.dart';
 import '../widgets/profile_dropdown_widget.dart';
@@ -16,16 +15,10 @@ class ProfileSettingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          AppStaticStrings.profileSetting.tr,
-          style: const TextStyle(fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
-      ),
+      appBar: AppBar(title: Text(AppStaticStrings.profileSetting.tr)),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: AppPadding.getPadding12(context),
+          padding: AppPadding.getPadding12H(context),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -81,7 +74,7 @@ class ProfileSettingPage extends StatelessWidget {
                   ),
                 ),
               ),
-              space8H,
+              space4H,
               Center(
                 child: Container(
                   padding: const EdgeInsets.symmetric(
@@ -92,24 +85,24 @@ class ProfileSettingPage extends StatelessWidget {
                     color: AppColors.kPrimaryColor,
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  child: const Text(
+                  child: CustomText(
                     '#SYN-2847',
-                    style: TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
+                    variant: TextVariant.labelSmall,
+                    color: AppColors.kWhiteTextColor,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
               space4H,
               const Center(
-                child: Text(
+                child: CustomText(
                   '🇳🇿 New Zealand',
-                  style: TextStyle(fontSize: 12, color: Colors.white70),
+                  variant: TextVariant.labelMedium,
+                  color: AppColors.kTextColor,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
-              space24H,
+              space4H,
 
               // Forms
               // Forms
@@ -121,96 +114,78 @@ class ProfileSettingPage extends StatelessWidget {
                   color: AppColors.kPrimaryColor,
                   size: 18,
                 ),
-                fillColor: AppColors.kSurfaceColor,
+
                 borderColor: AppColors.kPrimaryColor,
               ),
-              space12H,
+              space4H,
               FieldLabelWidget(label: AppStaticStrings.aboutMe.tr),
               CustomTextField(
                 hintText: controller.aboutMe.value,
                 maxLines: 4,
-                fillColor: AppColors.kSurfaceColor,
+
                 borderColor: AppColors.kPrimaryColor,
               ),
-              space12H,
+              space4H,
               FieldLabelWidget(label: AppStaticStrings.facebookUrl.tr),
               CustomTextField(
                 hintText: controller.facebookUrl.value,
                 prefixIcon: Padding(
                   padding: const EdgeInsets.all(12.0),
-                  child: SvgPicture.asset(
-                    AppIcons.fb,
-                    colorFilter: const ColorFilter.mode(
-                      AppColors.kPrimaryColor,
-                      BlendMode.srcIn,
-                    ),
-                  ),
+                  child: SvgPicture.asset(AppIcons.fb),
                 ),
-                fillColor: AppColors.kSurfaceColor,
+
                 borderColor: AppColors.kPrimaryColor,
               ),
-              space12H,
+              space4H,
               FieldLabelWidget(label: AppStaticStrings.instagramUrl.tr),
               CustomTextField(
                 hintText: controller.instagramUrl.value,
                 prefixIcon: Padding(
                   padding: const EdgeInsets.all(12.0),
-                  child: SvgPicture.asset(
-                    AppIcons.ig,
-                    colorFilter: const ColorFilter.mode(
-                      AppColors.kPrimaryColor,
-                      BlendMode.srcIn,
-                    ),
-                  ),
+                  child: SvgPicture.asset(AppIcons.ig),
                 ),
-                fillColor: AppColors.kSurfaceColor,
+
                 borderColor: AppColors.kPrimaryColor,
               ),
-              space12H,
+              space4H,
               FieldLabelWidget(label: AppStaticStrings.tiktokUrl.tr),
               CustomTextField(
                 hintText: controller.tiktokUrl.value,
                 prefixIcon: Padding(
                   padding: const EdgeInsets.all(12.0),
-                  child: SvgPicture.asset(
-                    AppIcons.tictok,
-                    colorFilter: const ColorFilter.mode(
-                      AppColors.kPrimaryColor,
-                      BlendMode.srcIn,
-                    ),
-                  ),
+                  child: SvgPicture.asset(AppIcons.tictok),
                 ),
-                fillColor: AppColors.kSurfaceColor,
+
                 borderColor: AppColors.kPrimaryColor,
               ),
-              space12H,
+              space4H,
               FieldLabelWidget(label: AppStaticStrings.emailAddress.tr),
               CustomTextField(
                 hintText: controller.email.value,
-                fillColor: AppColors.kSurfaceColor,
+
                 borderColor: AppColors.kPrimaryColor,
               ),
-              space12H,
+              space4H,
               FieldLabelWidget(label: AppStaticStrings.mobileNumber.tr),
               CustomTextField(
                 hintText: controller.mobileNumber.value,
-                fillColor: AppColors.kSurfaceColor,
+
                 borderColor: AppColors.kPrimaryColor,
               ),
-              space12H,
+              space4H,
               FieldLabelWidget(label: AppStaticStrings.deliveryAddress.tr),
               CustomTextField(
                 hintText: AppStaticStrings.streetAddress.tr,
-                fillColor: AppColors.kSurfaceColor,
+
                 borderColor: AppColors.kPrimaryColor,
               ),
-              space12H,
+              space4H,
               Row(
                 children: [
                   Expanded(
                     child: CustomTextField(
                       hintText: AppStaticStrings.city.tr,
-                      fillColor: AppColors.kSurfaceColor,
+
                       borderColor: AppColors.kPrimaryColor,
                     ),
                   ),
@@ -218,19 +193,19 @@ class ProfileSettingPage extends StatelessWidget {
                   Expanded(
                     child: CustomTextField(
                       hintText: AppStaticStrings.postalCode.tr,
-                      fillColor: AppColors.kSurfaceColor,
+
                       borderColor: AppColors.kPrimaryColor,
                     ),
                   ),
                 ],
               ),
-              space12H,
+              space4H,
               CustomTextField(
                 hintText: AppStaticStrings.stateRegion.tr,
-                fillColor: AppColors.kSurfaceColor,
+
                 borderColor: AppColors.kPrimaryColor,
               ),
-              space12H,
+              space4H,
               FieldLabelWidget(label: AppStaticStrings.clothingFit.tr),
               Obx(
                 () => ProfileDropdownWidget(
@@ -239,7 +214,7 @@ class ProfileSettingPage extends StatelessWidget {
                   onChanged: (v) => controller.selectedClothingFit.value = v!,
                 ),
               ),
-              space12H,
+              space4H,
               FieldLabelWidget(label: AppStaticStrings.tshirtSize.tr),
               Obx(
                 () => ProfileDropdownWidget(
@@ -248,7 +223,7 @@ class ProfileSettingPage extends StatelessWidget {
                   onChanged: (v) => controller.selectedTShirtSize.value = v!,
                 ),
               ),
-              space12H,
+              space4H,
               FieldLabelWidget(label: AppStaticStrings.hoodieJerseySize.tr),
               Obx(
                 () => ProfileDropdownWidget(
@@ -257,21 +232,21 @@ class ProfileSettingPage extends StatelessWidget {
                   onChanged: (v) => controller.selectedHoodieSize.value = v!,
                 ),
               ),
-              space12H,
+              space4H,
               FieldLabelWidget(label: AppStaticStrings.bikeModel.tr),
               CustomTextField(
                 hintText: 'Yamaha Yz450f',
-                fillColor: AppColors.kSurfaceColor,
+
                 borderColor: AppColors.kPrimaryColor,
               ),
-              space12H,
+              space4H,
               FieldLabelWidget(label: AppStaticStrings.year.tr),
               CustomTextField(
                 hintText: '2024',
-                fillColor: AppColors.kSurfaceColor,
+
                 borderColor: AppColors.kPrimaryColor,
               ),
-              space12H,
+              space4H,
               FieldLabelWidget(label: AppStaticStrings.rideType.tr),
               Obx(
                 () => Wrap(
@@ -286,7 +261,7 @@ class ProfileSettingPage extends StatelessWidget {
                   }).toList(),
                 ),
               ),
-              space12H,
+              space4H,
               FieldLabelWidget(label: AppStaticStrings.ridingLevel.tr),
               Obx(
                 () => Wrap(
@@ -303,7 +278,8 @@ class ProfileSettingPage extends StatelessWidget {
                   }).toList(),
                 ),
               ),
-              space24H,
+              space8H,
+              CustomButton(text: AppStaticStrings.save.tr, onPressed: () {}),
             ],
           ),
         ),

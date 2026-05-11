@@ -12,7 +12,11 @@ class FieldLabelWidget extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 6),
       child: Text(
         label,
-        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.kWhiteTextColor),
+        style: const TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.bold,
+          color: AppColors.kTextColor,
+        ),
       ),
     );
   }
