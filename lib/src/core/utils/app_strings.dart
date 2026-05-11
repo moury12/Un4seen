@@ -19,6 +19,7 @@ class AppStaticStrings {
   static const String getStarted = 'Get Started';
   static const String yourShredPointsBalance = 'Your Shared Points Balance';
   static const String messageUn4seen = 'Message Un4seen';
+  static const String myBikeProfile = 'My Bike Profile';
   static const String createAccount = 'Create Account';
   static const String joinSyndicate = 'Join the Un4seen Syndicate today';
   static const String fullName = 'Full Name';
@@ -172,4 +173,5 @@ class AppStaticStrings {
   // Members List
   static const String followers = 'followers';
   static const String exclusiveSyndicateMember = 'Exclusive Syndicate Member';
+  static const String download = 'Download';
 }

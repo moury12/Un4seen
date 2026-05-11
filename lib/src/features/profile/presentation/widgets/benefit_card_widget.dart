@@ -22,7 +22,11 @@ class BenefitCardWidget extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: AppColors.kPrimaryDarkColor,
+          gradient: LinearGradient(
+            colors: [AppColors.kPrimaryDarkColor, AppColors.kPrimaryDarkColor2],
+            begin: Alignment.bottomCenter,
+            end: Alignment.topCenter,
+          ),
           border: Border.all(color: AppColors.kPrimaryColor, width: 1),
         ),
         child: Row(

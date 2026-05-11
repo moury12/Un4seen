@@ -19,6 +19,7 @@ import '../../features/bike_profiles/presentation/pages/bike_profiles_page.dart'
 import '../../features/profile/presentation/pages/settings_page.dart';
 import '../../features/profile/presentation/pages/profile_setting_page.dart';
 import '../../features/profile/presentation/pages/test_rider_program_page.dart';
+import '../../features/stories/presentation/pages/story_full_page.dart';
 
 class AppRouter {
   AppRouter._();
@@ -107,12 +108,24 @@ class AppRouter {
       GoRoute(
         path: AppRoutes.profileSetting,
         name: 'profileSetting',
-        builder: (context, state) => const ProfileSettingPage(),
+        builder: (context, state) =>  ProfileSettingPage(),
       ),
       GoRoute(
         path: AppRoutes.testRiderProgram,
         name: 'testRiderProgram',
         builder: (context, state) => const TestRiderProgramPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.storyFull,
+        name: 'storyFull',
+        builder: (context, state) {
+          final args = state.extra as Map<String, dynamic>? ?? {};
+          return StoryFullPage(
+            imageUrl: args['imageUrl'] ?? '',
+            name: args['name'] ?? '',
+            time: args['time'] ?? '',
+          );
+        },
       ),
       GoRoute(
         path: AppRoutes.home,

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:un4seen/src/core/core_export.dart';
+import 'package:un4seen/src/core/routes/app_routes.dart';
 import 'package:un4seen/src/core/widgets/custom_network_image.dart';
-import '../../../../core/theme/app_colors.dart';
 import '../widgets/story_card_custom_shape.dart';
 
 class StoryCard extends StatelessWidget {
@@ -12,7 +13,16 @@ class StoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GenericSlantedCard(
+    return GestureDetector(
+      onTap: () => context.push(
+        AppRoutes.storyFull,
+        extra: {
+          'imageUrl': imageUrl,
+          'name': 'Sarah Martinez 🇦🇴',
+          'time': '2h ago',
+        },
+      ),
+      child: GenericSlantedCard(
       isLeft: isLeft,
       // borderColor: AppColors.kPrimaryColor,
       // borderWidth: 2,
@@ -71,7 +81,7 @@ class StoryCard extends StatelessWidget {
           ),
         ],
       ),
-    );
+    ));
   }
 
   Widget _buildBadge(String text, BuildContext context) {

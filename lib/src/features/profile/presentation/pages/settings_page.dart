@@ -12,58 +12,76 @@ class SettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppStaticStrings.settings.tr, style: const TextStyle(fontWeight: FontWeight.bold)),
+        title: Text(
+          AppStaticStrings.settings.tr,
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
         centerTitle: true,
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: AppPadding.getPadding12(context),
+          padding: AppPadding.getPadding12H(context),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              space12H,
               Text(
                 'Account',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.kWhiteTextColor,
+                  color: AppColors.kTextColor,
                 ),
               ),
-              space12H,
+              space8H,
               ProfileMenuTile(
                 title: AppStaticStrings.profileSetting.tr,
-                iconWidget: const Icon(Icons.person_outline, color: AppColors.kPrimaryColor, size: 20),
+                icon: AppIcons.person,
                 onTap: () => context.push(AppRoutes.profileSetting),
               ),
               ProfileMenuTile(
                 title: AppStaticStrings.members.tr,
-                iconWidget: const Icon(Icons.people_outline, color: AppColors.kPrimaryColor, size: 20),
+                icon: AppIcons.groupPeople,
                 onTap: () {},
               ),
               ProfileMenuTile(
                 title: AppStaticStrings.referAndEarn.tr,
-                iconWidget: const Icon(Icons.share_outlined, color: AppColors.kPrimaryColor, size: 20),
+                icon: AppIcons.share,
                 onTap: () {},
               ),
               ProfileMenuTile(
                 title: AppStaticStrings.changePassword.tr,
-                iconWidget: const Icon(Icons.lock_outline, color: AppColors.kPrimaryColor, size: 20),
+                iconWidget: const Icon(
+                  Icons.lock_outline,
+                  color: AppColors.kPrimaryColor,
+                  size: 20,
+                ),
                 onTap: () {},
               ),
               ProfileMenuTile(
                 title: AppStaticStrings.aboutUs.tr,
-                iconWidget: const Icon(Icons.info_outline, color: AppColors.kPrimaryColor, size: 20),
+                iconWidget: const Icon(
+                  Icons.info_outline,
+                  color: AppColors.kPrimaryColor,
+                  size: 20,
+                ),
                 onTap: () {},
               ),
               ProfileMenuTile(
                 title: AppStaticStrings.privacyPolicy.tr,
-                iconWidget: const Icon(Icons.privacy_tip_outlined, color: AppColors.kPrimaryColor, size: 20),
+                iconWidget: const Icon(
+                  Icons.privacy_tip_outlined,
+                  color: AppColors.kPrimaryColor,
+                  size: 20,
+                ),
                 onTap: () {},
               ),
               ProfileMenuTile(
                 title: AppStaticStrings.termsAndConditions.tr,
-                iconWidget: const Icon(Icons.description_outlined, color: AppColors.kPrimaryColor, size: 20),
+                iconWidget: const Icon(
+                  Icons.description_outlined,
+                  color: AppColors.kPrimaryColor,
+                  size: 20,
+                ),
                 onTap: () {},
               ),
             ],

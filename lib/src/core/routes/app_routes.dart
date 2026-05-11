@@ -20,5 +20,6 @@ class AppRoutes {
   static const String settings = '/settings';
   static const String profileSetting = '/profile-setting';
   static const String testRiderProgram = '/test-rider-program';
+  static const String storyFull = '/story-full';
   static const String detail  = '/detail/:id';
 }

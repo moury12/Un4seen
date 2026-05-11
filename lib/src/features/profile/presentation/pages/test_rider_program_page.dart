@@ -113,7 +113,14 @@ class TestRiderProgramPage extends StatelessWidget {
               Container(
                 padding: AppPadding.getPadding12(context),
                 decoration: BoxDecoration(
-                  color: AppColors.kPrimaryColor,
+                  gradient: LinearGradient(
+                    colors: [
+                      AppColors.kPrimaryColor,
+                      AppColors.kPrimaryDarkColor,
+                    ],
+                    end: Alignment.bottomCenter,
+                    begin: Alignment.topCenter,
+                  ),
                   borderRadius: BorderRadius.circular(appRadius),
                 ),
                 child: Column(
@@ -124,16 +131,14 @@ class TestRiderProgramPage extends StatelessWidget {
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
-                        color: AppColors.kTextColor,
+                        color: AppColors.kWhiteTextColor,
                       ),
                     ),
                     space8H,
                     CustomText(
                       AppStaticStrings.whyShouldYouBecomeTestRider.tr,
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: AppColors.kTextColor.withValues(alpha: 0.9),
-                      ),
+                      variant: TextVariant.labelMedium,
+                      color: AppColors.kWhiteTextColor,
                     ),
                     space8H,
                     Container(
@@ -142,19 +147,19 @@ class TestRiderProgramPage extends StatelessWidget {
                         color: AppColors.kSurfaceColor,
                         borderRadius: BorderRadius.circular(appRadius),
                       ),
-                      child: TextField(
-                        maxLines: 4,
-                        decoration: InputDecoration(
-                          hintText: AppStaticStrings
-                              .tellUsAboutYourRidingExperience
-                              .tr,
-                          hintStyle: TextStyle(
-                            fontSize: 12,
-                            color: AppColors.kSecondaryTextColor,
+                      child: Column(
+                        children: [
+                          CustomText(
+                            AppStaticStrings.tellUsAboutYourRidingExperience.tr,
+                            variant: TextVariant.labelMedium,
+                            color: AppColors.kTextColor,
                           ),
-                          border: InputBorder.none,
-                          contentPadding: EdgeInsets.zero,
-                        ),
+                          CustomTextField(
+                            maxLines: 3,
+                            hintText: "",
+                            borderColor: Colors.transparent,
+                          ),
+                        ],
                       ),
                     ),
                     space8H,
@@ -163,6 +168,7 @@ class TestRiderProgramPage extends StatelessWidget {
                       child: CustomButton(
                         text: AppStaticStrings.submitApplication.tr,
                         onPressed: () {},
+                        icon: Icons.send,
                         // icon:  Icon(AppIcons.access,
                       ),
                     ),
@@ -173,7 +179,7 @@ class TestRiderProgramPage extends StatelessWidget {
               Container(
                 padding: AppPadding.getPadding12(context),
                 decoration: BoxDecoration(
-                  color: AppColors.kSurfaceColor,
+                  color: AppColors.kPrimaryDarkColor2,
                   borderRadius: BorderRadius.circular(appRadius),
                   border: Border.all(color: AppColors.kPrimaryDarkColor2),
                 ),
@@ -185,7 +191,7 @@ class TestRiderProgramPage extends StatelessWidget {
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
-                        color: AppColors.kTextColor,
+                        color: AppColors.kWhiteTextColor,
                       ),
                     ),
                     space8H,

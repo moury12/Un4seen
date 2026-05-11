@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:un4seen/src/core/core_export.dart';
+import 'package:un4seen/src/core/widgets/custom_text_field.dart';
+import '../controllers/profile_controller.dart';
 import '../widgets/field_label_widget.dart';
-import '../widgets/profile_text_field_widget.dart';
 import '../widgets/profile_dropdown_widget.dart';
 import '../widgets/profile_pill_widget.dart';
 
 class ProfileSettingPage extends StatelessWidget {
-  const ProfileSettingPage({super.key});
+  ProfileSettingPage({super.key});
+
+  final controller = Get.put(ProfileController());
 
   @override
   Widget build(BuildContext context) {
@@ -27,42 +31,54 @@ class ProfileSettingPage extends StatelessWidget {
             children: [
               // Avatar with camera icon
               Center(
-                child: Stack(
-                  children: [
-                    Container(
-                      width: 80,
-                      height: 80,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: AppColors.kPrimaryColor,
-                          width: 2,
-                        ),
-                        image: const DecorationImage(
-                          image: NetworkImage(
-                            'https://i.pravatar.cc/150?img=11',
+                child: GestureDetector(
+                  onTap: controller.pickImage,
+                  child: Stack(
+                    children: [
+                      Obx(
+                        () => Container(
+                          width: 80,
+                          height: 80,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: AppColors.kPrimaryColor,
+                              width: 2,
+                            ),
+                            image: controller.profileImage.value != null
+                                ? DecorationImage(
+                                    image: FileImage(
+                                      controller.profileImage.value!,
+                                    ),
+                                    fit: BoxFit.cover,
+                                  )
+                                : const DecorationImage(
+                                    image: NetworkImage(
+                                      'https://i.pravatar.cc/150?img=11',
+                                    ),
+                                    fit: BoxFit.cover,
+                                  ),
                           ),
-                          fit: BoxFit.cover,
                         ),
                       ),
-                    ),
-                    Positioned(
-                      bottom: 0,
-                      right: 0,
-                      child: Container(
-                        padding: const EdgeInsets.all(4),
-                        decoration: const BoxDecoration(
-                          color: AppColors.kPrimaryColor,
-                          shape: BoxShape.circle,
-                        ),
-                        child: const Icon(
-                          Icons.camera_alt,
-                          size: 14,
-                          color: Colors.white,
+                      Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: Container(
+                          padding: const EdgeInsets.all(4),
+                          decoration: const BoxDecoration(
+                            color: AppColors.kPrimaryColor,
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(
+                            Icons.camera_alt,
+                            size: 14,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
               space8H,
@@ -96,81 +112,196 @@ class ProfileSettingPage extends StatelessWidget {
               space24H,
 
               // Forms
+              // Forms
               FieldLabelWidget(label: AppStaticStrings.fullName.tr),
-              const ProfileTextFieldWidget(hint: 'Nahid Hossain', icon: Icons.person_outline),
+              CustomTextField(
+                hintText: controller.fullName.value,
+                prefixIcon: const Icon(
+                  Icons.person_outline,
+                  color: AppColors.kPrimaryColor,
+                  size: 18,
+                ),
+                fillColor: AppColors.kSurfaceColor,
+                borderColor: AppColors.kPrimaryColor,
+              ),
               space12H,
               FieldLabelWidget(label: AppStaticStrings.aboutMe.tr),
-              const ProfileTextFieldWidget(hint: 'I\'m a passionate and creative individual...', maxLines: 4),
+              CustomTextField(
+                hintText: controller.aboutMe.value,
+                maxLines: 4,
+                fillColor: AppColors.kSurfaceColor,
+                borderColor: AppColors.kPrimaryColor,
+              ),
               space12H,
               FieldLabelWidget(label: AppStaticStrings.facebookUrl.tr),
-              const ProfileTextFieldWidget(hint: '@nahiddd1', icon: Icons.facebook),
+              CustomTextField(
+                hintText: controller.facebookUrl.value,
+                prefixIcon: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: SvgPicture.asset(
+                    AppIcons.fb,
+                    colorFilter: const ColorFilter.mode(
+                      AppColors.kPrimaryColor,
+                      BlendMode.srcIn,
+                    ),
+                  ),
+                ),
+                fillColor: AppColors.kSurfaceColor,
+                borderColor: AppColors.kPrimaryColor,
+              ),
               space12H,
               FieldLabelWidget(label: AppStaticStrings.instagramUrl.tr),
-              const ProfileTextFieldWidget(hint: '@nahiddd1', icon: Icons.camera_alt_outlined),
+              CustomTextField(
+                hintText: controller.instagramUrl.value,
+                prefixIcon: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: SvgPicture.asset(
+                    AppIcons.ig,
+                    colorFilter: const ColorFilter.mode(
+                      AppColors.kPrimaryColor,
+                      BlendMode.srcIn,
+                    ),
+                  ),
+                ),
+                fillColor: AppColors.kSurfaceColor,
+                borderColor: AppColors.kPrimaryColor,
+              ),
               space12H,
               FieldLabelWidget(label: AppStaticStrings.tiktokUrl.tr),
-              const ProfileTextFieldWidget(hint: '@nahiddd1', icon: Icons.music_note_outlined),
+              CustomTextField(
+                hintText: controller.tiktokUrl.value,
+                prefixIcon: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: SvgPicture.asset(
+                    AppIcons.tictok,
+                    colorFilter: const ColorFilter.mode(
+                      AppColors.kPrimaryColor,
+                      BlendMode.srcIn,
+                    ),
+                  ),
+                ),
+                fillColor: AppColors.kSurfaceColor,
+                borderColor: AppColors.kPrimaryColor,
+              ),
               space12H,
               FieldLabelWidget(label: AppStaticStrings.emailAddress.tr),
-              const ProfileTextFieldWidget(hint: 'nahid@gmail.com'),
+              CustomTextField(
+                hintText: controller.email.value,
+                fillColor: AppColors.kSurfaceColor,
+                borderColor: AppColors.kPrimaryColor,
+              ),
               space12H,
               FieldLabelWidget(label: AppStaticStrings.mobileNumber.tr),
-              const ProfileTextFieldWidget(hint: '02-8312024'), // Skipping country picker for simplicity
+              CustomTextField(
+                hintText: controller.mobileNumber.value,
+                fillColor: AppColors.kSurfaceColor,
+                borderColor: AppColors.kPrimaryColor,
+              ),
               space12H,
               FieldLabelWidget(label: AppStaticStrings.deliveryAddress.tr),
-              ProfileTextFieldWidget(hint: AppStaticStrings.streetAddress.tr),
+              CustomTextField(
+                hintText: AppStaticStrings.streetAddress.tr,
+                fillColor: AppColors.kSurfaceColor,
+                borderColor: AppColors.kPrimaryColor,
+              ),
               space12H,
               Row(
                 children: [
-                  Expanded(child: ProfileTextFieldWidget(hint: AppStaticStrings.city.tr)),
+                  Expanded(
+                    child: CustomTextField(
+                      hintText: AppStaticStrings.city.tr,
+                      fillColor: AppColors.kSurfaceColor,
+                      borderColor: AppColors.kPrimaryColor,
+                    ),
+                  ),
                   space12W,
-                  Expanded(child: ProfileTextFieldWidget(hint: AppStaticStrings.postalCode.tr)),
+                  Expanded(
+                    child: CustomTextField(
+                      hintText: AppStaticStrings.postalCode.tr,
+                      fillColor: AppColors.kSurfaceColor,
+                      borderColor: AppColors.kPrimaryColor,
+                    ),
+                  ),
                 ],
               ),
               space12H,
-              ProfileTextFieldWidget(hint: AppStaticStrings.stateRegion.tr),
+              CustomTextField(
+                hintText: AppStaticStrings.stateRegion.tr,
+                fillColor: AppColors.kSurfaceColor,
+                borderColor: AppColors.kPrimaryColor,
+              ),
               space12H,
               FieldLabelWidget(label: AppStaticStrings.clothingFit.tr),
-              const ProfileDropdownWidget(value: 'Mens'),
+              Obx(
+                () => ProfileDropdownWidget(
+                  value: controller.selectedClothingFit.value,
+                  options: controller.clothingFitList,
+                  onChanged: (v) => controller.selectedClothingFit.value = v!,
+                ),
+              ),
               space12H,
               FieldLabelWidget(label: AppStaticStrings.tshirtSize.tr),
-              const ProfileDropdownWidget(value: 'M'),
+              Obx(
+                () => ProfileDropdownWidget(
+                  value: controller.selectedTShirtSize.value,
+                  options: controller.sizeList,
+                  onChanged: (v) => controller.selectedTShirtSize.value = v!,
+                ),
+              ),
               space12H,
               FieldLabelWidget(label: AppStaticStrings.hoodieJerseySize.tr),
-              const ProfileDropdownWidget(value: 'M'),
+              Obx(
+                () => ProfileDropdownWidget(
+                  value: controller.selectedHoodieSize.value,
+                  options: controller.sizeList,
+                  onChanged: (v) => controller.selectedHoodieSize.value = v!,
+                ),
+              ),
               space12H,
               FieldLabelWidget(label: AppStaticStrings.bikeModel.tr),
-              const ProfileTextFieldWidget(hint: 'Yamaha Yz450f'),
+              CustomTextField(
+                hintText: 'Yamaha Yz450f',
+                fillColor: AppColors.kSurfaceColor,
+                borderColor: AppColors.kPrimaryColor,
+              ),
               space12H,
               FieldLabelWidget(label: AppStaticStrings.year.tr),
-              const ProfileTextFieldWidget(hint: '2024'),
+              CustomTextField(
+                hintText: '2024',
+                fillColor: AppColors.kSurfaceColor,
+                borderColor: AppColors.kPrimaryColor,
+              ),
               space12H,
               FieldLabelWidget(label: AppStaticStrings.rideType.tr),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: [
-                  const ProfilePillWidget(text: 'MX', isSelected: true),
-                  const ProfilePillWidget(text: 'Enduro', isSelected: true),
-                  const ProfilePillWidget(text: 'Ebike', isSelected: true),
-                  const ProfilePillWidget(text: 'Atv', isSelected: true),
-                  const ProfilePillWidget(text: 'Adventure', isSelected: true),
-                  const ProfilePillWidget(text: 'Road', isSelected: true),
-                  const ProfilePillWidget(text: 'Cruiser', isSelected: true),
-                  const ProfilePillWidget(text: 'Gokart', isSelected: true),
-                  const ProfilePillWidget(text: 'MTB', isSelected: true),
-                ],
+              Obx(
+                () => Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: controller.rideTypeList.map((type) {
+                    return ProfilePillWidget(
+                      text: type,
+                      isSelected: controller.selectedRideTypes.contains(type),
+                      onTap: () => controller.toggleRideType(type),
+                    );
+                  }).toList(),
+                ),
               ),
               space12H,
               FieldLabelWidget(label: AppStaticStrings.ridingLevel.tr),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: [
-                  const ProfilePillWidget(text: 'Beginner', isSelected: true),
-                  const ProfilePillWidget(text: 'Intermediate', isSelected: true),
-                  const ProfilePillWidget(text: 'Recreational', isSelected: true),
-                ],
+              Obx(
+                () => Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: controller.ridingLevelList.map((level) {
+                    return ProfilePillWidget(
+                      text: level,
+                      isSelected: controller.selectedRidingLevels.contains(
+                        level,
+                      ),
+                      onTap: () => controller.toggleRidingLevel(level),
+                    );
+                  }).toList(),
+                ),
               ),
               space24H,
             ],
