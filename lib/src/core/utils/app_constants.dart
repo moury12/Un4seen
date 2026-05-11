@@ -15,6 +15,7 @@ const SizedBox space24H = SizedBox(height: 24);
 
 const SizedBox space4W  = SizedBox(width: 4);
 const SizedBox space8W  = SizedBox(width: 8);
+const SizedBox space12W = SizedBox(width: 12);
 const SizedBox space16W = SizedBox(width: 16);
 
 // ── Padding helpers ──────────────────────────────────────

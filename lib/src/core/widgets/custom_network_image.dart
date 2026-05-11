@@ -134,12 +134,17 @@ class CustomNetworkImage extends StatelessWidget {
                   : BorderRadius.circular(radius ?? 8),
 
               color: Colors.grey.withValues(alpha: 0.6),
-              image: DecorationImage(
-                image: AssetImage(
-                  imageErrorUrl ?? 'assets/icons/placeholder.png',
-                ),
-                fit: BoxFit.cover,
-              ),
+
+              // image: DecorationImage(
+              //   image: AssetImage(
+
+              //   ),
+              //   fit: BoxFit.cover,
+              // ),
+            ),
+            child: Image.asset(
+              imageErrorUrl ?? 'assets/icons/placeholder.png',
+              fit: BoxFit.cover,
             ),
           );
         },

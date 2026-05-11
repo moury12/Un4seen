@@ -16,8 +16,13 @@ class AppTheme {
       backgroundColor: AppColors.kSurfaceColor,
       foregroundColor: Color.fromRGBO(26, 26, 46, 1),
       elevation: 0,
-      centerTitle: false,
+      centerTitle: true,
       surfaceTintColor: Colors.transparent,
+      titleTextStyle: TextStyle(
+        color: Colors.black,
+        fontSize: 18,
+        fontWeight: FontWeight.w600,
+      ),
     ),
     textTheme: const TextTheme(
       displayLarge: TextStyle(

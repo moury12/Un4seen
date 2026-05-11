@@ -16,6 +16,9 @@ import '../../features/orders/presentation/pages/orders_page.dart';
 import '../../features/subscription/presentation/pages/subscription_page.dart';
 import '../../features/stories/presentation/pages/saved_stories_page.dart';
 import '../../features/bike_profiles/presentation/pages/bike_profiles_page.dart';
+import '../../features/profile/presentation/pages/settings_page.dart';
+import '../../features/profile/presentation/pages/profile_setting_page.dart';
+import '../../features/profile/presentation/pages/test_rider_program_page.dart';
 
 class AppRouter {
   AppRouter._();
@@ -95,6 +98,21 @@ class AppRouter {
         path: AppRoutes.bikeProfiles,
         name: 'bikeProfiles',
         builder: (context, state) => const SavedBikeProfilesPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.settings,
+        name: 'settings',
+        builder: (context, state) => const SettingsPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.profileSetting,
+        name: 'profileSetting',
+        builder: (context, state) => const ProfileSettingPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.testRiderProgram,
+        name: 'testRiderProgram',
+        builder: (context, state) => const TestRiderProgramPage(),
       ),
       GoRoute(
         path: AppRoutes.home,

@@ -25,6 +25,8 @@ class AppIcons {
   static const String camera =
       '$basePath/camer_icon.svg'; // camer_icon.svg typo in filename
   static const String car = '$basePath/car_icon.svg';
+  static const String groupPeople = '$basePath/group_people_icon.svg';
+  static const String cycle = '$basePath/cycle_icon.svg';
   static const String cell = '$basePath/cell_icon.svg';
   static const String chat = '$basePath/chat_icon.svg';
   static const String colorPlate = '$basePath/color_plate_icon.svg';

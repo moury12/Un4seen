@@ -64,7 +64,7 @@ class ProfilePage extends StatelessWidget {
                             CustomText('🇺🇸', fontSize: 16),
                             Spacer(),
                             IconButton(
-                              onPressed: () {},
+                              onPressed: () => context.push(AppRoutes.settings),
                               icon: const Icon(
                                 Icons.settings_outlined,
                                 color: Colors.black,
@@ -221,7 +221,7 @@ class ProfilePage extends StatelessWidget {
               ProfileMenuTile(
                 title: AppStaticStrings.testRider,
                 icon: AppIcons.ride,
-                onTap: () {},
+                onTap: () => context.push(AppRoutes.testRiderProgram),
               ),
 
               const SizedBox(height: 8),
@@ -232,7 +232,7 @@ class ProfilePage extends StatelessWidget {
                 textColor: AppColors.kRedColor,
                 borderColor: AppColors.kRedColor,
                 text: AppStaticStrings.logOut,
-                onPressed: () => context.go(AppRoutes.login),
+                onPressed: () => _showLogoutDialog(context),
               ),
 
               const SizedBox(height: 32),
@@ -267,6 +267,73 @@ class ProfilePage extends StatelessWidget {
       height: 29,
       width: 1,
       color: Colors.black.withValues(alpha: 0.2),
+    );
+  }
+
+  void _showLogoutDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                AppStaticStrings.logoutPopup.tr,
+                style: const TextStyle(color: Colors.white70, fontSize: 14),
+              ),
+              space8H,
+              Container(
+                padding: const EdgeInsets.all(24),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      AppStaticStrings.areYouSureLogout.tr,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    space24H,
+                    Row(
+                      children: [
+                        Expanded(
+                          child: CustomButton(
+                            text: AppStaticStrings.no.tr,
+                            isOutlined: true,
+                            textColor: AppColors.kPrimaryColor,
+                            borderColor: AppColors.kPrimaryColor,
+                            onPressed: () => Navigator.pop(context),
+                          ),
+                        ),
+                        space8W,
+                        Expanded(
+                          child: CustomButton(
+                            text: AppStaticStrings.yes.tr,
+                            onPressed: () {
+                              Navigator.pop(context);
+                              context.go(AppRoutes.login);
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

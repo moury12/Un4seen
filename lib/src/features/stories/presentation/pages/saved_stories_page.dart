@@ -30,8 +30,8 @@ class SavedStoriesPage extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          crossAxisSpacing: 12,
-          mainAxisSpacing: 12,
+          crossAxisSpacing: 10,
+          mainAxisSpacing: 1,
           childAspectRatio: 0.65,
         ),
         itemCount: 4,

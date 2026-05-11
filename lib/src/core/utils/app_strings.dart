@@ -118,4 +118,58 @@ class AppStaticStrings {
   static const String startWeeklySubscription = 'Start 1-Week Subscription';
   static const String rideProfile = 'Ride Profile';
   static const String pointsBalance = 'Your Shred Points Balance';
+
+  // Settings / Profile
+  static const String settings = 'Settings';
+  static const String profileSetting = 'Profile Setting';
+  static const String members = 'Members';
+  static const String referAndEarn = 'Refer & Earn';
+  static const String changePassword = 'Change password';
+  static const String aboutUs = 'About Us';
+  static const String privacyPolicy = 'Privacy Policy';
+  static const String termsAndConditions = 'Terms and Conditions';
+  static const String areYouSureLogout = 'Are you sure Logout your Profile ?';
+  static const String no = 'No';
+  static const String yes = 'Yes';
+  static const String logoutPopup = 'Logout Popup';
+
+  // Form fields
+  static const String aboutMe = 'About Me';
+  static const String facebookUrl = 'Facebook URL';
+  static const String instagramUrl = 'Instagram URL';
+  static const String tiktokUrl = 'TikTok URL';
+
+  // Test Rider Program
+  static const String testRiderProgram = 'Test Rider Program';
+  static const String bePartOfCreationProcess = 'Be part of the creation process';
+  static const String doYouWantToBecomeTestRider = 'Do you want to become an Un4seen Test Rider?';
+  static const String getEarlyAccessToNewProducts = 'Get early access to new products before anyone else.';
+  static const String testThemInRealRidingConditions = 'Test them in real riding conditions and give us honest feedback the good and the bad so we can refine and improve every detail.';
+  static const String onceProductFullyDialed = 'Once the product is fully dialed, we\'ll send you the finished version to run, film, and review.';
+  static const String yourContentWillBeFeatured = 'Your content will be featured across Un4seen\'s social channels, helping other riders see real-world performance and builds and products.';
+  static const String thisIsYourChanceToBePart = 'This is your chance to be part of the process not just ride it, but help create it.';
+  static const String whatYouWillGet = 'What You\'ll Get';
+  static const String earlyAccess = 'Early Access';
+  static const String beTheFirstToTest = 'Be the first to test new products before official launch';
+  static const String freeProducts = 'Free Products';
+  static const String keepTheFinishedVersions = 'Keep the finished versions of products you test';
+  static const String featuredContent = 'Featured Content';
+  static const String yourReviewsFeatured = 'Your reviews featured on Un4seen\'s official channels';
+  static const String influenceDevelopment = 'Influence Development';
+  static const String yourFeedbackDirectlyShapes = 'Your feedback directly shapes our products';
+  static const String applyNow = 'Apply Now';
+  static const String whyShouldYouBecomeTestRider = 'Why should you become an Un4seen Test Rider? Give us your best spiel. If you\'re accepted, Un4seen Admin will get in touch.';
+  static const String tellUsAboutYourRidingExperience = 'Tell us about your riding experience, content creation skills, what makes you a great test rider, and why you want to be part of the Un4seen team...';
+  static const String submitApplication = 'Submit Application';
+  static const String whatWeAreLookingFor = 'What We\'re Looking For';
+  static const String activeRiderWhoLovesIt = 'Active rider who loves it as much as we do.';
+  static const String abilityToProvideDetailedFeedback = 'Ability to provide detailed, honest feedback';
+  static const String contentCreationSkills = 'Content creation skills (photo/video)';
+  static const String socialMediaPresence = 'Social media presence (Instagram, YouTube, TikTok, etc.)';
+  static const String commitmentToTesting = 'Commitment to testing within given timeframes';
+  static const String passionForHelpingImprove = 'Passion for helping improve products';
+
+  // Members List
+  static const String followers = 'followers';
+  static const String exclusiveSyndicateMember = 'Exclusive Syndicate Member';
 }

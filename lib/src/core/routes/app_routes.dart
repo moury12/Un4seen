@@ -17,5 +17,8 @@ class AppRoutes {
   static const String subscription = '/subscription';
   static const String savedStories = '/saved-stories';
   static const String bikeProfiles = '/bike-profiles';
+  static const String settings = '/settings';
+  static const String profileSetting = '/profile-setting';
+  static const String testRiderProgram = '/test-rider-program';
   static const String detail  = '/detail/:id';
 }
