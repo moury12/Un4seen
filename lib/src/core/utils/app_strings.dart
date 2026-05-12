@@ -174,4 +174,40 @@ class AppStaticStrings {
   static const String followers = 'followers';
   static const String exclusiveSyndicateMember = 'Exclusive Syndicate Member';
   static const String download = 'Download';
+  static const String discoverAndConnectWithTheSyndicate = 'Discover and connect with the Syndicate';
+
+  // Refer & Earn
+  static const String myReferralCode = 'Your Referral Code';
+  static const String referralLink = 'Referral Link';
+  static const String howReferralsWork = 'How Referrals Work';
+  static const String shareYourCode = 'Share your code';
+  static const String theySignUp = 'They sign up';
+  static const String youEarnPoints = 'You earn points!';
+
+  // Bike Profile
+  static const String bikeDetails = 'Bike Details';
+  static const String make = 'Make';
+  static const String model = 'Model';
+  static const String color = 'Color';
+  static const String type = 'Type';
+  static const String myBikeGallery = 'My Bike Gallery';
+  static const String rideUpgrades = 'Ride Upgrades';
+  static const String plastics = 'Plastics';
+  static const String exhaust = 'Exhaust';
+  static const String gearing = 'Gearing';
+  static const String suspension = 'Suspension';
+  static const String suspensionSettings = 'Suspension settings';
+  static const String motorMods = 'Motor Mods';
+  static const String estimatedCost = 'Estimated Cost';
+  static const String bikeHours = 'Bike Hours';
+  static const String retiredBikes = 'Retired Bikes';
+  static const String addNewBike = 'Add New Bike';
+  static const String bikeGallery = 'Bike Gallery';
+  static const String imageUpload = 'Image Upload';
+  static const String buildNote = 'Build Note';
+  static const String addBuildNote = 'Add Build Note';
+  static const String viewAllPhotosOfThisBike = 'View all photos of this bike';
+  static const String updatePasswordBtn = 'Update Password';
+  static const String confirmPasswordHint = 'Confirm Password';
+  static const String oldPasswordHint = 'Old Password';
 }

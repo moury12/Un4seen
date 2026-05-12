@@ -21,5 +21,12 @@ class AppRoutes {
   static const String profileSetting = '/profile-setting';
   static const String testRiderProgram = '/test-rider-program';
   static const String storyFull = '/story-full';
-  static const String detail  = '/detail/:id';
+  static const String members = '/members';
+  static const String myBikeProfile = '/my-bike-profile';
+  static const String referAndEarn = '/refer-and-earn';
+  static const String changePassword = '/change-password';
+  static const String aboutUs = '/about-us';
+  static const String privacyPolicy = '/privacy-policy';
+  static const String termsAndConditions = '/terms-and-conditions';
+  static const String bikeGallery = '/bike-gallery';
 }

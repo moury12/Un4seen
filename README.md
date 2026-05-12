@@ -1,4 +1,8 @@
 # un4seen
+
+@contextScopeItemMention manage route here 
+@contextScopeItemMention use color from here 
+@contextScopeItemMention use this widget instead of creating again and again
 also add static texts here 
 
 app_strings.dart

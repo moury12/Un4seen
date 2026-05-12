@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:un4seen/src/features/bike_profiles/presentation/pages/members_page.dart';
 import '../../features/auth/presentation/pages/splash_page.dart';
 import '../../features/auth/presentation/pages/login_page.dart';
 import '../../features/home/presentation/pages/home_page.dart';
@@ -15,11 +16,18 @@ import '../../features/navigation/presentation/pages/navigation_page.dart';
 import '../../features/orders/presentation/pages/orders_page.dart';
 import '../../features/subscription/presentation/pages/subscription_page.dart';
 import '../../features/stories/presentation/pages/saved_stories_page.dart';
-import '../../features/bike_profiles/presentation/pages/bike_profiles_page.dart';
+import '../../features/bike_profiles/presentation/pages/saved_bike_profiles_page.dart';
 import '../../features/profile/presentation/pages/settings_page.dart';
 import '../../features/profile/presentation/pages/profile_setting_page.dart';
 import '../../features/profile/presentation/pages/test_rider_program_page.dart';
 import '../../features/stories/presentation/pages/story_full_page.dart';
+import '../../features/profile/presentation/pages/change_password_page.dart';
+import '../../features/profile/presentation/pages/refer_and_earn_page.dart';
+import '../../features/profile/presentation/pages/about_us_page.dart';
+import '../../features/profile/presentation/pages/privacy_policy_page.dart';
+import '../../features/profile/presentation/pages/terms_and_conditions_page.dart';
+import '../../features/bike_profiles/presentation/pages/my_bike_profile_page.dart';
+import '../../features/bike_profiles/presentation/pages/bike_gallery_page.dart';
 
 class AppRouter {
   AppRouter._();
@@ -101,6 +109,11 @@ class AppRouter {
         builder: (context, state) => const SavedBikeProfilesPage(),
       ),
       GoRoute(
+        path: AppRoutes.members,
+        name: 'members',
+        builder: (context, state) => const MembersPage(),
+      ),
+      GoRoute(
         path: AppRoutes.settings,
         name: 'settings',
         builder: (context, state) => const SettingsPage(),
@@ -126,6 +139,41 @@ class AppRouter {
             time: args['time'] ?? '',
           );
         },
+      ),
+      GoRoute(
+        path: AppRoutes.changePassword,
+        name: 'changePassword',
+        builder: (context, state) => const ChangePasswordPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.referAndEarn,
+        name: 'referAndEarn',
+        builder: (context, state) => const ReferAndEarnPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.aboutUs,
+        name: 'aboutUs',
+        builder: (context, state) => const AboutUsPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.privacyPolicy,
+        name: 'privacyPolicy',
+        builder: (context, state) => const PrivacyPolicyPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.termsAndConditions,
+        name: 'termsAndConditions',
+        builder: (context, state) => const TermsAndConditionsPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.myBikeProfile,
+        name: 'myBikeProfile',
+        builder: (context, state) => const MyBikeProfilePage(),
+      ),
+      GoRoute(
+        path: AppRoutes.bikeGallery,
+        name: 'bikeGallery',
+        builder: (context, state) => const BikeGalleryPage(),
       ),
       GoRoute(
         path: AppRoutes.home,

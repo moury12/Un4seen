@@ -61,7 +61,6 @@ class _SlantedClipper extends CustomClipper<Path> {
 
   _SlantedClipper({required this.radius, required this.slantHeight});
 
-  @override
   Path getSelection(Size size) => getClip(size);
 
   @override

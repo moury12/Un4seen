@@ -39,14 +39,20 @@ class SettingsPage extends StatelessWidget {
                 onTap: () => context.push(AppRoutes.profileSetting),
               ),
               ProfileMenuTile(
+                title: AppStaticStrings.myBikeProfile.tr,
+                icon: AppIcons.ride,
+                onTap: () => context.push(AppRoutes.myBikeProfile),
+              ),
+
+              ProfileMenuTile(
                 title: AppStaticStrings.members.tr,
                 icon: AppIcons.groupPeople,
-                onTap: () {},
+                onTap: () => context.push(AppRoutes.members),
               ),
               ProfileMenuTile(
                 title: AppStaticStrings.referAndEarn.tr,
                 icon: AppIcons.share,
-                onTap: () {},
+                onTap: () => context.push(AppRoutes.referAndEarn),
               ),
               ProfileMenuTile(
                 title: AppStaticStrings.changePassword.tr,
@@ -55,7 +61,7 @@ class SettingsPage extends StatelessWidget {
                   color: AppColors.kPrimaryColor,
                   size: 20,
                 ),
-                onTap: () {},
+                onTap: () => context.push(AppRoutes.changePassword),
               ),
               ProfileMenuTile(
                 title: AppStaticStrings.aboutUs.tr,
@@ -64,7 +70,7 @@ class SettingsPage extends StatelessWidget {
                   color: AppColors.kPrimaryColor,
                   size: 20,
                 ),
-                onTap: () {},
+                onTap: () => context.push(AppRoutes.aboutUs),
               ),
               ProfileMenuTile(
                 title: AppStaticStrings.privacyPolicy.tr,
@@ -73,7 +79,7 @@ class SettingsPage extends StatelessWidget {
                   color: AppColors.kPrimaryColor,
                   size: 20,
                 ),
-                onTap: () {},
+                onTap: () => context.push(AppRoutes.privacyPolicy),
               ),
               ProfileMenuTile(
                 title: AppStaticStrings.termsAndConditions.tr,
@@ -82,7 +88,7 @@ class SettingsPage extends StatelessWidget {
                   color: AppColors.kPrimaryColor,
                   size: 20,
                 ),
-                onTap: () {},
+                onTap: () => context.push(AppRoutes.termsAndConditions),
               ),
             ],
           ),
