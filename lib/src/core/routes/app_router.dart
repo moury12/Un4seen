@@ -29,6 +29,7 @@ import '../../features/profile/presentation/pages/terms_and_conditions_page.dart
 import '../../features/bike_profiles/presentation/pages/my_bike_profile_page.dart';
 import '../../features/bike_profiles/presentation/pages/bike_gallery_page.dart';
 import '../../features/bike_profiles/presentation/pages/add_new_bike_page.dart';
+import '../../features/bike_profiles/presentation/pages/member_details_page.dart';
 
 class AppRouter {
   AppRouter._();
@@ -180,6 +181,23 @@ class AppRouter {
         path: AppRoutes.addNewBike,
         name: 'addNewBike',
         builder: (context, state) => const AddNewBikePage(),
+      ),
+      GoRoute(
+        path: AppRoutes.memberDetails,
+        name: 'memberDetails',
+        builder: (context, state) {
+          final args = state.extra as Map<String, dynamic>? ?? {};
+          return MemberDetailsPage(
+            name: args['name'] ?? '',
+            image: args['image'] ?? '',
+            location: args['location'] ?? '',
+            syndicateId: args['syndicateId'] ?? '',
+            memberType: args['memberType'] ?? '',
+            points: args['points'] ?? '',
+            followers: args['followers'] ?? '',
+            following: args['following'] ?? '',
+          );
+        },
       ),
       GoRoute(
         path: AppRoutes.home,

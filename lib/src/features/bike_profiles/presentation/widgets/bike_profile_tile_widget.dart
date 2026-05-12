@@ -1,0 +1,47 @@
+import 'package:flutter/material.dart';
+import '../../../../core/core_export.dart';
+
+class BikeProfileTileWidget extends StatelessWidget {
+  final Color bgColor;
+  final Color accentColor;
+
+  const BikeProfileTileWidget({
+    super.key,
+    required this.bgColor,
+    required this.accentColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: bgColor,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.1),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(Icons.directions_bike, color: accentColor, size: 24),
+          ),
+          space12W,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CustomText("My Bike Profile", variant: TextVariant.titleMedium, fontWeight: FontWeight.bold, color: Colors.white),
+                CustomText("View full bike setup & upgrades", variant: TextVariant.labelSmall, color: Colors.white70),
+              ],
+            ),
+          ),
+          const Icon(Icons.arrow_forward, color: Colors.white, size: 20),
+        ],
+      ),
+    );
+  }
+}

@@ -19,7 +19,7 @@ class SlantedBlurContainer extends StatelessWidget {
     super.key,
     this.child,
     this.radius = 20.0,
-    this.slantHeight = 25.0,
+    this.slantHeight = 20.0,
     this.color,
     this.gradient,
     this.blurSigma = 0.0, // Default to 0 (no blur)

@@ -1,9 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:go_router/go_router.dart';
-import 'package:un4seen/src/features/bike_profiles/bike_profiles_export.dart';
-import '../../../../core/core_export.dart';
+import '../../../../src_export.dart';
 import '../widgets/image_upload_section.dart';
+
 
 class AddNewBikePage extends StatelessWidget {
   const AddNewBikePage({super.key});

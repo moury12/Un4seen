@@ -8,6 +8,7 @@ import 'package:un4seen/src/core/widgets/custom_shape.dart';
 import 'package:un4seen/src/features/profile/presentation/widgets/point_blance_card_widget.dart';
 import '../../../../core/core_export.dart';
 import '../widgets/profile_menu_tile.dart';
+import '../widgets/profile_header_widget.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -22,174 +23,16 @@ class ProfilePage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                spacing: 6,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(top: 20),
-                    width: 80,
-                    height: 80,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: AppColors.kPrimaryColor,
-                        width: 2,
-                      ),
-                    ),
-                    child: const CircleAvatar(
-                      radius: 30,
-                      backgroundImage: NetworkImage(
-                        'https://i.pravatar.cc/150?img=11',
-                      ),
-                    ),
-                  ),
-
-                  // Name + flag
-                  Expanded(
-                    child: Column(
-                      // spacing: 6,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          spacing: 8,
-                          children: [
-                            CustomText(
-                              'Nahid Hossain',
-                              fontSize: 18,
-                              variant: TextVariant.headlineMedium,
-                              fontWeight: FontWeight.bold,
-                            ),
-
-                            CustomText('🇺🇸', fontSize: 16),
-                            Spacer(),
-                            IconButton(
-                              onPressed: () => context.push(AppRoutes.settings),
-                              icon: const Icon(
-                                Icons.settings_outlined,
-                                color: Colors.black,
-                                size: 24,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Container(
-                          padding: AppPadding.getPadding4(context),
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [
-                                AppColors.kPrimaryColor,
-                                AppColors.kPrimaryDarkColor,
-                              ],
-                            ),
-                            borderRadius: BorderRadius.circular(appRadius6),
-                          ),
-                          child: ButtonTapWidget(
-                            radius: appRadius6,
-
-                            child: Row(
-                              spacing: 6,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                SvgPicture.asset(AppIcons.chat, height: 15),
-                                CustomText(
-                                  AppStaticStrings.messageUn4seen.tr,
-                                  variant: TextVariant.labelSmall,
-                                  color: AppColors.kWhiteTextColor,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        space4H,
-                        Row(
-                          spacing: 6,
-                          children: [
-                            // Grey pill
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 10,
-                                vertical: 4,
-                              ),
-                              decoration: BoxDecoration(
-                                color: AppColors.kPrimaryColor,
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: CustomText(
-                                '#SYN-2847',
-                                color: Colors.white,
-                                variant: TextVariant.labelSmall,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-
-                            // Blue gradient pill
-                            Expanded(
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 10,
-                                  vertical: 4,
-                                ),
-                                decoration: BoxDecoration(
-                                  gradient: const LinearGradient(
-                                    colors: [
-                                      Color(0xFF00A6FF),
-                                      Color(0xFF0066CC),
-                                    ],
-                                  ),
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: CustomText(
-                                  'Exclusive Syndicate Member',
-                                  color: Colors.white,
-                                  variant: TextVariant.labelSmall,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        space4H,
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.location_on_outlined,
-                              color: AppColors.kTextColor,
-                              size: 16,
-                            ),
-                            const SizedBox(width: 4),
-                            CustomText(
-                              'Los Angeles, CA  •  MX',
-                              variant: TextVariant.labelMedium,
-                            ),
-                          ],
-                        ),
-                        space4H,
-                        Row(
-                          spacing: 5,
-                          // mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            SvgPicture.asset(
-                              AppIcons.pointsEarned,
-                              height: 18,
-                              width: 18,
-                              colorFilter: const ColorFilter.mode(
-                                AppColors.kTextColor,
-                                BlendMode.srcIn,
-                              ),
-                            ),
-                            _buildStat('3890', 'Points'),
-                            _buildStatDivider(),
-                            _buildStat('342', 'Followers'),
-                            _buildStatDivider(),
-                            _buildStat('156', 'Following'),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+              const ProfileHeaderWidget(
+                name: 'Nahid Hossain',
+                image: 'https://i.pravatar.cc/150?img=11',
+                location: 'Los Angeles, CA  •  MX',
+                syndicateId: '#SYN-2847',
+                memberType: 'Exclusive Syndicate Member',
+                points: '3890',
+                followers: '342',
+                following: '156',
+                isCurrentUser: true,
               ),
               space4H,
               // ── Points balance card ───────────────────
@@ -233,6 +76,11 @@ class ProfilePage extends StatelessWidget {
                 borderColor: AppColors.kRedColor,
                 text: AppStaticStrings.logOut,
                 onPressed: () => _showLogoutDialog(context),
+
+                // onPressed: () => showDialog(
+                //   context: context,
+                //   builder: (context) => const LogoutDialog(),
+                // ),
               ),
 
               const SizedBox(height: 32),
@@ -242,98 +90,72 @@ class ProfilePage extends StatelessWidget {
       ),
     );
   }
-
-  Widget _buildStat(String value, String label) {
-    return Column(
-      children: [
-        CustomText(
-          value,
-          variant: TextVariant.labelMedium,
-          color: AppColors.kTextColor,
-          fontWeight: FontWeight.w600,
-        ),
-
-        CustomText(
-          label,
-          variant: TextVariant.labelSmall,
-          color: AppColors.kSecondaryTextColor,
-        ),
-      ],
-    );
-  }
-
-  Widget _buildStatDivider() {
-    return Container(
-      height: 29,
-      width: 1,
-      color: Colors.black.withValues(alpha: 0.2),
-    );
-  }
-
   void _showLogoutDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return Dialog(
-          backgroundColor: Colors.transparent,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                AppStaticStrings.logoutPopup.tr,
-                style: const TextStyle(color: Colors.white70, fontSize: 14),
+  showDialog(
+    context: context,
+    builder: (context) => Dialog(
+      backgroundColor: Colors.black,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+        side: const BorderSide(color: AppColors.kPrimaryColor, width: 2),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.logout, size: 50, color: AppColors.kPrimaryColor),
+            const SizedBox(height: 16),
+            Text(
+              AppStaticStrings.logOut.tr,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
               ),
-              space8H,
-              Container(
-                padding: const EdgeInsets.all(24),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      AppStaticStrings.areYouSureLogout.tr,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    space24H,
-                    Row(
-                      children: [
-                        Expanded(
-                          child: CustomButton(
-                            text: AppStaticStrings.no.tr,
-                            isOutlined: true,
-                            textColor: AppColors.kPrimaryColor,
-                            borderColor: AppColors.kPrimaryColor,
-                            onPressed: () => Navigator.pop(context),
-                          ),
-                        ),
-                        space8W,
-                        Expanded(
-                          child: CustomButton(
-                            text: AppStaticStrings.yes.tr,
-                            onPressed: () {
-                              Navigator.pop(context);
-                              context.go(AppRoutes.login);
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              AppStaticStrings.areYouSureLogout.tr,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                color: Colors.white70,
+                fontSize: 14,
               ),
-            ],
-          ),
-        );
-      },
-    );
-  }
+            ),
+            const SizedBox(height: 24),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Expanded(
+                  child: CustomButton(
+                    text: AppStaticStrings.no.tr,
+                    backgroundColor: Colors.transparent,
+                    borderColor: Colors.grey,
+                    textColor: Colors.white,
+                    onPressed: () => Get.back(),
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: CustomButton(
+                    text: AppStaticStrings.yes.tr,
+                    onPressed: () {
+                      // TODO: Implement logout logic
+                      Get.back(); // Close dialog
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Logged out successfully')),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
+}
+
 }

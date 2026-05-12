@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get_utils/src/extensions/internacionalization.dart';
 
@@ -20,7 +19,7 @@ class PointsBalanceCardWidget extends StatelessWidget {
           Color(0xff015A89).withValues(alpha: 0.5),
         ],
       ), // boxBorder: Border.all(color: AppColors.kPrimaryColor, width: 1),
-      padding: AppPadding.getPadding24(context),
+      padding: AppPadding.getPadding12(context).copyWith(bottom: 28),
 
       child: Stack(
         children: [

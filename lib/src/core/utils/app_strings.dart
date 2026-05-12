@@ -13,8 +13,10 @@ class AppStaticStrings {
   static const String password = 'Password';
   static const String forgotPassword = 'Forgot password?';
   static const String orContinueWith = 'or continue with';
+  static const String follow = 'Follow';
   static const String dontHaveAccountRegister =
       "Don't have an account? Register";
+  static const String details = 'Details';
   static const String continueWithGoogle = 'Continue with Google';
   static const String getStarted = 'Get Started';
   static const String yourShredPointsBalance = 'Your Shared Points Balance';
@@ -215,4 +217,6 @@ class AppStaticStrings {
   static const String point1 = 'Point 1';
   static const String addBike = 'Add Bike';
   static const String addNewBikeDetailedNote = 'Note: Your current bike will be automatically moved to the retired bikes section. You can add upgrades to this bike after creating it.';
+  static const String sendMessage = 'Send message...';
+  static const String title = 'Title';
 }
