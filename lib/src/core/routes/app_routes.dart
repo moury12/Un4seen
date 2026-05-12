@@ -29,4 +29,5 @@ class AppRoutes {
   static const String privacyPolicy = '/privacy-policy';
   static const String termsAndConditions = '/terms-and-conditions';
   static const String bikeGallery = '/bike-gallery';
+  static const String addNewBike = '/add-new-bike';
 }

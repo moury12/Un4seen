@@ -246,7 +246,9 @@ class MyBikeProfilePage extends StatelessWidget {
                   CustomButton(
                     text: AppStaticStrings.addNewBike.tr,
                     icon: Icons.add,
-                    onPressed: () {},
+                    onPressed: () {
+                      context.push(AppRoutes.addNewBike);
+                    },
                   ),
                 ]),
               ),

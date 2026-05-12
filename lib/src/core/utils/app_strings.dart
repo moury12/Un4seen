@@ -210,4 +210,9 @@ class AppStaticStrings {
   static const String updatePasswordBtn = 'Update Password';
   static const String confirmPasswordHint = 'Confirm Password';
   static const String oldPasswordHint = 'Old Password';
+  static const String yourCurrentBikeWillBeMovedToRetiredBikes = 'Your current bike will be moved to retired bikes';
+  static const String bikeType = 'Bike Type';
+  static const String point1 = 'Point 1';
+  static const String addBike = 'Add Bike';
+  static const String addNewBikeDetailedNote = 'Note: Your current bike will be automatically moved to the retired bikes section. You can add upgrades to this bike after creating it.';
 }

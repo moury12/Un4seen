@@ -28,6 +28,7 @@ import '../../features/profile/presentation/pages/privacy_policy_page.dart';
 import '../../features/profile/presentation/pages/terms_and_conditions_page.dart';
 import '../../features/bike_profiles/presentation/pages/my_bike_profile_page.dart';
 import '../../features/bike_profiles/presentation/pages/bike_gallery_page.dart';
+import '../../features/bike_profiles/presentation/pages/add_new_bike_page.dart';
 
 class AppRouter {
   AppRouter._();
@@ -174,6 +175,11 @@ class AppRouter {
         path: AppRoutes.bikeGallery,
         name: 'bikeGallery',
         builder: (context, state) => const BikeGalleryPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.addNewBike,
+        name: 'addNewBike',
+        builder: (context, state) => const AddNewBikePage(),
       ),
       GoRoute(
         path: AppRoutes.home,
