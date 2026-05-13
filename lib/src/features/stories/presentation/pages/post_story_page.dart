@@ -124,7 +124,8 @@ class PostStoryPage extends StatelessWidget {
                       ),
                       child: Row(
                         children: [
-                          Icon(Icons.zoom_in, color: Colors.white, size: 20),
+                          Icon(Icons.zoom_in,
+                           color: Colors.white, size: 20),
                           space8W,
                           Expanded(
                             child: CustomText(

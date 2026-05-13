@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:un4seen/src/features/bike_profiles/presentation/pages/members_page.dart';
+import 'package:un4seen/src/features/competitions/presentation/pages/entries_gallery_page.dart';
 import '../../features/auth/presentation/pages/splash_page.dart';
 import '../../features/auth/presentation/pages/login_page.dart';
 import '../../features/home/presentation/pages/home_page.dart';
@@ -205,6 +206,12 @@ class AppRouter {
           );
         },
       ),
+      // Add this inside the routes list
+GoRoute(
+  path: AppRoutes.entriesGallery,
+  name: 'entriesGallery',
+  builder: (context, state) => const EntriesGalleryPage(),
+),
       GoRoute(
         path: AppRoutes.home,
         name: 'home',

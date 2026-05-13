@@ -32,4 +32,5 @@ class AppRoutes {
   static const String addNewBike = '/add-new-bike';
   static const String memberDetails = '/member-details';
   static const String postStory = '/post-story';
+  static const String entriesGallery = '/entries-gallery';
 }

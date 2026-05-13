@@ -267,4 +267,22 @@ class AppStaticStrings {
   static const String energyTrack = 'Energy Track';
   static const String chillVibes = 'Chill Vibes';
   static const String rockAnthem = 'Rock Anthem';
+  // Add these to AppStaticStrings class
+static const String competitionsTitle = 'Competitions';
+static const String designUploadVoteWin = 'Design, upload, vote, and win!';
+static const String activeCompetitions = 'Active Competitions';
+static const String winnersCircle = 'Winner\'s Circle';
+static const String thisWeek = 'This Week';
+static const String viewEntries = 'View Entries';
+static const String grandPrize = 'GRAND PRIZE';
+static const String votingNow = 'VOTING NOW';
+static const String openForEntries = 'OPEN FOR ENTRIES';
+static const String ended = 'ENDED';
+static const String howCompetitionsWork = 'How Competitions Work';
+static const String submitYourDesign = 'Submit Your Design';
+static const String uploadDesignImage = 'Image Upload';
+static const String designNameLabel = 'Design Name';
+static const String designNameHint = 'e.g., Flame Thunder, Neon Storm...';
+static const String submitEntry = 'Submit Entry';
+static const String entriesGallery = 'Entries Gallery';
 }
