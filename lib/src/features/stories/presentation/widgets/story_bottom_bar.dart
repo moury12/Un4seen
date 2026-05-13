@@ -32,10 +32,14 @@ class StoryBottomBar extends StatelessWidget {
 class CustomIconButtonWidget extends StatelessWidget {
   final String? image;
   final IconData? iconData;
+  final double? padding;
+  final double? iconSize;
   final VoidCallback? onPressed;
   const CustomIconButtonWidget({
     super.key,
     this.image,
+    this.padding,
+    this.iconSize,
     this.iconData,
     this.onPressed,
   });
@@ -45,14 +49,14 @@ class CustomIconButtonWidget extends StatelessWidget {
     return ButtonTapWidget(
       onTap: onPressed,
       child: Container(
-        padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
+        padding:  EdgeInsets.all(padding??12),
+      decoration: BoxDecoration(  
         shape: BoxShape.circle,
         color: AppColors.kPrimaryDarkColor3,
       ),
       child: image != null
-          ? SvgPicture.asset(image!, height: 30)
-          : Icon(iconData, color: Colors.white, size: 30),
+          ? SvgPicture.asset(image!, height:   iconSize??30,width:iconSize??30,)
+          : Icon(iconData, color: Colors.white, size: iconSize??30),
     ),
     );
   }

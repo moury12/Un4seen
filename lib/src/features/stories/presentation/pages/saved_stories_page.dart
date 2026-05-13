@@ -39,7 +39,7 @@ class SavedStoriesPage extends StatelessWidget {
           // Alternating slant direction based on column
           final isLeftColumn = index % 2 == 0;
           return StoryCard(
-        
+            isFromSaved: true,
             isLeft: isLeftColumn,
             imageUrl: _sampleImages[index % _sampleImages.length],
           );

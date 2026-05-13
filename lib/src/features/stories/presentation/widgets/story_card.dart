@@ -1,16 +1,22 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:un4seen/src/core/core_export.dart';
 import 'package:un4seen/src/core/routes/app_routes.dart';
 import 'package:un4seen/src/core/widgets/custom_network_image.dart';
 import 'package:un4seen/src/features/stories/presentation/stories_presentation_export.dart';
+import 'package:un4seen/src/features/stories/presentation/widgets/story_bottom_bar.dart';
 import '../widgets/story_card_custom_shape.dart';
 
 class StoryCard extends StatelessWidget {
   final bool isLeft;
   final String imageUrl;
-
-  const StoryCard({required this.isLeft, required this.imageUrl});
+  final bool? isFromSaved;
+  const StoryCard({
+    required this.isLeft,
+    required this.imageUrl,
+    this.isFromSaved = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -24,66 +30,85 @@ class StoryCard extends StatelessWidget {
         },
       ),
       child: GenericSlantedCard(
-      isLeft: isLeft,
-      // borderColor: AppColors.kPrimaryColor,
-      // borderWidth: 2,
-      borderRadius: 14,
-      slantHeight: 25,
-      child: Stack(
-        children: [
-          // Background Image
-          Positioned.fill(
-            child: CustomNetworkImage(imageUrl: imageUrl, fit: BoxFit.cover),
-          ),
-
-          // Top Left Badges
-          Positioned(
-            top: 25,
-            left: isLeft ? null : 12,
-            right: isLeft ? 12 : null,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                buildBadgeWidget('Sarah Martinez 🇦🇴', context),
-                const SizedBox(height: 4),
-                buildBadgeWidget('#SYN-2847', context),
-              ],
+        isLeft: isLeft,
+        // borderColor: AppColors.kPrimaryColor,
+        // borderWidth: 2,
+        borderRadius: 14,
+        slantHeight: 25,
+        child: Stack(
+          children: [
+            // Background Image
+            Positioned.fill(
+              child: CustomNetworkImage(imageUrl: imageUrl, fit: BoxFit.cover),
             ),
-          ),
 
-          // Bookmark Icon
-          Positioned(
-            bottom: 10,
-            left: isLeft ? 12 : null,
-            right: isLeft ? null : 12,
-            child: Container(
-              padding: const EdgeInsets.all(8),
-              decoration: const BoxDecoration(
-                color: AppColors.kPrimaryColor,
-                shape: BoxShape.circle,
-              ),
-              child: const Icon(Icons.bookmark, color: Colors.white, size: 18),
-            ),
-          ),
-
-          // Time Text
-          Positioned(
-            bottom: 30,
-            right: isLeft ? 12 : null,
-            left: isLeft ? null : 12,
-            child: const Text(
-              '2h ago',
-              style: TextStyle(
-                color: Colors.black87,
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
+            // Top Left Badges
+            Positioned(
+              top: 25,
+              left: isLeft ? null : 12,
+              right: isLeft ? 12 : null,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  buildBadgeWidget('Sarah Martinez 🇦🇴', context),
+                  const SizedBox(height: 4),
+                  buildBadgeWidget('#SYN-2847', context),
+                ],
               ),
             ),
-          ),
-        ],
+
+            // Bookmark Icon
+            Positioned(
+              bottom: 10,
+              left: isLeft ? 12 : null,
+              right: isLeft ? null : 12,
+              child: isFromSaved == true
+                  ? Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: const BoxDecoration(
+                        color: AppColors.kPrimaryColor,
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.bookmark,
+                        color: Colors.white,
+                        size: 18,
+                      ),
+                    )
+                  : Column(
+                      spacing: 6,
+                      children: [
+                        CustomIconButtonWidget(
+                          padding: 8,
+                          iconSize: 13,
+                          image: AppIcons.fire,
+                        ),
+                        CustomIconButtonWidget(
+                          padding: 8,
+                          iconSize: 13,
+                          iconData: CupertinoIcons.bookmark,
+                        ),
+                      ],
+                    ),
+            ),
+
+            // Time Text
+            Positioned(
+              bottom: 30,
+              right: isLeft ? 12 : null,
+              left: isLeft ? null : 12,
+              child: const Text(
+                '2h ago',
+                style: TextStyle(
+                  color: Colors.black87,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
-    ));
+    );
   }
-
-
 }

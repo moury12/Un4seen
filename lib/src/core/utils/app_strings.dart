@@ -219,4 +219,52 @@ class AppStaticStrings {
   static const String addNewBikeDetailedNote = 'Note: Your current bike will be automatically moved to the retired bikes section. You can add upgrades to this bike after creating it.';
   static const String sendMessage = 'Send message...';
   static const String title = 'Title';
+
+  // Stories Section
+  static const String syndicateStories = 'Syndicate Stories';
+  static const String membersStoriesCheckThemOut = 'Members Stories Check them out - Post your bike';
+  static const String postYourStory = 'Post Your Story';
+  static const String shareYourRide = 'Share your ride';
+  static const String announcements = 'Announcements';
+  static const String all = 'All';
+  static const String unseen = 'Unseen';
+  static const String seen = 'Seen';
+  static const String friends = 'Friends';
+  static const String sarahMartinez = 'Sarah Martinez 🇦🇴';
+  static const String synID = '#SYN-2847';
+  static const String twoHoursAgo = '2h ago';
+
+  // Post Story Section
+  static const String category = 'Category';
+  static const String selectACategory = 'Select an Category';
+  static const String caption = 'Caption';
+  static const String addACaption = 'Add a caption...';
+  static const String addMusic = 'Add Music';
+  static const String selectAMusic = 'Select an music';
+  static const String filter = 'Filter';
+  static const String none = 'None';
+  static const String vintage = 'Vintage';
+  static const String bw = 'B&W';
+  static const String cool = 'Cool';
+  static const String warm = 'Warm';
+  static const String vivid = 'Vivid';
+  static const String fade = 'Fade';
+  static const String autoZoomCrop = 'Auto Zoom/Crop';
+  static const String autoCropZoomDesc = 'Automatically crop and zoom to 9:16 story format';
+  static const String postStory = 'Post Story';
+  static const String storyVisibilityDesc = 'Stories are visible for 24 hours. Your story will be featured in the Syndicate feed.';
+
+  // Categories
+  static const String myStory = '#MyStory';
+  static const String myRide = '#MyRide';
+  static const String action = '#Action';
+  static const String setup = '#Setup';
+  static const String event = '#Event';
+
+  // Music
+  static const String noMusic = 'No Music';
+  static const String hyperBeat1 = 'Hyper Beat 1';
+  static const String energyTrack = 'Energy Track';
+  static const String chillVibes = 'Chill Vibes';
+  static const String rockAnthem = 'Rock Anthem';
 }
