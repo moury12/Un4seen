@@ -24,15 +24,16 @@ class StoryFullPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        foregroundColor: Colors.white,
+      ),
       backgroundColor: Colors.black,
       body: Stack(
         children: [
           // Full Screen Content
           Positioned.fill(
-            child: CustomNetworkImage(
-              imageUrl: imageUrl,
-              fit: BoxFit.cover,
-            ),
+            child: CustomNetworkImage(imageUrl: imageUrl, fit: BoxFit.cover),
           ),
 
           // Top Overlays
@@ -40,10 +41,7 @@ class StoryFullPage extends StatelessWidget {
             child: Column(
               children: [
                 // Progress Bar
-                const StoryProgressBar(
-                  segmentCount: 3,
-                  activeIndex: 0,
-                ),
+                const StoryProgressBar(segmentCount: 3, activeIndex: 0),
                 // User Info & Close
                 StoryUserInfo(
                   name: name,
@@ -57,38 +55,31 @@ class StoryFullPage extends StatelessWidget {
           // Sound Toggle & Download (Optional floating buttons or integrated)
           Positioned(
             right: 16,
-            top: 120,
+            bottom: 16,
             child: Column(
               children: [
-                Obx(() => IconButton(
-                  icon: Icon(
-                    controller.isSoundOn.value ? Icons.volume_up : Icons.volume_off,
-                    color: Colors.white,
-                    size: 28,
+                Obx(
+                  () => CustomIconButtonWidget(
+                    iconData: controller.isSoundOn.value
+                        ? Icons.volume_up
+                        : Icons.volume_off,
+                    onPressed: controller.toggleSound,
                   ),
-                  onPressed: controller.toggleSound,
-                )),
-                IconButton(
-                  icon: const Icon(Icons.download, color: Colors.white, size: 28),
-                  onPressed: () => controller.downloadImage(imageUrl),
                 ),
               ],
             ),
           ),
 
           // Bottom Bar
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: StoryBottomBar(
-              onJoinTap: () {
-                // Navigate to subscription or similar
-              },
-              onMessageSent: (val) {
-                // Handle message
-              },
-            ),
-          ),
         ],
+      ),
+      bottomNavigationBar: StoryBottomBar(
+        onJoinTap: () {
+          // Navigate to subscription or similar
+        },
+        onMessageSent: (val) {
+          // Handle message
+        },
       ),
     );
   }

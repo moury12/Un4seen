@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:un4seen/src/core/core_export.dart';
 import 'package:un4seen/src/core/routes/app_routes.dart';
 import 'package:un4seen/src/core/widgets/custom_network_image.dart';
+import 'package:un4seen/src/features/stories/presentation/stories_presentation_export.dart';
 import '../widgets/story_card_custom_shape.dart';
 
 class StoryCard extends StatelessWidget {
@@ -43,9 +44,9 @@ class StoryCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildBadge('Sarah Martinez 🇦🇴', context),
+                buildBadgeWidget('Sarah Martinez 🇦🇴', context),
                 const SizedBox(height: 4),
-                _buildBadge('#SYN-2847', context),
+                buildBadgeWidget('#SYN-2847', context),
               ],
             ),
           ),
@@ -84,19 +85,5 @@ class StoryCard extends StatelessWidget {
     ));
   }
 
-  Widget _buildBadge(String text, BuildContext context) {
-    return Container(
-      padding: AppPadding.getPadding4(context),
-      decoration: BoxDecoration(
-        color: AppColors.kPrimaryColor,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: CustomText(
-        text,
-        color: Colors.white,
-        fontSize: 9,
-        fontWeight: FontWeight.bold,
-      ),
-    );
-  }
+
 }

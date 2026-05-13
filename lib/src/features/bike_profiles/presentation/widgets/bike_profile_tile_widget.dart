@@ -24,18 +24,31 @@ class BikeProfileTileWidget extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.1),
+              color: AppColors.kPrimaryColor,
               shape: BoxShape.circle,
             ),
-            child: Icon(Icons.directions_bike, color: accentColor, size: 24),
+            child: Icon(
+              Icons.directions_bike,
+              color: AppColors.kPrimaryDarkColor2,
+              size: 24,
+            ),
           ),
           space12W,
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CustomText("My Bike Profile", variant: TextVariant.titleMedium, fontWeight: FontWeight.bold, color: Colors.white),
-                CustomText("View full bike setup & upgrades", variant: TextVariant.labelSmall, color: Colors.white70),
+                CustomText(
+                  "My Bike Profile",
+                  variant: TextVariant.titleMedium,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+                CustomText(
+                  "View full bike setup & upgrades",
+                  variant: TextVariant.labelMedium,
+                  color: Colors.white,
+                ),
               ],
             ),
           ),

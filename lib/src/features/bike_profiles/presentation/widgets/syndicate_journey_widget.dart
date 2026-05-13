@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import '../../../../core/core_export.dart';
 
 class SyndicateJourneyWidget extends StatelessWidget {
@@ -20,11 +21,16 @@ class SyndicateJourneyWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
+        spacing: 6,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              const Icon(Icons.calendar_today_outlined, color: Colors.white, size: 20),
+              const Icon(
+                Icons.calendar_today_outlined,
+                color: Colors.white,
+                size: 20,
+              ),
               space8W,
               CustomText(
                 "Syndicate Journey",
@@ -34,14 +40,14 @@ class SyndicateJourneyWidget extends StatelessWidget {
               ),
             ],
           ),
-          space8H,
+
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               CustomText(
                 "Member since November 2024",
-                variant: TextVariant.labelSmall,
-                color: Colors.white70,
+                variant: TextVariant.labelMedium,
+                color: Colors.white,
               ),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -51,14 +57,13 @@ class SyndicateJourneyWidget extends StatelessWidget {
                 ),
                 child: const CustomText(
                   "1.5 years",
-                  variant: TextVariant.labelSmall,
+                  variant: TextVariant.labelMedium,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
                 ),
               ),
             ],
           ),
-          space24H,
 
           // --- Timeline UI ---
           Stack(
@@ -91,14 +96,22 @@ class SyndicateJourneyWidget extends StatelessWidget {
                 top: -15,
                 child: Column(
                   children: [
-                    const Icon(Icons.keyboard_arrow_down, color: Colors.blue, size: 16),
+                    const Icon(
+                      Icons.keyboard_arrow_down,
+                      color: Colors.blue,
+                      size: 16,
+                    ),
                     Container(
                       padding: const EdgeInsets.all(4),
                       decoration: const BoxDecoration(
                         color: Colors.blue,
                         shape: BoxShape.circle,
                       ),
-                      child: const Icon(Icons.directions_bike, color: Colors.white, size: 14),
+                      child: const Icon(
+                        Icons.directions_bike,
+                        color: Colors.white,
+                        size: 14,
+                      ),
                     ),
                   ],
                 ),
@@ -118,7 +131,6 @@ class SyndicateJourneyWidget extends StatelessWidget {
               _buildMilestone("5yr", false, accentColor),
             ],
           ),
-          space24H,
 
           // --- Loyalty Pays Card ---
           Container(
@@ -126,13 +138,20 @@ class SyndicateJourneyWidget extends StatelessWidget {
             decoration: BoxDecoration(
               border: Border.all(color: accentColor.withOpacity(0.5)),
               borderRadius: BorderRadius.circular(12),
-              color: Colors.white.withOpacity(0.05),
+              gradient: LinearGradient(
+                colors: [
+                  AppColors.kPrimaryColor.withValues(alpha: 0.5),
+                  AppColors.kPrimaryDarkColor2.withValues(alpha: 0.5),
+                ],
+              ),
             ),
             child: Column(
+              spacing: 6,
               children: [
                 Row(
+                  spacing: 6,
                   children: [
-                    const Icon(Icons.stars, color: Colors.blue, size: 24),
+                    SvgPicture.asset(AppIcons.stars, height: 24, width: 24),
                     space8W,
                     Expanded(
                       child: RichText(
@@ -140,11 +159,19 @@ class SyndicateJourneyWidget extends StatelessWidget {
                           children: [
                             TextSpan(
                               text: "Loyalty Pays 👊🔥\n",
-                              style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 16),
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                                fontSize: 16,
+                              ),
                             ),
                             TextSpan(
-                              text: "Be part of the Syndicate for 5 years and you're in the draw to win",
-                              style: TextStyle(color: Colors.white70, fontSize: 11),
+                              text:
+                                  "Be part of the Syndicate for 5 years and you're in the draw to win",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 11,
+                              ),
                             ),
                           ],
                         ),
@@ -152,7 +179,7 @@ class SyndicateJourneyWidget extends StatelessWidget {
                     ),
                   ],
                 ),
-                space8H,
+
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.symmetric(vertical: 12),
@@ -185,13 +212,28 @@ class SyndicateJourneyWidget extends StatelessWidget {
           width: 14,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            border: Border.all(color: reached ? accentColor : Colors.white24, width: 2),
+            border: Border.all(
+              color: reached ? accentColor : Colors.white24,
+              width: 2,
+            ),
             color: reached ? accentColor : Colors.transparent,
-            boxShadow: reached ? [BoxShadow(color: accentColor.withOpacity(0.5), blurRadius: 4)] : null,
+            boxShadow: reached
+                ? [
+                    BoxShadow(
+                      color: accentColor.withValues(alpha: 0.5),
+                      blurRadius: 4,
+                      spreadRadius: 5,
+                    ),
+                  ]
+                : null,
           ),
         ),
         space4H,
-        CustomText(label, variant: TextVariant.labelSmall, color: reached ? accentColor : Colors.white24),
+        CustomText(
+          label,
+          variant: TextVariant.labelMedium,
+          color: reached ? accentColor : Colors.white24,
+        ),
       ],
     );
   }
