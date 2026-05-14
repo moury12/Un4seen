@@ -34,19 +34,17 @@ class GradientContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: width,
-        height: height,
-        margin: margin,
-        padding: padding ?? AppPadding.getPadding12(context),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(borderRadius ?? appRadius),
-          border: borderColor != null
-              ? Border.all(color: borderColor!, width: borderWidth ?? 1)
-              : null,
-          gradient: LinearGradient(
+    final container = Container(
+      width: width,
+      height: height,
+      margin: margin,
+      padding: padding ?? AppPadding.getPadding12(context),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(borderRadius ?? appRadius),
+        border: borderColor != null
+            ? Border.all(color: borderColor!, width: borderWidth ?? 1)
+            : null,
+        gradient: LinearGradient(
           colors: gradientColors ??
               [
                 AppColors.kPrimaryColor,
@@ -57,7 +55,16 @@ class GradientContainer extends StatelessWidget {
         ),
       ),
       child: child,
-    ),
+    );
+
+    if (onTap == null) {
+      return container;
+    }
+
+    return GestureDetector(
+      onTap: onTap,
+      child: container,
     );
   }
 }
+
