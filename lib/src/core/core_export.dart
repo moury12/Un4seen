@@ -16,3 +16,4 @@ export 'widgets/button_tap_widget.dart';
 export 'widgets/app_loader.dart';
 export 'widgets/empty_state_widget.dart';
 export 'widgets/bike_progress_bar.dart';
+export 'widgets/custom_network_image.dart';

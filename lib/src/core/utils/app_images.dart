@@ -22,6 +22,8 @@ class AppIcons {
   static const String bookmark = '$basePath/bookmark_icon.svg';
   static const String bulb = '$basePath/bulb_icon.svg';
   static const String checked = '$basePath/checked_icon.svg';
+  static const String logo = '$basePath/4_logo_icon.png';
+
   static const String camera =
       '$basePath/camer_icon.svg'; // camer_icon.svg typo in filename
   static const String car = '$basePath/car_icon.svg';

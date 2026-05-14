@@ -1,4 +1,6 @@
+import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../src_export.dart';
+
 
 class CompetitionsPage extends StatelessWidget {
   const CompetitionsPage({super.key});
@@ -7,72 +9,95 @@ class CompetitionsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
         title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+          spacing: 8,
+          // mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.emoji_events, color: AppColors.kPrimaryColor),
-            space8W,
-            CustomText(
-              AppStaticStrings.competitionsTitle.tr,
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
-            ),
+             Icon(Icons.emoji_events, color: AppColors.kPrimaryColor),
+            RichText(text:  TextSpan(
+              text: "${AppStaticStrings.competitionsTitle.tr}\n", 
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: AppColors.kTextColor),
+              children: [
+                TextSpan(
+                  text: AppStaticStrings.designUploadVoteWin.tr, 
+                  style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 14, color: AppColors.kTextColor),
+                ),
+              ],
+            )),
+           
           ],
         ),
+        actions: [ 
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Image.asset(AppIcons.logo, height: 38),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
-        padding: AppPadding.getPadding12(context),
+        padding: AppPadding.getPadding12H(context),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CustomText(
-              AppStaticStrings.designUploadVoteWin.tr,
-              color: Colors.white70,
+            
+            CustomText(AppStaticStrings.activeCompetitions.tr, variant: TextVariant.titleLarge, 
+            fontWeight: FontWeight.bold, color: AppColors.kTextColor, fontSize: 18),
+            
+space4H,
+            CompetitionCardWidget(
+              title: AppStaticStrings.designSickestKit.tr,
+              description: AppStaticStrings.designSickestKitDesc.tr,
+              prize: AppStaticStrings.winDesignMadeForBike.tr,
+              date: "September 20, 2026 ➔ September 27, 2026",
+              image: "https://images.unsplash.com/photo-1558981403-c5f9899a28bc?q=80&w=500",
+              status: "VOTING",
+              votingItems: [
+                VoteEntryItemWidget(title: "Flame Thunder", author: "Jake Thompson", synId: "#SYN-1892", likes: "88", image: "https://images.unsplash.com/photo-1558981403-c5f9899a28bc?q=80&w=100"),
+                VoteEntryItemWidget(title: "Neon Storm", author: "Sarah Martinez", synId: "#SYN-4521", likes: "80", image: "https://images.unsplash.com/photo-1444491741275-3747c53c99b4?q=80&w=100"),
+                VoteEntryItemWidget(title: "Shadow Strike", author: "Alex Rivera", synId: "#SYN-1892", likes: "77", image: "https://images.unsplash.com/photo-1558981403-c5f9899a28bc?q=80&w=100"),
+              ],
             ),
-            space12H,
 
-            // Winners Circle Section
-            CustomText(
-              AppStaticStrings.thisWeek.tr,
-              variant: TextVariant.titleMedium,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
+            CompetitionCardWidget(
+              title: AppStaticStrings.designOwnGear.tr,
+              description: AppStaticStrings.designOwnGearDesc.tr,
+              prize: AppStaticStrings.winCustomGearSize.tr,
+              date: "October 10, 2026 ➔ October 20, 2026",
+              image: "https://images.unsplash.com/photo-1444491741275-3747c53c99b4?q=80&w=500",
+              status: "OPEN",
             ),
-            space8H,
-            SizedBox(
-              height: 140,
-              child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                itemCount: 3,
-                separatorBuilder: (_, __) => space12W,
-                itemBuilder: (context, index) => const WinnersCircleCard(),
+
+            Container(
+              margin: const EdgeInsets.only(bottom: 16),
+              padding: const EdgeInsets.all(12),
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: AppColors.kPrimaryColor,
+                borderRadius: BorderRadius.circular(appRadius16),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      const Icon(Icons.check_circle_outline, color: Colors.white, size: 16),
+                      
+                      CustomText(AppStaticStrings.ended.tr, color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+                    ],
+                  ),
+                  
+                  CustomText(AppStaticStrings.ebikeChallenge.tr, fontWeight: FontWeight.bold, color: Colors.white),
+                  CustomText(AppStaticStrings.bmxToEbike.tr, color: Colors.white70, fontSize: 12),
+                  
+                  const CustomText("August 15, 2026 - August 25, 2026", color: Colors.white70, fontSize: 12),
+                ],
               ),
             ),
 
-            space24H,
-            CustomText(
-              AppStaticStrings.activeCompetitions.tr,
-              variant: TextVariant.titleMedium,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
-            space12H,
-
-            const ActiveCompetitionCard(
-              title: "Design the Sickest Graphics Kit",
-              status: "VOTING",
-              prize: "Win your design made for your bike!",
-              image:
-                  "https://images.unsplash.com/photo-1558981403-c5f9899a28bc?q=80&w=500",
-            ),
-
-            const ActiveCompetitionCard(
-              title: "Design Your Own Un4seen MX Gear",
-              status: "OPEN",
-              prize: "Win your custom MX gear design made in your size!",
-              image:
-                  "https://images.unsplash.com/photo-1444491741275-3747c53c99b4?q=80&w=500",
-            ),
+            const HowItWorksWidget(),
+            
           ],
         ),
       ),

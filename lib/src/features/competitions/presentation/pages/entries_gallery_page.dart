@@ -1,4 +1,3 @@
-import 'package:un4seen/src/core/widgets/custom_network_image.dart';
 
 import '../../../../src_export.dart';
 
@@ -8,38 +7,61 @@ class EntriesGalleryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.kPrimaryDarkColor3,
       appBar: AppBar(title: Text(AppStaticStrings.entriesGallery.tr)),
-      body: GridView.builder(
-        padding: AppPadding.getPadding12(context),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 1,
-          mainAxisSpacing: 12,
-          childAspectRatio: 1.1,
-        ),
+      body: ListView.builder(
+
+        padding: AppPadding.getPadding12H(context),
+     
         itemCount: 5,
         itemBuilder: (context, index) {
           return Container(
-            decoration: BoxDecoration(color: AppColors.kPrimaryDarkColor2, borderRadius: BorderRadius.circular(16)),
-            child: Column(
+            margin: EdgeInsets.only(bottom: 12),
+            padding: AppPadding.getPadding12(context),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [AppColors.kPrimaryColor,AppColors.kPrimaryDarkColor2],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight  ),
+               borderRadius: BorderRadius.circular(16)),
+            child: Column(spacing: 6,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ListTile(
-                  leading: const CircleAvatar(backgroundImage: NetworkImage('https://i.pravatar.cc/150?img=5')),
-                  title: const CustomText("Jake Thompson", color: Colors.white, fontWeight: FontWeight.bold),
-                  subtitle: const CustomText("#SYN-1892", color: Colors.white54, fontSize: 10),
-                ),
-                Expanded(child: CustomNetworkImage(imageUrl: 'https://images.unsplash.com/photo-1558981403-c5f9899a28bc?q=80&w=500', width: double.infinity)),
-                Padding(
-                  padding: AppPadding.getPadding8(context),
-                  child: Row(
-                    children: [
-                      const Icon(Icons.favorite, color: AppColors.kRedColor, size: 20),
-                      space8W,
-                      const CustomText("88", color: Colors.white),
-                    ],
-                  ),
-                )
+                Row(spacing: 8,
+                  children: [
+                   CircleAvatar(
+                    backgroundImage: NetworkImage('https://i.pravatar.cc/150?img=5')), 
+                   Expanded(
+                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const CustomText("Jake Thompson", color: Colors.white, fontWeight: FontWeight.bold,fontSize: 16,),
+                                   const CustomText("#SYN-1892", color: Colors.white, fontSize: 12),]
+                                     
+                     
+                                     ),
+                   ),
+                  ]
+                   )
+                        ,
+               
+                    CustomText("Flame Thunder", color: Colors.white, fontWeight: FontWeight.bold,fontSize: 16,),
+                               CustomNetworkImage(
+                                        imageUrl: 'https://images.unsplash.com/photo-1558981403-c5f9899a28bc?q=80&w=500', width: double.infinity, height: 200,),
+                          
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                borderRadius: BorderRadius.circular(12),
+                                              ),
+                                              padding: AppPadding.getPadding8(context),
+                                              child: Row(mainAxisSize: MainAxisSize.min ,
+                                                                   children: [
+                                                                     const Icon(Icons.favorite_outline, color: AppColors.kPrimaryColor, size: 20),
+                                                                     space8W,
+                                                                     const CustomText("88", color: AppColors.kPrimaryColor),
+                                                                   ],
+                                              ),
+                                            )
               ],
             ),
           );
