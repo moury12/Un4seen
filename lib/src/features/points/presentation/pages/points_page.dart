@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:un4seen/src/features/points/presentation/widgets/activity_log_tile.dart';
+import 'package:un4seen/src/features/points/presentation/widgets/milestone_progress_card.dart';
 import '../../../../core/core_export.dart';
 import '../../../../core/widgets/gradient_container.dart';
 import '../../../profile/presentation/widgets/point_blance_card_widget.dart';
@@ -97,23 +99,26 @@ class PointsPage extends StatelessWidget {
           _infoCard(AppStaticStrings.scholarshipTitle.tr, AppStaticStrings.scholarshipDesc.tr),
           space8H,
           _infoCard(AppStaticStrings.resilienceSupportTitle.tr, AppStaticStrings.resilienceSupportDesc.tr),
-          // space8H,
+          space8H,
 
-          // const MilestoneProgressCard(),
-          // space8H,
+          const MilestoneProgressCard(),
+          space8H,
+          CustomText(AppStaticStrings.helpGrowGoogleReview.tr, variant: TextVariant.titleLarge, fontWeight: FontWeight.bold),
+         space8H,
+          _milestoneRewardTile("assets/icons/dollar_icon.svg", AppStaticStrings.storeCreditTitle.tr, AppStaticStrings.reviewComplete.tr, AppStaticStrings.redeem.tr),
 
-          // CustomText(AppStaticStrings.milestoneRewards.tr, variant: TextVariant.titleLarge, fontWeight: FontWeight.bold),
-          // space8H,
-          // _milestoneRewardTile(AppIcons.reward, AppStaticStrings.stickerPack.tr, AppStaticStrings.points1000.tr),
-          // _milestoneRewardTile(AppIcons.reward, AppStaticStrings.tShirt.tr, AppStaticStrings.points2500.tr),
-          // space8H,
+          CustomText(AppStaticStrings.milestoneRewards.tr, variant: TextVariant.titleLarge, fontWeight: FontWeight.bold),
+          space8H,
+          _milestoneRewardTile(AppIcons.reward, AppStaticStrings.stickerPack.tr, AppStaticStrings.points1000.tr, AppStaticStrings.claim.tr),
+          _milestoneRewardTile(AppIcons.reward, AppStaticStrings.tShirt.tr, AppStaticStrings.points2500.tr, AppStaticStrings.claim.tr),
+          space8H,
 
-          // CustomText(AppStaticStrings.recentActivity.tr, variant: TextVariant.titleLarge, fontWeight: FontWeight.bold),
-          // space8H,
-          // const ActivityLogTile(title: "Profile completed", date: "4/20/2026", points: "100"),
-          // const ActivityLogTile(title: "Shared on Instagram", date: "4/21/2026", points: "200"),
-          // const ActivityLogTile(title: "Bike of the Week winner 🏆", date: "4/24/2026", points: "500"),
-          // space24H,
+          CustomText(AppStaticStrings.recentActivity.tr, variant: TextVariant.titleLarge, fontWeight: FontWeight.bold),
+          space8H,
+          const ActivityLogTile(title: "Profile completed", date: "4/20/2026", points: "100"),
+          const ActivityLogTile(title: "Shared on Instagram", date: "4/21/2026", points: "200"),
+          const ActivityLogTile(title: "Bike of the Week winner 🏆", date: "4/24/2026", points: "500"),
+          space24H,
         ],
       ),
     );
@@ -149,21 +154,37 @@ class PointsPage extends StatelessWidget {
     );
   }
 
-  Widget _milestoneRewardTile(String icon, String title, String points) {
+  Widget _milestoneRewardTile(String icon, String title, String points,String? buttonText ) {
     return GradientContainer(
       margin: const EdgeInsets.only(bottom: 8),
       gradientColors: [AppColors.kPrimaryDarkColor, AppColors.kPrimaryColor],
-      child: Row(
+      child: Column(spacing: 8,
         children: [
-          SvgPicture.asset(icon, height: 24, colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn)),
-          space12W,
-          Expanded(
-            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              CustomText(title, color: Colors.white, fontWeight: FontWeight.bold),
-              CustomText(points, color: Colors.white70, fontSize: 10),
-            ]),
+          Row(
+            children: [
+              SvgPicture.asset(icon, height: 24, colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn)),
+              space12W,
+              Expanded(
+                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  CustomText(title, color: Colors.white, fontWeight: FontWeight.bold,fontSize: 14,),
+                  CustomText(points, color: Colors.white70, fontSize: 12),
+                ]),
+              ),
+              ButtonTapWidget(child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(20)),
+                child: CustomText(buttonText??AppStaticStrings.claim.tr, color: Colors.white, fontWeight: FontWeight.bold),
+              ), onTap: () {}),
+            //  CustomButton(text: "Claim", onPressed: () {}, isExpanding: true, borderRadius: 20),
+            ],
           ),
-          CustomButton(text: "Claim", onPressed: () {}, isExpanding: false, borderRadius: 20),
+          LinearProgressIndicator(
+            value: 0.5,
+            minHeight: 8,
+            borderRadius: BorderRadius.circular(8),
+            backgroundColor: Colors.white.withValues(alpha: 0.1),
+            valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
+          ),
         ],
       ),
     );

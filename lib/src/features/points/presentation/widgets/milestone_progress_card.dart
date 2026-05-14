@@ -10,6 +10,7 @@ class MilestoneProgressCard extends StatelessWidget {
       padding: EdgeInsets.zero,
       gradientColors: [AppColors.kPrimaryDarkColor2, AppColors.kPrimaryColor],
       child: Column(
+        spacing: 8,
         children: [
           const CustomNetworkImage(
             imageUrl: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?q=80&w=400',
@@ -24,19 +25,24 @@ class MilestoneProgressCard extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Expanded(child: CustomText("🔒 When we hit 5000 Active Syndicate members, you'll receive an Un4seen Backpack.", color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold)),
+                    const 
+                    Expanded(child: 
+                    CustomText("🔒 When we hit 5000 Active Syndicate members, you'll receive an Un4seen Backpack.", color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold)),
                     space8W,
-                    CustomButton(text: "Claim", onPressed: () {}, isExpanding: false, borderRadius: 20),
-                  ],
+      ButtonTapWidget(child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(20)),
+                child: CustomText(AppStaticStrings.claim.tr, color: Colors.white, fontWeight: FontWeight.bold),
+              ), onTap: () {}),                  ],
                 ),
                 space8H,
-                CustomText(AppStaticStrings.backpackDesc.tr, color: Colors.white70, fontSize: 10),
+                CustomText(AppStaticStrings.backpackDesc.tr, color: Colors.white70, fontSize: 12),
                 space12H,
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    CustomText("3000 Members", color: Colors.white, fontSize: 9),
-                    CustomText("5000 Members", color: Colors.white, fontSize: 9),
+                    CustomText("3000 Members", color: Colors.white, fontSize: 12),
+                    CustomText("5000 Members", color: Colors.white, fontSize: 12),
                   ],
                 ),
                 space4H,

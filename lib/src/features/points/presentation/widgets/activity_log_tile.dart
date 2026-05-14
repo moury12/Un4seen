@@ -25,8 +25,8 @@ class ActivityLogTile extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CustomText(title, color: Colors.white, fontWeight: FontWeight.bold),
-              CustomText(date, color: Colors.white70, fontSize: 10),
+              CustomText(title, color: Colors.white, fontWeight: FontWeight.bold,fontSize: 14),
+              CustomText(date, color: Colors.white70, fontSize: 12),
             ],
           ),
           CustomText("+$points", color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
