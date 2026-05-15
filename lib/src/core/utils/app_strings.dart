@@ -100,6 +100,16 @@ class AppStaticStrings {
   static const String giveaway = 'Giveaway';
   static const String points = 'Points';
   static const String stories = 'Stories';
+  static const String quoteOfTheDay = 'Un4seen Quote of the Day 👊';
+  static const String neverGiveUp = 'Never Give up you got this 💪';
+  static const String bikeOfTheWeek = 'Bike of the Week';
+  static const String rateMyRide = 'Rate My Ride';
+  static const String recentWeeklyWinners = 'Recent Weekly Winners';
+  static const String keepShredding = 'Keep shredding!';
+  static const String newStoriesPosted = 'New stories posted';
+  static const String checkOutLatestStories = 'Check out the latest Stories';
+  static const String bonusShredPointsAwarded = '+500 Bonus Shred Points Awarded';
+  static const String customBuild = 'Custom Build';
 
   // Profile Section
   static const String myOrders = 'My Orders';
@@ -358,4 +368,22 @@ static const String days = 'Days';
 static const String hours = 'Hours';
 static const String mins = 'Mins';
 static const String secs = 'Secs';
+
+  // Ideas & Feedback
+  static const String ideasAndFeedback = 'Ideas & Feedback';
+  static const String helpShapeFuture = 'Help shape the future of Un4seen';
+  static const String shareYourIdea = 'Share Your Idea';
+  static const String howItWorks = 'How it Works?';
+  static const String yourIdeasMatter = 'Your ideas matter 👊🔥';
+  static const String selectIdeaCategory = 'Select an idea Category';
+  static const String whatsItAbout = 'Whats it about?';
+  static const String tellUsMoreAboutIdea = 'Tell us more about your idea...';
+  static const String submitIdea = 'Submit Idea';
+  static const String adminCanPublishDesc =
+      'Then admin can publish so other members can get involved also';
+  static const String howItWorksDesc1 =
+      'Share your ideas for new products, designs, or features';
+  static const String howItWorksDesc2 = 'Upvote ideas you want to see become reality';
+  static const String howItWorksDesc3 = 'Most popular ideas get priority consideration';
+  static const String howItWorksDesc4 = 'Help shape the future of Un4seen together! 🔥';
 }

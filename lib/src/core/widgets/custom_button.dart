@@ -16,7 +16,7 @@ class CustomButton extends StatelessWidget {
     this.isExpanding = true,
     this.borderRadius = 24.0,
     this.borderColor,
-    this.textStyle,
+    this.textStyle, this.rightIcon,
   });
 
   final String text;
@@ -25,6 +25,8 @@ class CustomButton extends StatelessWidget {
   final Color? textColor;
   final Color? iconColor;
   final IconData? icon;
+    final IconData? rightIcon ;
+
   final bool isOutlined;
   final bool isLoading;
   final bool isExpanding;
@@ -95,6 +97,18 @@ class CustomButton extends StatelessWidget {
                                   : Colors.white),
                         ),
                   ),
+                   if (rightIcon != null) ...[
+                       space8W,
+                    Icon(
+                      rightIcon,
+                      size: 20,
+                      color:
+                          iconColor ??
+                          textColor ??
+                          (isOutlined ? AppColors.kPrimaryColor : Colors.white),
+                    ),
+                 
+                  ],
                 ],
               ),
       ),

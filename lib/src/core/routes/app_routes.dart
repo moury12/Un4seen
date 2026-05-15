@@ -33,4 +33,5 @@ class AppRoutes {
   static const String memberDetails = '/member-details';
   static const String postStory = '/post-story';
   static const String entriesGallery = '/entries-gallery';
+  static const String ideasFeedback = '/ideas-feedback';
 }

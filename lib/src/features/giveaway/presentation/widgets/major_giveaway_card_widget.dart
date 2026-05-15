@@ -41,8 +41,8 @@ class MajorGiveawayCardWidget extends StatelessWidget {
           Container(
             width: double.infinity,
             padding: AppPadding.getPadding12(context),
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(colors: [AppColors.kPrimaryDarkColor, Color(0xFF00A6FF)], begin: Alignment.topCenter, end: Alignment.bottomCenter),
+            decoration:  BoxDecoration(
+       gradient: LinearGradient(colors:   [ AppColors.kPrimaryColor.withValues(alpha: 0.8),AppColors.kPrimaryDarkColor,],begin: Alignment.topCenter,end: Alignment.bottomCenter),
               borderRadius: BorderRadius.vertical(bottom: Radius.circular(appRadius16)),
             ),
             child: Column(

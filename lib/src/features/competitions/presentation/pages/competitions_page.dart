@@ -1,5 +1,4 @@
-import 'package:flutter_svg/flutter_svg.dart';
-import '../../../../src_export.dart';
+import 'package:un4seen/src/src_export.dart';
 
 
 class CompetitionsPage extends StatelessWidget {

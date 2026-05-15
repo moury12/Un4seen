@@ -32,6 +32,7 @@ import '../../features/bike_profiles/presentation/pages/bike_gallery_page.dart';
 import '../../features/bike_profiles/presentation/pages/add_new_bike_page.dart';
 import '../../features/bike_profiles/presentation/pages/member_details_page.dart';
 import '../../features/stories/presentation/pages/post_story_page.dart';
+import '../../features/home/presentation/pages/ideas_feedback_page.dart';
 
 class AppRouter {
   AppRouter._();
@@ -211,6 +212,11 @@ GoRoute(
   path: AppRoutes.entriesGallery,
   name: 'entriesGallery',
   builder: (context, state) => const EntriesGalleryPage(),
+),
+GoRoute(
+  path: AppRoutes.ideasFeedback,
+  name: 'ideasFeedback',
+  builder: (context, state) => const IdeasFeedbackPage(),
 ),
       GoRoute(
         path: AppRoutes.home,
