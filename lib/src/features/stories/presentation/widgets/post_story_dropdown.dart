@@ -46,7 +46,7 @@ class PostStoryDropdown extends StatelessWidget {
                 CustomText(
                   selectedValue.isEmpty ? hintText : selectedValue,
                   color: selectedValue.isEmpty
-                      ? Colors.white.withOpacity(0.5)
+                      ? Colors.white.withValues(alpha: 0.5)
                       : Colors.white,
                   variant: TextVariant.bodyMedium,
                 ),

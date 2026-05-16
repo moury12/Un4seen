@@ -34,4 +34,8 @@ class AppRoutes {
   static const String postStory = '/post-story';
   static const String entriesGallery = '/entries-gallery';
   static const String ideasFeedback = '/ideas-feedback';
+  static const String crewChoice = '/crew-choice';
+  static const String un4seenWorld = '/un4seen-world';
+  static const String rateMyRide = '/rate-my-ride';
+  static const String shop = '/shop';
 }

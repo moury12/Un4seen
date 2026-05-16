@@ -33,6 +33,10 @@ import '../../features/bike_profiles/presentation/pages/add_new_bike_page.dart';
 import '../../features/bike_profiles/presentation/pages/member_details_page.dart';
 import '../../features/stories/presentation/pages/post_story_page.dart';
 import '../../features/home/presentation/pages/ideas_feedback_page.dart';
+import '../../features/home/presentation/pages/crew_choice_page.dart';
+import '../../features/home/presentation/pages/un4seen_world_page.dart';
+import '../../features/home/presentation/pages/rate_my_ride_page.dart';
+import '../../features/home/presentation/pages/shop_page.dart';
 
 class AppRouter {
   AppRouter._();
@@ -217,6 +221,26 @@ GoRoute(
   path: AppRoutes.ideasFeedback,
   name: 'ideasFeedback',
   builder: (context, state) => const IdeasFeedbackPage(),
+),
+GoRoute(
+  path: AppRoutes.crewChoice,
+  name: 'crewChoice',
+  builder: (context, state) => const CrewChoicePage(),
+),
+GoRoute(
+  path: AppRoutes.un4seenWorld,
+  name: 'un4seenWorld',
+  builder: (context, state) => const Un4seenWorldPage(),
+),
+GoRoute(
+  path: AppRoutes.rateMyRide,
+  name: 'rateMyRide',
+  builder: (context, state) => const RateRidePage(),
+),
+GoRoute(
+  path: AppRoutes.shop,
+  name: 'shop',
+  builder: (context, state) => const ShopPage(),
 ),
       GoRoute(
         path: AppRoutes.home,

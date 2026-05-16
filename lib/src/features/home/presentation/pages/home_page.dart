@@ -75,7 +75,7 @@ class HomePage extends StatelessWidget {
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: AppPadding.getPadding12H(context),
+          padding: AppPadding.getPadding12(context),
           child: Column(
             spacing: 8,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -91,7 +91,7 @@ class HomePage extends StatelessWidget {
               // space12H,
               CustomButton(
                 text: AppStaticStrings.rateMyRide.tr,
-                onPressed: () {},
+                onPressed: () => context.push(AppRoutes.rateMyRide),
                 rightIcon: Icons.chevron_right,
                 backgroundColor: AppColors.kPrimaryDarkColor3,
               ),
