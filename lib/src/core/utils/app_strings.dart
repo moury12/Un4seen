@@ -43,6 +43,7 @@ class AppStaticStrings {
   static const String emailConfirmation = 'Email Confirmation';
   static const String thisIsWhereRidersGetRewarded =
       'This Is Where Riders Get Rewarded.';
+  static const String submitReport = "Submit Report";
   static const String
   theExclusiveWorldwideMotorcycleCommunityBuiltForRidersByRiders =
       'The exclusive worldwide motorcycle community built for riders, by riders.';
@@ -445,4 +446,29 @@ static const String secs = 'Secs';
     static const String yourPurchasesHelp = 'Your purchases help grow the ecosystem';
     static const String poweredByUn4seen = 'Powered by Un4seen';
     static const String buildingMostRewarding = 'Building the world’s most rewarding rider community.';
+
+    // Chat Strings
+    static const String chat = 'Chat';
+    static const String channels = 'Channels';
+    static const String buildsMods = 'Builds/Mods';
+    static const String shareYourBuildsDesc = 'Share your KLX140 builds, mods, and upgrades. Tips, tricks, and inspiration for KLX riders.';
+    static const String addPhoto = 'Add Photo';
+    static const String post = 'Post';
+    static const String flamesCount = 'flames';
+    static const String searchChannels = 'Search Channels...';
+    static const String createChannel = 'Create Channel';
+    static const String channelName = 'Channel Name';
+    static const String addMembers = 'Add Members';
+    static const String currentMembers = 'Current Members';
+    static const String reportMessage = 'Report Message';
+    static const String helpKeepCommunitySafe = 'Help keep the community safe.';
+    static const String reason = 'Reason';
+    static const String additionalDetails = 'Additional Details';
+    static const String provideMoreContext = 'Provide more context...';
+    static const String generalChat = 'General Chat';
+    static const String online = 'online';
+    static const String typeAMessage = 'Type a message...';
+    static const String remove = 'Remove';
+    static const String add = 'Add';
+    static const String admin = 'Admin';
 }

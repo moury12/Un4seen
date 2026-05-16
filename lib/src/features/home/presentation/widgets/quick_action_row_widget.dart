@@ -32,7 +32,12 @@ class QuickActionRowWidget extends StatelessWidget {
               3,
               onTap: () => context.push(AppRoutes.un4seenWorld),
             ),
-            _actionItem(AppIcons.chat, "Chat", 4),
+            _actionItem(
+              AppIcons.chat, 
+              AppStaticStrings.chat.tr, 
+              4,
+              onTap: () => context.push(AppRoutes.channels),
+            ),
             _actionItem(
               AppIcons.bag,
               "Shop",

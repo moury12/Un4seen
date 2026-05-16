@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:un4seen/src/core/utils/app_strings.dart';
 import 'package:un4seen/src/features/bike_profiles/presentation/pages/members_page.dart';
 import 'package:un4seen/src/features/competitions/presentation/pages/entries_gallery_page.dart';
 import '../../features/auth/presentation/pages/splash_page.dart';
@@ -37,6 +38,10 @@ import '../../features/home/presentation/pages/crew_choice_page.dart';
 import '../../features/home/presentation/pages/un4seen_world_page.dart';
 import '../../features/home/presentation/pages/rate_my_ride_page.dart';
 import '../../features/home/presentation/pages/shop_page.dart';
+import '../../features/chat/presentation/pages/channels_page.dart';
+import '../../features/chat/presentation/pages/chat_page.dart';
+import '../../features/chat/presentation/pages/channel_members_page.dart';
+import '../../features/chat/presentation/pages/builds_mods_page.dart';
 
 class AppRouter {
   AppRouter._();
@@ -130,7 +135,7 @@ class AppRouter {
       GoRoute(
         path: AppRoutes.profileSetting,
         name: 'profileSetting',
-        builder: (context, state) =>  ProfileSettingPage(),
+        builder: (context, state) => ProfileSettingPage(),
       ),
       GoRoute(
         path: AppRoutes.testRiderProgram,
@@ -192,7 +197,7 @@ class AppRouter {
       GoRoute(
         path: AppRoutes.postStory,
         name: 'postStory',
-        builder: (context, state) =>  PostStoryPage(),
+        builder: (context, state) => PostStoryPage(),
       ),
       GoRoute(
         path: AppRoutes.memberDetails,
@@ -212,36 +217,64 @@ class AppRouter {
         },
       ),
       // Add this inside the routes list
-GoRoute(
-  path: AppRoutes.entriesGallery,
-  name: 'entriesGallery',
-  builder: (context, state) => const EntriesGalleryPage(),
-),
-GoRoute(
-  path: AppRoutes.ideasFeedback,
-  name: 'ideasFeedback',
-  builder: (context, state) => const IdeasFeedbackPage(),
-),
-GoRoute(
-  path: AppRoutes.crewChoice,
-  name: 'crewChoice',
-  builder: (context, state) => const CrewChoicePage(),
-),
-GoRoute(
-  path: AppRoutes.un4seenWorld,
-  name: 'un4seenWorld',
-  builder: (context, state) => const Un4seenWorldPage(),
-),
-GoRoute(
-  path: AppRoutes.rateMyRide,
-  name: 'rateMyRide',
-  builder: (context, state) => const RateRidePage(),
-),
-GoRoute(
-  path: AppRoutes.shop,
-  name: 'shop',
-  builder: (context, state) => const ShopPage(),
-),
+      GoRoute(
+        path: AppRoutes.entriesGallery,
+        name: 'entriesGallery',
+        builder: (context, state) => const EntriesGalleryPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.ideasFeedback,
+        name: 'ideasFeedback',
+        builder: (context, state) => const IdeasFeedbackPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.crewChoice,
+        name: 'crewChoice',
+        builder: (context, state) => const CrewChoicePage(),
+      ),
+      GoRoute(
+        path: AppRoutes.un4seenWorld,
+        name: 'un4seenWorld',
+        builder: (context, state) => const Un4seenWorldPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.rateMyRide,
+        name: 'rateMyRide',
+        builder: (context, state) => const RateRidePage(),
+      ),
+      GoRoute(
+        path: AppRoutes.shop,
+        name: 'shop',
+        builder: (context, state) => const ShopPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.channels,
+        name: 'channels',
+        builder: (context, state) => const ChannelsPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.buildsMods,
+        name: 'buildsMods',
+        builder: (context, state) => const BuildsModsPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.chat,
+        name: 'chat',
+        builder: (context, state) {
+          final extra = state.extra;
+          final args = extra is ChatPageArgs
+              ? extra
+              : ChatPageArgs.channel(
+                  title: extra as String? ?? AppStaticStrings.chat,
+                );
+          return ChatPage(args: args);
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.channelMembers,
+        name: 'channelMembers',
+        builder: (context, state) => const ChannelMembersPage(),
+      ),
       GoRoute(
         path: AppRoutes.home,
         name: 'home',
@@ -260,11 +293,8 @@ GoRoute(
     ],
 
     // Global error page
-    errorBuilder: (context, state) => Scaffold(
-      body: Center(
-        child: Text('Route not found: ${state.uri}'),
-      ),
-    ),
+    errorBuilder: (context, state) =>
+        Scaffold(body: Center(child: Text('Route not found: ${state.uri}'))),
 
     // Redirect logic (e.g. auth guard)
     redirect: (context, state) {

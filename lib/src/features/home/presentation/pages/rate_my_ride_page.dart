@@ -10,9 +10,10 @@ class RateRidePage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: CustomText(AppStaticStrings.rateMyRideTitle.tr, variant: TextVariant.titleLarge, fontWeight: FontWeight.bold),
+        title: Text(AppStaticStrings.rateMyRideTitle.tr),
         actions: [
-          SizedBox(width: 200,
+          SizedBox(
+            width: 150,
             child: Padding(
               padding: const EdgeInsets.only(right: 12),
               child: CustomButton(
@@ -26,10 +27,14 @@ class RateRidePage extends StatelessWidget {
         ],
       ),
       body: SingleChildScrollView(
-        padding: AppPadding.getPadding12(context),
+        padding: AppPadding.getPadding12H(context),
         child: Column(
           children: [
-            CustomText(AppStaticStrings.rateMyRideDesc.tr, color: AppColors.kSecondaryTextColor, fontSize: 11),
+            CustomText(
+              AppStaticStrings.rateMyRideDesc.tr,
+              color: AppColors.kTextColor,
+              fontSize: 12,
+            ),
             space12H,
             Container(
               width: double.infinity,
@@ -37,9 +42,18 @@ class RateRidePage extends StatelessWidget {
               decoration: const BoxDecoration(color: AppColors.kPrimaryColor),
               child: Row(
                 children: [
-                  const Icon(Icons.emoji_events_outlined, color: Colors.white, size: 16),
+                  const Icon(
+                    Icons.emoji_events_outlined,
+                    color: Colors.white,
+                    size: 16,
+                  ),
                   space8W,
-                  CustomText(AppStaticStrings.votingEndsSunday.tr, color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12),
+                  CustomText(
+                    AppStaticStrings.votingEndsSunday.tr,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12,
+                  ),
                 ],
               ),
             ),
