@@ -28,13 +28,13 @@ class HowItWorksWidget extends StatelessWidget {
               ),
             ],
           ),
-          space12H,
+          space8H,
           _bulletPoint(AppStaticStrings.howItWorksDesc1.tr),
-          space8H,
+         
           _bulletPoint(AppStaticStrings.howItWorksDesc2.tr),
-          space8H,
+         
           _bulletPoint(AppStaticStrings.howItWorksDesc3.tr),
-          space8H,
+         
           _bulletPoint(AppStaticStrings.howItWorksDesc4.tr),
         ],
       ),

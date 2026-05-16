@@ -58,6 +58,7 @@ class _ShareIdeaDialogState extends State<ShareIdeaDialog> {
                         CustomText(
                           AppStaticStrings.shareYourIdea.tr,
                           variant: TextVariant.titleLarge,
+                          fontSize: 14,
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
                         ),
@@ -66,7 +67,8 @@ class _ShareIdeaDialogState extends State<ShareIdeaDialog> {
                     CustomText(
                       AppStaticStrings.yourIdeasMatter.tr,
                       variant: TextVariant.bodySmall,
-                      color: Colors.white.withValues(alpha: 0.7),
+                      fontSize: 12,
+                      color: Colors.white,
                     ),
                   ],
                 ),
@@ -83,14 +85,13 @@ class _ShareIdeaDialogState extends State<ShareIdeaDialog> {
             const Divider(color: AppColors.kPrimaryColor, height: 24),
             CustomText(
               AppStaticStrings.category.tr,
-              variant: TextVariant.labelMedium,
-              color: Colors.white,
+              style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold)
             ),
             space8H,
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: Colors.transparent,
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(color: AppColors.kPrimaryColor),
               ),
@@ -99,7 +100,7 @@ class _ShareIdeaDialogState extends State<ShareIdeaDialog> {
                   value: selectedCategory,
                   hint: CustomText(
                     AppStaticStrings.selectIdeaCategory.tr,
-                    color: AppColors.kTextColor.withValues(alpha: 0.5),
+                    color: AppColors.kWhiteTextColor,
                   ),
                   isExpanded: true,
                   items: categories.map((String value) {
@@ -116,24 +117,26 @@ class _ShareIdeaDialogState extends State<ShareIdeaDialog> {
                 ),
               ),
             ),
-            space16H,
+            space8H,
             CustomTextField(
               title: AppStaticStrings.title.tr,
               hintText: AppStaticStrings.whatsItAbout.tr,
               textEditingController: titleController,
-              fillColor: Colors.white,
-              titleStyle: const TextStyle(color: Colors.white),
+              fillColor: Colors.transparent,
+              titleStyle: const TextStyle(color: Colors.white,fontSize: 14, fontWeight: FontWeight.bold),
+              hintStyle: const TextStyle(fontSize: 12, color: Colors.white),
             ),
-            space16H,
+            space8H,
             CustomTextField(
               title: AppStaticStrings.aboutUs.tr, // Reusing about text or just "Description"
               hintText: AppStaticStrings.tellUsMoreAboutIdea.tr,
               textEditingController: descController,
               maxLines: 4,
-              fillColor: Colors.white,
-              titleStyle: const TextStyle(color: Colors.white),
+              fillColor: Colors.transparent,
+              titleStyle: const TextStyle(color: Colors.white,fontSize: 14, fontWeight: FontWeight.bold),
+              hintStyle: const TextStyle(fontSize: 12, color: Colors.white),
             ),
-            space24H,
+            space8H,
             CustomButton(
               text: AppStaticStrings.submitIdea.tr,
               onPressed: () {
@@ -142,12 +145,13 @@ class _ShareIdeaDialogState extends State<ShareIdeaDialog> {
               },
               backgroundColor: AppColors.kPrimaryColor,
             ),
-            space12H,
+            space8H,
             Center(
               child: CustomText(
                 AppStaticStrings.adminCanPublishDesc.tr,
                 variant: TextVariant.labelSmall,
-                color: Colors.white.withValues(alpha: 0.7),
+                fontSize: 12,
+                color: Colors.white,
                 textAlign: TextAlign.center,
               ),
             ),

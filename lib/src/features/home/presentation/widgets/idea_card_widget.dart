@@ -71,6 +71,7 @@ class IdeaCardWidget extends StatelessWidget {
                 CustomText(
                   title,
                   variant: TextVariant.titleMedium,
+                  fontSize: 14,
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                 ),
@@ -78,7 +79,8 @@ class IdeaCardWidget extends StatelessWidget {
                 CustomText(
                   description,
                   variant: TextVariant.bodySmall,
-                  color: Colors.white.withValues(alpha: 0.9),
+                  fontSize: 12,
+                  color: Colors.white,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -93,7 +95,7 @@ class IdeaCardWidget extends StatelessWidget {
                     CustomText(
                       '$userName • $date',
                       variant: TextVariant.labelSmall,
-                      color: Colors.white.withValues(alpha: 0.8),
+                      color: Colors.white,
                     ),
                   ],
                 ),

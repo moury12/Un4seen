@@ -15,9 +15,24 @@ class IdeasFeedbackPage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.kTextColor),
-          onPressed: () => Navigator.pop(context),
+        // leading: IconButton(
+        //   icon: const Icon(Icons.arrow_back, color: AppColors.kTextColor),
+        //   onPressed: () => Navigator.pop(context),
+        // ),
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+           CustomText(
+              AppStaticStrings.ideasAndFeedback.tr,
+              variant: TextVariant.headlineLarge,
+              fontWeight: FontWeight.bold,
+              color: AppColors.kTextColor,
+            ),
+            CustomText(
+              AppStaticStrings.helpShapeFuture.tr,
+              variant: TextVariant.bodyMedium,
+              color: AppColors.kSecondaryTextColor,
+            ),  ],
         ),
         actions: [
           Padding(
@@ -37,22 +52,11 @@ class IdeasFeedbackPage extends StatelessWidget {
         ],
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(12),
+        padding: AppPadding.getPadding12(context),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CustomText(
-              AppStaticStrings.ideasAndFeedback.tr,
-              variant: TextVariant.headlineLarge,
-              fontWeight: FontWeight.bold,
-              color: AppColors.kTextColor,
-            ),
-            CustomText(
-              AppStaticStrings.helpShapeFuture.tr,
-              variant: TextVariant.bodyMedium,
-              color: AppColors.kSecondaryTextColor,
-            ),
-            space24H,
+    
             // Example data as per screenshot
             const IdeaCardWidget(
               icon: AppIcons.chat,
@@ -81,9 +85,7 @@ class IdeasFeedbackPage extends StatelessWidget {
               upvotes: 42,
               userImage: 'https://i.pravatar.cc/150?u=sarah2',
             ),
-            space24H,
             const HowItWorksWidget(),
-            space24H,
           ],
         ),
       ),
