@@ -21,24 +21,48 @@ class CreateChannelDialog extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                CustomText(AppStaticStrings.createChannel.tr, color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
-                IconButton(onPressed: () => Navigator.pop(context), icon: const Icon(Icons.close, color: Colors.white)),
+                CustomText(
+                  AppStaticStrings.createChannel.tr,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+                IconButton(
+                  onPressed: () => Navigator.pop(context),
+                  icon: const Icon(Icons.close, color: Colors.white),
+                ),
               ],
             ),
             // CustomText( color: Colors.white70, fontSize: 11),
             // space8H,
-             CustomTextField(
+            CustomTextField(
               title: AppStaticStrings.channelName.tr,
-              hintText: 'Local Rides', fillColor: Colors.transparent,
-              hintStyle: TextStyle(color: Colors.white, fontSize: 12),
-               titleStyle: TextStyle(color: Colors.white, fontSize: 14),
+              inputTextStyle: const TextStyle(
+                fontSize: 13,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
               ),
+
+              hintText: 'Local Rides',
+              fillColor: Colors.transparent,
+              hintStyle: TextStyle(color: Colors.white, fontSize: 12),
+              titleStyle: TextStyle(color: Colors.white, fontSize: 14),
+            ),
             space12H,
             Row(
               children: [
-                const Icon(Icons.group_add_outlined, color: Colors.white, size: 18),
+                const Icon(
+                  Icons.group_add_outlined,
+                  color: Colors.white,
+                  size: 18,
+                ),
                 space8W,
-                CustomText(AppStaticStrings.addMembers.tr, color: Colors.white, fontWeight: FontWeight.bold,fontSize: 12,),
+                CustomText(
+                  AppStaticStrings.addMembers.tr,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12,
+                ),
               ],
             ),
             space8H,
@@ -46,9 +70,18 @@ class CreateChannelDialog extends StatelessWidget {
             space8H,
             const ChannelMemberItemWidget(name: 'Taylor Kim', isAdded: false),
             space12H,
-            CustomButton(text: AppStaticStrings.createChannel.tr, onPressed: () => Navigator.pop(context)),
+            CustomButton(
+              text: AppStaticStrings.createChannel.tr,
+              onPressed: () => Navigator.pop(context),
+            ),
             space8H,
-            const Center(child: CustomText('You will be the admin of this channel', color: Colors.white, fontSize: 12)),
+            const Center(
+              child: CustomText(
+                'You will be the admin of this channel',
+                color: Colors.white,
+                fontSize: 12,
+              ),
+            ),
           ],
         ),
       ),

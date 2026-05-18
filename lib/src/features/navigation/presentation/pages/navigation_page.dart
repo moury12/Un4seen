@@ -3,9 +3,7 @@ import 'package:flutter_auto_size_text/flutter_auto_size_text.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:un4seen/src/core/core_export.dart';
-import '../../../../core/theme/app_colors.dart';
-import '../../../../core/utils/app_images.dart';
-import '../../../../core/utils/app_strings.dart';
+
 import '../controllers/navigation_controller.dart';
 import '../../../home/presentation/pages/home_page.dart';
 import '../../../competitions/presentation/pages/competitions_page.dart';

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/core_export.dart';
@@ -58,8 +57,7 @@ class _SetupRidePageState extends State<SetupRidePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-         const BikeProgressBar(progress: 1.0),
-          
+              const BikeProgressBar(progress: 1.0),
 
               space8H,
               const CustomText(
@@ -205,7 +203,7 @@ class _SetupRidePageState extends State<SetupRidePage> {
               CustomButton(
                 text: AppStaticStrings.completeSetup,
                 onPressed: () {
-                  context.go(AppRoutes.home);
+                  context.go(AppRoutes.navigation);
                 },
               ),
               space12H,

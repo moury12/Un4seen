@@ -6,10 +6,7 @@ class ShareIdeaDialog extends StatefulWidget {
   const ShareIdeaDialog({super.key});
 
   static void show(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => const ShareIdeaDialog(),
-    );
+    showDialog(context: context, builder: (context) => const ShareIdeaDialog());
   }
 
   @override
@@ -53,7 +50,10 @@ class _ShareIdeaDialogState extends State<ShareIdeaDialog> {
                   children: [
                     Row(
                       children: [
-                        const Icon(Icons.lightbulb_outline, color: Colors.white),
+                        const Icon(
+                          Icons.lightbulb_outline,
+                          color: Colors.white,
+                        ),
                         space8W,
                         CustomText(
                           AppStaticStrings.shareYourIdea.tr,
@@ -85,7 +85,11 @@ class _ShareIdeaDialogState extends State<ShareIdeaDialog> {
             const Divider(color: AppColors.kPrimaryColor, height: 24),
             CustomText(
               AppStaticStrings.category.tr,
-              style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold)
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             space8H,
             Container(
@@ -97,16 +101,20 @@ class _ShareIdeaDialogState extends State<ShareIdeaDialog> {
               ),
               child: DropdownButtonHideUnderline(
                 child: DropdownButton<String>(
+                  style: const TextStyle(color: Colors.white),
+                  dropdownColor: AppColors.kPrimaryDarkColor3,
                   value: selectedCategory,
+
                   hint: CustomText(
                     AppStaticStrings.selectIdeaCategory.tr,
-                    color: AppColors.kWhiteTextColor,
+                    color: Colors.white,
                   ),
+
                   isExpanded: true,
                   items: categories.map((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
-                      child: CustomText(value, color: AppColors.kTextColor),
+                      child: CustomText(value, color: Colors.white),
                     );
                   }).toList(),
                   onChanged: (val) {
@@ -123,17 +131,37 @@ class _ShareIdeaDialogState extends State<ShareIdeaDialog> {
               hintText: AppStaticStrings.whatsItAbout.tr,
               textEditingController: titleController,
               fillColor: Colors.transparent,
-              titleStyle: const TextStyle(color: Colors.white,fontSize: 14, fontWeight: FontWeight.bold),
+              inputTextStyle: const TextStyle(
+                fontSize: 13,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+
+              titleStyle: const TextStyle(
+                color: Colors.white,
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+              ),
               hintStyle: const TextStyle(fontSize: 12, color: Colors.white),
             ),
             space8H,
             CustomTextField(
-              title: AppStaticStrings.aboutUs.tr, // Reusing about text or just "Description"
+              title: AppStaticStrings.aboutUs.tr,
+              inputTextStyle: const TextStyle(
+                fontSize: 13,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+              // Reusing about text or just "Description"
               hintText: AppStaticStrings.tellUsMoreAboutIdea.tr,
               textEditingController: descController,
               maxLines: 4,
               fillColor: Colors.transparent,
-              titleStyle: const TextStyle(color: Colors.white,fontSize: 14, fontWeight: FontWeight.bold),
+              titleStyle: const TextStyle(
+                color: Colors.white,
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+              ),
               hintStyle: const TextStyle(fontSize: 12, color: Colors.white),
             ),
             space8H,

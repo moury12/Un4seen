@@ -53,12 +53,14 @@ dependencies:
   flutter_auto_size_text: ^5.0.0
   image_picker: ^1.2.2
   path_provider: ^2.1.5
-  image_gallery_saver: ^2.0.3
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
+flutter_launcher_icons:
+  ios: true
+  android: false   # 🚫 Don’t touch Android icons
+  image_path_ios: "assets/icons/appicon.png"
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your

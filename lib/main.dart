@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'src/features/auth/presentation/bindings/auth_binding.dart';
 import 'src/features/home/presentation/bindings/home_binding.dart';
 import 'src/core/theme/app_theme.dart';
@@ -13,8 +14,12 @@ import 'src/features/orders/presentation/bindings/orders_binding.dart';
 import 'src/features/subscription/presentation/bindings/subscription_binding.dart';
 import 'src/features/bike_profiles/presentation/bindings/bike_profiles_binding.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
   runApp(const MyApp());
 }
 

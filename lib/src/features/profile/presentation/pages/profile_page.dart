@@ -74,7 +74,7 @@ class ProfilePage extends StatelessWidget {
                 textColor: AppColors.kRedColor,
                 borderColor: AppColors.kRedColor,
                 text: AppStaticStrings.logOut.tr,
-                onPressed: () => LogoutDialog.show(context),
+                onPressed: () => context.go(AppRoutes.login),
               ),
 
               const SizedBox(height: 32),
@@ -84,5 +84,4 @@ class ProfilePage extends StatelessWidget {
       ),
     );
   }
-
 }

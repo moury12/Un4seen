@@ -1,7 +1,6 @@
 import '../../../../src_export.dart';
 import '../widgets/image_upload_section.dart';
 
-
 class AddNewBikePage extends StatelessWidget {
   const AddNewBikePage({super.key});
 
@@ -191,6 +190,11 @@ class AddNewBikePage extends StatelessWidget {
         CustomTextField(
           hintText: hint,
           title: label,
+          inputTextStyle: const TextStyle(
+            fontSize: 13,
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
           titleStyle: Theme.of(
             context,
           ).textTheme.titleMedium?.copyWith(color: Colors.white),

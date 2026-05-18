@@ -13,7 +13,16 @@ class QuickActionRowWidget extends StatelessWidget {
         width: 70.0 * 6 + 20, // Total width: (item width * count) + padding
         child: Stack(
           children: [
-            _actionItem(AppIcons.reward, AppStaticStrings.points.tr, 0),
+            _actionItem(
+              AppIcons.reward,
+              AppStaticStrings.points.tr,
+              0,
+              onTap: () {
+                if (Get.isRegistered<NavigationController>()) {
+                  Get.find<NavigationController>().changeIndex(3);
+                }
+              },
+            ),
             _actionItem(
               AppIcons.ideas,
               "Ideas",
@@ -33,8 +42,8 @@ class QuickActionRowWidget extends StatelessWidget {
               onTap: () => context.push(AppRoutes.un4seenWorld),
             ),
             _actionItem(
-              AppIcons.chat, 
-              AppStaticStrings.chat.tr, 
+              AppIcons.chat,
+              AppStaticStrings.chat.tr,
               4,
               onTap: () => context.push(AppRoutes.channels),
             ),

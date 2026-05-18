@@ -34,10 +34,7 @@ class PointsBalanceCardWidget extends StatelessWidget {
             spacing: 2,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SvgPicture.asset(
-                AppImages.bikeShadow,
-                // height: 100,
-              ),
+              // Image.asset(AppImages.pointImage, height: 60),
               // "Your Shred Points Balance" row
               Row(
                 children: [
