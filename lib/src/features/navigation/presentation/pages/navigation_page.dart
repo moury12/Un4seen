@@ -28,39 +28,46 @@ class NavigationPage extends GetView<NavigationController> {
 
     return Scaffold(
       body: Obx(() => pages[controller.currentIndex]),
-      bottomNavigationBar: Container(
-        padding: EdgeInsets.only(bottom: 10),
-        height: 80,
-        decoration: const BoxDecoration(color: AppColors.kPrimaryDarkColor2),
-        child: Row(
-          children: [
-            _buildNavItem(0, AppIcons.home, AppStaticStrings.home, context),
-            _buildNavItem(
-              1,
-              AppIcons.reward,
-              AppStaticStrings.competitions,
-              context,
-            ),
-            _buildNavItem(
-              2,
-              AppIcons.pointsEarned,
-              AppStaticStrings.giveaway,
-              context,
-            ),
-            _buildNavItem(3, AppIcons.badge, AppStaticStrings.points, context),
-            _buildNavItem(
-              4,
-              AppIcons.camera,
-              AppStaticStrings.stories,
-              context,
-            ),
-            _buildNavItem(
-              5,
-              AppIcons.person,
-              AppStaticStrings.profile,
-              context,
-            ),
-          ],
+      bottomNavigationBar: SafeArea(
+        child: Container(
+          padding: EdgeInsets.only(bottom: 10),
+          height: 80,
+          decoration: const BoxDecoration(color: AppColors.kPrimaryDarkColor2),
+          child: Row(
+            children: [
+              _buildNavItem(0, AppIcons.home, AppStaticStrings.home, context),
+              _buildNavItem(
+                1,
+                AppIcons.reward,
+                AppStaticStrings.competitions,
+                context,
+              ),
+              _buildNavItem(
+                2,
+                AppIcons.pointsEarned,
+                AppStaticStrings.giveaway,
+                context,
+              ),
+              _buildNavItem(
+                3,
+                AppIcons.badge,
+                AppStaticStrings.points,
+                context,
+              ),
+              _buildNavItem(
+                4,
+                AppIcons.camera,
+                AppStaticStrings.stories,
+                context,
+              ),
+              _buildNavItem(
+                5,
+                AppIcons.person,
+                AppStaticStrings.profile,
+                context,
+              ),
+            ],
+          ),
         ),
       ),
     );

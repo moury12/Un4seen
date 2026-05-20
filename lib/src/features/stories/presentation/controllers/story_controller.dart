@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 
 class StoryController extends GetxController {
   final RxBool isSoundOn = true.obs;
+  final RxBool isLiked = false.obs;
   final Rx<File?> selectedImage = Rx<File?>(null);
   final RxString selectedCategory = ''.obs;
   final RxString selectedMusic = ''.obs;
@@ -19,6 +20,10 @@ class StoryController extends GetxController {
 
   void toggleSound() {
     isSoundOn.value = !isSoundOn.value;
+  }
+
+  void toggleLike() {
+    isLiked.value = !isLiked.value;
   }
 
   Future<void> pickImage() async {

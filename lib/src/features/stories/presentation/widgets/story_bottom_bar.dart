@@ -1,17 +1,21 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import '../../../../core/core_export.dart';
+import '../controllers/story_controller.dart';
 
 class StoryBottomBar extends StatelessWidget {
   final VoidCallback onJoinTap;
   final Function(String) onMessageSent;
 
-  const StoryBottomBar({
+  StoryBottomBar({
     super.key,
     required this.onJoinTap,
     required this.onMessageSent,
   });
+
+  final controller = Get.find<StoryController>();
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +24,16 @@ class StoryBottomBar extends StatelessWidget {
       child: Row(
         spacing: 12,
         children: [
-          CustomIconButtonWidget(image: AppIcons.fire),
+          Obx(() => CustomIconButtonWidget(
+                image: AppIcons.fire,
+                colorFilter: controller.isLiked.value
+                    ? const ColorFilter.mode(
+                        AppColors.kAccentColor,
+                        BlendMode.srcIn,
+                      )
+                    : null,
+                onPressed: controller.toggleLike,
+              )),
           CustomIconButtonWidget(iconData: CupertinoIcons.bookmark),
           CustomIconButtonWidget(iconData: Icons.download_outlined),
         ],
@@ -35,6 +48,7 @@ class CustomIconButtonWidget extends StatelessWidget {
   final double? padding;
   final double? iconSize;
   final VoidCallback? onPressed;
+  final ColorFilter? colorFilter;
   const CustomIconButtonWidget({
     super.key,
     this.image,
@@ -42,6 +56,7 @@ class CustomIconButtonWidget extends StatelessWidget {
     this.iconSize,
     this.iconData,
     this.onPressed,
+    this.colorFilter,
   });
 
   @override
@@ -49,15 +64,20 @@ class CustomIconButtonWidget extends StatelessWidget {
     return ButtonTapWidget(
       onTap: onPressed,
       child: Container(
-        padding:  EdgeInsets.all(padding??12),
-      decoration: BoxDecoration(  
-        shape: BoxShape.circle,
-        color: AppColors.kPrimaryDarkColor3,
+        padding: EdgeInsets.all(padding ?? 12),
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: AppColors.kPrimaryDarkColor3,
+        ),
+        child: image != null
+            ? SvgPicture.asset(
+                image!,
+                height: iconSize ?? 25,
+                width: iconSize ?? 25,
+                colorFilter: colorFilter,
+              )
+            : Icon(iconData, color: Colors.white, size: iconSize ?? 25),
       ),
-      child: image != null
-          ? SvgPicture.asset(image!, height:   iconSize??30,width:iconSize??30,)
-          : Icon(iconData, color: Colors.white, size: iconSize??30),
-    ),
     );
   }
 }

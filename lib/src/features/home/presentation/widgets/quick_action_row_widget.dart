@@ -9,12 +9,12 @@ class QuickActionRowWidget extends StatelessWidget {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: SizedBox(
-        height: 130, // Adjust height as needed
-        width: 70.0 * 6 + 20, // Total width: (item width * count) + padding
+        height: 140, // Adjust height as needed
+        width: 70.0 * 9 + 20, // Total width: (item width * count) + padding
         child: Stack(
           children: [
             _actionItem(
-              AppIcons.reward,
+              AppIcons.badge,
               AppStaticStrings.points.tr,
               0,
               onTap: () {
@@ -24,33 +24,54 @@ class QuickActionRowWidget extends StatelessWidget {
               },
             ),
             _actionItem(
+              AppIcons.reward,
+              AppStaticStrings.competitions.tr,
+              1,
+              onTap: () {
+                if (Get.isRegistered<NavigationController>()) {
+                  Get.find<NavigationController>().changeIndex(1);
+                }
+              },
+            ),
+            _actionItem(
+              AppIcons.pointsEarned,
+              AppStaticStrings.giveaway.tr,
+              2,
+              onTap: () {
+                if (Get.isRegistered<NavigationController>()) {
+                  Get.find<NavigationController>().changeIndex(2);
+                }
+              },
+            ),
+            _actionItem(
               AppIcons.ideas,
               "Ideas",
-              1,
+              3,
               onTap: () => context.push(AppRoutes.ideasFeedback),
             ),
             _actionItem(
               AppIcons.crew,
               "Crew",
-              2,
+                4,
               onTap: () => context.push(AppRoutes.crewChoice),
             ),
             _actionItem(
               AppIcons.world,
               "World",
-              3,
+              5,
               onTap: () => context.push(AppRoutes.un4seenWorld),
             ),
             _actionItem(
               AppIcons.chat,
               AppStaticStrings.chat.tr,
-              4,
+              6,
               onTap: () => context.push(AppRoutes.channels),
             ),
+            
             _actionItem(
               AppIcons.bag,
               "Shop",
-              5,
+              7,
               onTap: () => context.push(AppRoutes.shop),
             ),
           ],
@@ -105,6 +126,8 @@ class QuickActionRowWidget extends StatelessWidget {
                   label,
                   color: Colors.white,
                   fontSize: 10,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   fontWeight: FontWeight.bold,
                 ),
               ],
