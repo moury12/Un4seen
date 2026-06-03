@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:un4seen/src/core/routes/app_routes.dart';
 import 'package:un4seen/src/core/widgets/custom_scaffold.dart';
 import 'package:un4seen/src/core/widgets/logout_dialog.dart';
+import 'package:un4seen/src/features/auth/presentation/auth_presentation_export.dart';
 import 'package:un4seen/src/features/profile/presentation/widgets/point_blance_card_widget.dart';
 import '../../../../core/core_export.dart';
 import '../widgets/profile_menu_tile.dart';
@@ -14,6 +15,8 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+        final ctrl = Get.find<AuthController>();
+
     return CustomScaffold(
       // isPaddingNeeded: false,
       body: SafeArea(
@@ -74,7 +77,7 @@ class ProfilePage extends StatelessWidget {
                 textColor: AppColors.kRedColor,
                 borderColor: AppColors.kRedColor,
                 text: AppStaticStrings.logOut.tr,
-                onPressed: () => context.go(AppRoutes.login),
+                onPressed: () => ctrl.logout()  ,
               ),
 
               const SizedBox(height: 32),

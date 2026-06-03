@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:get/get.dart' as getx;
 import '../../../../core/core_export.dart';
 import '../../../../core/routes/app_routes.dart';
+import '../../../../core/services/local_storage_service.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -49,12 +51,14 @@ class _SplashPageState extends State<SplashPage>
       ),
     );
 
-    _controller.forward();
-
-    /// Optional navigation
-    // _controller.forward().whenComplete(() {
-    //   context.go(AppRoutes.home);
-    // });
+    _controller.forward().whenComplete(() {
+      final storage = getx.Get.find<LocalStorageService>();
+      if (storage.accessToken != null) {
+        context.go(AppRoutes.navigation);
+      } else {
+        context.go(AppRoutes.login);
+      }
+    });
   }
 
   @override

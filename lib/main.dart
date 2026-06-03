@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'src/core/services/local_storage_service.dart';
+import 'src/core/widgets/custom_snackbar.dart';
 import 'src/features/auth/presentation/bindings/auth_binding.dart';
 import 'src/features/home/presentation/bindings/home_binding.dart';
 import 'src/core/theme/app_theme.dart';
@@ -16,6 +19,11 @@ import 'src/features/bike_profiles/presentation/bindings/bike_profiles_binding.d
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
+  // Initialize Storage Service globally
+  final storage = await LocalStorageService().init();
+  Get.put(storage, permanent: true);
+  
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
@@ -42,7 +50,8 @@ class MyApp extends StatelessWidget {
     BikeProfilesBinding().dependencies();
 
     return MaterialApp.router(
-      title: 'Flutter Demo',
+      title: 'UN4SEEN',
+      scaffoldMessengerKey: CustomSnackbar.messengerKey,
       debugShowCheckedModeBanner: false,
       theme: AppTheme.light,
       routerConfig: AppRouter.router,

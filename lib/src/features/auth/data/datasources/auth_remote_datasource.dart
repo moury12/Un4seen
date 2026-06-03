@@ -1,31 +1,43 @@
-import '../models/user_model.dart';
+import '../../../../core/services/api_service.dart';
 
-// Replace with your actual ApiService / Dio client
 abstract class AuthRemoteDataSource {
-  Future<UserModel> login({required String email, required String password});
-  Future<void> logout();
-  Future<UserModel?> getCurrentUser();
+  Future<Map<String, dynamic>> login({required String email, required String password});
+  Future<String> forgotPassword({required String email});
+  Future<bool> verifyOtp({required String email, required String otp});
+  Future<String> resetPassword({required String email, required String newPassword});
+  Future<void> resendOtp({required String email});
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
-  // final ApiService _api;
-  // AuthRemoteDataSourceImpl(this._api);
+  final ApiService _api;
+  AuthRemoteDataSourceImpl(this._api);
 
   @override
-  Future<UserModel> login({required String email, required String password}) async {
-    // Simulate network call
-    await Future.delayed(const Duration(seconds: 1));
-    // TODO: replace with real API call
-    return UserModel(id: '1', email: email, name: 'Demo User');
+  Future<Map<String, dynamic>> login({required String email, required String password}) async {
+    final response = await _api.post('/auth/login', data: {'email': email, 'password': password});
+    return response.data;
   }
 
   @override
-  Future<void> logout() async {
-    await Future.delayed(const Duration(milliseconds: 300));
+  Future<String> forgotPassword({required String email}) async {
+    final response = await _api.post('/auth/forgot-password', data: {'email': email});
+    return response.data['message'];
   }
 
   @override
-  Future<UserModel?> getCurrentUser() async {
-    return null;
+  Future<bool> verifyOtp({required String email, required String otp}) async {
+    final response = await _api.post('/auth/verify-otp', data: {'email': email, 'otp': otp});
+    return response.data['success'];
+  }
+
+  @override
+  Future<String> resetPassword({required String email, required String newPassword}) async {
+    final response = await _api.post('/auth/reset-password', data: {'email': email, 'newPassword': newPassword});
+    return response.data['message'];
+  }
+
+  @override
+  Future<void> resendOtp({required String email}) async {
+    await _api.post('/auth/resend-otp', data: {'email': email});
   }
 }

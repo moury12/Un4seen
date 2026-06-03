@@ -5,13 +5,24 @@ class HomeHeaderWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Row(
       children: [
-        
-        CustomText(AppStaticStrings.quoteOfTheDay.tr, fontWeight: FontWeight.bold, fontSize: 14),
-        CustomText(AppStaticStrings.neverGiveUp.tr, color: AppColors.kSecondaryTextColor, fontSize: 12),
-   ],
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              
+              CustomText(AppStaticStrings.quoteOfTheDay.tr, fontWeight: FontWeight.bold, fontSize: 14),
+              CustomText(AppStaticStrings.neverGiveUp.tr, color: AppColors.kSecondaryTextColor, fontSize: 12),
+             ],
+          ),
+        ),
+        Image.asset(  
+          AppImages.logo,
+          // width: 80,
+          height: 30,
+        ),
+      ],
     );
   }
 }

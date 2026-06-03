@@ -22,19 +22,20 @@ class CustomScaffold extends StatelessWidget {
     return Scaffold(
       appBar: appBar,
       extendBodyBehindAppBar: extendBodyBehindAppBar,
-      body: Stack(
-        children: [
-          Container(
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(AppImages.darkBgImg),
-                fit: BoxFit.fill,
-              ),
-            ),
-          ),
-          body,
-        ],
-      ),
+      body: body,
+      //  Stack(
+      //   children: [
+      //     Container(
+      //       decoration: const BoxDecoration(
+      //         image: DecorationImage(
+      //           image: AssetImage(AppImages.darkBgImg),
+      //           fit: BoxFit.fill,
+      //         ),
+      //       ),
+      //     ),
+
+      //   ],
+      // ),
       bottomNavigationBar: bottomNavigationBar,
       floatingActionButton: floatingActionButton,
     );

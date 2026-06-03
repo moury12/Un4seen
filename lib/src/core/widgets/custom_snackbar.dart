@@ -2,20 +2,26 @@ import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
 
 class CustomSnackbar {
-  CustomSnackbar._();
+  // Add this key to your main.dart MaterialApp
+  static final GlobalKey<ScaffoldMessengerState> messengerKey =
+      GlobalKey<ScaffoldMessengerState>();
 
-  static void show(
-    BuildContext context,
-    String message, {
-    bool isError = false,
-  }) {
-    ScaffoldMessenger.of(context).showSnackBar(
+  static void showSuccess(String message) {
+    _show(message, AppColors.kGreenColor);
+  }
+
+  static void showError(String message) {
+    _show(message, AppColors.kRedColor);
+  }
+
+  static void _show(String message, Color color) {
+    messengerKey.currentState?.showSnackBar(
       SnackBar(
         content: Text(message, style: const TextStyle(color: Colors.white)),
-        backgroundColor: isError ? AppColors.kRedColor : AppColors.kPrimaryColor,
+        backgroundColor: color,
         behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         margin: const EdgeInsets.all(12),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       ),
     );
   }

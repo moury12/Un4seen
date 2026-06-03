@@ -1,8 +1,8 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/core_export.dart';
-import '../../../../core/routes/app_routes.dart';
 import '../controllers/auth_controller.dart';
 
 class OtpVerificationPage extends StatefulWidget {
@@ -24,6 +24,14 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
     (_) => TextEditingController(),
   );
   final List<FocusNode> _focusNodes = List.generate(6, (_) => FocusNode());
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Get.find<AuthController>().startResendTimer();
+    });
+  }
 
   @override
   void dispose() {
@@ -125,10 +133,40 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
               ),
 
               space24H,
-              const CustomText(
-                '${AppStaticStrings.resendCode} 00:34',
-                variant: TextVariant.labelMedium,
-                color: AppColors.kSecondaryTextColor,
+              Obx(
+                () {
+                  final seconds = ctrl.resendSeconds.value;
+                  final minutesStr = (seconds ~/ 60).toString().padLeft(2, '0');
+                  final secondsStr = (seconds % 60).toString().padLeft(2, '0');
+
+                  return RichText(
+                    text: TextSpan(
+                      text: '${AppStaticStrings.resendCode.tr} ',
+                      style: TextStyle(
+                        color: ctrl.canResend.value
+                            ? AppColors.kPrimaryColor
+                            : AppColors.kSecondaryTextColor,
+                        fontSize: 14,
+                        fontWeight: ctrl.canResend.value
+                            ? FontWeight.bold
+                            : FontWeight.normal,
+                      ),
+                      children: [
+                        if (!ctrl.canResend.value)
+                          TextSpan(
+                            text: '$minutesStr:$secondsStr',
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                      ],
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          if (ctrl.canResend.value) {
+                            ctrl.resendOtp(widget.email);
+                          }
+                        },
+                    ),
+                  );
+                },
               ),
 
               space12H,
@@ -138,11 +176,8 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                   text: AppStaticStrings.verifyCode,
                   isLoading: ctrl.isLoading,
                   onPressed: () {
-                    if (widget.isForResetPass) {
-                      context.push(AppRoutes.resetPassword);
-                    } else {
-                      context.push(AppRoutes.setupProfile);
-                    }
+                    String otp = _controllers.map((e) => e.text).join();
+                    ctrl.verifyOtp(widget.email, otp, widget.isForResetPass);
                   },
                 ),
               ),

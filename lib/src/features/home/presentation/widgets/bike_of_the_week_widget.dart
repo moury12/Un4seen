@@ -12,9 +12,17 @@ class BikeOfTheWeekWidget extends StatelessWidget {
       children: [
         Row(
           children: [
-            const Icon(Icons.emoji_events_outlined, color: AppColors.kPrimaryColor, size: 22),
+            const Icon(
+              Icons.emoji_events_outlined,
+              color: AppColors.kPrimaryColor,
+              size: 22,
+            ),
             space4W,
-            CustomText(AppStaticStrings.bikeOfTheWeek.tr, variant: TextVariant.titleLarge, fontWeight: FontWeight.bold),
+            CustomText(
+              AppStaticStrings.bikeOfTheWeek.tr,
+              variant: TextVariant.titleLarge,
+              fontWeight: FontWeight.bold,
+            ),
           ],
         ),
         space12H,
@@ -28,10 +36,14 @@ class BikeOfTheWeekWidget extends StatelessWidget {
             child: Column(
               children: [
                 ClipPath(
-                  clipper: BikeOfTheWeekShapeClipper(radius: 16, slantAmount: 6),
+                  clipper: BikeOfTheWeekShapeClipper(
+                    radius: 16,
+                    slantAmount: 6,
+                  ),
                   child: const CustomNetworkImage(
-                    imageUrl: 'https://images.unsplash.com/photo-1558981403-c5f9899a28bc?q=80&w=600',
-                    height: 180,
+                    imageUrl:
+                        'https://images.unsplash.com/photo-1558981403-c5f9899a28bc?q=80&w=600',
+                    height: 200,
                     width: double.infinity,
                   ),
                 ),
@@ -41,14 +53,28 @@ class BikeOfTheWeekWidget extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          const CircleAvatar(radius: 18, backgroundImage: NetworkImage('https://i.pravatar.cc/150?img=5')),
+                          const CircleAvatar(
+                            radius: 18,
+                            backgroundImage: NetworkImage(
+                              'https://i.pravatar.cc/150?img=5',
+                            ),
+                          ),
                           space8W,
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                CustomText("Jake Thompson #SYN-2847", color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14),
-                                CustomText("MX • ${AppStaticStrings.customBuild.tr} 🇳🇿 New Zealand", color: Colors.white70, fontSize: 12),
+                                CustomText(
+                                  "Jake Thompson #SYN-2847",
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                ),
+                                CustomText(
+                                  "MX • ${AppStaticStrings.customBuild.tr} 🇳🇿 New Zealand",
+                                  color: Colors.white70,
+                                  fontSize: 12,
+                                ),
                               ],
                             ),
                           ),
@@ -61,7 +87,12 @@ class BikeOfTheWeekWidget extends StatelessWidget {
                             // ),
                           ),
                           space4W,
-                          CustomText("23", color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14),
+                          CustomText(
+                            "23",
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
 
                           // CustomButton(
                           //   text: AppStaticStrings.follow.tr,
@@ -74,17 +105,29 @@ class BikeOfTheWeekWidget extends StatelessWidget {
                       ),
                       space12H,
                       Container(
-                        decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20)),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
                         child: ButtonTapWidget(
                           onTap: () {},
-                          child: Padding( 
+                          child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                const Icon(Icons.emoji_events, color: AppColors.kGoldColor, size: 16),
+                                const Icon(
+                                  Icons.emoji_events,
+                                  color: AppColors.kGoldColor,
+                                  size: 16,
+                                ),
                                 space8W,
-                                CustomText(AppStaticStrings.bonusShredPointsAwarded.tr, color: AppColors.kPrimaryColor, fontWeight: FontWeight.bold, fontSize: 11),
+                                CustomText(
+                                  AppStaticStrings.bonusShredPointsAwarded.tr,
+                                  color: AppColors.kPrimaryColor,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 11,
+                                ),
                               ],
                             ),
                           ),

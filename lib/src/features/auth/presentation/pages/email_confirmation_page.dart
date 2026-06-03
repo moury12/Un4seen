@@ -2,16 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/core_export.dart';
-import '../../../../core/routes/app_routes.dart';
 import '../controllers/auth_controller.dart';
 
-class EmailConfirmationPage extends StatelessWidget {
+class EmailConfirmationPage extends StatefulWidget {
   const EmailConfirmationPage({super.key});
+
+  @override
+  State<EmailConfirmationPage> createState() => _EmailConfirmationPageState();
+}
+
+class _EmailConfirmationPageState extends State<EmailConfirmationPage> {
+  final _formKey = GlobalKey<FormState>();
+  final emailCtrl = TextEditingController();
+
+  @override
+  void dispose() {
+    emailCtrl.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final ctrl = Get.find<AuthController>();
-    final emailCtrl = TextEditingController();
 
     return Scaffold(
       backgroundColor: AppColors.kBackgroundColor,
@@ -30,47 +42,53 @@ class EmailConfirmationPage extends StatelessWidget {
       body: SafeArea(
         child: SingleChildScrollView(
           padding: AppPadding.getPadding12(context).copyWith(top: 0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const CustomText(
-                AppStaticStrings.emailConfirmation,
-                variant: TextVariant.headlineMedium,
-                fontWeight: FontWeight.bold,
-              ),
-              space8H,
-              const CustomText(
-                AppStaticStrings.enterEmailVerification,
-                variant: TextVariant.bodyMedium,
-                color: AppColors.kSecondaryTextColor,
-              ),
-              space12H,
-
-              CustomTextField(
-                title: AppStaticStrings.email,
-                hintText: 'name@example.com',
-                textEditingController: emailCtrl,
-                keyboardType: TextInputType.emailAddress,
-                prefixIcon: const Icon(
-                  Icons.email_outlined,
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const CustomText(
+                  AppStaticStrings.emailConfirmation,
+                  variant: TextVariant.headlineMedium,
+                  fontWeight: FontWeight.bold,
+                ),
+                space8H,
+                const CustomText(
+                  AppStaticStrings.enterEmailVerification,
+                  variant: TextVariant.bodyMedium,
                   color: AppColors.kSecondaryTextColor,
-                  size: 20,
                 ),
-                isRequired: false,
-              ),
+                space12H,
 
-              space12H,
-              Obx(
-                () => CustomButton(
-                  text: AppStaticStrings.sendVerificationCode,
-                  isLoading: ctrl.isLoading,
-                  onPressed: () {
-                    context.push(AppRoutes.otpVerification,
-                    extra: {'email': emailCtrl.text,'isForResetPass': true});
-                  },
+                CustomTextField(
+                  title: AppStaticStrings.email,
+                  hintText: 'name@example.com',
+                  textEditingController: emailCtrl,
+                  keyboardType: TextInputType.emailAddress,
+                  isRequired: true,
+                  validator: (value) =>
+                      GetUtils.isEmail(value ?? '') ? null : 'Enter a valid email',
+                  prefixIcon: const Icon(
+                    Icons.email_outlined,
+                    color: AppColors.kSecondaryTextColor,
+                    size: 20,
+                  ),
                 ),
-              ),
-            ],
+
+                space12H,
+                Obx(
+                  () => CustomButton(
+                    text: AppStaticStrings.sendVerificationCode,
+                    isLoading: ctrl.isLoading,
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        ctrl.forgotPassword(emailCtrl.text.trim());
+                      }
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

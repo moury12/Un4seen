@@ -85,7 +85,10 @@ class AppRouter {
       GoRoute(
         path: AppRoutes.resetPassword,
         name: 'resetPassword',
-        builder: (context, state) => const ResetPasswordPage(),
+        builder: (context, state) {
+          final email = state.extra as String? ?? '';
+          return ResetPasswordPage(email: email);
+        },
       ),
       GoRoute(
         path: AppRoutes.setupProfile,
