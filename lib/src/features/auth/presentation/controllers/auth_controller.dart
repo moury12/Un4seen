@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'package:get/get.dart' as getx;
+import 'package:get/state_manager.dart';
+import 'package:un4seen/src/features/profile/data/models/profile_model.dart';
 import '../../../../core/widgets/custom_snackbar.dart';
 import '../../../../core/services/local_storage_service.dart';
 import '../../../../core/routes/app_router.dart';
@@ -20,7 +22,7 @@ class AuthController extends getx.GetxController {
   Timer? _timer;
 
   bool get isLoading => status.value == AuthStatus.loading;
-
+Rx<ProfileModel> userProfile = ProfileModel().obs;
   @override
   void onClose() {
     _timer?.cancel();
@@ -79,16 +81,21 @@ class AuthController extends getx.GetxController {
         final storage = getx.Get.find<LocalStorageService>();
         await storage.saveTokens(data['accessToken'], data['refreshToken']);
         status.value = AuthStatus.authenticated;
+     userProfile.value = ProfileModel.fromJson(data['user']);
 
-        // GoRouter Navigation
-        AppRouter.router.go(AppRoutes.navigation);
+
+if(userProfile.value.isProfileComplete == false || userProfile.value.isProfileComplete == null){
+   AppRouter.router.go(AppRoutes.setupProfile);
+}else{
+    AppRouter.router.go(AppRoutes.navigation);
+}
       });
     } catch (e) {
       status.value = AuthStatus.error;
       // Note: Catch is only for network/hard crashes, UI logic is in _handleApiResponse
       print('Hard Error at lib/src/features/auth/presentation/controllers/auth_controller.dart:51');
-    }
-  }
+    
+  }}
 
   // ── Forgot Password ───────────────────────────────────
   Future<void> forgotPassword(String email) async {

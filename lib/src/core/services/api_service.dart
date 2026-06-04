@@ -73,9 +73,30 @@ class ApiService {
   }
 
   Future<Response> post(String path, {dynamic data}) async {
-    return await _dio.post(path, data: data,
-        options: Options(validateStatus: (status) => status! < 500));
+    try {
+      return await _dio.post(path,
+          data: data,
+          options: Options(validateStatus: (status) => status! < 500));
+    } on DioException {
+      rethrow;
+    }
   }
 
-  Future<Response> get(String path) async => await _dio.get(path);
+  Future<Response> patch(String path, {dynamic data}) async {
+    try {
+      return await _dio.patch(path,
+          data: data,
+          options: Options(validateStatus: (status) => status! < 500));
+    } on DioException {
+      rethrow;
+    }
+  }
+
+  Future<Response> get(String path) async {
+    try {
+      return await _dio.get(path);
+    } on DioException {
+      rethrow;
+    }
+  }
 }

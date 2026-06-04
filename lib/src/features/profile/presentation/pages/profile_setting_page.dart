@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:un4seen/src/core/core_export.dart';
 import '../controllers/profile_controller.dart';
@@ -16,20 +16,20 @@ class ProfileSettingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(AppStaticStrings.profileSetting.tr)),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: AppPadding.getPadding12H(context),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Avatar with camera icon
-              Center(
-                child: GestureDetector(
-                  onTap: controller.pickImage,
-                  child: Stack(
-                    children: [
-                      Obx(
-                        () => Container(
+      body: Obx(
+        () => SafeArea(
+          child: SingleChildScrollView(
+            padding: AppPadding.getPadding12H(context),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Avatar Section
+                Center(
+                  child: GestureDetector(
+                    onTap: controller.pickImage,
+                    child: Stack(
+                      children: [
+                        Container(
                           width: 80,
                           height: 80,
                           decoration: BoxDecoration(
@@ -53,203 +53,216 @@ class ProfileSettingPage extends StatelessWidget {
                                   ),
                           ),
                         ),
-                      ),
-                      Positioned(
-                        bottom: 0,
-                        right: 0,
-                        child: Container(
-                          padding: const EdgeInsets.all(4),
-                          decoration: const BoxDecoration(
-                            color: AppColors.kPrimaryColor,
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Icon(
-                            Icons.camera_alt,
-                            size: 14,
-                            color: Colors.white,
+                        Positioned(
+                          bottom: 0,
+                          right: 0,
+                          child: Container(
+                            padding: const EdgeInsets.all(4),
+                            decoration: const BoxDecoration(
+                              color: AppColors.kPrimaryColor,
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(
+                              Icons.camera_alt,
+                              size: 14,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              space4H,
-              Center(
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 4,
+                space4H,
+                Center(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: AppColors.kPrimaryColor,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: CustomText(
+                      controller.memberNumber.value,
+                      variant: TextVariant.labelSmall,
+                      color: AppColors.kWhiteTextColor,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-                  decoration: BoxDecoration(
-                    color: AppColors.kPrimaryColor,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
+                ),
+                space4H,
+                Center(
                   child: CustomText(
-                    '#SYN-2847',
-                    variant: TextVariant.labelSmall,
-                    color: AppColors.kWhiteTextColor,
+                    '🇳🇿 ${controller.countryName.value}',
+                    variant: TextVariant.labelMedium,
+                    color: AppColors.kTextColor,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-              ),
-              space4H,
-              const Center(
-                child: CustomText(
-                  '🇳🇿 New Zealand',
-                  variant: TextVariant.labelMedium,
-                  color: AppColors.kTextColor,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              space4H,
+                space12H,
 
-              // Forms
-              // Forms
-              FieldLabelWidget(label: AppStaticStrings.fullName.tr),
-              CustomTextField(
-                hintText: controller.fullName.value,
-                prefixIcon: const Icon(
-                  Icons.person_outline,
-                  color: AppColors.kPrimaryColor,
-                  size: 18,
-                ),
-
-                borderColor: AppColors.kPrimaryColor,
-              ),
-              space4H,
-              FieldLabelWidget(label: AppStaticStrings.aboutMe.tr),
-              CustomTextField(
-                hintText: controller.aboutMe.value,
-                maxLines: 4,
-
-                borderColor: AppColors.kPrimaryColor,
-              ),
-              space4H,
-              FieldLabelWidget(label: AppStaticStrings.facebookUrl.tr),
-              CustomTextField(
-                hintText: controller.facebookUrl.value,
-                prefixIcon: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: SvgPicture.asset(AppIcons.fb),
-                ),
-
-                borderColor: AppColors.kPrimaryColor,
-              ),
-              space4H,
-              FieldLabelWidget(label: AppStaticStrings.instagramUrl.tr),
-              CustomTextField(
-                hintText: controller.instagramUrl.value,
-                prefixIcon: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: SvgPicture.asset(AppIcons.ig),
-                ),
-
-                borderColor: AppColors.kPrimaryColor,
-              ),
-              space4H,
-              FieldLabelWidget(label: AppStaticStrings.tiktokUrl.tr),
-              CustomTextField(
-                hintText: controller.tiktokUrl.value,
-                prefixIcon: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: SvgPicture.asset(AppIcons.tictok),
-                ),
-
-                borderColor: AppColors.kPrimaryColor,
-              ),
-              space4H,
-              FieldLabelWidget(label: AppStaticStrings.emailAddress.tr),
-              CustomTextField(
-                hintText: controller.email.value,
-
-                borderColor: AppColors.kPrimaryColor,
-              ),
-              space4H,
-              FieldLabelWidget(label: AppStaticStrings.mobileNumber.tr),
-              CustomTextField(
-                hintText: controller.mobileNumber.value,
-
-                borderColor: AppColors.kPrimaryColor,
-              ),
-              space4H,
-              FieldLabelWidget(label: AppStaticStrings.deliveryAddress.tr),
-              CustomTextField(
-                hintText: AppStaticStrings.streetAddress.tr,
-
-                borderColor: AppColors.kPrimaryColor,
-              ),
-              space4H,
-              Row(
-                children: [
-                  Expanded(
-                    child: CustomTextField(
-                      hintText: AppStaticStrings.city.tr,
-
-                      borderColor: AppColors.kPrimaryColor,
+                // Forms
+                FieldLabelWidget(label: AppStaticStrings.fullName.tr),
+                Row(
+                  spacing: 8,
+                  children: [
+                    Expanded(
+                      child: CustomTextField(
+                        textEditingController: controller.firstNameController,
+                        prefixIcon: const Icon(
+                          Icons.person_outline,
+                          color: AppColors.kPrimaryColor,
+                          size: 18,
+                        ),
+                        borderColor: AppColors.kPrimaryColor,
+                      ),
                     ),
-                  ),
-                  space12W,
-                  Expanded(
-                    child: CustomTextField(
-                      hintText: AppStaticStrings.postalCode.tr,
-
-                      borderColor: AppColors.kPrimaryColor,
+                    Expanded(
+                      child: CustomTextField(
+                        textEditingController: controller.lastNameController,
+                        prefixIcon: const Icon(
+                          Icons.person_outline,
+                          color: AppColors.kPrimaryColor,
+                          size: 18,
+                        ),
+                        borderColor: AppColors.kPrimaryColor,
+                      ),
                     ),
+                  ],
+                ),
+                space8H,
+                FieldLabelWidget(label: AppStaticStrings.aboutMe.tr),
+                CustomTextField(
+                  textEditingController: controller.aboutMeController,
+                  maxLines: 3,
+                  borderColor: AppColors.kPrimaryColor,
+                ),
+                space8H,
+                space4H,
+                FieldLabelWidget(label: AppStaticStrings.facebookUrl.tr),
+                CustomTextField(
+                  hintText: controller.facebookUrl.value,
+                  textEditingController: controller.facebookController,
+                  prefixIcon: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: SvgPicture.asset(AppIcons.fb),
                   ),
-                ],
-              ),
-              space4H,
-              CustomTextField(
-                hintText: AppStaticStrings.stateRegion.tr,
 
-                borderColor: AppColors.kPrimaryColor,
-              ),
-              space4H,
-              FieldLabelWidget(label: AppStaticStrings.clothingFit.tr),
-              Obx(
-                () => ProfileDropdownWidget(
+                  borderColor: AppColors.kPrimaryColor,
+                ),
+                space4H,
+                FieldLabelWidget(label: AppStaticStrings.instagramUrl.tr),
+                CustomTextField(
+                  hintText: controller.instagramUrl.value,
+                  textEditingController: controller.instagramController,
+
+                  prefixIcon: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: SvgPicture.asset(AppIcons.ig),
+                  ),
+
+                  borderColor: AppColors.kPrimaryColor,
+                ),
+                space4H,
+                FieldLabelWidget(label: AppStaticStrings.tiktokUrl.tr),
+                CustomTextField(
+                  hintText: controller.tiktokUrl.value,
+                  textEditingController: controller.tiktokController,
+
+                  prefixIcon: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: SvgPicture.asset(AppIcons.tictok),
+                  ),
+
+                  borderColor: AppColors.kPrimaryColor,
+                ),
+                space4H,
+                FieldLabelWidget(label: AppStaticStrings.emailAddress.tr),
+                CustomTextField(
+                  textEditingController: controller.emailController,
+                  borderColor: AppColors.kPrimaryColor,
+                  readOnly: true, // Usually emails aren't editable directly
+                ),
+                space8H,
+                FieldLabelWidget(label: AppStaticStrings.mobileNumber.tr),
+                CustomTextField(
+                  textEditingController: controller.mobileController,
+                  borderColor: AppColors.kPrimaryColor,
+                ),
+                space8H,
+                FieldLabelWidget(label: AppStaticStrings.deliveryAddress.tr),
+                CustomTextField(
+                  hintText: AppStaticStrings.streetAddress.tr,
+                  textEditingController: controller.streetController,
+                  borderColor: AppColors.kPrimaryColor,
+                ),
+                space8H,
+                Row(
+                  children: [
+                    Expanded(
+                      child: CustomTextField(
+                        hintText: AppStaticStrings.city.tr,
+                        textEditingController: controller.cityController,
+                        borderColor: AppColors.kPrimaryColor,
+                      ),
+                    ),
+                    space12W,
+                    Expanded(
+                      child: CustomTextField(
+                        hintText: AppStaticStrings.postalCode.tr,
+                        textEditingController: controller.zipController,
+                        borderColor: AppColors.kPrimaryColor,
+                      ),
+                    ),
+                  ],
+                ),
+                space8H,
+                CustomTextField(
+                  hintText: AppStaticStrings.stateRegion.tr,
+                  textEditingController: controller.stateController,
+                  borderColor: AppColors.kPrimaryColor,
+                ),
+                space12H,
+
+                FieldLabelWidget(label: AppStaticStrings.clothingFit.tr),
+                ProfileDropdownWidget(
                   value: controller.selectedClothingFit.value,
                   options: controller.clothingFitList,
                   onChanged: (v) => controller.selectedClothingFit.value = v!,
                 ),
-              ),
-              space4H,
-              FieldLabelWidget(label: AppStaticStrings.tshirtSize.tr),
-              Obx(
-                () => ProfileDropdownWidget(
+                space8H,
+                FieldLabelWidget(label: AppStaticStrings.tshirtSize.tr),
+                ProfileDropdownWidget(
                   value: controller.selectedTShirtSize.value,
                   options: controller.sizeList,
                   onChanged: (v) => controller.selectedTShirtSize.value = v!,
                 ),
-              ),
-              space4H,
-              FieldLabelWidget(label: AppStaticStrings.hoodieJerseySize.tr),
-              Obx(
-                () => ProfileDropdownWidget(
+                space8H,
+                FieldLabelWidget(label: AppStaticStrings.hoodieJerseySize.tr),
+
+                ProfileDropdownWidget(
                   value: controller.selectedHoodieSize.value,
                   options: controller.sizeList,
                   onChanged: (v) => controller.selectedHoodieSize.value = v!,
                 ),
-              ),
-              space4H,
-              FieldLabelWidget(label: AppStaticStrings.bikeModel.tr),
-              CustomTextField(
-                hintText: 'Yamaha Yz450f',
+                space12H,
+                FieldLabelWidget(label: AppStaticStrings.bikeModel.tr),
+                CustomTextField(
+                  textEditingController: controller.bikeModelController,
+                  borderColor: AppColors.kPrimaryColor,
+                ),
+                space8H,
+                FieldLabelWidget(label: AppStaticStrings.year.tr),
+                CustomTextField(
+                  textEditingController: controller.bikeYearController,
+                  borderColor: AppColors.kPrimaryColor,
+                ),
+                space12H,
 
-                borderColor: AppColors.kPrimaryColor,
-              ),
-              space4H,
-              FieldLabelWidget(label: AppStaticStrings.year.tr),
-              CustomTextField(
-                hintText: '2024',
-
-                borderColor: AppColors.kPrimaryColor,
-              ),
-              space4H,
-              FieldLabelWidget(label: AppStaticStrings.rideType.tr),
-              Obx(
-                () => Wrap(
+                FieldLabelWidget(label: AppStaticStrings.rideType.tr),
+                Wrap(
                   spacing: 8,
                   runSpacing: 8,
                   children: controller.rideTypeList.map((type) {
@@ -260,27 +273,15 @@ class ProfileSettingPage extends StatelessWidget {
                     );
                   }).toList(),
                 ),
-              ),
-              space4H,
-              FieldLabelWidget(label: AppStaticStrings.ridingLevel.tr),
-              Obx(
-                () => Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
-                  children: controller.ridingLevelList.map((level) {
-                    return ProfilePillWidget(
-                      text: level,
-                      isSelected: controller.selectedRidingLevels.contains(
-                        level,
-                      ),
-                      onTap: () => controller.toggleRidingLevel(level),
-                    );
-                  }).toList(),
+                space12H,
+                CustomButton(
+                  text: AppStaticStrings.save.tr,
+                  isLoading: controller.isLoading.value,
+                  onPressed: controller.updateProfile,
                 ),
-              ),
-              space8H,
-              CustomButton(text: AppStaticStrings.save.tr, onPressed: () {}),
-            ],
+                space24H,
+              ],
+            ),
           ),
         ),
       ),

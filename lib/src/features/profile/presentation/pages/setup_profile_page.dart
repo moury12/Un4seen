@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:get/get.dart';
 import '../../../../core/core_export.dart';
+import '../controllers/profile_controller.dart';
 import '../../../../core/routes/app_routes.dart';
 
 class SetupProfilePage extends StatefulWidget {
@@ -15,11 +17,6 @@ class _SetupProfilePageState extends State<SetupProfilePage> {
   String? _selectedDay;
   String? _selectedMonth;
   String? _selectedYear;
-  String? _selectedCountry = 'New Zealand';
-  String? _selectedFit = 'Mens';
-  String? _selectedTShirtSize = 'M';
-  String? _selectedHoodieSize = 'M';
-
   // Dummy lists
   final List<String> _days = List.generate(
     31,
@@ -53,8 +50,65 @@ class _SetupProfilePageState extends State<SetupProfilePage> {
   final List<String> _fits = ['Mens', 'Womens', 'Unisex'];
   final List<String> _sizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL', '3XL'];
 
+  late Worker _profileWorker;
+
+  @override
+  void initState() {
+    super.initState();
+    final ctrl = Get.isRegistered<ProfileController>()
+        ? Get.find<ProfileController>()
+        : Get.put(ProfileController());
+
+    _parseDob(ctrl.userProfile.value.dob);
+
+    _profileWorker = ever(ctrl.userProfile, (profile) {
+      if (mounted) {
+        setState(() {
+          _parseDob(profile.dob);
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _profileWorker.dispose();
+    super.dispose();
+  }
+
+  void _parseDob(String? dob) {
+    if (dob == null || dob.isEmpty) return;
+    try {
+      final parts = dob.split('-');
+      if (parts.length == 3) {
+        final year = parts[0];
+        final monthInt = int.tryParse(parts[1]);
+        final dayInt = int.tryParse(parts[2]);
+
+        if (year.isNotEmpty && _years.contains(year)) {
+          _selectedYear = year;
+        }
+        if (monthInt != null && monthInt >= 1 && monthInt <= 12) {
+          _selectedMonth = _months[monthInt - 1];
+        }
+        if (dayInt != null && dayInt >= 1 && dayInt <= 31) {
+          final dayStr = dayInt.toString().padLeft(2, '0');
+          if (_days.contains(dayStr)) {
+            _selectedDay = dayStr;
+          }
+        }
+      }
+    } catch (e) {
+      // ignore parsing errors
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final ctrl = Get.isRegistered<ProfileController>()
+        ? Get.find<ProfileController>()
+        : Get.put(ProfileController());
+
     return Scaffold(
       backgroundColor: AppColors.kBackgroundColor,
       appBar: AppBar(
@@ -136,16 +190,14 @@ class _SetupProfilePageState extends State<SetupProfilePage> {
 
               CustomTextField(
                 title: AppStaticStrings.emailAddress,
-                hintText: 'your.email@example.com',
-                textEditingController: TextEditingController(),
+                textEditingController: ctrl.emailController,
                 isRequired: false,
               ),
               space8H,
 
               CustomTextField(
                 title: AppStaticStrings.mobileNumber,
-                hintText: '02-8312024',
-                textEditingController: TextEditingController(),
+                textEditingController: ctrl.mobileController,
                 isRequired: false,
                 prefixIcon: const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 12.0),
@@ -163,11 +215,19 @@ class _SetupProfilePageState extends State<SetupProfilePage> {
                 fontWeight: FontWeight.bold,
               ),
               space8H,
-              _buildDropdown(
-                hint: 'Country',
-                items: _countries,
-                value: _selectedCountry,
-                onChanged: (val) => setState(() => _selectedCountry = val),
+              Obx(
+                () => _buildDropdown(
+                  hint: 'Country',
+                  items: _countries,
+                  value: _countries.contains(ctrl.countryName.value)
+                      ? ctrl.countryName.value
+                      : null,
+                  onChanged: (val) {
+                    if (val != null) {
+                      ctrl.countryName.value = val;
+                    }
+                  },
+                ),
               ),
               space8H,
 
@@ -179,7 +239,7 @@ class _SetupProfilePageState extends State<SetupProfilePage> {
               space8H,
               CustomTextField(
                 hintText: AppStaticStrings.streetAddress,
-                textEditingController: TextEditingController(),
+                textEditingController: ctrl.streetController,
               ),
               space8H,
               Row(
@@ -187,14 +247,14 @@ class _SetupProfilePageState extends State<SetupProfilePage> {
                   Expanded(
                     child: CustomTextField(
                       hintText: AppStaticStrings.city,
-                      textEditingController: TextEditingController(),
+                      textEditingController: ctrl.cityController,
                     ),
                   ),
                   space8W,
                   Expanded(
                     child: CustomTextField(
                       hintText: AppStaticStrings.postalCode,
-                      textEditingController: TextEditingController(),
+                      textEditingController: ctrl.zipController,
                     ),
                   ),
                 ],
@@ -202,7 +262,7 @@ class _SetupProfilePageState extends State<SetupProfilePage> {
               space8H,
               CustomTextField(
                 hintText: AppStaticStrings.stateRegion,
-                textEditingController: TextEditingController(),
+                textEditingController: ctrl.stateController,
               ),
               space8H,
 
@@ -212,11 +272,19 @@ class _SetupProfilePageState extends State<SetupProfilePage> {
                 fontWeight: FontWeight.bold,
               ),
               space8H,
-              _buildDropdown(
-                hint: 'Fit',
-                items: _fits,
-                value: _selectedFit,
-                onChanged: (val) => setState(() => _selectedFit = val),
+              Obx(
+                () => _buildDropdown(
+                  hint: 'Fit',
+                  items: _fits,
+                  value: _fits.contains(ctrl.selectedClothingFit.value)
+                      ? ctrl.selectedClothingFit.value
+                      : null,
+                  onChanged: (val) {
+                    if (val != null) {
+                      ctrl.selectedClothingFit.value = val;
+                    }
+                  },
+                ),
               ),
               space8H,
 
@@ -226,11 +294,19 @@ class _SetupProfilePageState extends State<SetupProfilePage> {
                 fontWeight: FontWeight.bold,
               ),
               space8H,
-              _buildDropdown(
-                hint: 'Size',
-                items: _sizes,
-                value: _selectedTShirtSize,
-                onChanged: (val) => setState(() => _selectedTShirtSize = val),
+              Obx(
+                () => _buildDropdown(
+                  hint: 'Size',
+                  items: _sizes,
+                  value: _sizes.contains(ctrl.selectedTShirtSize.value)
+                      ? ctrl.selectedTShirtSize.value
+                      : null,
+                  onChanged: (val) {
+                    if (val != null) {
+                      ctrl.selectedTShirtSize.value = val;
+                    }
+                  },
+                ),
               ),
               space8H,
 
@@ -240,11 +316,19 @@ class _SetupProfilePageState extends State<SetupProfilePage> {
                 fontWeight: FontWeight.bold,
               ),
               space8H,
-              _buildDropdown(
-                hint: 'Size',
-                items: _sizes,
-                value: _selectedHoodieSize,
-                onChanged: (val) => setState(() => _selectedHoodieSize = val),
+              Obx(
+                () => _buildDropdown(
+                  hint: 'Size',
+                  items: _sizes,
+                  value: _sizes.contains(ctrl.selectedHoodieSize.value)
+                      ? ctrl.selectedHoodieSize.value
+                      : null,
+                  onChanged: (val) {
+                    if (val != null) {
+                      ctrl.selectedHoodieSize.value = val;
+                    }
+                  },
+                ),
               ),
               space8H,
 
@@ -275,11 +359,42 @@ class _SetupProfilePageState extends State<SetupProfilePage> {
 
               space8H,
 
-              CustomButton(
-                text: AppStaticStrings.next,
-                onPressed: () {
-                  context.push(AppRoutes.setupRide);
-                },
+              Obx(
+                () => CustomButton(
+                  text: AppStaticStrings.next,
+                  isLoading: ctrl.isLoading.value,
+                  onPressed: () {
+                    if (_selectedDay == null ||
+                        _selectedMonth == null ||
+                        _selectedYear == null) {
+                      CustomSnackbar.showError(
+                        "Please select your Date of Birth",
+                      );
+                      return;
+                    }
+
+                    if (ctrl.countryName.value.isEmpty) {
+                      CustomSnackbar.showError(
+                        "Please select your country",
+                      );
+                      return;
+                    }
+
+                    final monthIndex = _months.indexOf(_selectedMonth!) + 1;
+                    final monthStr = monthIndex.toString().padLeft(2, '0');
+                    final dayStr = _selectedDay!.padLeft(2, '0');
+                    final dobString = '$_selectedYear-$monthStr-$dayStr';
+
+                    ctrl.updateProfile(
+                      country: ctrl.countryName.value,
+                      dob: dobString,
+                    ).then((success) {
+                      if (success) {
+                        context.push(AppRoutes.setupRide);
+                      }
+                    });
+                  },
+                ),
               ),
               space24H,
             ],

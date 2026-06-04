@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:un4seen/src/core/core_export.dart';
 import 'package:un4seen/src/core/routes/app_routes.dart';
 import 'package:un4seen/src/features/profile/presentation/widgets/profile_menu_tile.dart';
+import 'package:un4seen/src/features/profile/profile_export.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -36,7 +37,22 @@ class SettingsPage extends StatelessWidget {
               ProfileMenuTile(
                 title: AppStaticStrings.profileSetting.tr,
                 icon: AppIcons.person,
-                onTap: () => context.push(AppRoutes.profileSetting),
+                onTap: () {
+                  if (Get.find<ProfileController>()
+                              .userProfile
+                              .value
+                              .isProfileComplete ==
+                          false ||
+                      Get.find<ProfileController>()
+                              .userProfile
+                              .value
+                              .isProfileComplete ==
+                          null) {
+                    context.push(AppRoutes.setupProfile);
+                  } else {
+                    context.push(AppRoutes.profileSetting);
+                  }
+                },
               ),
               ProfileMenuTile(
                 title: AppStaticStrings.myBikeProfile.tr,

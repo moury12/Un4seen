@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:get/get.dart';
 import '../../../../core/core_export.dart';
 import '../../../../core/routes/app_routes.dart';
+import '../controllers/profile_controller.dart';
 
 class SetupRidePage extends StatefulWidget {
   const SetupRidePage({super.key});
@@ -36,7 +38,26 @@ class _SetupRidePageState extends State<SetupRidePage> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    final ctrl = Get.isRegistered<ProfileController>()
+        ? Get.find<ProfileController>()
+        : Get.put(ProfileController());
+    if (ctrl.selectedRideTypes.isNotEmpty) {
+      _selectedRideTypes.clear();
+      _selectedRideTypes.addAll(ctrl.selectedRideTypes);
+    }
+    if (ctrl.selectedRidingLevels.isNotEmpty) {
+      _selectedRidingLevel = ctrl.selectedRidingLevels.first;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final ctrl = Get.isRegistered<ProfileController>()
+        ? Get.find<ProfileController>()
+        : Get.put(ProfileController());
+
     return Scaffold(
       backgroundColor: AppColors.kBackgroundColor,
       appBar: AppBar(
@@ -186,7 +207,7 @@ class _SetupRidePageState extends State<SetupRidePage> {
               CustomTextField(
                 title: AppStaticStrings.bikeModel,
                 hintText: 'Eg: Yamaha Yz450f',
-                textEditingController: TextEditingController(),
+                textEditingController: ctrl.bikeModelController,
                 isRequired: false,
               ),
               space8H,
@@ -194,18 +215,25 @@ class _SetupRidePageState extends State<SetupRidePage> {
               CustomTextField(
                 title: AppStaticStrings.year,
                 hintText: 'Eg: 2024',
-                textEditingController: TextEditingController(),
+                textEditingController: ctrl.bikeYearController,
                 isRequired: false,
               ),
               space12H,
 
-              // const SizedBox(height: 32),
-              CustomButton(
-                text: AppStaticStrings.completeSetup,
-                onPressed: () {
-                  context.go(AppRoutes.navigation);
-                },
-              ),
+              Obx(() => CustomButton(
+                    text: AppStaticStrings.completeSetup,
+                    isLoading: ctrl.isLoading.value,
+                    onPressed: () {
+                      // sync local selections into controller before submitting
+                      ctrl.selectedRideTypes.assignAll(_selectedRideTypes);
+                      ctrl.selectedRidingLevels.assignAll([_selectedRidingLevel]);
+                      ctrl.updateProfile().then((success) {
+                        if (success) {
+                          context.go(AppRoutes.navigation);
+                        }
+                      });
+                    },
+                  )),
               space12H,
             ],
           ),
