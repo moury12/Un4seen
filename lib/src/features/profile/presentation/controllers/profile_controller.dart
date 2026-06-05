@@ -51,15 +51,19 @@ class ProfileController extends GetxController {
   final List<String> clothingFitList = ['Mens', 'Womens', 'Kids'];
   final List<String> sizeList = ['S', 'M', 'L', 'XL', 'XXL'];
   final List<String> rideTypeList = [
+   
     'MX',
     'Enduro',
-    'Ebike',
-    'Atv',
-    'Adventure',
+    'E-Bike',
+    'Saving Up',
+    'Go-Kart',
     'Road',
-    'Cruiser',
-    'Gokart',
-    'MTB',
+    'Harley/Cruiser',
+    'ATV',
+    'Vintage',
+    'Adventure/Dual sport',
+    'Supermoto',
+  
   ];
   final List<String> ridingLevelList = [
     'Beginner',

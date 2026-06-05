@@ -374,9 +374,7 @@ class _SetupProfilePageState extends State<SetupProfilePage> {
                     }
 
                     if (ctrl.countryName.value.isEmpty) {
-                      CustomSnackbar.showError(
-                        "Please select your country",
-                      );
+                      CustomSnackbar.showError("Please select your country");
                       return;
                     }
 
@@ -385,14 +383,13 @@ class _SetupProfilePageState extends State<SetupProfilePage> {
                     final dayStr = _selectedDay!.padLeft(2, '0');
                     final dobString = '$_selectedYear-$monthStr-$dayStr';
 
-                    ctrl.updateProfile(
-                      country: ctrl.countryName.value,
-                      dob: dobString,
-                    ).then((success) {
-                      if (success) {
-                        context.push(AppRoutes.setupRide);
-                      }
-                    });
+                    context.push(
+                      AppRoutes.setupRide,
+                      extra: {
+                        "country": ctrl.countryName.value,
+                        "dob": dobString,
+                      },
+                    );
                   },
                 ),
               ),

@@ -6,27 +6,30 @@ import '../../../../core/routes/app_routes.dart';
 import '../controllers/profile_controller.dart';
 
 class SetupRidePage extends StatefulWidget {
-  const SetupRidePage({super.key});
+  final String country;
+  final String dob;
+  const SetupRidePage({super.key, required this.country, required this.dob});
 
   @override
   State<SetupRidePage> createState() => _SetupRidePageState();
 }
 
 class _SetupRidePageState extends State<SetupRidePage> {
-  final List<String> _selectedRideTypes = ['MX', 'Enduro', 'E-Bike'];
+  final List<String> _selectedRideTypes = [];
   String _selectedRidingLevel = 'Beginner';
 
   final List<String> _rideTypes = [
     'MX',
     'Enduro',
     'E-Bike',
-    'Surron/Up',
+    'Saving Up',
     'Go-Kart',
     'Road',
     'Harley/Cruiser',
     'ATV',
     'Vintage',
     'Adventure/Dual sport',
+    'Supermoto',
   ];
   final List<String> _ridingLevels = [
     'Beginner',
@@ -220,20 +223,24 @@ class _SetupRidePageState extends State<SetupRidePage> {
               ),
               space12H,
 
-              Obx(() => CustomButton(
-                    text: AppStaticStrings.completeSetup,
-                    isLoading: ctrl.isLoading.value,
-                    onPressed: () {
-                      // sync local selections into controller before submitting
-                      ctrl.selectedRideTypes.assignAll(_selectedRideTypes);
-                      ctrl.selectedRidingLevels.assignAll([_selectedRidingLevel]);
-                      ctrl.updateProfile().then((success) {
-                        if (success) {
-                          context.go(AppRoutes.navigation);
-                        }
-                      });
-                    },
-                  )),
+              Obx(
+                () => CustomButton(
+                  text: AppStaticStrings.completeSetup,
+                  isLoading: ctrl.isLoading.value,
+                  onPressed: () {
+                    // sync local selections into controller before submitting
+                    ctrl.selectedRideTypes.assignAll(_selectedRideTypes);
+                    ctrl.selectedRidingLevels.assignAll([_selectedRidingLevel]);
+                    ctrl
+                        .updateProfile(country: widget.country, dob: widget.dob)
+                        .then((success) {
+                          if (success) {
+                            context.go(AppRoutes.navigation);
+                          }
+                        });
+                  },
+                ),
+              ),
               space12H,
             ],
           ),

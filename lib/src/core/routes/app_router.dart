@@ -98,7 +98,13 @@ class AppRouter {
       GoRoute(
         path: AppRoutes.setupRide,
         name: 'setupRide',
-        builder: (context, state) => const SetupRidePage(),
+        builder: (context, state) {
+          final extraData = state.extra as Map<String, dynamic>?;
+          return SetupRidePage(
+            country: extraData?['country'] ?? '',
+            dob: extraData?['dob'] ?? '',
+          );
+        },
       ),
       GoRoute(
         path: AppRoutes.navigation,
