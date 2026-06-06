@@ -1,10 +1,27 @@
 import '../../../../src_export.dart';
 
-class SubmitDesignDialog extends StatelessWidget {
-  const SubmitDesignDialog({super.key});
+class SubmitDesignDialog extends StatefulWidget {
+  final CompetitionModel competition;
+  const SubmitDesignDialog({super.key, required this.competition});
+
+  @override
+  State<SubmitDesignDialog> createState() => _SubmitDesignDialogState();
+}
+
+class _SubmitDesignDialogState extends State<SubmitDesignDialog> {
+  final TextEditingController _designNameController = TextEditingController();
+
+  @override
+  void dispose() {
+    _designNameController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final competitionsController = Get.find<CompetitionsController>();
+    final homeController = Get.find<HomeController>();
+
     return Dialog(
       backgroundColor: AppColors.kPrimaryDarkColor3,
       shape: RoundedRectangleBorder(
@@ -21,22 +38,24 @@ class SubmitDesignDialog extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      CustomText(
-                        AppStaticStrings.submitYourDesign.tr,
-                        variant: TextVariant.titleLarge,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      space4H,
-                      CustomText(
-                        AppStaticStrings.designOwnGear.tr,
-                        color: Colors.white,
-                        fontSize: 12,
-                      ),
-                    ],
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CustomText(
+                          AppStaticStrings.submitYourDesign.tr,
+                          variant: TextVariant.titleLarge,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        space4H,
+                        CustomText(
+                          widget.competition.title,
+                          color: Colors.white,
+                          fontSize: 12,
+                        ),
+                      ],
+                    ),
                   ),
                   IconButton(
                     onPressed: () => context.pop(),
@@ -52,23 +71,17 @@ class SubmitDesignDialog extends StatelessWidget {
               ),
               space8H,
               ButtonTapWidget(
-                onTap: () {
-                  final controller = Get.find<HomeController>();
-                  controller.pickRideImage();
-                },
+                onTap: () => homeController.pickRideImage(),
                 child: Obx(() {
-                  final controller = Get.find<HomeController>();
                   return Container(
-                    height: controller.selectedRideImage.value != null
-                        ? 300
-                        : 100,
+                    height: homeController.selectedRideImage.value != null ? 300 : 100,
                     width: double.infinity,
                     clipBehavior: Clip.hardEdge,
                     decoration: BoxDecoration(
                       color: Colors.black26,
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: controller.selectedRideImage.value == null
+                    child: homeController.selectedRideImage.value == null
                         ? const Icon(
                             Icons.camera_alt_outlined,
                             color: AppColors.kPrimaryColor,
@@ -80,7 +93,7 @@ class SubmitDesignDialog extends StatelessWidget {
                             minScale: 0.5,
                             maxScale: 4.0,
                             child: Image.file(
-                              controller.selectedRideImage.value!,
+                              homeController.selectedRideImage.value!,
                               fit: BoxFit.contain,
                             ),
                           ),
@@ -89,6 +102,7 @@ class SubmitDesignDialog extends StatelessWidget {
               ),
               space16H,
               CustomTextField(
+                textEditingController: _designNameController,
                 title: AppStaticStrings.designNameLabel.tr,
                 hintText: AppStaticStrings.designNameHint.tr,
                 fillColor: Colors.white10,
@@ -114,14 +128,14 @@ class SubmitDesignDialog extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     CustomText(
-                      AppStaticStrings.winCustomGearSize.tr,
+                      widget.competition.grandPrize,
                       color: Colors.white,
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
                     ),
                     space4H,
                     CustomText(
-                      AppStaticStrings.designOwnGearDesc.tr,
+                      widget.competition.description,
                       color: Colors.white,
                       fontSize: 11,
                       maxLines: 2,
@@ -130,10 +144,28 @@ class SubmitDesignDialog extends StatelessWidget {
                 ),
               ),
               space16H,
-              CustomButton(
-                text: AppStaticStrings.submitEntry.tr,
-                onPressed: () => Get.back(),
-              ),
+              Obx(() => CustomButton(
+                    text: competitionsController.isSubmitting.value
+                        ? 'Submitting...'
+                        : AppStaticStrings.submitEntry.tr,
+                    onPressed: () {
+                          if (competitionsController.isSubmitting.value) return;
+                          final imagePath = homeController.selectedRideImage.value?.path;
+                          if (imagePath == null) {
+                            CustomSnackbar.showError('Please select an image.');
+                            return;
+                          }
+                          if (_designNameController.text.trim().isEmpty) {
+                            CustomSnackbar.showError('Please enter a design name.');
+                              return;
+                            }
+                            competitionsController.submitDesign(
+                              widget.competition.id,
+                              _designNameController.text.trim(),
+                              imagePath,
+                            );
+                          },
+                  )),
               space12H,
               CustomText(
                 'By submitting, you grant Un4seen rights to feature your design.',

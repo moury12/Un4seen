@@ -13,6 +13,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final giveawayController = Get.find<GiveawayController>();
     return CustomScaffold(
       appBar: AppBar(
         leading: Padding(
@@ -82,7 +83,14 @@ class HomePage extends StatelessWidget {
             children: [
               const HomeHeaderWidget(),
               // space8H,
-              const WeeklyPrizeCardWidget(),
+              Obx(() {
+                if (giveawayController.isLoading.value) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                final data = giveawayController.pageData.value;
+                if (data == null || data.currentWeekly == null) return const SizedBox.shrink();
+                return WeeklyPrizeCardWidget(giveaway: data.currentWeekly!);
+              }),
 
               // space8H,
               const QuickActionRowWidget(),
@@ -96,7 +104,14 @@ class HomePage extends StatelessWidget {
                 backgroundColor: AppColors.kPrimaryDarkColor3,
               ),
 
-              const MajorGiveawayCardWidget(),
+              Obx(() {
+                if (giveawayController.isLoading.value) {
+                  return const SizedBox.shrink();
+                }
+                final data = giveawayController.pageData.value;
+                if (data == null || data.majorGiveaways.isEmpty) return const SizedBox.shrink();
+                return MajorGiveawayCardWidget(giveaway: data.majorGiveaways.first);
+              }),
               // space24H,
               CustomText(
                 AppStaticStrings.recentWeeklyWinners.tr,

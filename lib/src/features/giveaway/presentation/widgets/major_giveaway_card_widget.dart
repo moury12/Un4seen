@@ -3,7 +3,8 @@ import 'package:flutter_svg/svg.dart';
 import '../../../../src_export.dart';
 
 class MajorGiveawayCardWidget extends StatelessWidget {
-  const MajorGiveawayCardWidget({super.key});
+  final GiveawayItem giveaway;
+  const MajorGiveawayCardWidget({super.key, required this.giveaway});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +23,7 @@ class MajorGiveawayCardWidget extends StatelessWidget {
               ClipRRect(
                 borderRadius: const BorderRadius.vertical(top: Radius.circular(appRadius16)),
                 child: CustomNetworkImage(
-                  imageUrl: 'https://images.unsplash.com/photo-1444491741275-3747c53c99b4?q=80&w=600',
+                  imageUrl: giveaway.image,
                   height: 200,
                   width: double.infinity,
                 ),
@@ -41,8 +42,15 @@ class MajorGiveawayCardWidget extends StatelessWidget {
           Container(
             width: double.infinity,
             padding: AppPadding.getPadding12(context),
-            decoration:  BoxDecoration(
-       gradient: LinearGradient(colors:   [ AppColors.kPrimaryColor.withValues(alpha: 0.8),AppColors.kPrimaryDarkColor,],begin: Alignment.topCenter,end: Alignment.bottomCenter),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  AppColors.kPrimaryColor.withValues(alpha: 0.8),
+                  AppColors.kPrimaryDarkColor,
+                ],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
               borderRadius: BorderRadius.vertical(bottom: Radius.circular(appRadius16)),
             ),
             child: Column(
@@ -57,7 +65,12 @@ class MajorGiveawayCardWidget extends StatelessWidget {
                       children: [
                         const Icon(Icons.timer_outlined, color: Colors.white, size: 14),
                         space8W,
-                        CustomText("DRAW IN: Only 3 Months Away", color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+                        Obx(() => CustomText(
+                              "DRAW IN: Only ${controller.majorMonths.value} Months Away",
+                              color: Colors.white,
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                            )),
                       ],
                     ),
                   ),
@@ -65,26 +78,30 @@ class MajorGiveawayCardWidget extends StatelessWidget {
                 space12H,
                 // --- DYNAMIC MAJOR COUNTDOWN ---
                 Obx(() => Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  spacing: 12,
-                  children: [
-                    CountdownUnitWidget(value: controller.majorMonths.value, label: "MO"),
-                    CountdownUnitWidget(value: controller.majorDays.value, label: "D"),
-                    CountdownUnitWidget(value: controller.majorHours.value, label: "H"),
-                    CountdownUnitWidget(value: controller.majorMins.value, label: "M"),
-                  ],
-                )),
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      spacing: 12,
+                      children: [
+                        CountdownUnitWidget(value: controller.majorMonths.value, label: "MO"),
+                        CountdownUnitWidget(value: controller.majorDays.value, label: "D"),
+                        CountdownUnitWidget(value: controller.majorHours.value, label: "H"),
+                        CountdownUnitWidget(value: controller.majorMins.value, label: "M"),
+                      ],
+                    )),
                 space12H,
-                CustomText(AppStaticStrings.christmasMajorGiveaway.tr, fontWeight: FontWeight.bold, color: Colors.white),
-                CustomText(AppStaticStrings.biggestPrizeDesc.tr, color: Colors.white70, fontSize: 12),
+                CustomText(giveaway.title, fontWeight: FontWeight.bold, color: Colors.white),
+                CustomText(giveaway.prizeDescription, color: Colors.white70, fontSize: 12),
                 space12H,
                 CustomText("GRAND PRIZE", color: AppColors.kPrimaryColor, fontSize: 12, fontWeight: FontWeight.bold),
-                CustomText(AppStaticStrings.hondaModel.tr, variant: TextVariant.headlineSmall, fontWeight: FontWeight.bold, color: Colors.white),
+                CustomText(giveaway.title, variant: TextVariant.headlineSmall, fontWeight: FontWeight.bold, color: Colors.white),
                 space8H,
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                  decoration: BoxDecoration(color: Colors.white10, borderRadius: BorderRadius.circular(20), border: Border.all(color: Colors.white24)),
-                  child: CustomText("${AppStaticStrings.rrp.tr} \$16,999 nzd", color: Colors.white, fontWeight: FontWeight.bold),
+                  decoration: BoxDecoration(
+                    color: Colors.white10,
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(color: Colors.white24),
+                  ),
+                  child: CustomText("${AppStaticStrings.rrp.tr} \$${giveaway.valueInNzd} nzd", color: Colors.white, fontWeight: FontWeight.bold),
                 ),
                 space12H,
                 Container(
@@ -97,13 +114,19 @@ class MajorGiveawayCardWidget extends StatelessWidget {
                           SvgPicture.asset(
                             AppIcons.crown,
                             height: 20,
-                            colorFilter: ColorFilter.mode(
+                            colorFilter: const ColorFilter.mode(
                               Colors.white,
                               BlendMode.srcIn,
                             ),
                           ),
                           space8W,
-                          Expanded(child: CustomText(AppStaticStrings.automaticEntryTitle.tr, color: Colors.white, fontWeight: FontWeight.bold,fontSize: 14,)),
+                          Expanded(
+                              child: CustomText(
+                            AppStaticStrings.automaticEntryTitle.tr,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          )),
                         ],
                       ),
                       space4H,

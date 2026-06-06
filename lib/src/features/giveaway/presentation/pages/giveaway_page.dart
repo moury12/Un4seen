@@ -8,7 +8,6 @@ class GiveawayPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // ignore: unused_local_variable
     final controller = Get.put(GiveawayController());
 
     return Scaffold(
@@ -36,76 +35,86 @@ class GiveawayPage extends StatelessWidget {
           ],
         ),
       ),
-      body: SingleChildScrollView(
-        padding: AppPadding.getPadding12H(context),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            CustomText(
-              AppStaticStrings.newPrizeEveryWeek.tr,
-              color: AppColors.kSecondaryTextColor,
-              fontSize: 12,
-              fontWeight: FontWeight.bold,
-            ),
-            CustomText(
-              AppStaticStrings.drawnFridays.tr,
-              color: AppColors.kSecondaryTextColor,
-              fontSize: 11,
-            ),
-            space8H,
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-              decoration: BoxDecoration(
-                color: AppColors.kPrimaryColor,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: CustomText(
-                AppStaticStrings.week18Of52.tr,
-                color: Colors.white,
-                fontSize: 10,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            space8H,
+      body: RefreshIndicator(
+        onRefresh: () => controller.fetchPageData(),
+        child: SingleChildScrollView(
+          padding: AppPadding.getPadding12H(context),
+          child: Obx(() {
+            if (controller.isLoading.value) {
+              return const Center(child: CircularProgressIndicator());
+            }
 
-            // Weekly Prize Card
-            const WeeklyPrizeCardWidget(),
-            space8H,
+            final data = controller.pageData.value;
+            if (data == null) {
+              return const Center(
+                child: CustomText("There is no running giveaway"),
+              );
+            }
 
-            // Major Giveaway Card
-            const MajorGiveawayCardWidget(),
-            space8H,
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CustomText(
+                  AppStaticStrings.newPrizeEveryWeek.tr,
+                  color: AppColors.kSecondaryTextColor,
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                ),
+                CustomText(
+                  AppStaticStrings.drawnFridays.tr,
+                  color: AppColors.kSecondaryTextColor,
+                  fontSize: 11,
+                ),
+                space8H,
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 4,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppColors.kPrimaryColor,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: CustomText(
+                    "Week ${data.currentWeekly?.weekNumber ?? 18} of 52",
+                    color: Colors.white,
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                space8H,
 
-            // Coming Up Section
-            CustomText(
-              AppStaticStrings.giveawaysComingUp.tr,
-              variant: TextVariant.titleLarge,
-              fontWeight: FontWeight.bold,
-            ),
-            space12H,
-            const UpcomingGiveawayTileWidget(
-              title: "250pc Pack of Hubstikers",
-              week: "Week 19",
-              price: "\$199.99nzd",
-            ),
-            const UpcomingGiveawayTileWidget(
-              title: "1x Custom Graphics Kit",
-              week: "Week 19",
-              price: "\$389.99nzd",
-            ),
-            const UpcomingGiveawayTileWidget(
-              title: "1 x Custom Made Gripper Ace'n seat cover",
-              week: "Week 21",
-              price: "\$159.99nzd",
-            ),
-            const UpcomingGiveawayTileWidget(
-              title: "iphone 17 Pro",
-              week: "Week 22",
-              price: "\$2349nzd",
-            ),
+                // Weekly Prize Card
+                if (data.currentWeekly != null)
+                  WeeklyPrizeCardWidget(giveaway: data.currentWeekly!),
+                space8H,
 
-            space24H,
-          ],
+                // Major Giveaway Card
+                if (data.majorGiveaways.isNotEmpty)
+                  MajorGiveawayCardWidget(giveaway: data.majorGiveaways.first),
+                space8H,
+
+                // Coming Up Section
+                CustomText(
+                  AppStaticStrings.giveawaysComingUp.tr,
+                  variant: TextVariant.titleLarge,
+                  fontWeight: FontWeight.bold,
+                ),
+                space12H,
+
+                // Dynamic Upcoming List
+                ...data.upcoming.map(
+                  (item) => UpcomingGiveawayTileWidget(
+                    title: item.title,
+                    week: "Week ${item.weekNumber}",
+                    price: "\$${item.valueInNzd}.00nzd",
+                  ),
+                ),
+
+                space24H,
+              ],
+            );
+          }),
         ),
       ),
     );

@@ -1,104 +1,246 @@
 import 'package:un4seen/src/src_export.dart';
 
-
 class CompetitionsPage extends StatelessWidget {
   const CompetitionsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.find<CompetitionsController>();
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: Row(
           spacing: 8,
-          // mainAxisAlignment: MainAxisAlignment.center,
           children: [
-             Icon(Icons.emoji_events, color: AppColors.kPrimaryColor),
-            RichText(text:  TextSpan(
-              text: "${AppStaticStrings.competitionsTitle.tr}\n", 
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: AppColors.kTextColor),
-              children: [
-                TextSpan(
-                  text: AppStaticStrings.designUploadVoteWin.tr, 
-                  style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 14, color: AppColors.kTextColor),
+            Icon(Icons.emoji_events, color: AppColors.kPrimaryColor),
+            RichText(
+              text: TextSpan(
+                text: "${AppStaticStrings.competitionsTitle.tr}\n",
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                  color: AppColors.kTextColor,
                 ),
-              ],
-            )),
-           
+                children: [
+                  TextSpan(
+                    text: AppStaticStrings.designUploadVoteWin.tr,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.normal,
+                      fontSize: 14,
+                      color: AppColors.kTextColor,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
-        actions: [ 
+        actions: [
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Image.asset(AppIcons.logo, height: 38),
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        padding: AppPadding.getPadding12H(context),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            
-            CustomText(AppStaticStrings.activeCompetitions.tr, variant: TextVariant.titleLarge, 
-            fontWeight: FontWeight.bold, color: AppColors.kTextColor, fontSize: 18),
-            
-space4H,
-            CompetitionCardWidget(
-              title: AppStaticStrings.designSickestKit.tr,
-              description: AppStaticStrings.designSickestKitDesc.tr,
-              prize: AppStaticStrings.winDesignMadeForBike.tr,
-              date: "September 20, 2026 ➔ September 27, 2026",
-              image: "https://images.unsplash.com/photo-1558981403-c5f9899a28bc?q=80&w=500",
-              status: "VOTING",
-              votingItems: [
-                VoteEntryItemWidget(title: "Flame Thunder", author: "Jake Thompson", synId: "#SYN-1892", likes: "88", image: "https://images.unsplash.com/photo-1558981403-c5f9899a28bc?q=80&w=100"),
-                VoteEntryItemWidget(title: "Neon Storm", author: "Sarah Martinez", synId: "#SYN-4521", likes: "80", image: "https://images.unsplash.com/photo-1444491741275-3747c53c99b4?q=80&w=100"),
-                VoteEntryItemWidget(title: "Shadow Strike", author: "Alex Rivera", synId: "#SYN-1892", likes: "77", image: "https://images.unsplash.com/photo-1558981403-c5f9899a28bc?q=80&w=100"),
+      body: RefreshIndicator(
+        onRefresh: () {
+          return controller.fetchAllCompetitions();
+        },
+        child: SingleChildScrollView(
+          padding: AppPadding.getPadding12H(context),
+
+          child: Obx(() {
+            if (controller.isCompLoading.value) {
+              return _buildShimmer(context);
+            }
+        
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Active Competitions
+                if (controller.activeComps.isNotEmpty) ...[
+                  CustomText(
+                    AppStaticStrings.activeCompetitions.tr,
+                    variant: TextVariant.titleLarge,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.kTextColor,
+                    fontSize: 18,
+                  ),
+                  space4H,
+                  ...controller.activeComps.map(
+                    (comp) => CompetitionCardWidget(model: comp),
+                  ),
+                ],
+        
+                // Upcoming Competitions
+                if (controller.upcomingComps.isNotEmpty) ...[
+                  space4H,
+                  CustomText(
+                    'Upcoming Competitions',
+                    variant: TextVariant.titleLarge,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.kTextColor,
+                    fontSize: 18,
+                  ),
+                  space8H,
+                  ...controller.upcomingComps.map(
+                    (comp) => CompetitionCardWidget(model: comp),
+                  ),
+                ],
+        
+                // Ended Competitions
+                if (controller.endedComps.isNotEmpty) ...[
+                  space8H,
+                  CustomText(
+                    AppStaticStrings.ended.tr,
+                    variant: TextVariant.titleLarge,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.kTextColor,
+                    fontSize: 18,
+                  ),
+                  space4H,
+                  ...controller.endedComps.map(
+                    (comp) => _buildEndedTile(context, comp),
+                  ),
+                ],
+        
+                // Empty state
+                if (controller.activeComps.isEmpty &&
+                    controller.upcomingComps.isEmpty &&
+                    controller.endedComps.isEmpty) ...[
+                  const SizedBox(height: 80),
+                  Center(
+                    child: Column(
+                      children: [
+                        Icon(
+                          Icons.emoji_events_outlined,
+                          size: 64,
+                          color: AppColors.kPrimaryColor.withValues(alpha: .5),
+                        ),
+                        space8H,
+                        CustomText(
+                          'No competitions available',
+                          color: AppColors.kSecondaryTextColor,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+        
+                space8H,
+                const HowItWorksWidget(),
+                space8H,
+              ],
+            );
+          }),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildEndedTile(BuildContext context, CompetitionModel comp) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.all(12),
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: AppColors.kPrimaryColor,
+        borderRadius: BorderRadius.circular(appRadius16),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Icon(
+                Icons.check_circle_outline,
+                color: Colors.white,
+                size: 16,
+              ),
+              space4W,
+              CustomText(
+                AppStaticStrings.ended.tr,
+                color: Colors.white,
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+              ),
+            ],
+          ),
+          space4H,
+          CustomText(
+            comp.title,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+          CustomText(
+            comp.description,
+            color: Colors.white70,
+            fontSize: 12,
+            maxLines: 2,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildShimmer(BuildContext context) {
+    return SingleChildScrollView(
+      padding: AppPadding.getPadding12H(context),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: List.generate(3, (i) => _buildShimmerCard()),
+      ),
+    );
+  }
+
+  Widget _buildShimmerCard() {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      height: 300,
+      decoration: BoxDecoration(
+        color: AppColors.kPrimaryDarkColor2,
+        borderRadius: BorderRadius.circular(appRadius16),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            height: 160,
+            decoration: BoxDecoration(
+              color: AppColors.kPrimaryDarkColor3,
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(appRadius16),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  height: 16,
+                  width: 200,
+                  color: AppColors.kPrimaryDarkColor3,
+                  margin: const EdgeInsets.only(bottom: 8),
+                ),
+                Container(
+                  height: 12,
+                  width: 280,
+                  color: AppColors.kPrimaryDarkColor3,
+                  margin: const EdgeInsets.only(bottom: 6),
+                ),
+                Container(
+                  height: 12,
+                  width: 240,
+                  color: AppColors.kPrimaryDarkColor3,
+                ),
               ],
             ),
-
-            CompetitionCardWidget(
-              title: AppStaticStrings.designOwnGear.tr,
-              description: AppStaticStrings.designOwnGearDesc.tr,
-              prize: AppStaticStrings.winCustomGearSize.tr,
-              date: "October 10, 2026 ➔ October 20, 2026",
-              image: "https://images.unsplash.com/photo-1444491741275-3747c53c99b4?q=80&w=500",
-              status: "OPEN",
-            ),
-
-            Container(
-              margin: const EdgeInsets.only(bottom: 16),
-              padding: const EdgeInsets.all(12),
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: AppColors.kPrimaryColor,
-                borderRadius: BorderRadius.circular(appRadius16),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      const Icon(Icons.check_circle_outline, color: Colors.white, size: 16),
-                      
-                      CustomText(AppStaticStrings.ended.tr, color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
-                    ],
-                  ),
-                  
-                  CustomText(AppStaticStrings.ebikeChallenge.tr, fontWeight: FontWeight.bold, color: Colors.white),
-                  CustomText(AppStaticStrings.bmxToEbike.tr, color: Colors.white70, fontSize: 12),
-                  
-                  const CustomText("August 15, 2026 - August 25, 2026", color: Colors.white70, fontSize: 12),
-                ],
-              ),
-            ),
-
-            const HowItWorksWidget(),
-            
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
