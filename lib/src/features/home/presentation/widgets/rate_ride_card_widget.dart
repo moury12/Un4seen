@@ -2,10 +2,18 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../src_export.dart';
 
 class RateRideCardWidget extends StatelessWidget {
-  const RateRideCardWidget({super.key});
+  final RideModel ride;
+  final int index;
+  const RateRideCardWidget({
+    super.key,
+    required this.ride,
+    required this.index,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.find<RateMyRideController>();
+
     return Container(
       decoration: BoxDecoration(
         color: AppColors.kPrimaryDarkColor3,
@@ -13,12 +21,13 @@ class RateRideCardWidget extends StatelessWidget {
       ),
       child: Stack(
         children: [
-          const CustomNetworkImage(
-            imageUrl: 'https://images.unsplash.com/photo-1558981403-c5f9899a28bc?q=80&w=600',
+          CustomNetworkImage(
+            imageUrl: ride.image,
             height: 450,
             width: double.infinity,
             radius: 16,
           ),
+
           Positioned.fill(
             child: Container(
               decoration: BoxDecoration(
@@ -26,7 +35,7 @@ class RateRideCardWidget extends StatelessWidget {
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
-                    colors: [Colors.transparent, Colors.black.withAlpha(204)],
+                  colors: [Colors.transparent, Colors.black.withAlpha(204)],
                 ),
               ),
             ),
@@ -36,13 +45,28 @@ class RateRideCardWidget extends StatelessWidget {
             left: 12,
             child: Row(
               children: [
-                const CircleAvatar(radius: 16, backgroundImage: NetworkImage('https://i.pravatar.cc/150?u=jake')),
+                const CircleAvatar(
+                  radius: 16,
+                  backgroundImage: NetworkImage(
+                    'https://i.pravatar.cc/150?u=jake',
+                  ),
+                ),
                 space8W,
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    CustomText("Jake Thompson 🇺🇸", color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13),
-                    CustomText("#SYN-2847  MX", color: AppColors.kPrimaryColor, fontSize: 10, fontWeight: FontWeight.bold),
+                    CustomText(
+                      ride.user.fullName,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 13,
+                    ),
+                    CustomText(
+                      "${ride.user.memberNumber} ${ride.rideType}",
+                      color: AppColors.kPrimaryColor,
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ],
                 ),
               ],
@@ -56,26 +80,62 @@ class RateRideCardWidget extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(
                 children: [
-                  CustomText("2022 Yamaha YZ250f - Decals - Seat Cover", color: Colors.white, fontSize: 13, fontWeight: FontWeight.w500),
+                  CustomText(
+                    "${ride.bikeModel} - ${ride.description}",
+                    color: Colors.white,
+                    fontSize: 13,
+                    maxLines: 2,
+                  ),
                   space8H,
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SvgPicture.asset(AppIcons.fire, height: 20, colorFilter: const ColorFilter.mode(AppColors.kPrimaryColor, BlendMode.srcIn)),
-                      space8W,
-                      CustomText("46 ${AppStaticStrings.flames.tr}", color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18),
-                    ],
+                  GestureDetector(
+                    onTap: () => controller.toggleHeart(index),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SvgPicture.asset(
+                          AppIcons.fire,
+                          height: 24,
+                          colorFilter: ColorFilter.mode(
+                            ride.isHearted
+                                ? AppColors.kPrimaryColor
+                                : Colors.white70,
+                            BlendMode.srcIn,
+                          ),
+                        ),
+                        space8W,
+                        CustomText(
+                          "${ride.heartCount} ${AppStaticStrings.flames.tr}",
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                        ),
+                      ],
+                    ),
                   ),
                   space12H,
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      CustomText(AppStaticStrings.yourRating.tr, color: Colors.white, fontSize: 11),
+                      CustomText(
+                        AppStaticStrings.yourRating.tr,
+                        color: Colors.white,
+                        fontSize: 11,
+                      ),
                       Row(
-                        children: List.generate(4, (index) => Padding(
-                          padding: const EdgeInsets.only(left: 4),
-                          child: SvgPicture.asset(AppIcons.fire, height: 12, colorFilter: const ColorFilter.mode(AppColors.kPrimaryColor, BlendMode.srcIn)),
-                        )),
+                        children: List.generate(
+                          4,
+                          (index) => Padding(
+                            padding: const EdgeInsets.only(left: 4),
+                            child: SvgPicture.asset(
+                              AppIcons.fire,
+                              height: 12,
+                              colorFilter: const ColorFilter.mode(
+                                AppColors.kPrimaryColor,
+                                BlendMode.srcIn,
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
                     ],
                   ),
@@ -93,21 +153,17 @@ class RateRideCardWidget extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       CustomText("0", color: Colors.white70, fontSize: 10),
-                      CustomText("4 / 10", color: AppColors.kPrimaryColor, fontSize: 12, fontWeight: FontWeight.bold),
+                      CustomText(
+                        "4 / 10",
+                        color: AppColors.kPrimaryColor,
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
                       CustomText("10", color: Colors.white70, fontSize: 10),
                     ],
                   ),
                 ],
               ),
-            ),
-          ),
-          Positioned(
-            right: 12,
-            top: 200,
-            child: Container(
-              padding: const EdgeInsets.all(8),
-              decoration: const BoxDecoration(color: Colors.black45, shape: BoxShape.circle),
-              child: const Icon(Icons.chevron_right, color: Colors.white),
             ),
           ),
         ],

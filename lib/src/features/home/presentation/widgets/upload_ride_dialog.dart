@@ -1,6 +1,6 @@
 import '../../../../src_export.dart';
 
-class UploadRideDialog extends StatelessWidget {
+class UploadRideDialog extends StatefulWidget {
   const UploadRideDialog({super.key});
 
   static void show(BuildContext context) {
@@ -11,13 +11,33 @@ class UploadRideDialog extends StatelessWidget {
   }
 
   @override
+  State<UploadRideDialog> createState() => _UploadRideDialogState();
+}
+
+class _UploadRideDialogState extends State<UploadRideDialog> {
+  // Local controllers for the input fields
+  final TextEditingController _bikeModelCtrl = TextEditingController();
+  final TextEditingController _descriptionCtrl = TextEditingController();
+  final TextEditingController _rideTypeCtrl = TextEditingController();
+
+  @override
+  void dispose() {
+    _bikeModelCtrl.dispose();
+    _descriptionCtrl.dispose();
+    _rideTypeCtrl.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final controller = Get.find<RateMyRideController>();
+    final homeController = Get.find<HomeController>();
+
     return Dialog(
       backgroundColor: AppColors.kPrimaryDarkColor3,
-
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
-        side: BorderSide(color: AppColors.kPrimaryColor),
+        side: const BorderSide(color: AppColors.kPrimaryColor),
       ),
       child: Padding(
         padding: AppPadding.getPadding12(context),
@@ -26,6 +46,7 @@ class UploadRideDialog extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Header
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -57,21 +78,19 @@ class UploadRideDialog extends StatelessWidget {
                 ],
               ),
               const Divider(color: Colors.white10, height: 24),
+
               CustomText(
                 AppStaticStrings.uploadDesignImage.tr,
                 color: Colors.white,
-
                 fontWeight: FontWeight.bold,
               ),
               space8H,
 
+              // Image Picker Section
               Obx(() {
-                final controller = Get.find<HomeController>();
-                return controller.selectedRideImage.value == null
+                return homeController.selectedRideImage.value == null
                     ? ButtonTapWidget(
-                        onTap: () {
-                          controller.pickRideImage();
-                        },
+                        onTap: () => homeController.pickRideImage(),
                         child: Container(
                           height: 100,
                           width: double.infinity,
@@ -87,7 +106,7 @@ class UploadRideDialog extends StatelessWidget {
                         ),
                       )
                     : Container(
-                        height: 300,
+                        height: 250,
                         width: double.infinity,
                         clipBehavior: Clip.hardEdge,
                         decoration: BoxDecoration(
@@ -97,35 +116,26 @@ class UploadRideDialog extends StatelessWidget {
                         child: Stack(
                           children: [
                             Positioned.fill(
-                              child: InteractiveViewer(
-                                panEnabled: true,
-                                scaleEnabled: true,
-                                minScale: 0.5,
-                                maxScale: 4.0,
-                                child: Image.file(
-                                  controller.selectedRideImage.value!,
-                                  fit: BoxFit.contain,
-                                ),
+                              child: Image.file(
+                                homeController.selectedRideImage.value!,
+                                fit: BoxFit.cover,
                               ),
                             ),
                             Positioned(
                               bottom: 8,
                               right: 8,
-                              child: InkWell(
-                                onTap: () {
-                                  controller.pickRideImage();
-                                },
-                                borderRadius: BorderRadius.circular(20),
+                              child: ButtonTapWidget(
+                                onTap: () => homeController.pickRideImage(),
                                 child: Container(
                                   padding: const EdgeInsets.all(8),
                                   decoration: const BoxDecoration(
                                     shape: BoxShape.circle,
-                                    color: AppColors.kPrimaryDarkColor2,
+                                    color: AppColors.kPrimaryColor,
                                   ),
                                   child: const Icon(
-                                    Icons.camera_alt_outlined,
+                                    Icons.refresh,
                                     color: Colors.white,
-                                    size: 24,
+                                    size: 20,
                                   ),
                                 ),
                               ),
@@ -135,16 +145,19 @@ class UploadRideDialog extends StatelessWidget {
                       );
               }),
               space12H,
+
+              // Input Fields
               CustomTextField(
-                hintStyle: TextStyle(color: Colors.white, fontSize: 12),
-                title: AppStaticStrings.bikeTypeLabel.tr,
-                hintText: "MX",
-                inputTextStyle: const TextStyle(
-                  fontSize: 13,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
                 fillColor: Colors.transparent,
+                hintStyle: TextStyle(
+                  color: AppColors.kWhiteTextColor,
+                  fontSize: 10,
+                ),
+                title: AppStaticStrings.bikeModel.tr,
+                hintText: "Eg. Honda CRF250R",
+                textEditingController: _bikeModelCtrl,
+
+                inputTextStyle: const TextStyle(color: Colors.white),
                 titleStyle: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
@@ -152,26 +165,61 @@ class UploadRideDialog extends StatelessWidget {
               ),
               space12H,
               CustomTextField(
-                hintStyle: TextStyle(color: Colors.white, fontSize: 12),
-                title: AppStaticStrings.description.tr,
-                hintText: AppStaticStrings.bikeDescriptionHint.tr,
-                maxLines: 3,
-                inputTextStyle: const TextStyle(
-                  fontSize: 13,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
                 fillColor: Colors.transparent,
+                hintStyle: TextStyle(
+                  color: AppColors.kWhiteTextColor,
+                  fontSize: 10,
+                ),
+                title: AppStaticStrings.bikeTypeLabel.tr,
+                hintText: "MX",
+                textEditingController: _rideTypeCtrl,
+
+                inputTextStyle: const TextStyle(color: Colors.white),
                 titleStyle: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              space16H,
-              CustomButton(
-                text: AppStaticStrings.uploadEnterCompetition.tr,
-                onPressed: () => Navigator.pop(context),
+              space12H,
+              CustomTextField(
+                fillColor: Colors.transparent,
+                hintStyle: TextStyle(
+                  color: AppColors.kWhiteTextColor,
+                  fontSize: 10,
+                ),
+                title: AppStaticStrings.description.tr,
+                hintText: AppStaticStrings.bikeDescriptionHint.tr,
+                textEditingController: _descriptionCtrl,
+                maxLines: 3,
+
+                inputTextStyle: const TextStyle(color: Colors.white),
+                titleStyle: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
+              space24H,
+
+              // Submit Button
+              Obx(
+                () => CustomButton(
+                  text: AppStaticStrings.uploadEnterCompetition.tr,
+                  isLoading: controller.isSubmitting.value,
+                  onPressed: () async {
+                    final isSuccess = await controller.uploadRide(
+                      _bikeModelCtrl.text.trim(),
+                      _descriptionCtrl.text.trim(),
+                      _rideTypeCtrl.text.trim(),
+                    );
+                    if (isSuccess) {
+                      context.pop();
+                    } else {
+                      context.pop();
+                    }
+                  },
+                ),
+              ),
+              space12H,
             ],
           ),
         ),

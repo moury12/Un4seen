@@ -74,7 +74,9 @@ class _SubmitDesignDialogState extends State<SubmitDesignDialog> {
                 onTap: () => homeController.pickRideImage(),
                 child: Obx(() {
                   return Container(
-                    height: homeController.selectedRideImage.value != null ? 300 : 100,
+                    height: homeController.selectedRideImage.value != null
+                        ? 300
+                        : 100,
                     width: double.infinity,
                     clipBehavior: Clip.hardEdge,
                     decoration: BoxDecoration(
@@ -144,28 +146,39 @@ class _SubmitDesignDialogState extends State<SubmitDesignDialog> {
                 ),
               ),
               space16H,
-              Obx(() => CustomButton(
-                    text: competitionsController.isSubmitting.value
-                        ? 'Submitting...'
-                        : AppStaticStrings.submitEntry.tr,
-                    onPressed: () {
-                          if (competitionsController.isSubmitting.value) return;
-                          final imagePath = homeController.selectedRideImage.value?.path;
-                          if (imagePath == null) {
-                            CustomSnackbar.showError('Please select an image.');
-                            return;
-                          }
-                          if (_designNameController.text.trim().isEmpty) {
-                            CustomSnackbar.showError('Please enter a design name.');
-                              return;
-                            }
-                            competitionsController.submitDesign(
-                              widget.competition.id,
-                              _designNameController.text.trim(),
-                              imagePath,
-                            );
-                          },
-                  )),
+              Obx(
+                () => CustomButton(
+                  text: competitionsController.isSubmitting.value
+                      ? 'Submitting...'
+                      : AppStaticStrings.submitEntry.tr,
+                  onPressed: () async {
+                    if (competitionsController.isSubmitting.value) return;
+                    final imagePath =
+                        homeController.selectedRideImage.value?.path;
+                    if (imagePath == null) {
+                      CustomSnackbar.showError('Please select an image.');
+                      return;
+                    }
+                    if (_designNameController.text.trim().isEmpty) {
+                      CustomSnackbar.showError('Please enter a design name.');
+                      return;
+                    }
+                    final success = await competitionsController.submitDesign(
+                      widget.competition.id,
+                      _designNameController.text.trim(),
+                      imagePath,
+                    );
+                    if (success) {
+                      context.pop();
+                      return;
+                    } else {
+                      context.pop();
+                      // CustomSnackbar.showError('Please enter a design name.');
+                      return;
+                    }
+                  },
+                ),
+              ),
               space12H,
               CustomText(
                 'By submitting, you grant Un4seen rights to feature your design.',

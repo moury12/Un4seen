@@ -84,7 +84,7 @@ class CompetitionsController extends GetxController {
     }
   }
 
-  Future<void> submitDesign(String compId, String name, String imagePath) async {
+  Future<bool> submitDesign(String compId, String name, String imagePath) async {
     try {
       isSubmitting.value = true;
       final formData = dio.FormData.fromMap({
@@ -95,7 +95,7 @@ class CompetitionsController extends GetxController {
       final res = await _api.post('/competitions/submit-entry', data: formData);
       if (res.data['success'] == true) {
         CustomSnackbar.showSuccess(res.data['message'] ?? 'Design submitted!');
-        Get.back(); // Close dialog
+        return true;
       } else {
         CustomSnackbar.showError(res.data['message'] ?? 'Submission failed.');
       }
@@ -105,5 +105,6 @@ class CompetitionsController extends GetxController {
     } finally {
       isSubmitting.value = false;
     }
+    return false;
   }
 }

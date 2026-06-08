@@ -6,7 +6,8 @@ import '../../../../core/core_export.dart';
 import '../../../../core/widgets/custom_shape.dart';
 
 class PointsBalanceCardWidget extends StatelessWidget {
-  const PointsBalanceCardWidget({super.key});
+  final String? point;
+  const PointsBalanceCardWidget({super.key, this.point});
 
   @override
   Widget build(BuildContext context) {
@@ -53,9 +54,9 @@ class PointsBalanceCardWidget extends StatelessWidget {
               space4H,
 
               // Points value
-              const Text(
-                '2,850',
-                style: TextStyle(
+              Text(
+                point ?? 'not provided',
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: 38,
                   fontWeight: FontWeight.bold,

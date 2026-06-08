@@ -40,11 +40,7 @@ class _CompetitionCardWidgetState extends State<CompetitionCardWidget> {
     final bool isVoting = widget.model.canVote;
     final bool isOpen = widget.model.canSubmit;
 
-    final String statusLabel = widget.model.canVote
-        ? AppStaticStrings.votingNow.tr
-        : (widget.model.canSubmit
-              ? AppStaticStrings.openForEntries.tr
-              : AppStaticStrings.ended.tr);
+    final String statusLabel = widget.model.statusLabel;
 
     final String dateRange =
         "${_formatDate(widget.model.startDate)} ➔ ${_formatDate(widget.model.endDate)}";
@@ -226,27 +222,31 @@ class _CompetitionCardWidgetState extends State<CompetitionCardWidget> {
                     ],
                   ),
                   space4H,
-                Obx((){
-                  final entries = controller.entries.toList();
-                 if(entries.isEmpty){return SizedBox.shrink();}
-                  
-                 return  Column(
-                  
-                  children: List.generate(
-                      controller.entries.length > 2
-                          ? 2
-                          : controller.entries.length,
-                      (index) => VoteEntryItemWidget(
-                        title: controller.entries[index].designName,
-                      author: controller.entries[index].user?.fullName ?? "--",
-                      synId: controller.entries[index].id,
-                      likes: controller.entries[index].heartCount.toString(),
-                      image: controller.entries[index].image,
-                    ),
-                  ),  
-                  );}
-                  ),],
-                  
+                  Obx(() {
+                    final entries = controller.entries.toList();
+                    if (entries.isEmpty) {
+                      return SizedBox.shrink();
+                    }
+
+                    return Column(
+                      children: List.generate(
+                        controller.entries.length > 2
+                            ? 2
+                            : controller.entries.length,
+                        (index) => VoteEntryItemWidget(
+                          title: controller.entries[index].designName,
+                          author:
+                              controller.entries[index].user?.fullName ?? "--",
+                          synId: controller.entries[index].id,
+                          likes: controller.entries[index].heartCount
+                              .toString(),
+                          image: controller.entries[index].image,
+                        ),
+                      ),
+                    );
+                  }),
+                ],
+
                 if (isOpen) ...[
                   space8H,
                   CustomButton(
