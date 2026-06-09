@@ -14,14 +14,20 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final giveawayController = Get.find<GiveawayController>();
+    final profileController = Get.find<ProfileController>();
     return CustomScaffold(
       appBar: AppBar(
         leading: Padding(
           padding: const EdgeInsets.only(left: 8.0),
-          child: const CircleAvatar(
-            radius: 22,
-            backgroundImage: NetworkImage('https://i.pravatar.cc/150?img=11'),
-          ),
+          child: Obx(() {
+            return CustomNetworkImage(
+              height: 40,
+              width: 40,
+              
+              imageUrl: profileController.userProfile.value.profilePicture!,
+              borderRadius: BorderRadius.circular(360),
+            );
+          }),
         ),
 
         centerTitle: false,
@@ -29,7 +35,14 @@ class HomePage extends StatelessWidget {
           spacing: 2,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CustomText("User Name", fontWeight: FontWeight.bold, fontSize: 16),
+            Obx(() {
+              return CustomText(
+                profileController.userProfile.value.fullName ??
+                    "no data provided",
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              );
+            }),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
               decoration: BoxDecoration(
@@ -88,7 +101,8 @@ class HomePage extends StatelessWidget {
                   return const Center(child: CircularProgressIndicator());
                 }
                 final data = giveawayController.pageData.value;
-                if (data == null || data.currentWeekly == null) return const SizedBox.shrink();
+                if (data == null || data.currentWeekly == null)
+                  return const SizedBox.shrink();
                 return WeeklyPrizeCardWidget(giveaway: data.currentWeekly!);
               }),
 
@@ -109,8 +123,11 @@ class HomePage extends StatelessWidget {
                   return const SizedBox.shrink();
                 }
                 final data = giveawayController.pageData.value;
-                if (data == null || data.majorGiveaways.isEmpty) return const SizedBox.shrink();
-                return MajorGiveawayCardWidget(giveaway: data.majorGiveaways.first);
+                if (data == null || data.majorGiveaways.isEmpty)
+                  return const SizedBox.shrink();
+                return MajorGiveawayCardWidget(
+                  giveaway: data.majorGiveaways.first,
+                );
               }),
               // space24H,
               CustomText(

@@ -20,6 +20,7 @@ class ProfileModel {
   final String? hoodieSize;
   final String? phoneNumber;
   final String? dob;
+  final String? profilePicture;
   // New fields
   final String? lastDailyClaimDate;
   final String? role;
@@ -41,6 +42,7 @@ class ProfileModel {
     this.id,
     this.email,
     this.firstName,
+    this.profilePicture,
     this.lastName,
     this.fullName,
     this.memberNumber,
@@ -71,6 +73,7 @@ class ProfileModel {
       shredPoints: json['shredPoints'] ?? 0,
       country: json['country'],
       aboutMe: json['aboutMe'],
+      profilePicture: json['image'],
       facebookURL: json['facebookURL'],
       instagramURL: json['instagramURL'],
       tiktokURL: json['tiktokURL'],
