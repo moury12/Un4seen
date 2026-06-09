@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:un4seen/src/core/utils/url_launcher_utils.dart';
 import 'package:un4seen/src/features/points/points_export.dart';
 import 'package:un4seen/src/features/points/presentation/widgets/activity_log_tile.dart';
 import 'package:un4seen/src/features/points/presentation/widgets/milestone_progress_card.dart';
+import 'package:un4seen/src/features/points/presentation/widgets/milestone_reward.dart';
 import 'package:un4seen/src/features/points/presentation/widgets/points_shimmer_loading.dart';
 import '../../../../core/core_export.dart';
 import '../../../../core/widgets/gradient_container.dart';
@@ -11,9 +13,23 @@ import '../../../profile/presentation/widgets/point_blance_card_widget.dart';
 import '../widgets/points_action_card.dart';
 import '../widgets/social_share_tile.dart';
 
-class PointsPage extends StatelessWidget {
+class PointsPage extends StatefulWidget {
   const PointsPage({super.key});
 
+  @override
+  State<PointsPage> createState() => _PointsPageState();
+}
+
+class _PointsPageState extends State<PointsPage> {
+   final TextEditingController _platformCtrl = TextEditingController();
+    final TextEditingController _postLinkCtrl = TextEditingController();
+
+  @override
+  void dispose() {
+    _platformCtrl.dispose();
+    _postLinkCtrl.dispose();
+    super.dispose();
+  } 
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(PointsController());
@@ -164,10 +180,35 @@ class PointsPage extends StatelessWidget {
                         title: AppStaticStrings.completeYourProfile.tr,
                         subtitle: "+100 points",
                         icon: AppIcons.statics,
-                        trailing: const Icon(
-                          Icons.check_circle_outline,
-                          color: Colors.white,
-                        ),
+                        trailing:
+                            data.profileCompletion.isClaimed ||
+                                !data.profileCompletion.isComplete
+                            ? data.profileCompletion.isClaimed
+                                  ? const Icon(
+                                      Icons.check_circle_outline,
+                                      color: Colors.white,
+                                    )
+                                  : null
+                            : Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: ButtonTapWidget(
+                                  onTap: () {
+                                    controller.claimProfileBonus();
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: CustomText(
+                                      AppStaticStrings.claim.tr,
+                                      fontWeight: FontWeight.bold,
+                                      color: AppColors.kPrimaryDarkColor3,
+                                      variant: TextVariant.labelLarge,
+                                    ),
+                                  ),
+                                ),
+                              ),
                       ),
                       PointsActionCard(
                         title: AppStaticStrings.referralBonus.tr,
@@ -183,18 +224,33 @@ class PointsPage extends StatelessWidget {
                       ),
                       space8H,
                       SocialShareTile(
+                        onTap: () {
+                          UrlLauncherUtils.launchExternalUrl(
+                            UrlLauncherUtils.facebookUrl,
+                          );
+                        },
                         title: AppStaticStrings.shareOnFacebook.tr,
                         subtitle: AppStaticStrings.earn100Points.tr,
                         icon: AppIcons.fb,
                         points: "100",
                       ),
                       SocialShareTile(
+                        onTap: () {
+                          UrlLauncherUtils.launchExternalUrl(
+                            UrlLauncherUtils.instagramUrl,
+                          );
+                        },
                         title: AppStaticStrings.shareOnInstagram.tr,
                         subtitle: AppStaticStrings.earn100Points.tr,
                         icon: AppIcons.ig,
                         points: "100",
                       ),
                       SocialShareTile(
+                        onTap: () {
+                          UrlLauncherUtils.launchExternalUrl(
+                            UrlLauncherUtils.tiktokUrl,
+                          );
+                        },
                         title: AppStaticStrings.shareOnTikTok.tr,
                         subtitle: AppStaticStrings.earn100Points.tr,
                         icon: AppIcons.tictok,
@@ -214,7 +270,12 @@ class PointsPage extends StatelessWidget {
                       ),
                       space8H,
 
-                      const MilestoneProgressCard(),
+                      ...List.generate(data.communityMilestones.length, (
+                        index,
+                      ) {
+                        final milestone = data.communityMilestones[index];
+                        return MilestoneProgressCard(model: milestone);
+                      }),
                       space8H,
                       CustomText(
                         AppStaticStrings.helpGrowGoogleReview.tr,
@@ -226,7 +287,13 @@ class PointsPage extends StatelessWidget {
                         "assets/icons/dollar_icon.svg",
                         AppStaticStrings.storeCreditTitle.tr,
                         AppStaticStrings.reviewComplete.tr,
-                        AppStaticStrings.redeem.tr,
+                        (){
+                         showDialog(context: context, builder: 
+                         (context)=>SubmitProofDialog(
+                         platformCtrl: _platformCtrl, 
+                         postLinkCtrl: _postLinkCtrl)) ;
+                        }
+
                       ),
 
                       CustomText(
@@ -235,18 +302,13 @@ class PointsPage extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                       space8H,
-                      _milestoneRewardTile(
-                        AppIcons.reward,
-                        AppStaticStrings.stickerPack.tr,
-                        AppStaticStrings.points1000.tr,
-                        AppStaticStrings.claim.tr,
-                      ),
-                      _milestoneRewardTile(
-                        AppIcons.reward,
-                        AppStaticStrings.tShirt.tr,
-                        AppStaticStrings.points2500.tr,
-                        AppStaticStrings.claim.tr,
-                      ),
+                      ...List.generate(data.individualMilestones.length, (
+                        index,
+                      ) {
+                        final reward = data.individualMilestones[index];
+                        return MilestoneRewardWidget(data: reward);
+                      }),
+
                       space8H,
 
                       CustomText(
@@ -255,21 +317,15 @@ class PointsPage extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                       space8H,
-                      const ActivityLogTile(
-                        title: "Profile completed",
-                        date: "4/20/2026",
-                        points: "100",
-                      ),
-                      const ActivityLogTile(
-                        title: "Shared on Instagram",
-                        date: "4/21/2026",
-                        points: "200",
-                      ),
-                      const ActivityLogTile(
-                        title: "Bike of the Week winner 🏆",
-                        date: "4/24/2026",
-                        points: "500",
-                      ),
+                      ...List.generate(data.recentActivity.length, (index) {
+                        final log = data.recentActivity[index];
+                        return ActivityLogTile(
+                          title: log.description,
+                          date: formatDate(log.updatedAt),
+                          points: log.points.toString(),
+                        );
+                      }),
+
                       space24H,
                     ]),
                   ),
@@ -283,22 +339,35 @@ class PointsPage extends StatelessWidget {
 
   Widget _socialBtn(String icon, String label) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
       ),
-      child: Column(
-        children: [
-          SvgPicture.asset(icon, height: 24),
-          space4H,
-          CustomText(
-            label,
-            color: Colors.black,
-            fontSize: 10,
-            fontWeight: FontWeight.bold,
+      child: ButtonTapWidget(
+        onTap: () {
+          if (label == "Facebook") {
+            UrlLauncherUtils.launchExternalUrl(UrlLauncherUtils.facebookUrl);
+          } else if (label == "Instagram") {
+            UrlLauncherUtils.launchExternalUrl(UrlLauncherUtils.instagramUrl);
+          } else if (label == "TikTok") {
+            UrlLauncherUtils.launchExternalUrl(UrlLauncherUtils.tiktokUrl);
+          }
+        },
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: Column(
+            children: [
+              SvgPicture.asset(icon, height: 24),
+              space4H,
+              CustomText(
+                label,
+                color: Colors.black,
+                fontSize: 10,
+                fontWeight: FontWeight.bold,
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
@@ -328,7 +397,7 @@ class PointsPage extends StatelessWidget {
     String icon,
     String title,
     String points,
-    String? buttonText,
+    VoidCallback? onTap
   ) {
     return GradientContainer(
       margin: const EdgeInsets.only(bottom: 8),
@@ -372,22 +441,15 @@ class PointsPage extends StatelessWidget {
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: CustomText(
-                    buttonText ?? AppStaticStrings.claim.tr,
+                   AppStaticStrings.claim.tr,
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                onTap: () {},
+                onTap: onTap,
               ),
               //  CustomButton(text: "Claim", onPressed: () {}, isExpanding: true, borderRadius: 20),
             ],
-          ),
-          LinearProgressIndicator(
-            value: 0.5,
-            minHeight: 8,
-            borderRadius: BorderRadius.circular(8),
-            backgroundColor: Colors.white.withValues(alpha: 0.1),
-            valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
           ),
         ],
       ),

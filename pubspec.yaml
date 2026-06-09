@@ -52,6 +52,7 @@ dependencies:
   flutter_auto_size_text: ^5.0.0
   image_picker: ^1.2.2
   path_provider: ^2.1.5
+  url_launcher: ^6.3.2
 
 dev_dependencies:
   flutter_test:

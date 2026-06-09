@@ -71,11 +71,25 @@ class CommunityMilestone {
   final String title;
   final String description;
   final String image;
+  final int targetMembers;
+  final int currentMembers;
   final double progress;
   final bool isUnlocked;
   final bool isClaimed;
+  final String rewardType;
 
-  CommunityMilestone({required this.id, required this.title, required this.description, required this.image, required this.progress, required this.isUnlocked, required this.isClaimed});
+  CommunityMilestone({
+    required this.id,
+    required this.title,
+    required this.description,
+    required this.image,
+    required this.targetMembers,
+    required this.currentMembers,
+    required this.progress,
+    required this.isUnlocked,
+    required this.isClaimed,
+    required this.rewardType,
+  });
 
   factory CommunityMilestone.fromJson(Map<String, dynamic> json) {
     return CommunityMilestone(
@@ -83,9 +97,13 @@ class CommunityMilestone {
       title: json['title'] ?? '',
       description: json['description'] ?? '',
       image: json['image'] ?? '',
+      targetMembers: json['targetMembers'] ?? 0,
+      currentMembers: json['currentMembers'] ?? 0,
+      // Progress comes as a string "0.14" in JSON, parsing it to double for the progress bar
       progress: double.tryParse(json['progress'].toString()) ?? 0.0,
       isUnlocked: json['isUnlocked'] ?? false,
       isClaimed: json['isClaimed'] ?? false,
+      rewardType: json['rewardType'] ?? '',
     );
   }
 }
@@ -94,18 +112,30 @@ class IndividualMilestone {
   final String id;
   final String title;
   final String description;
+  final String image;
   final double progress;
   final int pointsRequired;
   final bool isUnlocked;
   final bool isClaimed;
 
-  IndividualMilestone({required this.id, required this.title, required this.description, required this.progress, required this.pointsRequired, required this.isUnlocked, required this.isClaimed});
+  IndividualMilestone({
+    required this.id,
+    required this.title,
+    required this.description,
+    required this.image,
+    required this.progress,
+    required this.pointsRequired,
+    required this.isUnlocked,
+    required this.isClaimed,
+  });
 
   factory IndividualMilestone.fromJson(Map<String, dynamic> json) {
     return IndividualMilestone(
       id: json['_id'] ?? '',
       title: json['title'] ?? '',
       description: json['description'] ?? '',
+      image: json['image'] ?? '',
+      // Progress from JSON is "26.00", converting to 0.26 for LinearProgressIndicator
       progress: (double.tryParse(json['progress'].toString()) ?? 0.0) / 100,
       pointsRequired: json['pointsRequired'] ?? 0,
       isUnlocked: json['isUnlocked'] ?? false,
@@ -115,17 +145,33 @@ class IndividualMilestone {
 }
 
 class RecentActivity {
-  final String description;
+  final String id;
+  final String user;
   final int points;
+  final String source;
+  final String description;
   final String createdAt;
+  final String updatedAt;
 
-  RecentActivity({required this.description, required this.points, required this.createdAt});
+  RecentActivity({
+    required this.id,
+    required this.user,
+    required this.points,
+    required this.source,
+    required this.description,
+    required this.createdAt,
+    required this.updatedAt,
+  });
 
   factory RecentActivity.fromJson(Map<String, dynamic> json) {
     return RecentActivity(
-      description: json['description'] ?? '',
+      id: json['_id'] ?? '',
+      user: json['user'] ?? '',
       points: json['points'] ?? 0,
+      source: json['source'] ?? '',
+      description: json['description'] ?? '',
       createdAt: json['createdAt'] ?? '',
+      updatedAt: json['updatedAt'] ?? '',
     );
   }
 }

@@ -60,3 +60,12 @@ class EmptyStateWidget extends StatelessWidget {
     );
   }
 }
+ String formatDate(String isoDate) {
+    try {
+      DateTime parsedDate = DateTime.parse(isoDate);
+      // Returns format: Day/Month/Year (e.g., 9/6/2026)
+      return "${parsedDate.day}/${parsedDate.month}/${parsedDate.year}";
+    } catch (e) {
+      return isoDate; // Fallback to original if parsing fails
+    }
+  }

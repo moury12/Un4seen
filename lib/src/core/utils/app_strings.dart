@@ -1,3 +1,5 @@
+import 'dart:io';
+
 class AppStaticStrings {
   AppStaticStrings._();
 
@@ -14,6 +16,8 @@ class AppStaticStrings {
   static const String forgotPassword = 'Forgot password?';
   static const String orContinueWith = 'or continue with';
   static const String follow = 'Follow';
+  static const String platform = 'Platform';
+  static const String postLink = 'Post Link';
   static const String dontHaveAccountRegister =
       "Don't have an account? Register";
   static const String details = 'Details';
