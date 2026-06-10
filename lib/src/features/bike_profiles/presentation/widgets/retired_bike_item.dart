@@ -5,12 +5,14 @@ class RetiredBikeItem extends StatelessWidget {
   final String title;
   final String subtitle;
   final String imageUrl;
+  final VoidCallback? onTap;
 
   const RetiredBikeItem({
     super.key,
     required this.title,
     required this.subtitle,
     required this.imageUrl,
+    this.onTap,
   });
 
   @override
@@ -59,6 +61,7 @@ class RetiredBikeItem extends StatelessWidget {
               borderRadius: BorderRadius.circular(8),
             ),
             child: ButtonTapWidget(
+              onTap: onTap,
               child: CustomText(
                 "View Details",
                 color: AppColors.kPrimaryColor,

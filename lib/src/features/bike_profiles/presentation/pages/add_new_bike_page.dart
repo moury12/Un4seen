@@ -1,12 +1,44 @@
+import 'package:flutter/foundation.dart';
+import 'package:un4seen/src/features/bike_profiles/presentation/widgets/labeled_new_field.dart';
+
 import '../../../../src_export.dart';
 import '../widgets/image_upload_section.dart';
 
-class AddNewBikePage extends StatelessWidget {
+class AddNewBikePage extends StatefulWidget {
   const AddNewBikePage({super.key});
 
   @override
+  State<AddNewBikePage> createState() => _AddNewBikePageState();
+}
+
+class _AddNewBikePageState extends State<AddNewBikePage> {
+  final yearCtrl = TextEditingController(text: kDebugMode ? "2024" : "");
+  final makeCtrl = TextEditingController(text: kDebugMode ? "Honda" : "");
+  final modelCtrl = TextEditingController(text: kDebugMode ? "CRF250R" : "");
+  final typeCtrl = TextEditingController(text: kDebugMode ? "250R" : "");
+  final colorCtrl = TextEditingController(text: kDebugMode ? "Red" : "");
+  final noteTitleCtrl = TextEditingController(
+    text: kDebugMode ? "test Title" : "",
+  );
+  final notePointCtrl = TextEditingController(
+    text: kDebugMode ? "test Point 1" : "",
+  );
+
+  @override
+  void dispose() {
+    yearCtrl.dispose();
+    makeCtrl.dispose();
+    modelCtrl.dispose();
+    typeCtrl.dispose();
+    colorCtrl.dispose();
+    noteTitleCtrl.dispose();
+    notePointCtrl.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    // Custom colors based on your image
+    final controller = Get.find<BikeProfilesController>();
     final Color scaffoldBg = AppColors.kPrimaryDarkColor3;
     const Color borderColor = AppColors.kPrimaryDarkColor; // Light Blue Border
     const Color noteBoxBg =
@@ -78,38 +110,35 @@ class AddNewBikePage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Center(child: ImageUploadSection()),
-
-                    _buildLabeledField(
-                      "Year",
-                      "e.g., 2024",
-                      borderColor,
-                      context,
-                    ),
-                    _buildLabeledField(
-                      "Make",
-                      "e.g., Honda, Kawasaki, GT",
-                      borderColor,
-                      context,
-                    ),
-                    _buildLabeledField(
-                      "Model",
-                      "e.g., CRF250R, KLX140",
-                      borderColor,
-                      context,
-                    ),
-                    _buildLabeledField(
-                      "Bike Type",
-                      "type here..",
-                      borderColor,
-                      context,
-                    ),
-                    _buildLabeledField(
-                      "Color",
-                      "e.g., Red, Matte Black, Lime Green",
-                      borderColor,
-                      context,
+                    LabeledInputField(
+                      label: "Year",
+                      hint: "e.g., 2024",
+                      controller: yearCtrl,
                     ),
 
+                    LabeledInputField(
+                      label: "Make",
+                      hint: "e.g., Honda",
+                      controller: makeCtrl,
+                    ),
+
+                    LabeledInputField(
+                      label: "Model",
+                      hint: "e.g., CRF250R",
+                      controller: modelCtrl,
+                    ),
+
+                    LabeledInputField(
+                      label: "Bike Type",
+                      hint: "type here..",
+                      controller: typeCtrl,
+                    ),
+
+                    LabeledInputField(
+                      label: "Color",
+                      hint: "e.g., Red",
+                      controller: colorCtrl,
+                    ),
                     CustomText(
                       "Build Note",
                       fontWeight: FontWeight.bold,
@@ -117,27 +146,90 @@ class AddNewBikePage extends StatelessWidget {
                       color: Colors.white,
                     ),
 
-                    _buildLabeledField(
-                      "Title",
-                      "e.g., Red, Matte Black, Lime Green",
-                      borderColor,
-                      context,
-                    ),
-                    _buildLabeledField(
-                      "Point 1",
-                      "e.g., Red, Matte Black, Lime Green",
-                      borderColor,
-                      context,
-                    ),
+                    // --- DYNAMIC BUILD NOTES SECTION ---
+                    Obx(
+                      () => Column(
+                        children: List.generate(controller.buildNoteSets.length, (
+                          noteIdx,
+                        ) {
+                          final noteSet = controller.buildNoteSets[noteIdx];
+                          return Container(
+                            margin: const EdgeInsets.only(bottom: 16),
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.white10),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                LabeledInputField(
+                                  label: "Note Title",
+                                  hint: "e.g., Engine Mods",
+                                  controller: noteSet.titleController,
+                                ),
+                                space12H,
 
-                    const Center(
-                      child: Icon(Icons.add, color: Colors.white, size: 30),
+                                // Loop through points for this specific note
+                                Obx(
+                                  () => Column(
+                                    children: List.generate(
+                                      noteSet.pointControllers.length,
+                                      (pointIdx) {
+                                        return Padding(
+                                          padding: const EdgeInsets.only(
+                                            bottom: 8.0,
+                                          ),
+                                          child: Row(
+                                            children: [
+                                              Expanded(
+                                                child: LabeledInputField(
+                                                  label:
+                                                      "Point ${pointIdx + 1}",
+                                                  hint: "e.g., Ported Head",
+                                                  controller: noteSet
+                                                      .pointControllers[pointIdx],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ),
+
+                                // ADD POINT BUTTON (Button 2)
+                                Align(
+                                  alignment: Alignment.centerRight,
+                                  child: TextButton.icon(
+                                    onPressed: () =>
+                                        controller.addPointToNote(noteIdx),
+                                    icon: const Icon(
+                                      Icons.add,
+                                      size: 16,
+                                      color: AppColors.kPrimaryColor,
+                                    ),
+                                    label: CustomText(
+                                      "Add Point",
+                                      color: AppColors.kPrimaryColor,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        }),
+                      ),
                     ),
 
                     // Outlined Add Build Note Button
                     CustomButton(
                       text: "Add Build Note",
-                      onPressed: () {},
+                      onPressed: () {
+                        controller.addNewBuildNote();
+                      },
                       isOutlined: true,
                       icon: Icons.add,
                       textColor: Colors.white,
@@ -160,11 +252,25 @@ class AddNewBikePage extends StatelessWidget {
                     ),
 
                     // --- MAIN ADD BIKE BUTTON ---
-                    CustomButton(
-                      text: "Add Bike",
-                      onPressed: () {},
-                      icon: Icons.add,
-                      backgroundColor: AppColors.kPrimaryColor,
+                    Obx(
+                      () => CustomButton(
+                        text: "Add Bike",
+                        isLoading: controller.isLoading.value,
+                        onPressed: () async {
+                          final res = await controller.addBike(
+                            year: yearCtrl.text.trim(),
+                            make: makeCtrl.text.trim(),
+                            model: modelCtrl.text.trim(),
+                            type: typeCtrl.text.trim(),
+                            color: colorCtrl.text.trim(),
+                          );
+                          if (res) {
+                            context.pop();
+                          }
+                        },
+                        icon: Icons.add,
+                        backgroundColor: AppColors.kPrimaryColor,
+                      ),
                     ),
                     space24H,
                   ],
@@ -174,38 +280,6 @@ class AddNewBikePage extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-
-  // Helper to build the labeled fields with that specific blue border
-  Widget _buildLabeledField(
-    String label,
-    String hint,
-    Color borderColor,
-    BuildContext context,
-  ) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        CustomTextField(
-          hintText: hint,
-          title: label,
-          inputTextStyle: const TextStyle(
-            fontSize: 13,
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
-          titleStyle: Theme.of(
-            context,
-          ).textTheme.titleMedium?.copyWith(color: Colors.white),
-          fillColor: Colors.transparent,
-          hintStyle: Theme.of(
-            context,
-          ).textTheme.labelMedium?.copyWith(color: Colors.white),
-          // If your CustomTextField doesn't support direct border color,
-          // wrap it in a Theme or pass a decoration.
-        ),
-      ],
     );
   }
 }

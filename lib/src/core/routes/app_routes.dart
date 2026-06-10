@@ -30,6 +30,7 @@ class AppRoutes {
   static const String termsAndConditions = '/terms-and-conditions';
   static const String bikeGallery = '/bike-gallery';
   static const String addNewBike = '/add-new-bike';
+  static const String singleBikeDetails = '/single-bike-details';
   static const String memberDetails = '/member-details';
   static const String postStory = '/post-story';
   static const String entriesGallery = '/entries-gallery';

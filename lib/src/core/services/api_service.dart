@@ -61,11 +61,30 @@ class ApiService {
       ),
     );
   }
-
-  void _logRequest(RequestOptions o) {
+void _logRequest(RequestOptions o) {
     print('🚀 [API REQUEST] | ${o.method} | ${o.path}');
-    print('🔗 File: lib/src/core/services/api_service.dart:45');
-    if (o.data != null) print('📦 Body: ${o.data}');
+    print('🔗 File: lib/src/core/services/api_service.dart');
+
+    if (o.data != null) {
+      if (o.data is FormData) {
+        final formData = o.data as FormData;
+        print('📦 [BODY - FormData Fields]:');
+        for (var field in formData.fields) {
+          // This will show your "data" JSON string: {"year": "2024", "make": "Honda"...}
+          print('   ➤ ${field.key}: ${field.value}');
+        }
+        print('📂 [BODY - FormData Files]:');
+        for (var file in formData.files) {
+          // This will show your "image" field and filename
+          print('   ➤ ${file.key}: ${file.value.filename}');
+        }
+      } else {
+        // Standard JSON body (Map or String)
+        print('📦 [BODY]: ${o.data}');
+      }
+    } else {
+      print('📦 [BODY]: Empty');
+    }
   }
 
   void _logResponse(Response r) {
