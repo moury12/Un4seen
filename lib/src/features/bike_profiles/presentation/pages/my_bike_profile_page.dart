@@ -53,7 +53,7 @@ class MyBikeProfilePage extends StatelessWidget {
                   padding: AppPadding.getPadding12H(context),
                   sliver: SliverList(
                     delegate: SliverChildListDelegate([
-                      if (bike == null) ...[
+                      if (bike == null) ...[ 
                         const SizedBox(height: 100),
                         Center(
                           child: CustomText(

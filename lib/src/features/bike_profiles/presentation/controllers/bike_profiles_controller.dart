@@ -189,7 +189,7 @@ class BikeProfilesController extends GetxController {
       final res = await _api.patch(
         '/bikes/$bikeId/remove-images',
         data: {
-          "images": [imageUrl],
+          "imageUrls": [imageUrl],
         },
       );
 
