@@ -14,7 +14,7 @@ class CompetitionsPage extends StatelessWidget {
         title: Row(
           spacing: 8,
           children: [
-            Icon(Icons.emoji_events, color: AppColors.kPrimaryColor),
+            const Icon(Icons.emoji_events, color: AppColors.kPrimaryColor),
             RichText(
               text: TextSpan(
                 text: "${AppStaticStrings.competitionsTitle.tr}\n",
@@ -55,7 +55,7 @@ class CompetitionsPage extends StatelessWidget {
             if (controller.isCompLoading.value) {
               return _buildShimmer(context);
             }
-        
+
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -73,11 +73,11 @@ class CompetitionsPage extends StatelessWidget {
                     (comp) => CompetitionCardWidget(model: comp),
                   ),
                 ],
-        
+
                 // Upcoming Competitions
                 if (controller.upcomingComps.isNotEmpty) ...[
                   space4H,
-                  CustomText(
+                  const CustomText(
                     'Upcoming Competitions',
                     variant: TextVariant.titleLarge,
                     fontWeight: FontWeight.bold,
@@ -89,7 +89,7 @@ class CompetitionsPage extends StatelessWidget {
                     (comp) => CompetitionCardWidget(model: comp),
                   ),
                 ],
-        
+
                 // Ended Competitions
                 if (controller.endedComps.isNotEmpty) ...[
                   space8H,
@@ -105,7 +105,7 @@ class CompetitionsPage extends StatelessWidget {
                     (comp) => _buildEndedTile(context, comp),
                   ),
                 ],
-        
+
                 // Empty state
                 if (controller.activeComps.isEmpty &&
                     controller.upcomingComps.isEmpty &&
@@ -120,7 +120,7 @@ class CompetitionsPage extends StatelessWidget {
                           color: AppColors.kPrimaryColor.withValues(alpha: .5),
                         ),
                         space8H,
-                        CustomText(
+                        const CustomText(
                           'No competitions available',
                           color: AppColors.kSecondaryTextColor,
                         ),
@@ -128,7 +128,7 @@ class CompetitionsPage extends StatelessWidget {
                     ),
                   ),
                 ],
-        
+
                 space8H,
                 const HowItWorksWidget(),
                 space8H,
@@ -208,9 +208,9 @@ class CompetitionsPage extends StatelessWidget {
         children: [
           Container(
             height: 160,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: AppColors.kPrimaryDarkColor3,
-              borderRadius: const BorderRadius.vertical(
+              borderRadius: BorderRadius.vertical(
                 top: Radius.circular(appRadius16),
               ),
             ),

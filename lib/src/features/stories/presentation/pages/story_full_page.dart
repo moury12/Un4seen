@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:un4seen/src/core/core_export.dart';
-import 'package:un4seen/src/core/widgets/custom_network_image.dart';
 import '../controllers/story_controller.dart';
 import '../widgets/story_progress_bar.dart';
 import '../widgets/story_user_info.dart';
@@ -76,7 +75,7 @@ class _StoryFullPageState extends State<StoryFullPage>
     setState(() {
       _showFire = true;
     });
-    
+
     // Update controller state
     controller.isLiked.value = true;
 

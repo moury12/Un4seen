@@ -20,13 +20,11 @@ class ShopProductCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-       gradient: LinearGradient(colors: [
-        AppColors.kPrimaryColor,
-        AppColors.kPrimaryDarkColor2
-       ],
-       begin: Alignment.topCenter,
-       end: Alignment.bottomCenter
-      ), 
+        gradient: const LinearGradient(
+          colors: [AppColors.kPrimaryColor, AppColors.kPrimaryDarkColor2],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        ),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
@@ -35,23 +33,48 @@ class ShopProductCard extends StatelessWidget {
           Expanded(
             child: Stack(
               children: [
-                CustomNetworkImage(imageUrl: image, width: double.infinity, radius: 12),
+                CustomNetworkImage(
+                  imageUrl: image,
+                  width: double.infinity,
+                  radius: 12,
+                ),
                 Positioned(
                   top: 8,
                   right: 8,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                    decoration: BoxDecoration(color: AppColors.kPrimaryColor, borderRadius: BorderRadius.circular(4)),
-                    child: const CustomText("-20%", color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 6,
+                      vertical: 2,
+                    ),
+                    decoration: BoxDecoration(
+                      color: AppColors.kPrimaryColor,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: const CustomText(
+                      "-20%",
+                      color: Colors.white,
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
                 Positioned(
                   bottom: 8,
                   left: 8,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                    decoration: BoxDecoration(color: Colors.black45, borderRadius: BorderRadius.circular(4)),
-                    child: CustomText(category, color: Colors.white, fontSize: 12),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 6,
+                      vertical: 2,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.black45,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: CustomText(
+                      category,
+                      color: Colors.white,
+                      fontSize: 12,
+                    ),
                   ),
                 ),
               ],
@@ -62,13 +85,29 @@ class ShopProductCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CustomText(title, color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14, maxLines: 2),
+                CustomText(
+                  title,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                  maxLines: 2,
+                ),
                 space4H,
                 Row(
                   children: [
-                    CustomText(price, color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12),
+                    CustomText(
+                      price,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12,
+                    ),
                     space4W,
-                    CustomText(oldPrice, color: Colors.white, fontSize: 12, decoration: TextDecoration.lineThrough),
+                    CustomText(
+                      oldPrice,
+                      color: Colors.white,
+                      fontSize: 12,
+                      decoration: TextDecoration.lineThrough,
+                    ),
                   ],
                 ),
               ],

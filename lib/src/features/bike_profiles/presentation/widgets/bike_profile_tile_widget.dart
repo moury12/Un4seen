@@ -23,18 +23,18 @@ class BikeProfileTileWidget extends StatelessWidget {
         children: [
           Container(
             padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: AppColors.kPrimaryColor,
               shape: BoxShape.circle,
             ),
-            child: Icon(
+            child: const Icon(
               Icons.directions_bike,
               color: AppColors.kPrimaryDarkColor2,
               size: 24,
             ),
           ),
           space12W,
-          Expanded(
+          const Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

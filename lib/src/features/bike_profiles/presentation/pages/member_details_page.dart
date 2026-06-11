@@ -57,19 +57,25 @@ class MemberDetailsPage extends StatelessWidget {
               space8H,
 
               // --- SYNDICATE JOURNEY SECTION ---
-              SyndicateJourneyWidget(bgColor: cardBg, accentColor: highlightBlue),
+              const SyndicateJourneyWidget(
+                bgColor: cardBg,
+                accentColor: highlightBlue,
+              ),
               space8H,
 
               // --- ABOUT ME SECTION ---
-              AboutMeWidget(bgColor: cardBg),
+              const AboutMeWidget(bgColor: cardBg),
               space8H,
 
               // --- CONNECT SECTION ---
-              ConnectSectionWidget(bgColor: cardBg),
+              const ConnectSectionWidget(bgColor: cardBg),
               space8H,
 
               // --- BIKE PROFILE SECTION ---
-              BikeProfileTileWidget(bgColor: cardBg, accentColor: highlightBlue),
+              const BikeProfileTileWidget(
+                bgColor: cardBg,
+                accentColor: highlightBlue,
+              ),
               space8H,
             ],
           ),

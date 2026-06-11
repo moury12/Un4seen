@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import '../../../../src_export.dart';
 import '../widgets/poll_card_widget.dart';
 import '../widgets/poll_option_widget.dart';
@@ -13,8 +12,16 @@ class CrewChoicePage extends StatelessWidget {
       appBar: AppBar(
         title: Column(
           children: [
-            CustomText(AppStaticStrings.crewChoice.tr, variant: TextVariant.titleLarge, fontWeight: FontWeight.bold),
-            CustomText(AppStaticStrings.syndicateCallsShots.tr, variant: TextVariant.labelSmall, color: AppColors.kSecondaryTextColor),
+            CustomText(
+              AppStaticStrings.crewChoice.tr,
+              variant: TextVariant.titleLarge,
+              fontWeight: FontWeight.bold,
+            ),
+            CustomText(
+              AppStaticStrings.syndicateCallsShots.tr,
+              variant: TextVariant.labelSmall,
+              color: AppColors.kSecondaryTextColor,
+            ),
           ],
         ),
       ),
@@ -30,9 +37,18 @@ class CrewChoicePage extends StatelessWidget {
               timeLeft: "3 ${AppStaticStrings.daysLeft.tr}",
               options: const [
                 PollOptionWidget(title: "Carbon Fork Wraps", percentage: 0.23),
-                PollOptionWidget(title: "Custom Made Hoodie with your race number and Name", percentage: 0.35),
-                PollOptionWidget(title: "2026 Honda Crf110cc", percentage: 0.27),
-                PollOptionWidget(title: "Full Set of Race Numbers", percentage: 0.15),
+                PollOptionWidget(
+                  title: "Custom Made Hoodie with your race number and Name",
+                  percentage: 0.35,
+                ),
+                PollOptionWidget(
+                  title: "2026 Honda Crf110cc",
+                  percentage: 0.27,
+                ),
+                PollOptionWidget(
+                  title: "Full Set of Race Numbers",
+                  percentage: 0.15,
+                ),
               ],
             ),
             PollCardWidget(
@@ -45,7 +61,11 @@ class CrewChoicePage extends StatelessWidget {
               options: const [
                 PollOptionWidget(title: "Textured Laminate", percentage: 0.28),
                 PollOptionWidget(title: "Exhaust Decals", percentage: 0.22),
-                PollOptionWidget(title: "T-Shirt Designs", percentage: 0.33, isSelected: true),
+                PollOptionWidget(
+                  title: "T-Shirt Designs",
+                  percentage: 0.33,
+                  isSelected: true,
+                ),
                 PollOptionWidget(title: "Road Bike Decals", percentage: 0.18),
               ],
             ),
@@ -53,15 +73,26 @@ class CrewChoicePage extends StatelessWidget {
             // How it works card
             Container(
               padding: AppPadding.getPadding12(context),
-              decoration: BoxDecoration(color: AppColors.kPrimaryDarkColor3, borderRadius: BorderRadius.circular(16)),
+              decoration: BoxDecoration(
+                color: AppColors.kPrimaryDarkColor3,
+                borderRadius: BorderRadius.circular(16),
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
                     children: [
-                      const Icon(Icons.info_outline, color: AppColors.kPrimaryColor, size: 20),
+                      const Icon(
+                        Icons.info_outline,
+                        color: AppColors.kPrimaryColor,
+                        size: 20,
+                      ),
                       space8W,
-                      CustomText(AppStaticStrings.howItWorks.tr, color: Colors.white, fontWeight: FontWeight.bold),
+                      CustomText(
+                        AppStaticStrings.howItWorks.tr,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ],
                   ),
                   space12H,

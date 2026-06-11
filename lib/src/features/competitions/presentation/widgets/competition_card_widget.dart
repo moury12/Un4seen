@@ -187,7 +187,7 @@ class _CompetitionCardWidgetState extends State<CompetitionCardWidget> {
                           color: Colors.white,
                         )
                       else
-                        SizedBox.shrink(),
+                        const SizedBox.shrink(),
                       GestureDetector(
                         onTap: () {
                           context.push(AppRoutes.entriesGallery);
@@ -225,7 +225,7 @@ class _CompetitionCardWidgetState extends State<CompetitionCardWidget> {
                   Obx(() {
                     final entries = controller.entries.toList();
                     if (entries.isEmpty) {
-                      return SizedBox.shrink();
+                      return const SizedBox.shrink();
                     }
 
                     return Column(
@@ -236,7 +236,7 @@ class _CompetitionCardWidgetState extends State<CompetitionCardWidget> {
                         (index) => VoteEntryItemWidget(
                           title: controller.entries[index].designName,
                           author:
-                              controller.entries[index].user?.fullName ?? "--",
+                              controller.entries[index].user.fullName ?? "--",
                           synId: controller.entries[index].id,
                           likes: controller.entries[index].heartCount
                               .toString(),

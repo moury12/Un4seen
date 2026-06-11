@@ -149,7 +149,7 @@ class _UploadRideDialogState extends State<UploadRideDialog> {
               // Input Fields
               CustomTextField(
                 fillColor: Colors.transparent,
-                hintStyle: TextStyle(
+                hintStyle: const TextStyle(
                   color: AppColors.kWhiteTextColor,
                   fontSize: 10,
                 ),
@@ -166,7 +166,7 @@ class _UploadRideDialogState extends State<UploadRideDialog> {
               space12H,
               CustomTextField(
                 fillColor: Colors.transparent,
-                hintStyle: TextStyle(
+                hintStyle: const TextStyle(
                   color: AppColors.kWhiteTextColor,
                   fontSize: 10,
                 ),
@@ -183,7 +183,7 @@ class _UploadRideDialogState extends State<UploadRideDialog> {
               space12H,
               CustomTextField(
                 fillColor: Colors.transparent,
-                hintStyle: TextStyle(
+                hintStyle: const TextStyle(
                   color: AppColors.kWhiteTextColor,
                   fontSize: 10,
                 ),

@@ -18,7 +18,10 @@ class HowItWorksWidget extends StatelessWidget {
         children: [
           Row(
             children: [
-              const Icon(Icons.lightbulb_outline, color: AppColors.kPrimaryColor),
+              const Icon(
+                Icons.lightbulb_outline,
+                color: AppColors.kPrimaryColor,
+              ),
               space8W,
               CustomText(
                 AppStaticStrings.howItWorks.tr,
@@ -30,11 +33,11 @@ class HowItWorksWidget extends StatelessWidget {
           ),
           space8H,
           _bulletPoint(AppStaticStrings.howItWorksDesc1.tr),
-         
+
           _bulletPoint(AppStaticStrings.howItWorksDesc2.tr),
-         
+
           _bulletPoint(AppStaticStrings.howItWorksDesc3.tr),
-         
+
           _bulletPoint(AppStaticStrings.howItWorksDesc4.tr),
         ],
       ),

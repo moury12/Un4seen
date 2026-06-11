@@ -44,7 +44,7 @@ class ImageUploadSection extends StatelessWidget {
                             : AppColors.kPrimaryColor,
                         shape: BoxShape.circle,
                       ),
-                      child: Icon(
+                      child: const Icon(
                         Icons.camera_alt_outlined,
                         color: Colors.white,
                         size: 32,

@@ -180,7 +180,7 @@ class _SubmitDesignDialogState extends State<SubmitDesignDialog> {
                 ),
               ),
               space12H,
-              CustomText(
+              const CustomText(
                 'By submitting, you grant Un4seen rights to feature your design.',
                 color: Colors.white,
                 fontSize: 10,

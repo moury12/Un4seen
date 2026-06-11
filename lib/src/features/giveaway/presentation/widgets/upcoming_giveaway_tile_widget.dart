@@ -18,12 +18,8 @@ class UpcomingGiveawayTileWidget extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 8),
       padding: AppPadding.getPadding12(context),
       decoration: BoxDecoration(
-       gradient: LinearGradient(
-          colors: [
-             AppColors.kPrimaryDarkColor2,
-            AppColors.kPrimaryColor,
-           
-          ],
+        gradient: const LinearGradient(
+          colors: [AppColors.kPrimaryDarkColor2, AppColors.kPrimaryColor],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -36,12 +32,21 @@ class UpcomingGiveawayTileWidget extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CustomText(title, fontWeight: FontWeight.bold, color: Colors.white),
+                CustomText(
+                  title,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
                 CustomText(week, color: Colors.white70, fontSize: 10),
               ],
             ),
           ),
-          CustomText(price, fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+          CustomText(
+            price,
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
         ],
       ),
     );

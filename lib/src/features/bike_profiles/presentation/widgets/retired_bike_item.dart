@@ -62,7 +62,7 @@ class RetiredBikeItem extends StatelessWidget {
             ),
             child: ButtonTapWidget(
               onTap: onTap,
-              child: CustomText(
+              child: const CustomText(
                 "View Details",
                 color: AppColors.kPrimaryColor,
                 variant: TextVariant.labelSmall,

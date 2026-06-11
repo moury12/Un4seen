@@ -1,5 +1,4 @@
 import 'package:un4seen/src/src_export.dart';
-import '../../../../core/widgets/custom_scaffold.dart';
 
 class SubscriptionPage extends StatefulWidget {
   const SubscriptionPage({super.key});

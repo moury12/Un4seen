@@ -18,7 +18,7 @@ class PostStoryCard extends StatelessWidget {
         borderRadius: 14,
         slantHeight: 25,
         child: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             gradient: LinearGradient(
               colors: [AppColors.kPrimaryDarkColor3, AppColors.kPrimaryColor],
               begin: Alignment.topCenter,
@@ -35,7 +35,11 @@ class PostStoryCard extends StatelessWidget {
                   color: AppColors.kPrimaryColor,
                   shape: BoxShape.circle,
                 ),
-              child: Icon(CupertinoIcons.add, color: Colors.white, size: 30),
+                child: const Icon(
+                  CupertinoIcons.add,
+                  color: Colors.white,
+                  size: 30,
+                ),
               ),
               space12H,
               Text(

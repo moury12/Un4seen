@@ -51,7 +51,7 @@ class DynamicTabWidget extends StatelessWidget {
                   BoxShadow(
                     color: Colors.black.withValues(alpha: 0.2),
                     blurRadius: 4,
-                    offset: Offset(0, 2), // Slight shadow for active tab
+                    offset: const Offset(0, 2), // Slight shadow for active tab
                   ),
                 ],
               ),
@@ -76,7 +76,7 @@ class DynamicTabWidget extends StatelessWidget {
                   .entries
                   .map(
                     (entry) => Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 12),
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
                       child: Container(
                         height: 30,
                         alignment: Alignment.center,

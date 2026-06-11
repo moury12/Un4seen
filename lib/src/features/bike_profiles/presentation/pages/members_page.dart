@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:un4seen/src/core/core_export.dart';
-import 'package:un4seen/src/core/utils/app_constants.dart';
-import '../../../../core/utils/app_strings.dart';
 import '../widgets/member_card_widget.dart';
 
 class MembersPage extends StatelessWidget {
@@ -18,7 +16,7 @@ class MembersPage extends StatelessWidget {
           SliverToBoxAdapter(
             child: Padding(
               padding: edgePadding.copyWith(top: 0, bottom: 0),
-              child: CustomText(
+              child: const CustomText(
                 AppStaticStrings.discoverAndConnectWithTheSyndicate,
                 textAlign: TextAlign.center,
               ),

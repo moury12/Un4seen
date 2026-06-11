@@ -24,9 +24,9 @@ class SyndicateJourneyWidget extends StatelessWidget {
         spacing: 6,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
+          const Row(
             children: [
-              const Icon(
+              Icon(
                 Icons.calendar_today_outlined,
                 color: Colors.white,
                 size: 20,
@@ -44,7 +44,7 @@ class SyndicateJourneyWidget extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              CustomText(
+              const CustomText(
                 "Member since November 2024",
                 variant: TextVariant.labelMedium,
                 color: Colors.white,

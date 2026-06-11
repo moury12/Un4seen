@@ -149,7 +149,7 @@ class RateRideCardWidget extends StatelessWidget {
                     ),
                     child: Slider(value: 0.4, onChanged: (v) {}),
                   ),
-                  Row(
+                  const Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       CustomText("0", color: Colors.white70, fontSize: 10),

@@ -170,7 +170,7 @@ class BikeProfilesController extends GetxController {
       if (res.data['success']) {
         CustomSnackbar.showSuccess(res.data['message']);
         profileImage.value = null;
-       
+
         fetchBikeProfile();
         return true;
       }

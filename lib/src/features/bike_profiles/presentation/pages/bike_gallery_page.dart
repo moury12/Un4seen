@@ -9,7 +9,9 @@ class BikeGalleryPage extends StatelessWidget {
     final controller = Get.find<BikeProfilesController>();
 
     // Initial fetch
-    WidgetsBinding.instance.addPostFrameCallback((_) => controller.fetchGallery(bikeId));
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) => controller.fetchGallery(bikeId),
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -22,7 +24,7 @@ class BikeGalleryPage extends StatelessWidget {
           IconButton(
             onPressed: () => controller.addImagesToGallery(bikeId),
             icon: const Icon(Icons.add_a_photo, color: AppColors.kPrimaryColor),
-          )
+          ),
         ],
       ),
       body: SafeArea(
@@ -36,11 +38,11 @@ class BikeGalleryPage extends StatelessWidget {
               ),
               slivers: [
                 // 1. Loading State
-                if (controller.isGalleryLoading.value && controller.bikeGallery.isEmpty)
+                if (controller.isGalleryLoading.value &&
+                    controller.bikeGallery.isEmpty)
                   const SliverFillRemaining(
                     child: Center(child: CircularProgressIndicator()),
                   )
-                
                 // 2. Empty State
                 else if (controller.bikeGallery.isEmpty)
                   SliverFillRemaining(
@@ -52,7 +54,9 @@ class BikeGalleryPage extends StatelessWidget {
                           Icon(
                             Icons.image_outlined,
                             size: 48,
-                            color: AppColors.kSecondaryTextColor.withOpacity(0.5),
+                            color: AppColors.kSecondaryTextColor.withOpacity(
+                              0.5,
+                            ),
                           ),
                           space12H,
                           CustomText(
@@ -64,35 +68,32 @@ class BikeGalleryPage extends StatelessWidget {
                       ),
                     ),
                   )
-                
                 // 3. Grid Content
                 else
                   SliverPadding(
                     padding: AppPadding.getPadding12(context),
                     sliver: SliverGrid(
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 12,
-                        mainAxisSpacing: 12,
-                        childAspectRatio: 1.0,
-                      ),
-                      delegate: SliverChildBuilderDelegate(
-                        (context, index) {
-                          final imageUrl = controller.bikeGallery[index];
-                          return _GalleryImageItem(
-                            imageUrl: imageUrl,
-                            onDelete: () => _showDeleteConfirmation(
-                              context,
-                              controller,
-                              imageUrl,
-                            ),
-                          );
-                        },
-                        childCount: controller.bikeGallery.length,
-                      ),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 12,
+                            mainAxisSpacing: 12,
+                            childAspectRatio: 1.0,
+                          ),
+                      delegate: SliverChildBuilderDelegate((context, index) {
+                        final imageUrl = controller.bikeGallery[index];
+                        return _GalleryImageItem(
+                          imageUrl: imageUrl,
+                          onDelete: () => _showDeleteConfirmation(
+                            context,
+                            controller,
+                            imageUrl,
+                          ),
+                        );
+                      }, childCount: controller.bikeGallery.length),
                     ),
                   ),
-                
+
                 // Bottom Spacing
                 const SliverToBoxAdapter(child: SizedBox(height: 20)),
               ],

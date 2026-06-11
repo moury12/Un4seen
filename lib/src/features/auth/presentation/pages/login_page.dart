@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/core_export.dart';
@@ -16,8 +15,12 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-  final emailCtrl = TextEditingController(text: kDebugMode ? 'tanzibamouri28@gmail.com' : '');
-  final passwordCtrl = TextEditingController(text: kDebugMode ? 'Test1234' : '');
+  final emailCtrl = TextEditingController(
+    text: kDebugMode ? 'tanzibamouri28@gmail.com' : '',
+  );
+  final passwordCtrl = TextEditingController(
+    text: kDebugMode ? 'Test1234' : '',
+  );
 
   @override
   void dispose() {
@@ -117,7 +120,10 @@ class _LoginPageState extends State<LoginPage> {
                     isLoading: ctrl.isLoading,
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        ctrl.login(emailCtrl.text.trim(), passwordCtrl.text.trim());
+                        ctrl.login(
+                          emailCtrl.text.trim(),
+                          passwordCtrl.text.trim(),
+                        );
                       }
                     },
                   ),
@@ -125,47 +131,46 @@ class _LoginPageState extends State<LoginPage> {
 
                 space12H,
 
-              //   Row(
-              //     children: [
-              //       const Expanded(child: Divider()),
-              //       Padding(
-              //         padding: AppPadding.getPadding12H(context),
-              //         child: const CustomText(
-              //           AppStaticStrings.orContinueWith,
-              //           variant: TextVariant.labelMedium,
-              //           color: AppColors.kSecondaryTextColor,
-              //         ),
-              //       ),
-              //       const Expanded(child: Divider()),
-              //     ],
-              //   ),
+                //   Row(
+                //     children: [
+                //       const Expanded(child: Divider()),
+                //       Padding(
+                //         padding: AppPadding.getPadding12H(context),
+                //         child: const CustomText(
+                //           AppStaticStrings.orContinueWith,
+                //           variant: TextVariant.labelMedium,
+                //           color: AppColors.kSecondaryTextColor,
+                //         ),
+                //       ),
+                //       const Expanded(child: Divider()),
+                //     ],
+                //   ),
 
-              //   space12H,
+                //   space12H,
 
-              //   OutlinedButton(
-              //     onPressed: () {},
-              //     style: OutlinedButton.styleFrom(
-              //       minimumSize: const Size(double.infinity, 50),
-              //       shape: RoundedRectangleBorder(
-              //         borderRadius: BorderRadius.circular(appRadius),
-              //       ),
-              //       side: const BorderSide(color: Color(0xFFE5E7EB)),
-              //     ),
-              //     child: Row(
-              //       mainAxisAlignment: MainAxisAlignment.center,
-              //       children: [
-              //         SvgPicture.asset(AppIcons.google, width: 20, height: 20),
-              //         space8W,
-              //         const CustomText(
-              //           AppStaticStrings.continueWithGoogle,
-              //           variant: TextVariant.labelLarge,
-              //           fontWeight: FontWeight.w600,
-              //         ),
-              //       ],
-              //     ),
-              //   ),
-               ],
-           
+                //   OutlinedButton(
+                //     onPressed: () {},
+                //     style: OutlinedButton.styleFrom(
+                //       minimumSize: const Size(double.infinity, 50),
+                //       shape: RoundedRectangleBorder(
+                //         borderRadius: BorderRadius.circular(appRadius),
+                //       ),
+                //       side: const BorderSide(color: Color(0xFFE5E7EB)),
+                //     ),
+                //     child: Row(
+                //       mainAxisAlignment: MainAxisAlignment.center,
+                //       children: [
+                //         SvgPicture.asset(AppIcons.google, width: 20, height: 20),
+                //         space8W,
+                //         const CustomText(
+                //           AppStaticStrings.continueWithGoogle,
+                //           variant: TextVariant.labelLarge,
+                //           fontWeight: FontWeight.w600,
+                //         ),
+                //       ],
+                //     ),
+                //   ),
+              ],
             ),
           ),
         ),

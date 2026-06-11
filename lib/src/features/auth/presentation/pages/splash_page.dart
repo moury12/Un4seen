@@ -93,16 +93,16 @@ class _SplashPageState extends State<SplashPage>
                         spacing: 8,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          SizedBox(height: 85),
+                          const SizedBox(height: 85),
                           Image.asset(
                             AppImages.splash,
                             height: MediaQuery.of(context).size.height * 0.4,
                           ),
-                          CustomText(
+                          const CustomText(
                             AppStaticStrings.thisIsWhereRidersGetRewarded,
                             variant: TextVariant.displaySmall,
                           ),
-                          CustomText(
+                          const CustomText(
                             AppStaticStrings
                                 .theExclusiveWorldwideMotorcycleCommunityBuiltForRidersByRiders,
                             variant: TextVariant.labelSmall,
@@ -114,14 +114,14 @@ class _SplashPageState extends State<SplashPage>
                               context.go(AppRoutes.login);
                             },
                           ),
-                          CustomText(
+                          const CustomText(
                             AppStaticStrings
                                 .byContinuingYouAgreeToOurTermsOfServiceAndPrivacyPolicy,
                             variant: TextVariant.labelSmall,
                             color: AppColors.kSecondaryTextColor,
                             textAlign: TextAlign.center,
                           ),
-                          CustomText(
+                          const CustomText(
                             AppStaticStrings.rideShareEarnWin,
                             variant: TextVariant.labelMedium,
                             textAlign: TextAlign.center,

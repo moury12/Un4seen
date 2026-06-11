@@ -30,7 +30,7 @@ class NavigationPage extends GetView<NavigationController> {
       body: Obx(() => pages[controller.currentIndex]),
       bottomNavigationBar: SafeArea(
         child: Container(
-          padding: EdgeInsets.only(bottom: 10),
+          padding: const EdgeInsets.only(bottom: 10),
           height: 80,
           decoration: const BoxDecoration(color: AppColors.kPrimaryDarkColor2),
           child: Row(

@@ -21,15 +21,16 @@ class PointsPage extends StatefulWidget {
 }
 
 class _PointsPageState extends State<PointsPage> {
-   final TextEditingController _platformCtrl = TextEditingController();
-    final TextEditingController _postLinkCtrl = TextEditingController();
+  final TextEditingController _platformCtrl = TextEditingController();
+  final TextEditingController _postLinkCtrl = TextEditingController();
 
   @override
   void dispose() {
     _platformCtrl.dispose();
     _postLinkCtrl.dispose();
     super.dispose();
-  } 
+  }
+
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(PointsController());
@@ -95,7 +96,7 @@ class _PointsPageState extends State<PointsPage> {
                       // Daily Login Card
                       if (data.dailyLogin.canClaimDaily)
                         GradientContainer(
-                          gradientColors: [
+                          gradientColors: const [
                             AppColors.kPrimaryDarkColor,
                             AppColors.kPrimaryColor,
                           ],
@@ -133,7 +134,7 @@ class _PointsPageState extends State<PointsPage> {
 
                       // Share Card
                       GradientContainer(
-                        gradientColors: [
+                        gradientColors: const [
                           AppColors.kPrimaryDarkColor,
                           AppColors.kPrimaryColor,
                         ],
@@ -287,13 +288,15 @@ class _PointsPageState extends State<PointsPage> {
                         "assets/icons/dollar_icon.svg",
                         AppStaticStrings.storeCreditTitle.tr,
                         AppStaticStrings.reviewComplete.tr,
-                        (){
-                         showDialog(context: context, builder: 
-                         (context)=>SubmitProofDialog(
-                         platformCtrl: _platformCtrl, 
-                         postLinkCtrl: _postLinkCtrl)) ;
-                        }
-
+                        () {
+                          showDialog(
+                            context: context,
+                            builder: (context) => SubmitProofDialog(
+                              platformCtrl: _platformCtrl,
+                              postLinkCtrl: _postLinkCtrl,
+                            ),
+                          );
+                        },
                       ),
 
                       CustomText(
@@ -374,7 +377,10 @@ class _PointsPageState extends State<PointsPage> {
 
   Widget _infoCard(String title, String desc) {
     return GradientContainer(
-      gradientColors: [AppColors.kPrimaryDarkColor, AppColors.kPrimaryColor],
+      gradientColors: const [
+        AppColors.kPrimaryDarkColor,
+        AppColors.kPrimaryColor,
+      ],
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -397,11 +403,14 @@ class _PointsPageState extends State<PointsPage> {
     String icon,
     String title,
     String points,
-    VoidCallback? onTap
+    VoidCallback? onTap,
   ) {
     return GradientContainer(
       margin: const EdgeInsets.only(bottom: 8),
-      gradientColors: [AppColors.kPrimaryDarkColor, AppColors.kPrimaryColor],
+      gradientColors: const [
+        AppColors.kPrimaryDarkColor,
+        AppColors.kPrimaryColor,
+      ],
       child: Column(
         spacing: 8,
         children: [
@@ -441,7 +450,7 @@ class _PointsPageState extends State<PointsPage> {
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: CustomText(
-                   AppStaticStrings.claim.tr,
+                    AppStaticStrings.claim.tr,
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),

@@ -64,7 +64,7 @@ class BikeOfTheWeekWidget extends StatelessWidget {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                CustomText(
+                                const CustomText(
                                   "Jake Thompson #SYN-2847",
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
@@ -87,7 +87,7 @@ class BikeOfTheWeekWidget extends StatelessWidget {
                             // ),
                           ),
                           space4W,
-                          CustomText(
+                          const CustomText(
                             "23",
                             color: Colors.white,
                             fontWeight: FontWeight.bold,

@@ -22,7 +22,7 @@ class BenefitCardWidget extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          gradient: LinearGradient(
+          gradient: const LinearGradient(
             colors: [AppColors.kPrimaryDarkColor, AppColors.kPrimaryDarkColor2],
             begin: Alignment.bottomCenter,
             end: Alignment.topCenter,
@@ -39,7 +39,7 @@ class BenefitCardWidget extends StatelessWidget {
               ),
               child: SvgPicture.asset(
                 icon.toString(),
-                colorFilter: ColorFilter.mode(
+                colorFilter: const ColorFilter.mode(
                   AppColors.kPrimaryColor,
                   BlendMode.srcIn,
                 ),
@@ -62,7 +62,7 @@ class BenefitCardWidget extends StatelessWidget {
                   space4H,
                   CustomText(
                     subtitle,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 14,
                       color: AppColors.kWhiteTextColor,
                     ),

@@ -21,7 +21,9 @@ class PollOptionWidget extends StatelessWidget {
       decoration: BoxDecoration(
         color: isSelected ? Colors.black.withOpacity(0.3) : Colors.white,
         borderRadius: BorderRadius.circular(12),
-        border: isSelected ? Border.all(color: AppColors.kPrimaryColor, width: 2) : null,
+        border: isSelected
+            ? Border.all(color: AppColors.kPrimaryColor, width: 2)
+            : null,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -50,18 +52,31 @@ class PollOptionWidget extends StatelessWidget {
             child: LinearProgressIndicator(
               value: percentage,
               minHeight: 8,
-              backgroundColor: isSelected ? Colors.white24 : AppColors.kAccentColor.withOpacity(0.3),
-              valueColor: AlwaysStoppedAnimation<Color>(AppColors.kPrimaryColor),
+              backgroundColor: isSelected
+                  ? Colors.white24
+                  : AppColors.kAccentColor.withOpacity(0.3),
+              valueColor: const AlwaysStoppedAnimation<Color>(
+                AppColors.kPrimaryColor,
+              ),
             ),
           ),
           space8H,
           Row(
-            children: List.generate(4, (index) => Padding(
-              padding: const EdgeInsets.only(right: 4),
-              child: SvgPicture.asset(AppIcons.fire, height: 12,colorFilter: ColorFilter.mode(AppColors.kPrimaryColor,
-               BlendMode.srcIn),),
-            )),
-          )
+            children: List.generate(
+              4,
+              (index) => Padding(
+                padding: const EdgeInsets.only(right: 4),
+                child: SvgPicture.asset(
+                  AppIcons.fire,
+                  height: 12,
+                  colorFilter: const ColorFilter.mode(
+                    AppColors.kPrimaryColor,
+                    BlendMode.srcIn,
+                  ),
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );

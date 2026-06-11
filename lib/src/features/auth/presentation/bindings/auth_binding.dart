@@ -8,7 +8,9 @@ class AuthBinding extends Bindings {
   @override
   void dependencies() {
     Get.lazyPut(() => ApiService());
-    Get.lazyPut<AuthRemoteDataSource>(() => AuthRemoteDataSourceImpl(Get.find()));
+    Get.lazyPut<AuthRemoteDataSource>(
+      () => AuthRemoteDataSourceImpl(Get.find()),
+    );
     Get.lazyPut<AuthRepositoryImpl>(() => AuthRepositoryImpl(Get.find()));
     Get.lazyPut(() => AuthController(Get.find<AuthRepositoryImpl>()));
   }

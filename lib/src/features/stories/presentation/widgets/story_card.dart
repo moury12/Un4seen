@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:un4seen/src/core/core_export.dart';
 import 'package:un4seen/src/core/routes/app_routes.dart';
-import 'package:un4seen/src/core/widgets/custom_network_image.dart';
 import 'package:un4seen/src/features/stories/presentation/stories_presentation_export.dart';
 import 'package:un4seen/src/features/stories/presentation/widgets/story_bottom_bar.dart';
 import '../widgets/story_card_custom_shape.dart';
@@ -13,6 +12,7 @@ class StoryCard extends StatelessWidget {
   final String imageUrl;
   final bool? isFromSaved;
   const StoryCard({
+    super.key,
     required this.isLeft,
     required this.imageUrl,
     this.isFromSaved = false,
@@ -75,7 +75,7 @@ class StoryCard extends StatelessWidget {
                         size: 18,
                       ),
                     )
-                  : Column(
+                  : const Column(
                       spacing: 6,
                       children: [
                         CustomIconButtonWidget(

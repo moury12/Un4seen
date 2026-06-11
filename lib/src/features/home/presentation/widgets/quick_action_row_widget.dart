@@ -126,7 +126,7 @@ class QuickActionRowWidget extends StatelessWidget {
       child: Container(
         width: 65,
         decoration: BoxDecoration(
-          gradient: LinearGradient(
+          gradient: const LinearGradient(
             colors: [AppColors.kPrimaryColor, AppColors.kPrimaryDarkColor3],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,

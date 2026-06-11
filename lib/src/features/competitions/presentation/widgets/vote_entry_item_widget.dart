@@ -37,8 +37,17 @@ class VoteEntryItemWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                CustomText(title, fontWeight: FontWeight.bold, color: Colors.white, fontSize: 13),
-                CustomText("by $author • $synId", variant: TextVariant.labelSmall, color: Colors.white70),
+                CustomText(
+                  title,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  fontSize: 13,
+                ),
+                CustomText(
+                  "by $author • $synId",
+                  variant: TextVariant.labelSmall,
+                  color: Colors.white70,
+                ),
               ],
             ),
           ),
@@ -50,9 +59,18 @@ class VoteEntryItemWidget extends StatelessWidget {
             ),
             child: Row(
               children: [
-                const Icon(Icons.favorite, color: AppColors.kPrimaryColor, size: 14),
+                const Icon(
+                  Icons.favorite,
+                  color: AppColors.kPrimaryColor,
+                  size: 14,
+                ),
                 space4W,
-                CustomText(likes, color: AppColors.kPrimaryColor, fontWeight: FontWeight.bold, fontSize: 12),
+                CustomText(
+                  likes,
+                  color: AppColors.kPrimaryColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12,
+                ),
               ],
             ),
           ),

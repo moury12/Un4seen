@@ -11,15 +11,19 @@ class GiveawayPageModel {
 
   factory GiveawayPageModel.fromJson(Map<String, dynamic> json) {
     return GiveawayPageModel(
-      currentWeekly: json['currentWeekly'] != null 
-          ? GiveawayItem.fromJson(json['currentWeekly']) 
+      currentWeekly: json['currentWeekly'] != null
+          ? GiveawayItem.fromJson(json['currentWeekly'])
           : null,
-      majorGiveaways: (json['majorGiveaway'] as List?)
+      majorGiveaways:
+          (json['majorGiveaway'] as List?)
               ?.map((e) => GiveawayItem.fromJson(e))
-              .toList() ?? [],
-      upcoming: (json['upcoming'] as List?)
+              .toList() ??
+          [],
+      upcoming:
+          (json['upcoming'] as List?)
               ?.map((e) => GiveawayItem.fromJson(e))
-              .toList() ?? [],
+              .toList() ??
+          [],
     );
   }
 }
@@ -53,7 +57,9 @@ class GiveawayItem {
       prizeDescription: json['prizeDescription'] ?? '',
       image: json['image'] ?? '',
       valueInNzd: json['valueInNzd'] ?? 0,
-      endDate: DateTime.parse(json['endDate'] ?? DateTime.now().toIso8601String()),
+      endDate: DateTime.parse(
+        json['endDate'] ?? DateTime.now().toIso8601String(),
+      ),
       isMajorGiveaway: json['isMajorGiveaway'] ?? false,
     );
   }

@@ -44,7 +44,7 @@ class GiveawayPage extends StatelessWidget {
           final data = controller.pageData.value;
 
           return CustomScrollView(
-            // AlwaysScrollableScrollPhysics is key to making RefreshIndicator work 
+            // AlwaysScrollableScrollPhysics is key to making RefreshIndicator work
             // even when there is no content.
             physics: const AlwaysScrollableScrollPhysics(),
             slivers: [
@@ -108,7 +108,9 @@ class GiveawayPage extends StatelessWidget {
 
                       // Major Giveaway Card
                       if (data.majorGiveaways.isNotEmpty) ...[
-                        MajorGiveawayCardWidget(giveaway: data.majorGiveaways.first),
+                        MajorGiveawayCardWidget(
+                          giveaway: data.majorGiveaways.first,
+                        ),
                         space24H,
                       ],
 
@@ -127,17 +129,14 @@ class GiveawayPage extends StatelessWidget {
                 SliverPadding(
                   padding: AppPadding.getPadding12H(context),
                   sliver: SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (context, index) {
-                        final item = data.upcoming[index];
-                        return UpcomingGiveawayTileWidget(
-                          title: item.title,
-                          week: "Week ${item.weekNumber}",
-                          price: "\$${item.valueInNzd}.00nzd",
-                        );
-                      },
-                      childCount: data.upcoming.length,
-                    ),
+                    delegate: SliverChildBuilderDelegate((context, index) {
+                      final item = data.upcoming[index];
+                      return UpcomingGiveawayTileWidget(
+                        title: item.title,
+                        week: "Week ${item.weekNumber}",
+                        price: "\$${item.valueInNzd}.00nzd",
+                      );
+                    }, childCount: data.upcoming.length),
                   ),
                 ),
 

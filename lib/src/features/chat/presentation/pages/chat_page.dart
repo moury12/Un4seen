@@ -471,7 +471,7 @@ class _MessageInput extends StatelessWidget {
                 ),
                 child: Row(
                   children: [
-                    Expanded(
+                    const Expanded(
                       child: CustomTextField(
                         fillColor: Colors.transparent,
                         borderColor: Colors.transparent,
@@ -525,9 +525,9 @@ class _ChannelsDrawer extends StatelessWidget {
               width: double.infinity,
               padding: const EdgeInsets.fromLTRB(14, 10, 14, 12),
               color: AppColors.kPrimaryDarkColor3,
-              child: Column(
+              child: const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
+                children: [
                   CustomText(
                     '♕ SYNDICATE',
                     color: Colors.white,
@@ -547,10 +547,10 @@ class _ChannelsDrawer extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(14, 12, 14, 8),
               child: Row(
                 children: [
-                  Expanded(
+                  const Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
+                      children: [
                         CustomText(
                           'Channels (4)',
                           fontSize: 12,
@@ -628,11 +628,11 @@ class _ChannelsDrawer extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 14),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 14),
               child: CustomTextField(
                 hintText: 'Search name...',
-                prefixIcon: const Icon(
+                prefixIcon: Icon(
                   Icons.search,
                   size: 18,
                   color: AppColors.kSecondaryTextColor,
@@ -641,15 +641,15 @@ class _ChannelsDrawer extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 10),
-            _DrawerMember(
+            const _DrawerMember(
               name: 'Jake',
               imageUrl: 'https://i.pravatar.cc/150?u=jake',
             ),
-            _DrawerMember(
+            const _DrawerMember(
               name: 'Sarah M',
               imageUrl: 'https://i.pravatar.cc/150?u=sarah-m',
             ),
-            _DrawerMember(
+            const _DrawerMember(
               name: 'Sarah',
               imageUrl: 'https://i.pravatar.cc/150?u=sarah',
             ),
@@ -658,8 +658,8 @@ class _ChannelsDrawer extends StatelessWidget {
               width: double.infinity,
               padding: const EdgeInsets.all(14),
               color: const Color(0xFFB9EDFF),
-              child: Row(
-                children: const [
+              child: const Row(
+                children: [
                   _Avatar(url: 'https://i.pravatar.cc/150?u=nahid', radius: 16),
                   SizedBox(width: 10),
                   Expanded(child: _OnlineName(name: 'Nahid Hossain')),
@@ -797,8 +797,8 @@ class _OnlineName extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         CustomText(name, fontSize: 12, fontWeight: FontWeight.w500),
-        Row(
-          children: const [
+        const Row(
+          children: [
             Icon(Icons.circle, size: 7, color: AppColors.kGreenColor),
             space4W,
             CustomText(

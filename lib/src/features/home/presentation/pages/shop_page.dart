@@ -50,7 +50,7 @@ class ShopPage extends StatelessWidget {
                   image:
                       "https://images.unsplash.com/photo-1444491741275-3747c53c99b4?q=80&w=200",
                 ),
-                ShopProductCard(
+                const ShopProductCard(
                   title: "Un4seen CMG Tshirt",
                   category: "Apparel",
                   price: "\$44.99nzd",
@@ -84,11 +84,11 @@ class ShopPage extends StatelessWidget {
                 // const Spacer(),
                 Container(
                   padding: AppPadding.getPadding4(context),
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: AppColors.kPrimaryColor,
                     shape: BoxShape.circle,
                   ),
-                  child: CustomText(
+                  child: const CustomText(
                     "Go",
                     fontWeight: FontWeight.bold,
                     fontSize: 14,
@@ -117,7 +117,7 @@ class ShopPage extends StatelessWidget {
                     border: Border.all(color: Colors.black12),
                     borderRadius: BorderRadius.circular(4),
                   ),
-                  child: CustomNetworkImage(
+                  child: const CustomNetworkImage(
                     imageUrl:
                         "https://images.unsplash.com/photo-1558981403-c5f9899a28bc?q=80&w=200",
                     radius: 4,
@@ -129,7 +129,7 @@ class ShopPage extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                gradient: LinearGradient(
+                gradient: const LinearGradient(
                   colors: [
                     AppColors.kPrimaryColor,
                     AppColors.kPrimaryDarkColor2,

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:un4seen/src/core/core_export.dart';
 
 class PostStoryDropdown extends StatelessWidget {

@@ -16,7 +16,8 @@ class CustomButton extends StatelessWidget {
     this.isExpanding = true,
     this.borderRadius = 24.0,
     this.borderColor,
-    this.textStyle, this.rightIcon,
+    this.textStyle,
+    this.rightIcon,
   });
 
   final String text;
@@ -25,7 +26,7 @@ class CustomButton extends StatelessWidget {
   final Color? textColor;
   final Color? iconColor;
   final IconData? icon;
-    final IconData? rightIcon ;
+  final IconData? rightIcon;
 
   final bool isOutlined;
   final bool isLoading;
@@ -36,7 +37,7 @@ class CustomButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final defaultColor = AppColors.kPrimaryColor;
+    const defaultColor = AppColors.kPrimaryColor;
 
     return SizedBox(
       width: isExpanding ? double.infinity : null,
@@ -97,8 +98,8 @@ class CustomButton extends StatelessWidget {
                                   : Colors.white),
                         ),
                   ),
-                   if (rightIcon != null) ...[
-                       space8W,
+                  if (rightIcon != null) ...[
+                    space8W,
                     Icon(
                       rightIcon,
                       size: 20,
@@ -107,7 +108,6 @@ class CustomButton extends StatelessWidget {
                           textColor ??
                           (isOutlined ? AppColors.kPrimaryColor : Colors.white),
                     ),
-                 
                   ],
                 ],
               ),

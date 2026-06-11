@@ -19,11 +19,11 @@ import 'src/features/bike_profiles/presentation/bindings/bike_profiles_binding.d
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   // Initialize Storage Service globally
   final storage = await LocalStorageService().init();
   Get.put(storage, permanent: true);
-  
+
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,

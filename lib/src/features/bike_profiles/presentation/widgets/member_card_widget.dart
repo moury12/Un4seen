@@ -1,5 +1,3 @@
-
-
 import '../../../../src_export.dart';
 
 class MemberCardWidget extends StatelessWidget {
@@ -174,7 +172,7 @@ class MemberCardWidget extends StatelessWidget {
                         child: CustomText(
                           location,
                           style: const TextStyle(
-                            fontSize: 12, 
+                            fontSize: 12,
                             color: Colors.white,
                           ),
                           maxLines: 1,
@@ -189,7 +187,10 @@ class MemberCardWidget extends StatelessWidget {
                       space4W,
                       CustomText(
                         followers,
-                        style: const TextStyle(fontSize: 12, color: Colors.white),
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: Colors.white,
+                        ),
                       ),
                     ],
                   ),

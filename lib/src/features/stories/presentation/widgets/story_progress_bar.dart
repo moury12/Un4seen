@@ -21,7 +21,9 @@ class StoryProgressBar extends StatelessWidget {
               height: 2,
               margin: const EdgeInsets.symmetric(horizontal: 2),
               decoration: BoxDecoration(
-                color: index <= activeIndex ? Colors.white : Colors.white.withValues(alpha: 0.3),
+                color: index <= activeIndex
+                    ? Colors.white
+                    : Colors.white.withValues(alpha: 0.3),
                 borderRadius: BorderRadius.circular(1),
               ),
             ),

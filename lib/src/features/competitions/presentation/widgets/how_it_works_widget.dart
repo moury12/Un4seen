@@ -17,9 +17,18 @@ class HowItWorksWidget extends StatelessWidget {
         children: [
           Row(
             children: [
-              const Icon(Icons.auto_awesome_outlined, color: AppColors.kPrimaryColor, size: 20),
+              const Icon(
+                Icons.auto_awesome_outlined,
+                color: AppColors.kPrimaryColor,
+                size: 20,
+              ),
               space8W,
-              CustomText(AppStaticStrings.howCompetitionsWork.tr, fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
+              CustomText(
+                AppStaticStrings.howCompetitionsWork.tr,
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
             ],
           ),
           space12H,
@@ -41,7 +50,9 @@ class HowItWorksWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const CustomText("• ", color: Colors.white),
-          Expanded(child: CustomText(text, color: Colors.white70, fontSize: 12)),
+          Expanded(
+            child: CustomText(text, color: Colors.white70, fontSize: 12),
+          ),
         ],
       ),
     );

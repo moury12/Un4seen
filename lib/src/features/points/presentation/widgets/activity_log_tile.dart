@@ -18,18 +18,31 @@ class ActivityLogTile extends StatelessWidget {
     return GradientContainer(
       margin: const EdgeInsets.only(bottom: 8),
       padding: AppPadding.getPadding12(context),
-      gradientColors: [AppColors.kPrimaryDarkColor, AppColors.kPrimaryColor],
+      gradientColors: const [
+        AppColors.kPrimaryDarkColor,
+        AppColors.kPrimaryColor,
+      ],
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CustomText(title, color: Colors.white, fontWeight: FontWeight.bold,fontSize: 14),
+              CustomText(
+                title,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 14,
+              ),
               CustomText(date, color: Colors.white70, fontSize: 12),
             ],
           ),
-          CustomText("+$points", color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
+          CustomText(
+            "+$points",
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+          ),
         ],
       ),
     );

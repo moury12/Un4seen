@@ -133,41 +133,39 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
               ),
 
               space24H,
-              Obx(
-                () {
-                  final seconds = ctrl.resendSeconds.value;
-                  final minutesStr = (seconds ~/ 60).toString().padLeft(2, '0');
-                  final secondsStr = (seconds % 60).toString().padLeft(2, '0');
+              Obx(() {
+                final seconds = ctrl.resendSeconds.value;
+                final minutesStr = (seconds ~/ 60).toString().padLeft(2, '0');
+                final secondsStr = (seconds % 60).toString().padLeft(2, '0');
 
-                  return RichText(
-                    text: TextSpan(
-                      text: '${AppStaticStrings.resendCode.tr} ',
-                      style: TextStyle(
-                        color: ctrl.canResend.value
-                            ? AppColors.kPrimaryColor
-                            : AppColors.kSecondaryTextColor,
-                        fontSize: 14,
-                        fontWeight: ctrl.canResend.value
-                            ? FontWeight.bold
-                            : FontWeight.normal,
-                      ),
-                      children: [
-                        if (!ctrl.canResend.value)
-                          TextSpan(
-                            text: '$minutesStr:$secondsStr',
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                      ],
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-                          if (ctrl.canResend.value) {
-                            ctrl.resendOtp(widget.email);
-                          }
-                        },
+                return RichText(
+                  text: TextSpan(
+                    text: '${AppStaticStrings.resendCode.tr} ',
+                    style: TextStyle(
+                      color: ctrl.canResend.value
+                          ? AppColors.kPrimaryColor
+                          : AppColors.kSecondaryTextColor,
+                      fontSize: 14,
+                      fontWeight: ctrl.canResend.value
+                          ? FontWeight.bold
+                          : FontWeight.normal,
                     ),
-                  );
-                },
-              ),
+                    children: [
+                      if (!ctrl.canResend.value)
+                        TextSpan(
+                          text: '$minutesStr:$secondsStr',
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                    ],
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        if (ctrl.canResend.value) {
+                          ctrl.resendOtp(widget.email);
+                        }
+                      },
+                  ),
+                );
+              }),
 
               space12H,
 

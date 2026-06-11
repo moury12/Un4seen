@@ -23,8 +23,9 @@ class HomePage extends StatelessWidget {
             return CustomNetworkImage(
               height: 40,
               width: 40,
-              
-              imageUrl: profileController.userProfile.value.profilePicture!,
+
+              imageUrl:
+                  profileController.userProfile.value.profilePicture ?? "",
               borderRadius: BorderRadius.circular(360),
             );
           }),

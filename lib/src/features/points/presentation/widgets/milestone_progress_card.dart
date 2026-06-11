@@ -12,7 +12,10 @@ class MilestoneProgressCard extends StatelessWidget {
     final controller = Get.find<PointsController>();
     return GradientContainer(
       padding: EdgeInsets.zero,
-      gradientColors: [AppColors.kPrimaryDarkColor2, AppColors.kPrimaryColor],
+      gradientColors: const [
+        AppColors.kPrimaryDarkColor2,
+        AppColors.kPrimaryColor,
+      ],
       child: Column(
         spacing: 8,
         children: [
@@ -50,7 +53,7 @@ class MilestoneProgressCard extends StatelessWidget {
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: controller.isSubmittingProof.value
-                              ? SizedBox(
+                              ? const SizedBox(
                                   height: 20,
                                   width: 20,
                                   child: CircularProgressIndicator(
@@ -101,7 +104,9 @@ class MilestoneProgressCard extends StatelessWidget {
                     value: model.progress,
                     minHeight: 8,
                     backgroundColor: Colors.black26,
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                    valueColor: const AlwaysStoppedAnimation<Color>(
+                      Colors.white,
+                    ),
                   ),
                 ),
               ],

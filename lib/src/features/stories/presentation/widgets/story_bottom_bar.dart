@@ -24,18 +24,20 @@ class StoryBottomBar extends StatelessWidget {
       child: Row(
         spacing: 12,
         children: [
-          Obx(() => CustomIconButtonWidget(
-                image: AppIcons.fire,
-                colorFilter: controller.isLiked.value
-                    ? const ColorFilter.mode(
-                        AppColors.kAccentColor,
-                        BlendMode.srcIn,
-                      )
-                    : null,
-                onPressed: controller.toggleLike,
-              )),
-          CustomIconButtonWidget(iconData: CupertinoIcons.bookmark),
-          CustomIconButtonWidget(iconData: Icons.download_outlined),
+          Obx(
+            () => CustomIconButtonWidget(
+              image: AppIcons.fire,
+              colorFilter: controller.isLiked.value
+                  ? const ColorFilter.mode(
+                      AppColors.kAccentColor,
+                      BlendMode.srcIn,
+                    )
+                  : null,
+              onPressed: controller.toggleLike,
+            ),
+          ),
+          const CustomIconButtonWidget(iconData: CupertinoIcons.bookmark),
+          const CustomIconButtonWidget(iconData: Icons.download_outlined),
         ],
       ),
     );
@@ -65,7 +67,7 @@ class CustomIconButtonWidget extends StatelessWidget {
       onTap: onPressed,
       child: Container(
         padding: EdgeInsets.all(padding ?? 12),
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           shape: BoxShape.circle,
           color: AppColors.kPrimaryDarkColor3,
         ),

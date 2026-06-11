@@ -1,4 +1,3 @@
-
 import '../../../../src_export.dart';
 
 class LabeledInputField extends StatelessWidget {
@@ -21,16 +20,21 @@ class LabeledInputField extends StatelessWidget {
       textEditingController: controller,
       hintText: hint,
       title: label,
-      isRequired: true, // This triggers the built-in "This field is required" logic
+      isRequired:
+          true, // This triggers the built-in "This field is required" logic
       validator: validator,
       inputTextStyle: const TextStyle(
         fontSize: 13,
         color: Colors.white,
         fontWeight: FontWeight.bold,
       ),
-      titleStyle: Theme.of(context).textTheme.titleMedium?.copyWith(color: Colors.white),
+      titleStyle: Theme.of(
+        context,
+      ).textTheme.titleMedium?.copyWith(color: Colors.white),
       fillColor: Colors.transparent,
-      hintStyle: Theme.of(context).textTheme.labelMedium?.copyWith(color: Colors.white.withOpacity(0.5)),
+      hintStyle: Theme.of(
+        context,
+      ).textTheme.labelMedium?.copyWith(color: Colors.white.withOpacity(0.5)),
     );
   }
 }

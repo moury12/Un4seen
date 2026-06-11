@@ -19,9 +19,16 @@ class EntriesGalleryPage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.image_not_supported_outlined, size: 64, color: AppColors.kPrimaryColor.withValues(alpha: .4)),
+                Icon(
+                  Icons.image_not_supported_outlined,
+                  size: 64,
+                  color: AppColors.kPrimaryColor.withValues(alpha: .4),
+                ),
                 space16H,
-                CustomText('No entries yet', color: AppColors.kSecondaryTextColor),
+                const CustomText(
+                  'No entries yet',
+                  color: AppColors.kSecondaryTextColor,
+                ),
               ],
             ),
           );
@@ -37,8 +44,11 @@ class EntriesGalleryPage extends StatelessWidget {
               margin: const EdgeInsets.only(bottom: 12),
               padding: AppPadding.getPadding12(context),
               decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [AppColors.kPrimaryColor, AppColors.kPrimaryDarkColor2],
+                gradient: const LinearGradient(
+                  colors: [
+                    AppColors.kPrimaryColor,
+                    AppColors.kPrimaryDarkColor2,
+                  ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
@@ -68,7 +78,9 @@ class EntriesGalleryPage extends StatelessWidget {
                               fontSize: 16,
                             ),
                             CustomText(
-                              entry.user.memberNumber.isNotEmpty ? '#${entry.user.memberNumber}' : '',
+                              entry.user.memberNumber.isNotEmpty
+                                  ? '#${entry.user.memberNumber}'
+                                  : '',
                               color: Colors.white70,
                               fontSize: 12,
                             ),
@@ -109,8 +121,12 @@ class EntriesGalleryPage extends StatelessWidget {
                         GestureDetector(
                           onTap: () => controller.toggleHeart(index),
                           child: Icon(
-                            entry.isHearted ? Icons.favorite : Icons.favorite_outline,
-                            color: entry.isHearted ? Colors.red : AppColors.kPrimaryColor,
+                            entry.isHearted
+                                ? Icons.favorite
+                                : Icons.favorite_outline,
+                            color: entry.isHearted
+                                ? Colors.red
+                                : AppColors.kPrimaryColor,
                             size: 20,
                           ),
                         ),
@@ -150,22 +166,31 @@ class EntriesGalleryPage extends StatelessWidget {
               padding: const EdgeInsets.all(12),
               child: Row(
                 children: [
-                  const CircleAvatar(radius: 20, backgroundColor: AppColors.kPrimaryDarkColor3),
+                  const CircleAvatar(
+                    radius: 20,
+                    backgroundColor: AppColors.kPrimaryDarkColor3,
+                  ),
                   space8W,
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Container(height: 14, width: 120, color: AppColors.kPrimaryDarkColor3),
+                      Container(
+                        height: 14,
+                        width: 120,
+                        color: AppColors.kPrimaryDarkColor3,
+                      ),
                       space4H,
-                      Container(height: 10, width: 80, color: AppColors.kPrimaryDarkColor3),
+                      Container(
+                        height: 10,
+                        width: 80,
+                        color: AppColors.kPrimaryDarkColor3,
+                      ),
                     ],
                   ),
                 ],
               ),
             ),
-            Expanded(
-              child: Container(color: AppColors.kPrimaryDarkColor3),
-            ),
+            Expanded(child: Container(color: AppColors.kPrimaryDarkColor3)),
           ],
         ),
       ),

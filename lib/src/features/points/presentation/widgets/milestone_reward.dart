@@ -6,18 +6,20 @@ import 'package:un4seen/src/features/points/points_export.dart';
 import '../../../../core/core_export.dart';
 import '../../../../core/widgets/gradient_container.dart';
 
-
 class MilestoneRewardWidget extends StatelessWidget {
   final IndividualMilestone data;
   const MilestoneRewardWidget({super.key, required this.data});
 
   @override
   Widget build(BuildContext context) {
-        final controller = Get.find<PointsController>();
+    final controller = Get.find<PointsController>();
 
     return GradientContainer(
       margin: const EdgeInsets.only(bottom: 8),
-      gradientColors: [AppColors.kPrimaryDarkColor, AppColors.kPrimaryColor],
+      gradientColors: const [
+        AppColors.kPrimaryDarkColor,
+        AppColors.kPrimaryColor,
+      ],
       child: Column(
         spacing: 8,
         children: [
@@ -43,39 +45,39 @@ class MilestoneRewardWidget extends StatelessWidget {
                   ],
                 ),
               ),
-             if (!data.isClaimed && data.isUnlocked)
-                      ButtonTapWidget(
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 6,
+              if (!data.isClaimed && data.isUnlocked)
+                ButtonTapWidget(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.2),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: controller.isSubmittingProof.value
+                        ? const SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                Colors.white,
+                              ),
+                            ),
+                          )
+                        : CustomText(
+                            AppStaticStrings.claim.tr,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
                           ),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.2),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: controller.isSubmittingProof.value
-                              ? SizedBox(
-                                  height: 20,
-                                  width: 20,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                    valueColor: AlwaysStoppedAnimation<Color>(
-                                      Colors.white,
-                                    ),
-                                  ),
-                                )
-                              : CustomText(
-                                  AppStaticStrings.claim.tr,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                        ),
-                        onTap: () {
-                          controller.claimMilestone(data.id);
-                        },
-                      ),
-                
+                  ),
+                  onTap: () {
+                    controller.claimMilestone(data.id);
+                  },
+                ),
+
               //  CustomButton(text: "Claim", onPressed: () {}, isExpanding: true, borderRadius: 20),
             ],
           ),

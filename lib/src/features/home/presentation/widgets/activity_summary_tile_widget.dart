@@ -20,20 +20,34 @@ class ActivitySummaryTileWidget extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 8),
       padding: AppPadding.getPadding8(context),
       decoration: BoxDecoration(
-gradient: LinearGradient(colors: [ AppColors.kPrimaryColor.withValues(alpha: 0.8),AppColors.kPrimaryDarkColor,]),        borderRadius: BorderRadius.circular(12),
+        gradient: LinearGradient(
+          colors: [
+            AppColors.kPrimaryColor.withValues(alpha: 0.8),
+            AppColors.kPrimaryDarkColor,
+          ],
+        ),
+        borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
         children: [
           Container(
             padding: const EdgeInsets.all(10),
-            decoration: const BoxDecoration(color: AppColors.kAccentColor, shape: BoxShape.circle),
+            decoration: const BoxDecoration(
+              color: AppColors.kAccentColor,
+              shape: BoxShape.circle,
+            ),
             child: SvgPicture.asset(icon, height: 20),
           ),
           space12W,
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CustomText(title, color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14),
+              CustomText(
+                title,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 14,
+              ),
               CustomText(subtitle, color: Colors.white70, fontSize: 12),
             ],
           ),

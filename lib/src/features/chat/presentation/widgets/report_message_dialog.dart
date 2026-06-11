@@ -15,7 +15,9 @@ class ReportMessageDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(appRadius16)),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(appRadius16),
+      ),
       child: Padding(
         padding: AppPadding.getPadding12(context),
         child: Column(
@@ -48,7 +50,7 @@ class ReportMessageDialog extends StatelessWidget {
                 color: AppColors.kBackgroundColor,
                 borderRadius: BorderRadius.circular(appRadius),
               ),
-              child: CustomText('"$message"', ),
+              child: CustomText('"$message"'),
             ),
             space12H,
             CustomText(AppStaticStrings.reason.tr, fontWeight: FontWeight.bold),
@@ -58,7 +60,10 @@ class ReportMessageDialog extends StatelessWidget {
               suffixIcon: Icon(Icons.keyboard_arrow_down),
             ),
             space12H,
-            CustomText(AppStaticStrings.additionalDetails.tr, fontWeight: FontWeight.bold),
+            CustomText(
+              AppStaticStrings.additionalDetails.tr,
+              fontWeight: FontWeight.bold,
+            ),
             space8H,
             CustomTextField(
               hintText: AppStaticStrings.provideMoreContext.tr,
@@ -79,7 +84,7 @@ class ReportMessageDialog extends StatelessWidget {
                 Expanded(
                   child: CustomButton(
                     text: AppStaticStrings.submitReport.tr,
-                    
+
                     onPressed: () => Navigator.pop(context),
                   ),
                 ),

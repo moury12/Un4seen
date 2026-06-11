@@ -1,9 +1,9 @@
 import 'package:get/get.dart';
-import '../controllers/stories_controller.dart';
+import 'package:un4seen/src/features/stories/presentation/controllers/story_controller.dart';
 
 class StoriesBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<StoriesController>(() => StoriesController());
+    Get.lazyPut<StoryController>(() => StoryController());
   }
 }

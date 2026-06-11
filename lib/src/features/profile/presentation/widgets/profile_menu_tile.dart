@@ -27,7 +27,7 @@ class ProfileMenuTile extends StatelessWidget {
           margin: const EdgeInsets.only(bottom: 6),
           padding: AppPadding.getPadding12(context),
           decoration: BoxDecoration(
-            gradient: LinearGradient(
+            gradient: const LinearGradient(
               colors: [
                 AppColors.kPrimaryDarkColor,
                 AppColors.kPrimaryDarkColor2,
@@ -51,7 +51,8 @@ class ProfileMenuTile extends StatelessWidget {
                   border: Border.all(color: AppColors.kPrimaryColor, width: 1),
                 ),
                 child: Center(
-                  child: iconWidget ??
+                  child:
+                      iconWidget ??
                       (icon != null
                           ? SvgPicture.asset(
                               icon!,

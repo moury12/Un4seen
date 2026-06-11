@@ -22,7 +22,7 @@ class AuthController extends getx.GetxController {
   Timer? _timer;
 
   bool get isLoading => status.value == AuthStatus.loading;
-Rx<ProfileModel> userProfile = ProfileModel().obs;
+  Rx<ProfileModel> userProfile = ProfileModel().obs;
   @override
   void onClose() {
     _timer?.cancel();
@@ -55,8 +55,10 @@ Rx<ProfileModel> userProfile = ProfileModel().obs;
   }
 
   // Logic to show snackbars based on "success" key from JSON
-  void _handleApiResponse(Map<String, dynamic> response,
-      {required Function() onSuccess}) {
+  void _handleApiResponse(
+    Map<String, dynamic> response, {
+    required Function() onSuccess,
+  }) {
     final bool isSuccess = response['success'] ?? false;
     final String message = response['message'] ?? 'Action failed';
 
@@ -74,28 +76,36 @@ Rx<ProfileModel> userProfile = ProfileModel().obs;
   Future<void> login(String email, String password) async {
     try {
       status.value = AuthStatus.loading;
-      final response = await _repository.login(email: email, password: password);
+      final response = await _repository.login(
+        email: email,
+        password: password,
+      );
 
-      _handleApiResponse(response, onSuccess: () async {
-        final data = response['data'];
-        final storage = getx.Get.find<LocalStorageService>();
-        await storage.saveTokens(data['accessToken'], data['refreshToken']);
-        status.value = AuthStatus.authenticated;
-     userProfile.value = ProfileModel.fromJson(data['user']);
+      _handleApiResponse(
+        response,
+        onSuccess: () async {
+          final data = response['data'];
+          final storage = getx.Get.find<LocalStorageService>();
+          await storage.saveTokens(data['accessToken'], data['refreshToken']);
+          status.value = AuthStatus.authenticated;
+          userProfile.value = ProfileModel.fromJson(data['user']);
 
-
-if(userProfile.value.isProfileComplete == false || userProfile.value.isProfileComplete == null){
-   AppRouter.router.go(AppRoutes.setupProfile);
-}else{
-    AppRouter.router.go(AppRoutes.navigation);
-}
-      });
+          if (userProfile.value.isProfileComplete == false ||
+              userProfile.value.isProfileComplete == null) {
+            AppRouter.router.go(AppRoutes.setupProfile);
+          } else {
+            AppRouter.router.go(AppRoutes.navigation);
+          }
+        },
+      );
     } catch (e) {
       status.value = AuthStatus.error;
       // Note: Catch is only for network/hard crashes, UI logic is in _handleApiResponse
-      print('Hard Error at lib/src/features/auth/presentation/controllers/auth_controller.dart:51');
-    
-  }}
+      print(
+        'Hard Error at lib/src/features/auth/presentation/controllers/auth_controller.dart:51',
+      );
+    }
+  }
 
   // ── Forgot Password ───────────────────────────────────
   Future<void> forgotPassword(String email) async {
@@ -109,8 +119,10 @@ if(userProfile.value.isProfileComplete == false || userProfile.value.isProfileCo
       status.value = AuthStatus.initial;
 
       // GoRouter Navigation
-      AppRouter.router.push(AppRoutes.otpVerification,
-          extra: {'email': email, 'isForResetPass': true});
+      AppRouter.router.push(
+        AppRoutes.otpVerification,
+        extra: {'email': email, 'isForResetPass': true},
+      );
     } catch (e) {
       status.value = AuthStatus.error;
     }
@@ -141,7 +153,9 @@ if(userProfile.value.isProfileComplete == false || userProfile.value.isProfileCo
     try {
       status.value = AuthStatus.loading;
       final msg = await _repository.resetPassword(
-          email: email, newPassword: newPassword);
+        email: email,
+        newPassword: newPassword,
+      );
       CustomSnackbar.showSuccess(msg);
       status.value = AuthStatus.initial;
 

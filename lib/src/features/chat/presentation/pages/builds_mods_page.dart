@@ -11,7 +11,7 @@ class BuildsModsPage extends StatelessWidget {
         backgroundColor: Colors.white,
         title: Column(
           children: [
-            CustomText(
+            const CustomText(
               'Kawasaki KLX140',
               variant: TextVariant.titleMedium,
               fontWeight: FontWeight.bold,

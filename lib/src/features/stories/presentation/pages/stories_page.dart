@@ -40,7 +40,7 @@ class StoriesPage extends StatelessWidget {
                 // Dummy data for story cards
                 return StoryCard(
                   isLeft: index % 2 == 0,
-                  
+
                   imageUrl: 'https://picsum.photos/id/${index + 10}/400/600',
                 );
               },

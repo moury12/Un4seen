@@ -49,7 +49,7 @@ class ProfilePage extends StatelessWidget {
                 ),
                 space4H,
                 // ── Points balance card ───────────────────
-                PointsBalanceCardWidget(),
+                const PointsBalanceCardWidget(),
 
                 space8H,
 

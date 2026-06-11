@@ -50,6 +50,7 @@ class CustomNetworkImage extends StatelessWidget {
                 maxScale: 4.0,
                 child: CachedNetworkImage(
                   imageUrl: imageUrl,
+
                   fit: BoxFit.contain,
                   placeholder: (context, url) => const Center(
                     child: CircularProgressIndicator(color: Colors.white),
@@ -87,6 +88,12 @@ class CustomNetworkImage extends StatelessWidget {
           : null,
       child: CachedNetworkImage(
         imageUrl: imageUrl,
+        memCacheHeight: (height != null && height!.isFinite)
+            ? height!.toInt()
+            : 300,
+        memCacheWidth: (width != null && width!.isFinite)
+            ? width!.toInt()
+            : 300,
         imageBuilder: (context, imageProvider) {
           return Container(
             height: height,
@@ -114,7 +121,7 @@ class CustomNetworkImage extends StatelessWidget {
             child: Center(
               child: Padding(
                 padding: AppPadding.getPadding8(context),
-                child: CircularProgressIndicator(
+                child: const CircularProgressIndicator(
                   color: AppColors.kPrimaryColor,
                   strokeWidth: 1,
                 ),

@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:un4seen/src/core/core_export.dart';
 import 'package:get/get.dart';
 import 'package:un4seen/src/features/profile/presentation/widgets/dynamic_tab_widget.dart';
-import 'package:un4seen/src/features/stories/presentation/widgets/announcements_button.dart';
-import 'package:un4seen/src/features/stories/presentation/widgets/filter_chip_widget.dart';
 
 class StoryFilterChips extends StatelessWidget {
   const StoryFilterChips({super.key});

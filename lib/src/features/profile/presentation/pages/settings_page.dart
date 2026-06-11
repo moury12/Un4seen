@@ -25,7 +25,7 @@ class SettingsPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
+              const Text(
                 'Account',
                 style: TextStyle(
                   fontSize: 18,

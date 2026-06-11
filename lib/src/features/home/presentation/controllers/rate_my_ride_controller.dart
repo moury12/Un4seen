@@ -8,12 +8,12 @@ import 'home_controller.dart';
 
 class RateMyRideController extends GetxController {
   final ApiService _api = Get.find<ApiService>();
-  
+
   final RxList<RideModel> rides = <RideModel>[].obs;
   final RxBool isLoading = false.obs;
   final RxBool isMoreLoading = false.obs;
   final RxBool isSubmitting = false.obs;
-  
+
   int _currentPage = 1;
   int _totalPage = 1;
 
@@ -28,13 +28,15 @@ class RateMyRideController extends GetxController {
       _currentPage = 1;
       rides.clear();
     }
-    
+
     try {
-      if (_currentPage == 1) isLoading.value = true;
-      else isMoreLoading.value = true;
+      if (_currentPage == 1)
+        isLoading.value = true;
+      else
+        isMoreLoading.value = true;
 
       final response = await _api.get('/rides?page=$_currentPage&limit=10');
-      
+
       if (response.data['success']) {
         final feed = RideFeedModel.fromJson(response.data['data']);
         rides.addAll(feed.result);
@@ -60,7 +62,9 @@ class RateMyRideController extends GetxController {
 
     // Instant Optimistic UI Update
     ride.isHearted = !ride.isHearted;
-    ride.heartCount = ride.isHearted ? ride.heartCount + 1 : ride.heartCount - 1;
+    ride.heartCount = ride.isHearted
+        ? ride.heartCount + 1
+        : ride.heartCount - 1;
     rides[index] = ride;
     rides.refresh();
 
@@ -76,63 +80,65 @@ class RateMyRideController extends GetxController {
     }
   }
 
-// Inside RateMyRideController class
-Future<bool> uploadRide(String model, String desc, String type) async {
-  // 1. Validation
-  if (model.isEmpty || desc.isEmpty || type.isEmpty) {
-    CustomSnackbar.showError("Please fill in all fields");
-    return false;
-  }
-
-  final homeCtrl = Get.find<HomeController>();
-  if (homeCtrl.selectedRideImage.value == null) {
-    CustomSnackbar.showError("Please select a bike photo");
-    return false;
-  }
-
-  try {
-    isSubmitting.value = true;
-
-    // 2. Prepare Form Data
-    // Your API expects 'data' key to contain a JSON string
-    final payload = jsonEncode({
-      "bikeModel": model,
-      "description": desc,
-      "rideType": type,
-    });
-
-    dio.FormData formData = dio.FormData.fromMap({
-      'data': payload,
-      'image': await dio.MultipartFile.fromFile(
-        homeCtrl.selectedRideImage.value!.path,
-        filename: 'ride_image.jpg',
-      ),
-    });
-
-    // 3. Hit API
-    final res = await _api.post('/rides/upload', data: formData);
-
-    // 4. Handle Response
-    if (res.data['success'] == true) {
-      CustomSnackbar.showSuccess(res.data['message'] ?? "Ride uploaded!");
-      
-      // Cleanup
-      homeCtrl.selectedRideImage.value = null;
-     // Close Dialog
-      
-      // Refresh the list to show new ride
-      fetchRides(isRefresh: true);
-      return true;
-    } else {
-      CustomSnackbar.showError(res.data['message'] ?? "Upload failed");
+  // Inside RateMyRideController class
+  Future<bool> uploadRide(String model, String desc, String type) async {
+    // 1. Validation
+    if (model.isEmpty || desc.isEmpty || type.isEmpty) {
+      CustomSnackbar.showError("Please fill in all fields");
       return false;
     }
-  } catch (e) {
-    print("❌ Upload Error: $e | File: lib/src/features/home/presentation/controllers/rate_my_ride_controller.dart");
-    CustomSnackbar.showError("Something went wrong during upload");
-  } finally {
-    isSubmitting.value = false;
-  }
-  return false;
 
-}}
+    final homeCtrl = Get.find<HomeController>();
+    if (homeCtrl.selectedRideImage.value == null) {
+      CustomSnackbar.showError("Please select a bike photo");
+      return false;
+    }
+
+    try {
+      isSubmitting.value = true;
+
+      // 2. Prepare Form Data
+      // Your API expects 'data' key to contain a JSON string
+      final payload = jsonEncode({
+        "bikeModel": model,
+        "description": desc,
+        "rideType": type,
+      });
+
+      dio.FormData formData = dio.FormData.fromMap({
+        'data': payload,
+        'image': await dio.MultipartFile.fromFile(
+          homeCtrl.selectedRideImage.value!.path,
+          filename: 'ride_image.jpg',
+        ),
+      });
+
+      // 3. Hit API
+      final res = await _api.post('/rides/upload', data: formData);
+
+      // 4. Handle Response
+      if (res.data['success'] == true) {
+        CustomSnackbar.showSuccess(res.data['message'] ?? "Ride uploaded!");
+
+        // Cleanup
+        homeCtrl.selectedRideImage.value = null;
+        // Close Dialog
+
+        // Refresh the list to show new ride
+        fetchRides(isRefresh: true);
+        return true;
+      } else {
+        CustomSnackbar.showError(res.data['message'] ?? "Upload failed");
+        return false;
+      }
+    } catch (e) {
+      print(
+        "❌ Upload Error: $e | File: lib/src/features/home/presentation/controllers/rate_my_ride_controller.dart",
+      );
+      CustomSnackbar.showError("Something went wrong during upload");
+    } finally {
+      isSubmitting.value = false;
+    }
+    return false;
+  }
+}

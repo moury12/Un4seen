@@ -11,8 +11,8 @@ class HomeController extends GetxController {
 
   // ── State ─────────────────────────────────────────────
   final RxList<ItemEntity> items = <ItemEntity>[].obs;
-  final RxBool isLoading         = false.obs;
-  final RxString errorMessage    = ''.obs;
+  final RxBool isLoading = false.obs;
+  final RxString errorMessage = ''.obs;
 
   final Rx<File?> selectedRideImage = Rx<File?>(null);
   final ImagePicker _picker = ImagePicker();
@@ -26,9 +26,9 @@ class HomeController extends GetxController {
   // ── Actions ───────────────────────────────────────────
   Future<void> fetchItems() async {
     try {
-      isLoading.value    = true;
+      isLoading.value = true;
       errorMessage.value = '';
-      items.value        = await _repository.getItems();
+      items.value = await _repository.getItems();
     } catch (e) {
       errorMessage.value = e.toString();
     } finally {

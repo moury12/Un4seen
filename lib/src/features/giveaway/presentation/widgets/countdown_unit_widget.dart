@@ -22,7 +22,11 @@ class CountdownUnitWidget extends StatelessWidget {
             color: AppColors.kPrimaryColor,
             borderRadius: BorderRadius.circular(8),
             boxShadow: [
-              BoxShadow(color: Colors.black.withOpacity(0.2), blurRadius: 4, offset: const Offset(0, 2)),
+              BoxShadow(
+                color: Colors.black.withOpacity(0.2),
+                blurRadius: 4,
+                offset: const Offset(0, 2),
+              ),
             ],
           ),
           child: CustomText(
@@ -34,7 +38,11 @@ class CountdownUnitWidget extends StatelessWidget {
         ),
         if (showLabelBelow) ...[
           space4H,
-          CustomText(label, variant: TextVariant.labelSmall, color: Colors.white70),
+          CustomText(
+            label,
+            variant: TextVariant.labelSmall,
+            color: Colors.white70,
+          ),
         ],
       ],
     );

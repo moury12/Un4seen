@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../core/core_export.dart';
+import '../controllers/ideas_controller.dart';
 
 class ShareIdeaDialog extends StatefulWidget {
   const ShareIdeaDialog({super.key});
@@ -27,6 +28,8 @@ class _ShareIdeaDialogState extends State<ShareIdeaDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.find<IdeasController>();
+
     return Dialog(
       backgroundColor: Colors.transparent,
       insetPadding: const EdgeInsets.symmetric(horizontal: 16),
@@ -92,39 +95,46 @@ class _ShareIdeaDialogState extends State<ShareIdeaDialog> {
               ),
             ),
             space8H,
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              decoration: BoxDecoration(
-                color: Colors.transparent,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: AppColors.kPrimaryColor),
-              ),
-              child: DropdownButtonHideUnderline(
-                child: DropdownButton<String>(
-                  style: const TextStyle(color: Colors.white),
-                  dropdownColor: AppColors.kPrimaryDarkColor3,
-                  value: selectedCategory,
-
-                  hint: CustomText(
-                    AppStaticStrings.selectIdeaCategory.tr,
-                    color: Colors.white,
-                  ),
-
-                  isExpanded: true,
-                  items: categories.map((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: CustomText(value, color: Colors.white),
-                    );
-                  }).toList(),
-                  onChanged: (val) {
-                    setState(() {
-                      selectedCategory = val;
-                    });
-                  },
+            Obx(() {
+              final list = controller.categories.isNotEmpty
+                  ? controller.categories.toList()
+                  : categories;
+              // Reset if selected category is not in the list anymore
+              if (selectedCategory != null && !list.contains(selectedCategory)) {
+                selectedCategory = null;
+              }
+              return Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                decoration: BoxDecoration(
+                  color: Colors.transparent,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: AppColors.kPrimaryColor),
                 ),
-              ),
-            ),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<String>(
+                    style: const TextStyle(color: Colors.white),
+                    dropdownColor: AppColors.kPrimaryDarkColor3,
+                    value: selectedCategory,
+                    hint: CustomText(
+                      AppStaticStrings.selectIdeaCategory.tr,
+                      color: Colors.white,
+                    ),
+                    isExpanded: true,
+                    items: list.map((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: CustomText(value, color: Colors.white),
+                      );
+                    }).toList(),
+                    onChanged: (val) {
+                      setState(() {
+                        selectedCategory = val;
+                      });
+                    },
+                  ),
+                ),
+              );
+            }),
             space8H,
             CustomTextField(
               title: AppStaticStrings.title.tr,
@@ -136,7 +146,6 @@ class _ShareIdeaDialogState extends State<ShareIdeaDialog> {
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
               ),
-
               titleStyle: const TextStyle(
                 color: Colors.white,
                 fontSize: 14,
@@ -152,7 +161,6 @@ class _ShareIdeaDialogState extends State<ShareIdeaDialog> {
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
               ),
-              // Reusing about text or just "Description"
               hintText: AppStaticStrings.tellUsMoreAboutIdea.tr,
               textEditingController: descController,
               maxLines: 4,
@@ -165,14 +173,33 @@ class _ShareIdeaDialogState extends State<ShareIdeaDialog> {
               hintStyle: const TextStyle(fontSize: 12, color: Colors.white),
             ),
             space8H,
-            CustomButton(
-              text: AppStaticStrings.submitIdea.tr,
-              onPressed: () {
-                // Handle submission
-                Navigator.pop(context);
-              },
-              backgroundColor: AppColors.kPrimaryColor,
-            ),
+            Obx(() => CustomButton(
+                  text: AppStaticStrings.submitIdea.tr,
+                  isLoading: controller.isSubmitting.value,
+                  onPressed: () async {
+                    if (selectedCategory == null || selectedCategory!.isEmpty) {
+                      CustomSnackbar.showError("Please select a category");
+                      return;
+                    }
+                    if (titleController.text.trim().isEmpty) {
+                      CustomSnackbar.showError("Please enter a title");
+                      return;
+                    }
+                    if (descController.text.trim().isEmpty) {
+                      CustomSnackbar.showError("Please enter a description");
+                      return;
+                    }
+                    final success = await controller.submitIdea(
+                      selectedCategory!,
+                      titleController.text.trim(),
+                      descController.text.trim(),
+                    );
+                    if (success && context.mounted) {
+                      Navigator.pop(context);
+                    }
+                  },
+                  backgroundColor: AppColors.kPrimaryColor,
+                )),
             space8H,
             Center(
               child: CustomText(

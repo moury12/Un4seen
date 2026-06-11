@@ -34,12 +34,17 @@ class CompetitionsController extends GetxController {
     isCompLoading.value = false;
   }
 
-  Future<void> _fetchByStatus(String status, RxList<CompetitionModel> list) async {
+  Future<void> _fetchByStatus(
+    String status,
+    RxList<CompetitionModel> list,
+  ) async {
     try {
       final res = await _api.get('/competitions/all?status=$status');
       if (res.data['success'] == true) {
         final results = res.data['data']['result'] as List;
-        list.assignAll(results.map((e) => CompetitionModel.fromJson(e)).toList());
+        list.assignAll(
+          results.map((e) => CompetitionModel.fromJson(e)).toList(),
+        );
       }
     } catch (e) {
       print('❌ Error fetching $status competitions: $e');
@@ -53,7 +58,9 @@ class CompetitionsController extends GetxController {
       final res = await _api.get('/competitions/gallery/$compId');
       if (res.data['success'] == true) {
         final data = res.data['data'] as List;
-        entries.assignAll(data.map((e) => CompetitionEntryModel.fromJson(e)).toList());
+        entries.assignAll(
+          data.map((e) => CompetitionEntryModel.fromJson(e)).toList(),
+        );
       }
     } catch (e) {
       print('❌ Error fetching gallery: $e');
@@ -69,7 +76,9 @@ class CompetitionsController extends GetxController {
 
     // Instant optimistic UI update
     entry.isHearted = !entry.isHearted;
-    entry.heartCount = entry.isHearted ? entry.heartCount + 1 : entry.heartCount - 1;
+    entry.heartCount = entry.isHearted
+        ? entry.heartCount + 1
+        : entry.heartCount - 1;
     entries[index] = entry;
     entries.refresh();
 
@@ -84,7 +93,11 @@ class CompetitionsController extends GetxController {
     }
   }
 
-  Future<bool> submitDesign(String compId, String name, String imagePath) async {
+  Future<bool> submitDesign(
+    String compId,
+    String name,
+    String imagePath,
+  ) async {
     try {
       isSubmitting.value = true;
       final formData = dio.FormData.fromMap({

@@ -5,7 +5,7 @@ class ChannelListItemWidget extends StatelessWidget {
   final String title;
   final String subtitle;
   final String? img;
-    final String? profileImg;
+  final String? profileImg;
 
   final bool isActive;
   final VoidCallback onTap;
@@ -15,7 +15,9 @@ class ChannelListItemWidget extends StatelessWidget {
     required this.title,
     required this.subtitle,
     this.isActive = false,
-    required this.onTap,  this.img, this.profileImg,
+    required this.onTap,
+    this.img,
+    this.profileImg,
   });
 
   @override
@@ -26,29 +28,55 @@ class ChannelListItemWidget extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: 8),
         padding: AppPadding.getPadding12(context),
         decoration: BoxDecoration(
-          color:  AppColors.kPrimaryColor.withValues(alpha: .3),
+          color: AppColors.kPrimaryColor.withValues(alpha: .3),
           borderRadius: BorderRadius.circular(appRadius),
-          border:Border.all(color: AppColors.kPrimaryDarkColor) ,
+          border: Border.all(color: AppColors.kPrimaryDarkColor),
         ),
-        child: Row(spacing: 8,
+        child: Row(
+          spacing: 8,
           children: [
-if(img!=null)SvgPicture.asset(img??"",colorFilter: ColorFilter.mode(AppColors.kTextColor, BlendMode.srcIn),height: 20,)
-else if(profileImg!=null)CustomNetworkImage(imageUrl:   profileImg??"",height: 60,width: 60,radius: 50,),
+            if (img != null)
+              SvgPicture.asset(
+                img ?? "",
+                colorFilter: const ColorFilter.mode(
+                  AppColors.kTextColor,
+                  BlendMode.srcIn,
+                ),
+                height: 20,
+              )
+            else if (profileImg != null)
+              CustomNetworkImage(
+                imageUrl: profileImg ?? "",
+                height: 60,
+                width: 60,
+                radius: 50,
+              ),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   CustomText(
-                    "$title",
+                    title,
                     fontWeight: FontWeight.bold,
-                    color: isActive ? AppColors.kPrimaryColor : AppColors.kTextColor  ,fontSize: 14,
+                    color: isActive
+                        ? AppColors.kPrimaryColor
+                        : AppColors.kTextColor,
+                    fontSize: 14,
                   ),
                   space4H,
                   Row(
                     children: [
-                      const Icon(Icons.circle, size: 8, color: AppColors.kGreenColor),
+                      const Icon(
+                        Icons.circle,
+                        size: 8,
+                        color: AppColors.kGreenColor,
+                      ),
                       space4W,
-                      CustomText(subtitle, fontSize: 12, color: AppColors.kTextColor  ),
+                      CustomText(
+                        subtitle,
+                        fontSize: 12,
+                        color: AppColors.kTextColor,
+                      ),
                     ],
                   ),
                 ],

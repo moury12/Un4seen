@@ -103,7 +103,10 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                     isLoading: ctrl.isLoading,
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        ctrl.resetPassword(widget.email, newPasswordCtrl.text.trim());
+                        ctrl.resetPassword(
+                          widget.email,
+                          newPasswordCtrl.text.trim(),
+                        );
                       }
                     },
                   ),

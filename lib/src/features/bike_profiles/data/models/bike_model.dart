@@ -6,8 +6,14 @@ class BikeProfileResponse {
 
   factory BikeProfileResponse.fromJson(Map<String, dynamic> json) {
     return BikeProfileResponse(
-      activeBike: json['activeBike'] != null ? BikeModel.fromJson(json['activeBike']) : null,
-      retiredBikes: (json['retiredBikes'] as List?)?.map((e) => BikeModel.fromJson(e)).toList() ?? [],
+      activeBike: json['activeBike'] != null
+          ? BikeModel.fromJson(json['activeBike'])
+          : null,
+      retiredBikes:
+          (json['retiredBikes'] as List?)
+              ?.map((e) => BikeModel.fromJson(e))
+              .toList() ??
+          [],
     );
   }
 }
@@ -48,7 +54,11 @@ class BikeModel {
       model: json['model'] ?? '',
       bikeType: json['bikeType'] ?? '',
       color: json['color'] ?? '',
-      upgrades: (json['upgrades'] as List?)?.map((e) => BikeUpgrade.fromJson(e)).toList() ?? [],
+      upgrades:
+          (json['upgrades'] as List?)
+              ?.map((e) => BikeUpgrade.fromJson(e))
+              .toList() ??
+          [],
       gallery: List<String>.from(json['gallery'] ?? []),
       isRetired: json['isRetired'] ?? false,
       isSaved: json['isSaved'] ?? false,

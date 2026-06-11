@@ -15,7 +15,7 @@ class AboutMeWidget extends StatelessWidget {
         color: bgColor,
         borderRadius: BorderRadius.circular(16),
       ),
-      child: Column(
+      child: const Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           CustomText(

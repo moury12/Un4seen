@@ -4,11 +4,17 @@ import '../home_export.dart';
 class ItemModel extends ItemEntity {
   const ItemModel({required super.id, required super.title, super.subtitle});
 
-  factory ItemModel.fromJson(Map<String, dynamic> j) =>
-      ItemModel(id: j['_id'] ?? j['id'] ?? '', title: j['title'] ?? '', subtitle: j['subtitle']);
+  factory ItemModel.fromJson(Map<String, dynamic> j) => ItemModel(
+    id: j['_id'] ?? j['id'] ?? '',
+    title: j['title'] ?? '',
+    subtitle: j['subtitle'],
+  );
 
-  Map<String, dynamic> toJson() =>
-      {'id': id, 'title': title, if (subtitle != null) 'subtitle': subtitle};
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'title': title,
+    if (subtitle != null) 'subtitle': subtitle,
+  };
 }
 
 // ── DataSource ────────────────────────────────────────────
@@ -23,7 +29,11 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
     // TODO: replace with real API call
     return List.generate(
       10,
-      (i) => ItemModel(id: '$i', title: 'Item ${i + 1}', subtitle: 'Subtitle for item ${i + 1}'),
+      (i) => ItemModel(
+        id: '$i',
+        title: 'Item ${i + 1}',
+        subtitle: 'Subtitle for item ${i + 1}',
+      ),
     );
   }
 }

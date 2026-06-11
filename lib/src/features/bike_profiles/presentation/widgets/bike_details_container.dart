@@ -1,7 +1,8 @@
 import '../../../../src_export.dart';
 import '../widgets/bike_detail_item.dart';
+
 class BikeDetailsContainerWidget extends StatelessWidget {
- final BikeModel bike;
+  final BikeModel bike;
   const BikeDetailsContainerWidget({super.key, required this.bike});
 
   @override
@@ -70,6 +71,6 @@ class BikeDetailsContainerWidget extends StatelessWidget {
         ],
       ),
     );
- ;
+    ;
   }
 }

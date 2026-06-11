@@ -20,12 +20,14 @@ class PointsController extends GetxController {
     super.onInit();
     fetchDashboard();
   }
- Future<void> pickProofImage() async {
+
+  Future<void> pickProofImage() async {
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
     if (image != null) {
       selectedProofImage.value = File(image.path);
     }
   }
+
   Future<void> fetchDashboard() async {
     try {
       isLoading.value = true;
@@ -80,11 +82,12 @@ class PointsController extends GetxController {
       );
     }
   }
+
   // ── Claim Milestone (Individual or Community) ──────────
   Future<void> claimMilestone(String milestoneId) async {
     try {
       // Reusing isSubmittingProof or create a generic isActionLoading if preferred
-      isSubmittingProof.value = true; 
+      isSubmittingProof.value = true;
 
       final res = await _api.post(
         '/shred-points/claim-milestone',
@@ -98,12 +101,15 @@ class PointsController extends GetxController {
         CustomSnackbar.showError(res.data['message']);
       }
     } catch (e) {
-      print('❌ Claim Milestone Error: $e | lib/src/features/points/presentation/controllers/points_controller.dart');
+      print(
+        '❌ Claim Milestone Error: $e | lib/src/features/points/presentation/controllers/points_controller.dart',
+      );
       CustomSnackbar.showError("Failed to claim reward");
     } finally {
       isSubmittingProof.value = false;
     }
   }
+
   // ── Submit Social Proof ───────────────────────────────
   Future<bool> submitProof({
     required String platform,

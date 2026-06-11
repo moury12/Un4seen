@@ -45,11 +45,9 @@ class GradientContainer extends StatelessWidget {
             ? Border.all(color: borderColor!, width: borderWidth ?? 1)
             : null,
         gradient: LinearGradient(
-          colors: gradientColors ??
-              [
-                AppColors.kPrimaryColor,
-                AppColors.kPrimaryDarkColor,
-              ],
+          colors:
+              gradientColors ??
+              [AppColors.kPrimaryColor, AppColors.kPrimaryDarkColor],
           begin: begin ?? Alignment.topLeft,
           end: end ?? Alignment.bottomRight,
         ),
@@ -61,10 +59,6 @@ class GradientContainer extends StatelessWidget {
       return container;
     }
 
-    return GestureDetector(
-      onTap: onTap,
-      child: container,
-    );
+    return GestureDetector(onTap: onTap, child: container);
   }
 }
-

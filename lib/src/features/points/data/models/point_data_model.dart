@@ -39,7 +39,12 @@ class UserStats {
   final String fullName;
   final String referralCode;
 
-  UserStats({required this.totalPoints, required this.memberNumber, required this.fullName, required this.referralCode});
+  UserStats({
+    required this.totalPoints,
+    required this.memberNumber,
+    required this.fullName,
+    required this.referralCode,
+  });
 
   factory UserStats.fromJson(Map<String, dynamic> json) {
     return UserStats(
@@ -55,15 +60,27 @@ class DailyLogin {
   final bool canClaimDaily;
   final int points;
   DailyLogin({required this.canClaimDaily, required this.points});
-  factory DailyLogin.fromJson(Map<String, dynamic> json) => DailyLogin(canClaimDaily: json['canClaimDaily'] ?? false, points: json['points'] ?? 0);
+  factory DailyLogin.fromJson(Map<String, dynamic> json) => DailyLogin(
+    canClaimDaily: json['canClaimDaily'] ?? false,
+    points: json['points'] ?? 0,
+  );
 }
 
 class ProfileCompletion {
   final bool isComplete;
   final bool isClaimed;
   final int points;
-  ProfileCompletion({required this.isComplete, required this.isClaimed, required this.points});
-  factory ProfileCompletion.fromJson(Map<String, dynamic> json) => ProfileCompletion(isComplete: json['isComplete'] ?? false, isClaimed: json['isClaimed'] ?? false, points: json['points'] ?? 0);
+  ProfileCompletion({
+    required this.isComplete,
+    required this.isClaimed,
+    required this.points,
+  });
+  factory ProfileCompletion.fromJson(Map<String, dynamic> json) =>
+      ProfileCompletion(
+        isComplete: json['isComplete'] ?? false,
+        isClaimed: json['isClaimed'] ?? false,
+        points: json['points'] ?? 0,
+      );
 }
 
 class CommunityMilestone {

@@ -15,13 +15,19 @@ class BulletTextWidget extends StatelessWidget {
         children: [
           const Padding(
             padding: EdgeInsets.only(top: 6),
-            child: CircleAvatar(radius: 2, backgroundColor: AppColors.kWhiteTextColor),
+            child: CircleAvatar(
+              radius: 2,
+              backgroundColor: AppColors.kWhiteTextColor,
+            ),
           ),
           space8W,
           Expanded(
             child: Text(
               text,
-              style: TextStyle(fontSize: 12, color: AppColors.kWhiteTextColor.withValues(alpha: 0.9)),
+              style: TextStyle(
+                fontSize: 12,
+                color: AppColors.kWhiteTextColor.withValues(alpha: 0.9),
+              ),
             ),
           ),
         ],

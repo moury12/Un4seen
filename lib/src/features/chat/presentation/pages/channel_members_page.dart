@@ -32,13 +32,23 @@ class ChannelMembersPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CustomText(AppStaticStrings.currentMembers.tr, fontWeight: FontWeight.bold),
+            CustomText(
+              AppStaticStrings.currentMembers.tr,
+              fontWeight: FontWeight.bold,
+            ),
             space12H,
-            const ChannelMemberItemWidget(name: "Chris Lee", isAdded: true, isAdmin: true),
+            const ChannelMemberItemWidget(
+              name: "Chris Lee",
+              isAdded: true,
+              isAdmin: true,
+            ),
             space8H,
             const ChannelMemberItemWidget(name: "Taylor Kim", isAdded: true),
             space12H,
-            CustomText(AppStaticStrings.addMembers.tr, fontWeight: FontWeight.bold),
+            CustomText(
+              AppStaticStrings.addMembers.tr,
+              fontWeight: FontWeight.bold,
+            ),
             space12H,
             const ChannelMemberItemWidget(name: "Alex Rivera", isAdded: false),
           ],

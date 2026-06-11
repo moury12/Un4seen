@@ -20,7 +20,7 @@ class TestRiderProgramPage extends StatelessWidget {
               Center(
                 child: Text(
                   AppStaticStrings.bePartOfCreationProcess.tr,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: AppColors.kSecondaryTextColor,
                     fontSize: 12,
                   ),
@@ -38,7 +38,7 @@ class TestRiderProgramPage extends StatelessWidget {
               space8H,
               CustomText(
                 AppStaticStrings.getEarlyAccessToNewProducts.tr,
-                style: TextStyle(
+                style: const TextStyle(
                   color: AppColors.kSecondaryTextColor,
                   fontSize: 12,
                 ),
@@ -46,7 +46,7 @@ class TestRiderProgramPage extends StatelessWidget {
               space8H,
               CustomText(
                 AppStaticStrings.testThemInRealRidingConditions.tr,
-                style: TextStyle(
+                style: const TextStyle(
                   color: AppColors.kSecondaryTextColor,
                   fontSize: 12,
                 ),
@@ -54,7 +54,7 @@ class TestRiderProgramPage extends StatelessWidget {
               space8H,
               CustomText(
                 AppStaticStrings.onceProductFullyDialed.tr,
-                style: TextStyle(
+                style: const TextStyle(
                   color: AppColors.kSecondaryTextColor,
                   fontSize: 12,
                 ),
@@ -62,7 +62,7 @@ class TestRiderProgramPage extends StatelessWidget {
               space8H,
               CustomText(
                 AppStaticStrings.yourContentWillBeFeatured.tr,
-                style: TextStyle(
+                style: const TextStyle(
                   color: AppColors.kSecondaryTextColor,
                   fontSize: 12,
                 ),
@@ -113,7 +113,7 @@ class TestRiderProgramPage extends StatelessWidget {
               Container(
                 padding: AppPadding.getPadding12(context),
                 decoration: BoxDecoration(
-                  gradient: LinearGradient(
+                  gradient: const LinearGradient(
                     colors: [
                       AppColors.kPrimaryColor,
                       AppColors.kPrimaryDarkColor,
@@ -154,7 +154,7 @@ class TestRiderProgramPage extends StatelessWidget {
                             variant: TextVariant.labelMedium,
                             color: AppColors.kTextColor,
                           ),
-                          CustomTextField(
+                          const CustomTextField(
                             maxLines: 3,
                             hintText: "",
                             borderColor: Colors.transparent,

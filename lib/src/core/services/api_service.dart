@@ -1,4 +1,3 @@
-
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
@@ -61,7 +60,7 @@ class ApiService {
       ),
     );
   }
-void _logRequest(RequestOptions o) {
+  void _logRequest(RequestOptions o) {
     print('🚀 [API REQUEST] | ${o.method} | ${o.path}');
     print('🔗 File: lib/src/core/services/api_service.dart');
 

@@ -39,7 +39,7 @@ class _AddNewBikePageState extends State<AddNewBikePage> {
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<BikeProfilesController>();
-    final Color scaffoldBg = AppColors.kPrimaryDarkColor3;
+    const Color scaffoldBg = AppColors.kPrimaryDarkColor3;
     const Color borderColor = AppColors.kPrimaryDarkColor; // Light Blue Border
     const Color noteBoxBg =
         AppColors.kPrimaryDarkColor2; // Lighter Blue for Note
@@ -139,7 +139,7 @@ class _AddNewBikePageState extends State<AddNewBikePage> {
                       hint: "e.g., Red",
                       controller: colorCtrl,
                     ),
-                    CustomText(
+                    const CustomText(
                       "Build Note",
                       fontWeight: FontWeight.bold,
                       variant: TextVariant.titleMedium,
@@ -210,7 +210,7 @@ class _AddNewBikePageState extends State<AddNewBikePage> {
                                       size: 16,
                                       color: AppColors.kPrimaryColor,
                                     ),
-                                    label: CustomText(
+                                    label: const CustomText(
                                       "Add Point",
                                       color: AppColors.kPrimaryColor,
                                       fontSize: 12,
@@ -244,7 +244,7 @@ class _AddNewBikePageState extends State<AddNewBikePage> {
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(color: borderColor),
                       ),
-                      child: CustomText(
+                      child: const CustomText(
                         "Note: Your current bike will be automatically moved to the retired bikes section. You can add upgrades to this bike after creating it.",
                         color: Colors.white,
                         variant: TextVariant.labelSmall,

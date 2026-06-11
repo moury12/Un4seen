@@ -21,7 +21,9 @@ class MajorGiveawayCardWidget extends StatelessWidget {
           Stack(
             children: [
               ClipRRect(
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(appRadius16)),
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(appRadius16),
+                ),
                 child: CustomNetworkImage(
                   imageUrl: giveaway.image,
                   height: 200,
@@ -32,9 +34,20 @@ class MajorGiveawayCardWidget extends StatelessWidget {
                 top: 10,
                 left: 10,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                  decoration: BoxDecoration(color: AppColors.kPrimaryColor, borderRadius: BorderRadius.circular(20)),
-                  child: CustomText(AppStaticStrings.majorGiveaway.tr, color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppColors.kPrimaryColor,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: CustomText(
+                    AppStaticStrings.majorGiveaway.tr,
+                    color: Colors.white,
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ],
@@ -51,7 +64,9 @@ class MajorGiveawayCardWidget extends StatelessWidget {
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
               ),
-              borderRadius: BorderRadius.vertical(bottom: Radius.circular(appRadius16)),
+              borderRadius: const BorderRadius.vertical(
+                bottom: Radius.circular(appRadius16),
+              ),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -59,54 +74,105 @@ class MajorGiveawayCardWidget extends StatelessWidget {
                 Center(
                   child: Container(
                     padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(color: Colors.black26, borderRadius: BorderRadius.circular(12)),
+                    decoration: BoxDecoration(
+                      color: Colors.black26,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Icon(Icons.timer_outlined, color: Colors.white, size: 14),
+                        const Icon(
+                          Icons.timer_outlined,
+                          color: Colors.white,
+                          size: 14,
+                        ),
                         space8W,
-                        Obx(() => CustomText(
-                              "DRAW IN: Only ${controller.majorMonths.value} Months Away",
-                              color: Colors.white,
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                            )),
+                        Obx(
+                          () => CustomText(
+                            "DRAW IN: Only ${controller.majorMonths.value} Months Away",
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ],
                     ),
                   ),
                 ),
                 space12H,
                 // --- DYNAMIC MAJOR COUNTDOWN ---
-                Obx(() => Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      spacing: 12,
-                      children: [
-                        CountdownUnitWidget(value: controller.majorMonths.value, label: "MO"),
-                        CountdownUnitWidget(value: controller.majorDays.value, label: "D"),
-                        CountdownUnitWidget(value: controller.majorHours.value, label: "H"),
-                        CountdownUnitWidget(value: controller.majorMins.value, label: "M"),
-                      ],
-                    )),
+                Obx(
+                  () => Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    spacing: 12,
+                    children: [
+                      CountdownUnitWidget(
+                        value: controller.majorMonths.value,
+                        label: "MO",
+                      ),
+                      CountdownUnitWidget(
+                        value: controller.majorDays.value,
+                        label: "D",
+                      ),
+                      CountdownUnitWidget(
+                        value: controller.majorHours.value,
+                        label: "H",
+                      ),
+                      CountdownUnitWidget(
+                        value: controller.majorMins.value,
+                        label: "M",
+                      ),
+                    ],
+                  ),
+                ),
                 space12H,
-                CustomText(giveaway.title, fontWeight: FontWeight.bold, color: Colors.white),
-                CustomText(giveaway.prizeDescription, color: Colors.white70, fontSize: 12),
+                CustomText(
+                  giveaway.title,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+                CustomText(
+                  giveaway.prizeDescription,
+                  color: Colors.white70,
+                  fontSize: 12,
+                ),
                 space12H,
-                CustomText("GRAND PRIZE", color: AppColors.kPrimaryColor, fontSize: 12, fontWeight: FontWeight.bold),
-                CustomText(giveaway.title, variant: TextVariant.headlineSmall, fontWeight: FontWeight.bold, color: Colors.white),
+                const CustomText(
+                  "GRAND PRIZE",
+                  color: AppColors.kPrimaryColor,
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                ),
+                CustomText(
+                  giveaway.title,
+                  variant: TextVariant.headlineSmall,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
                 space8H,
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.white10,
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(color: Colors.white24),
                   ),
-                  child: CustomText("${AppStaticStrings.rrp.tr} \$${giveaway.valueInNzd} nzd", color: Colors.white, fontWeight: FontWeight.bold),
+                  child: CustomText(
+                    "${AppStaticStrings.rrp.tr} \$${giveaway.valueInNzd} nzd",
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 space12H,
                 Container(
                   padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(color: AppColors.kPrimaryColor, borderRadius: BorderRadius.circular(12)),
+                  decoration: BoxDecoration(
+                    color: AppColors.kPrimaryColor,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                   child: Column(
                     children: [
                       Row(
@@ -121,16 +187,21 @@ class MajorGiveawayCardWidget extends StatelessWidget {
                           ),
                           space8W,
                           Expanded(
-                              child: CustomText(
-                            AppStaticStrings.automaticEntryTitle.tr,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
-                          )),
+                            child: CustomText(
+                              AppStaticStrings.automaticEntryTitle.tr,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                            ),
+                          ),
                         ],
                       ),
                       space4H,
-                      CustomText(AppStaticStrings.automaticEntryDesc.tr, color: Colors.white, fontSize: 12),
+                      CustomText(
+                        AppStaticStrings.automaticEntryDesc.tr,
+                        color: Colors.white,
+                        fontSize: 12,
+                      ),
                     ],
                   ),
                 ),

@@ -16,8 +16,8 @@ class PointsBalanceCardWidget extends StatelessWidget {
       blurSigma: 20,
       gradient: LinearGradient(
         colors: [
-          Color(0xff0196E7).withValues(alpha: 0.5),
-          Color(0xff015A89).withValues(alpha: 0.5),
+          const Color(0xff0196E7).withValues(alpha: 0.5),
+          const Color(0xff015A89).withValues(alpha: 0.5),
         ],
       ), // boxBorder: Border.all(color: AppColors.kPrimaryColor, width: 1),
       padding: AppPadding.getPadding12(context).copyWith(bottom: 28),

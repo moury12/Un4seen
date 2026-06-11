@@ -45,8 +45,8 @@ class CreateChannelDialog extends StatelessWidget {
 
               hintText: 'Local Rides',
               fillColor: Colors.transparent,
-              hintStyle: TextStyle(color: Colors.white, fontSize: 12),
-              titleStyle: TextStyle(color: Colors.white, fontSize: 14),
+              hintStyle: const TextStyle(color: Colors.white, fontSize: 12),
+              titleStyle: const TextStyle(color: Colors.white, fontSize: 14),
             ),
             space12H,
             Row(

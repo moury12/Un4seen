@@ -8,8 +8,10 @@ class AuthRepositoryImpl implements AuthRepository {
   AuthRepositoryImpl(this._remote);
 
   @override
-  Future<Map<String, dynamic>> login({required String email, required String password}) =>
-      _remote.login(email: email, password: password);
+  Future<Map<String, dynamic>> login({
+    required String email,
+    required String password,
+  }) => _remote.login(email: email, password: password);
 
   @override
   Future<String> forgotPassword({required String email}) =>
@@ -20,8 +22,10 @@ class AuthRepositoryImpl implements AuthRepository {
       _remote.verifyOtp(email: email, otp: otp);
 
   @override
-  Future<String> resetPassword({required String email, required String newPassword}) =>
-      _remote.resetPassword(email: email, newPassword: newPassword);
+  Future<String> resetPassword({
+    required String email,
+    required String newPassword,
+  }) => _remote.resetPassword(email: email, newPassword: newPassword);
 
   @override
   Future<void> resendOtp({required String email}) =>

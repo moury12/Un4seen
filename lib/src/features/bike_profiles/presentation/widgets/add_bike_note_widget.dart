@@ -12,7 +12,9 @@ class AddBikeNoteWidget extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.kPrimaryColor.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.kPrimaryColor.withValues(alpha: 0.5)),
+        border: Border.all(
+          color: AppColors.kPrimaryColor.withValues(alpha: 0.5),
+        ),
       ),
       child: CustomText(
         AppStaticStrings.addNewBikeDetailedNote.tr,

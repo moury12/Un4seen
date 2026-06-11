@@ -23,7 +23,7 @@ class BrandCardWidget extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 16),
       padding: AppPadding.getPadding12(context),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
+        gradient: const LinearGradient(
           colors: [AppColors.kPrimaryColor, AppColors.kPrimaryDarkColor2],
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
@@ -92,7 +92,7 @@ class BrandCardWidget extends StatelessWidget {
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: Icon(
+                    child: const Icon(
                       Icons.copy,
                       color: AppColors.kPrimaryColor,
                       size: 18,

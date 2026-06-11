@@ -28,21 +28,30 @@ class ChangePasswordPage extends StatelessWidget {
                     title: AppStaticStrings.oldPasswordHint.tr,
                     hintText: '********',
                     isPassword: true,
-                    prefixIcon: const Icon(Icons.lock_outline, color: AppColors.kSecondaryTextColor),
+                    prefixIcon: const Icon(
+                      Icons.lock_outline,
+                      color: AppColors.kSecondaryTextColor,
+                    ),
                   ),
                   space12H,
                   CustomTextField(
                     title: AppStaticStrings.newPassword.tr,
                     hintText: '********',
                     isPassword: true,
-                    prefixIcon: const Icon(Icons.lock_outline, color: AppColors.kSecondaryTextColor),
+                    prefixIcon: const Icon(
+                      Icons.lock_outline,
+                      color: AppColors.kSecondaryTextColor,
+                    ),
                   ),
                   space12H,
                   CustomTextField(
                     title: AppStaticStrings.confirmPasswordHint.tr,
                     hintText: '********',
                     isPassword: true,
-                    prefixIcon: const Icon(Icons.lock_outline, color: AppColors.kSecondaryTextColor),
+                    prefixIcon: const Icon(
+                      Icons.lock_outline,
+                      color: AppColors.kSecondaryTextColor,
+                    ),
                   ),
                   space24H,
                   CustomButton(

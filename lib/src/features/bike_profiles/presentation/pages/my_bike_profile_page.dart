@@ -20,7 +20,7 @@ class MyBikeProfilePage extends StatelessWidget {
           Container(
             margin: const EdgeInsets.only(right: 12),
             padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: AppColors.kPrimaryDarkColor2,
               shape: BoxShape.circle,
             ),
@@ -38,9 +38,9 @@ class MyBikeProfilePage extends StatelessWidget {
           child: Obx(() {
             if (controller.isLoading.value &&
                 controller.activeBike.value == null) {
-              return Padding(
-                padding: const EdgeInsets.all(12),
-                child: const BikeShimmerLoading(),
+              return const Padding(
+                padding: EdgeInsets.all(12),
+                child: BikeShimmerLoading(),
               );
             }
 
@@ -53,7 +53,7 @@ class MyBikeProfilePage extends StatelessWidget {
                   padding: AppPadding.getPadding12H(context),
                   sliver: SliverList(
                     delegate: SliverChildListDelegate([
-                      if (bike == null) ...[ 
+                      if (bike == null) ...[
                         const SizedBox(height: 100),
                         Center(
                           child: CustomText(

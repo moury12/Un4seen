@@ -1,7 +1,6 @@
 import '../../../../src_export.dart';
 import '../widgets/upload_ride_dialog.dart';
 
-
 class RateRidePage extends StatelessWidget {
   const RateRidePage({super.key});
 
@@ -38,7 +37,8 @@ class RateRidePage extends StatelessWidget {
         return NotificationListener<ScrollNotification>(
           onNotification: (ScrollNotification scrollInfo) {
             // Logic for pagination (load more)
-            if (scrollInfo.metrics.pixels == scrollInfo.metrics.maxScrollExtent) {
+            if (scrollInfo.metrics.pixels ==
+                scrollInfo.metrics.maxScrollExtent) {
               controller.loadMore();
             }
             return false;
@@ -69,7 +69,11 @@ class RateRidePage extends StatelessWidget {
                           ),
                           child: Row(
                             children: [
-                              const Icon(Icons.emoji_events_outlined, color: Colors.white, size: 18),
+                              const Icon(
+                                Icons.emoji_events_outlined,
+                                color: Colors.white,
+                                size: 18,
+                              ),
                               space8W,
                               CustomText(
                                 AppStaticStrings.votingEndsSunday.tr,
@@ -89,18 +93,15 @@ class RateRidePage extends StatelessWidget {
                 SliverPadding(
                   padding: AppPadding.getPadding12H(context),
                   sliver: SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 16),
-                          child: RateRideCardWidget(
-                            ride: controller.rides[index],
-                            index: index,
-                          ),
-                        );
-                      },
-                      childCount: controller.rides.length,
-                    ),
+                    delegate: SliverChildBuilderDelegate((context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 16),
+                        child: RateRideCardWidget(
+                          ride: controller.rides[index],
+                          index: index,
+                        ),
+                      );
+                    }, childCount: controller.rides.length),
                   ),
                 ),
 
@@ -112,7 +113,7 @@ class RateRidePage extends StatelessWidget {
                       child: Center(child: CircularProgressIndicator()),
                     ),
                   ),
-                
+
                 // Extra padding at the bottom
                 const SliverToBoxAdapter(child: SizedBox(height: 40)),
               ],

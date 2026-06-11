@@ -5,10 +5,7 @@ import '../../../../core/core_export.dart';
 class ConnectSectionWidget extends StatelessWidget {
   final Color bgColor;
 
-  const ConnectSectionWidget({
-    super.key,
-    required this.bgColor,
-  });
+  const ConnectSectionWidget({super.key, required this.bgColor});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +19,12 @@ class ConnectSectionWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CustomText("Connect", variant: TextVariant.titleMedium, fontWeight: FontWeight.bold, color: Colors.white),
+          const CustomText(
+            "Connect",
+            variant: TextVariant.titleMedium,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
           space8H,
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
@@ -47,13 +49,19 @@ class ConnectSectionWidget extends StatelessWidget {
         color: Colors.white,
         borderRadius: BorderRadius.circular(8),
       ),
-      child: Row(spacing: 6,
+      child: Row(
+        spacing: 6,
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-         SvgPicture.asset(icon),
-        
-          CustomText(label, variant: TextVariant.labelMedium, fontWeight: FontWeight.bold, color: Colors.black),
+          SvgPicture.asset(icon),
+
+          CustomText(
+            label,
+            variant: TextVariant.labelMedium,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
           const Icon(Icons.open_in_new, size: 18, color: Colors.grey),
         ],
       ),

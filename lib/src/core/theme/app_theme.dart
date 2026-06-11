@@ -101,10 +101,9 @@ class AppTheme {
         color: AppColors.kTextColor,
       ),
     ),
-    progressIndicatorTheme: ProgressIndicatorThemeData(
+    progressIndicatorTheme: const ProgressIndicatorThemeData(
       color: AppColors.kPrimaryColor,
       strokeWidth: 5,
-      
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(

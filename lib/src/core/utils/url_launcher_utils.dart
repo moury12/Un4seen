@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:url_launcher/url_launcher.dart';
 import '../widgets/custom_snackbar.dart';
 
@@ -8,7 +6,7 @@ class UrlLauncherUtils {
 
   static Future<void> launchExternalUrl(String urlString) async {
     final Uri url = Uri.parse(urlString);
-    
+
     try {
       // On iOS, sometimes canLaunchUrl returns false even if it can open.
       // We try to launch directly and catch the error.
@@ -16,7 +14,7 @@ class UrlLauncherUtils {
         url,
         mode: LaunchMode.externalApplication,
       );
-      
+
       if (!launched) {
         CustomSnackbar.showError("Could not open the link");
       }

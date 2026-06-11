@@ -66,8 +66,9 @@ class _EmailConfirmationPageState extends State<EmailConfirmationPage> {
                   textEditingController: emailCtrl,
                   keyboardType: TextInputType.emailAddress,
                   isRequired: true,
-                  validator: (value) =>
-                      GetUtils.isEmail(value ?? '') ? null : 'Enter a valid email',
+                  validator: (value) => GetUtils.isEmail(value ?? '')
+                      ? null
+                      : 'Enter a valid email',
                   prefixIcon: const Icon(
                     Icons.email_outlined,
                     color: AppColors.kSecondaryTextColor,

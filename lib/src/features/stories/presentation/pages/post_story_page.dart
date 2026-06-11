@@ -1,4 +1,5 @@
 import 'package:un4seen/src/features/stories/presentation/controllers/story_controller.dart';
+import 'package:un4seen/src/features/stories/presentation/widgets/music_selection_sheet.dart';
 import 'package:un4seen/src/features/stories/presentation/widgets/post_story_dropdown.dart';
 import 'package:un4seen/src/src_export.dart';
 import '../widgets/post_story_header.dart';
@@ -80,7 +81,7 @@ class PostStoryPage extends StatelessWidget {
               color: AppColors.kPrimaryColor,
             ),
             space24H,
-            CustomText(
+            const CustomText(
               "Select Image Source", // Should ideally be from AppStaticStrings, using hardcoded fallback if missing
               variant: TextVariant.titleLarge,
               color: Colors.white,
@@ -208,7 +209,7 @@ class PostStoryPage extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CustomText(
+              const CustomText(
                 "Select Filter",
                 variant: TextVariant.titleMedium,
                 color: Colors.white,
@@ -258,58 +259,13 @@ class PostStoryPage extends StatelessWidget {
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
       builder: (BuildContext context) {
-        return Container(
-          padding: const EdgeInsets.all(24),
-          decoration: const BoxDecoration(
-            color: AppColors.kPrimaryDarkColor3,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              CustomText(
-                "Add Music",
-                variant: TextVariant.titleMedium,
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-              ),
-              CustomTextField(
-                title: "Search",
-                titleStyle: TextStyle(color: Colors.white, fontSize: 14),
-              ),
-              space16H,
-              Material(
-                color: Colors.transparent,
-                child: Column(
-                  children: musicOptions.map((music) {
-                    return ListTile(
-                      contentPadding: EdgeInsets.zero,
-                      title: CustomText(music, color: Colors.white),
-                      onTap: () {
-                        controller.selectedMusic.value = music;
-                        Navigator.pop(context);
-                      },
-                      trailing: Obx(
-                        () => controller.selectedMusic.value == music
-                            ? const Icon(
-                                Icons.check,
-                                color: AppColors.kPrimaryColor,
-                              )
-                            : const SizedBox.shrink(),
-                      ),
-                    );
-                  }).toList(),
-                ),
-              ),
-              space16H,
-            ],
-          ),
+        return const FractionallySizedBox(
+          heightFactor: 0.8, // Make it large for better browsing
+          child: MusicSelectionSheet(),
         );
       },
     );
   }
-
   Widget _buildDetailsForm(BuildContext context) {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),

@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import '../../../../src_export.dart';
 
 class MessageBubbleWidget extends StatelessWidget {
@@ -21,7 +20,9 @@ class MessageBubbleWidget extends StatelessWidget {
       alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
       child: Container(
         margin: const EdgeInsets.only(bottom: 12),
-        constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.75),
+        constraints: BoxConstraints(
+          maxWidth: MediaQuery.of(context).size.width * 0.75,
+        ),
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
           color: isMe ? AppColors.kPrimaryColor : Colors.white,

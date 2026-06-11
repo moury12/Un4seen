@@ -39,7 +39,10 @@ class _SocialShareTileState extends State<SocialShareTile> {
     return GradientContainer(
       margin: const EdgeInsets.only(bottom: 8),
       padding: EdgeInsets.zero,
-      gradientColors: [AppColors.kPrimaryDarkColor, AppColors.kPrimaryColor],
+      gradientColors: const [
+        AppColors.kPrimaryDarkColor,
+        AppColors.kPrimaryColor,
+      ],
       child: ButtonTapWidget(
         onTap: widget.onTap,
         child: Padding(
@@ -97,7 +100,10 @@ class _SocialShareTileState extends State<SocialShareTile> {
                   onTap: () {
                     showDialog(
                       context: context,
-                      builder: (context) => SubmitProofDialog(platformCtrl: _platformCtrl, postLinkCtrl: _postLinkCtrl),
+                      builder: (context) => SubmitProofDialog(
+                        platformCtrl: _platformCtrl,
+                        postLinkCtrl: _postLinkCtrl,
+                      ),
                     );
                   },
                   child: Padding(
@@ -126,22 +132,21 @@ class SubmitProofDialog extends StatelessWidget {
     super.key,
     required TextEditingController platformCtrl,
     required TextEditingController postLinkCtrl,
-  }) : _platformCtrl = platformCtrl, _postLinkCtrl = postLinkCtrl;
+  }) : _platformCtrl = platformCtrl,
+       _postLinkCtrl = postLinkCtrl;
 
   final TextEditingController _platformCtrl;
   final TextEditingController _postLinkCtrl;
 
   @override
   Widget build(BuildContext context) {
-        final pointsCtrl = Get.find<PointsController>();
+    final pointsCtrl = Get.find<PointsController>();
 
     return Dialog(
       backgroundColor: AppColors.kPrimaryDarkColor3,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
-        side: const BorderSide(
-          color: AppColors.kPrimaryColor,
-        ),
+        side: const BorderSide(color: AppColors.kPrimaryColor),
       ),
       child: Padding(
         padding: AppPadding.getPadding12(context),
@@ -152,49 +157,38 @@ class SubmitProofDialog extends StatelessWidget {
             children: [
               // Header
               Row(
-                mainAxisAlignment:
-                    MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Expanded(child: SizedBox.shrink()),
+                  const Expanded(child: SizedBox.shrink()),
                   IconButton(
                     onPressed: () => Navigator.pop(context),
-                    icon: const Icon(
-                      Icons.close,
-                      color: Colors.white,
-                    ),
+                    icon: const Icon(Icons.close, color: Colors.white),
                     style: IconButton.styleFrom(
-                      backgroundColor:
-                          AppColors.kPrimaryColor,
+                      backgroundColor: AppColors.kPrimaryColor,
                     ),
                   ),
                 ],
               ),
-              const Divider(
-                color: Colors.white10,
-                height: 24,
-              ),
-    
+              const Divider(color: Colors.white10, height: 24),
+
               CustomText(
                 AppStaticStrings.uploadDesignImage.tr,
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
               ),
               space8H,
-    
+
               // Image Picker Section
               Obx(() {
-                return pointsCtrl.selectedProofImage.value ==
-                        null
+                return pointsCtrl.selectedProofImage.value == null
                     ? ButtonTapWidget(
-                        onTap: () =>
-                            pointsCtrl.pickProofImage(),
+                        onTap: () => pointsCtrl.pickProofImage(),
                         child: Container(
                           height: 100,
                           width: double.infinity,
                           decoration: BoxDecoration(
                             color: Colors.black26,
-                            borderRadius:
-                                BorderRadius.circular(12),
+                            borderRadius: BorderRadius.circular(12),
                           ),
                           child: const Icon(
                             Icons.camera_alt_outlined,
@@ -209,17 +203,13 @@ class SubmitProofDialog extends StatelessWidget {
                         clipBehavior: Clip.hardEdge,
                         decoration: BoxDecoration(
                           color: Colors.black26,
-                          borderRadius: BorderRadius.circular(
-                            12,
-                          ),
+                          borderRadius: BorderRadius.circular(12),
                         ),
                         child: Stack(
                           children: [
                             Positioned.fill(
                               child: Image.file(
-                                pointsCtrl
-                                    .selectedProofImage
-                                    .value!,
+                                pointsCtrl.selectedProofImage.value!,
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -227,18 +217,13 @@ class SubmitProofDialog extends StatelessWidget {
                               bottom: 8,
                               right: 8,
                               child: ButtonTapWidget(
-                                onTap: () => pointsCtrl
-                                    .pickProofImage(),
+                                onTap: () => pointsCtrl.pickProofImage(),
                                 child: Container(
-                                  padding:
-                                      const EdgeInsets.all(8),
-                                  decoration:
-                                      const BoxDecoration(
-                                        shape:
-                                            BoxShape.circle,
-                                        color: AppColors
-                                            .kPrimaryColor,
-                                      ),
+                                  padding: const EdgeInsets.all(8),
+                                  decoration: const BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: AppColors.kPrimaryColor,
+                                  ),
                                   child: const Icon(
                                     Icons.refresh,
                                     color: Colors.white,
@@ -252,21 +237,19 @@ class SubmitProofDialog extends StatelessWidget {
                       );
               }),
               space12H,
-    
+
               // Input Fields
               CustomTextField(
                 fillColor: Colors.transparent,
-                hintStyle: TextStyle(
+                hintStyle: const TextStyle(
                   color: AppColors.kWhiteTextColor,
                   fontSize: 10,
                 ),
                 title: AppStaticStrings.platform.tr,
                 hintText: "Eg. Facebook",
                 textEditingController: _platformCtrl,
-    
-                inputTextStyle: const TextStyle(
-                  color: Colors.white,
-                ),
+
+                inputTextStyle: const TextStyle(color: Colors.white),
                 titleStyle: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
@@ -275,17 +258,15 @@ class SubmitProofDialog extends StatelessWidget {
               space12H,
               CustomTextField(
                 fillColor: Colors.transparent,
-                hintStyle: TextStyle(
+                hintStyle: const TextStyle(
                   color: AppColors.kWhiteTextColor,
                   fontSize: 10,
                 ),
                 title: AppStaticStrings.postLink.tr,
                 hintText: "eg. https://ig.me/xyz",
                 textEditingController: _postLinkCtrl,
-    
-                inputTextStyle: const TextStyle(
-                  color: Colors.white,
-                ),
+
+                inputTextStyle: const TextStyle(color: Colors.white),
                 titleStyle: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
@@ -294,20 +275,14 @@ class SubmitProofDialog extends StatelessWidget {
               space8H,
               Obx(
                 () => CustomButton(
-                  text: AppStaticStrings
-                      .uploadEnterCompetition
-                      .tr,
-                  isLoading:
-                      pointsCtrl.isSubmittingProof.value,
+                  text: AppStaticStrings.uploadEnterCompetition.tr,
+                  isLoading: pointsCtrl.isSubmittingProof.value,
                   onPressed: () async {
-                    final isSuccess = await pointsCtrl
-                        .submitProof(
-                          platform: _platformCtrl.text.trim(),
-                          postLink: _postLinkCtrl.text.trim(),
-                          imageFile: pointsCtrl
-                              .selectedProofImage
-                              .value!,
-                        );
+                    final isSuccess = await pointsCtrl.submitProof(
+                      platform: _platformCtrl.text.trim(),
+                      postLink: _postLinkCtrl.text.trim(),
+                      imageFile: pointsCtrl.selectedProofImage.value!,
+                    );
                     if (isSuccess) {
                       context.pop();
                     } else {

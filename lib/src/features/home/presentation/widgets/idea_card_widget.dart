@@ -1,29 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../core/core_export.dart';
+import '../../data/models/idea_model.dart';
 
 class IdeaCardWidget extends StatelessWidget {
-  final String icon;
-  final String title;
-  final String description;
-  final String userName;
-  final String date;
-  final int upvotes;
-  final String userImage;
+  final IdeaModel model;
+  final VoidCallback onUpvote;
 
   const IdeaCardWidget({
     super.key,
-    required this.icon,
-    required this.title,
-    required this.description,
-    required this.userName,
-    required this.date,
-    required this.upvotes,
-    required this.userImage,
+    required this.model,
+    required this.onUpvote,
   });
 
   @override
   Widget build(BuildContext context) {
+    // Dynamically select icon based on category/title content
+    String icon = AppIcons.ideas;
+    final categoryLower = model.category.toLowerCase();
+    if (categoryLower.contains('meetup') ||
+        categoryLower.contains('chat') ||
+        categoryLower.contains('feedback')) {
+      icon = AppIcons.chat;
+    } else if (categoryLower.contains('cell') ||
+        categoryLower.contains('phone') ||
+        categoryLower.contains('decal')) {
+      icon = AppIcons.cell;
+    } else if (categoryLower.contains('pad') ||
+        categoryLower.contains('color') ||
+        categoryLower.contains('design') ||
+        categoryLower.contains('plate')) {
+      icon = AppIcons.colorPlate;
+    }
+
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(12),
@@ -69,7 +78,7 @@ class IdeaCardWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CustomText(
-                  title,
+                  model.title,
                   variant: TextVariant.titleMedium,
                   fontSize: 14,
                   color: Colors.white,
@@ -77,7 +86,7 @@ class IdeaCardWidget extends StatelessWidget {
                 ),
                 space4H,
                 CustomText(
-                  description,
+                  model.description,
                   variant: TextVariant.bodySmall,
                   fontSize: 12,
                   color: Colors.white,
@@ -89,11 +98,15 @@ class IdeaCardWidget extends StatelessWidget {
                   children: [
                     CircleAvatar(
                       radius: 10,
-                      backgroundImage: NetworkImage(userImage),
+                      backgroundImage: model.user.image.isNotEmpty
+                          ? NetworkImage(model.user.image)
+                          : const NetworkImage(
+                              'https://i.pravatar.cc/150?u=temp_user',
+                            ),
                     ),
                     space8W,
                     CustomText(
-                      '$userName • $date',
+                      '${model.user.fullName} • ${formatDate(model.createdAt)}',
                       variant: TextVariant.labelSmall,
                       color: Colors.white,
                     ),
@@ -103,29 +116,36 @@ class IdeaCardWidget extends StatelessWidget {
             ),
           ),
           space8W,
-          // Upvote badge
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Icon(
-                  Icons.thumb_up_outlined,
-                  size: 16,
-                  color: AppColors.kPrimaryColor,
-                ),
-                space4H,
-                CustomText(
-                  upvotes.toString(),
-                  variant: TextVariant.labelSmall,
-                  color: AppColors.kPrimaryColor,
-                  fontWeight: FontWeight.bold,
-                ),
-              ],
+          // Upvote button
+          GestureDetector(
+            onTap: onUpvote,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              decoration: BoxDecoration(
+                color: model.isUpvoted
+                    ? Colors.white
+                    : Colors.white.withValues(alpha: 0.15),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    model.isUpvoted ? Icons.thumb_up : Icons.thumb_up_outlined,
+                    size: 16,
+                    color:
+                        model.isUpvoted ? AppColors.kPrimaryColor : Colors.white,
+                  ),
+                  space4H,
+                  CustomText(
+                    model.upvoteCount.toString(),
+                    variant: TextVariant.labelSmall,
+                    color:
+                        model.isUpvoted ? AppColors.kPrimaryColor : Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ],
+              ),
             ),
           ),
         ],

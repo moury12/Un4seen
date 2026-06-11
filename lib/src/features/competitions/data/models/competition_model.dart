@@ -37,8 +37,12 @@ class CompetitionModel {
       image: json['image'] ?? '',
       grandPrize: json['grandPrize'] ?? '',
       rules: List<String>.from(json['rules'] ?? []),
-      startDate: DateTime.parse(json['startDate'] ?? DateTime.now().toIso8601String()),
-      endDate: DateTime.parse(json['endDate'] ?? DateTime.now().toIso8601String()),
+      startDate: DateTime.parse(
+        json['startDate'] ?? DateTime.now().toIso8601String(),
+      ),
+      endDate: DateTime.parse(
+        json['endDate'] ?? DateTime.now().toIso8601String(),
+      ),
       status: json['status'] ?? '',
       statusLabel: json['statusLabel'] ?? '',
       canSubmit: json['canSubmit'] ?? false,

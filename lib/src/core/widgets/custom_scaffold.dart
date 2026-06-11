@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../utils/app_images.dart';
 
 class CustomScaffold extends StatelessWidget {
   final Widget body;

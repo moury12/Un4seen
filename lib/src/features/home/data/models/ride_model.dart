@@ -6,19 +6,25 @@ class RideFeedModel {
 
   factory RideFeedModel.fromJson(Map<String, dynamic> json) {
     return RideFeedModel(
-      result: (json['result'] as List).map((e) => RideModel.fromJson(e)).toList(),
+      result: (json['result'] as List)
+          .map((e) => RideModel.fromJson(e))
+          .toList(),
       meta: PaginationMeta.fromJson(json['meta']), // Changed from MetaData
     );
   }
 }
 
 // Renamed class to avoid conflict with Flutter's MetaData widget
-class PaginationMeta { 
+class PaginationMeta {
   final int page;
   final int totalPage;
   final int total;
 
-  PaginationMeta({required this.page, required this.totalPage, required this.total});
+  PaginationMeta({
+    required this.page,
+    required this.totalPage,
+    required this.total,
+  });
 
   factory PaginationMeta.fromJson(Map<String, dynamic> json) {
     return PaginationMeta(
@@ -69,7 +75,11 @@ class RideUser {
   final String memberNumber;
   final String image;
 
-  RideUser({required this.fullName, required this.memberNumber, required this.image});
+  RideUser({
+    required this.fullName,
+    required this.memberNumber,
+    required this.image,
+  });
 
   factory RideUser.fromJson(Map<String, dynamic> json) {
     return RideUser(

@@ -29,7 +29,10 @@ class ItemCard extends StatelessWidget {
                 color: AppColors.kPrimaryColor.withValues(alpha: .12),
                 borderRadius: BorderRadius.circular(appRadius),
               ),
-              child: const Icon(Icons.inbox_outlined, color: AppColors.kPrimaryColor),
+              child: const Icon(
+                Icons.inbox_outlined,
+                color: AppColors.kPrimaryColor,
+              ),
             ),
             space12H,
             Expanded(
@@ -46,7 +49,10 @@ class ItemCard extends StatelessWidget {
                 ],
               ),
             ),
-            const Icon(Icons.chevron_right, color: AppColors.kSecondaryTextColor),
+            const Icon(
+              Icons.chevron_right,
+              color: AppColors.kSecondaryTextColor,
+            ),
           ],
         ),
       ),

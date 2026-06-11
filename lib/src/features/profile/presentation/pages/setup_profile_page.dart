@@ -338,15 +338,15 @@ class _SetupProfilePageState extends State<SetupProfilePage> {
                   color: AppColors.kPrimaryDarkColor,
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: Row(
+                child: const Row(
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.info_outline,
                       color: AppColors.kGoldColor,
                       size: 20,
                     ),
                     space8W,
-                    const Expanded(
+                    Expanded(
                       child: CustomText(
                         'Your date of birth is locked after submission and cannot be changed.',
                         variant: TextVariant.labelSmall,

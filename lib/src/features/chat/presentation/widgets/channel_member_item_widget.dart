@@ -37,14 +37,8 @@ class ChannelMemberItemWidget extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CustomText(
-                  name,
-                  fontWeight: FontWeight.bold,
-                ),
-                 CustomText(
-                  "#srt434",
-               
-                ),
+                CustomText(name, fontWeight: FontWeight.bold),
+                const CustomText("#srt434"),
               ],
             ),
           ),
@@ -67,12 +61,16 @@ class ChannelMemberItemWidget extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
               decoration: BoxDecoration(
-                color: isAdded ? AppColors.kBackgroundColor : AppColors.kPrimaryColor,
+                color: isAdded
+                    ? AppColors.kBackgroundColor
+                    : AppColors.kPrimaryColor,
                 borderRadius: BorderRadius.circular(appRadius),
               ),
               child: CustomText(
                 isAdded ? AppStaticStrings.remove.tr : AppStaticStrings.add.tr,
-                color: isAdded ? AppColors.kTextColor : AppColors.kWhiteTextColor,
+                color: isAdded
+                    ? AppColors.kTextColor
+                    : AppColors.kWhiteTextColor,
                 fontWeight: FontWeight.bold,
               ),
             ),

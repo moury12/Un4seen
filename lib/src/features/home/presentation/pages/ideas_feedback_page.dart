@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:get/get_utils/src/extensions/internacionalization.dart';
+import 'package:get/get.dart';
 import '../../../../core/core_export.dart';
-import '../widgets/idea_card_widget.dart';
+import '../controllers/ideas_controller.dart';
 import '../widgets/how_it_works_widget.dart';
+import '../widgets/idea_card_widget.dart';
 import '../widgets/share_idea_dialog.dart';
 
 class IdeasFeedbackPage extends StatelessWidget {
@@ -10,19 +11,17 @@ class IdeasFeedbackPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(IdeasController());
+
     return Scaffold(
       backgroundColor: AppColors.kBackgroundColor,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        // leading: IconButton(
-        //   icon: const Icon(Icons.arrow_back, color: AppColors.kTextColor),
-        //   onPressed: () => Navigator.pop(context),
-        // ),
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-           CustomText(
+            CustomText(
               AppStaticStrings.ideasAndFeedback.tr,
               variant: TextVariant.headlineLarge,
               fontWeight: FontWeight.bold,
@@ -32,7 +31,8 @@ class IdeasFeedbackPage extends StatelessWidget {
               AppStaticStrings.helpShapeFuture.tr,
               variant: TextVariant.bodyMedium,
               color: AppColors.kSecondaryTextColor,
-            ),  ],
+            ),
+          ],
         ),
         actions: [
           Padding(
@@ -51,43 +51,101 @@ class IdeasFeedbackPage extends StatelessWidget {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        padding: AppPadding.getPadding12(context),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-    
-            // Example data as per screenshot
-            const IdeaCardWidget(
-              icon: AppIcons.chat,
-              title: 'Monthly Riding Meetups',
-              description: 'Organize monthly local meetups for the Syndicate community to ride together',
-              userName: 'Mike D',
-              date: '4/23/2026',
-              upvotes: 56,
-              userImage: 'https://i.pravatar.cc/150?u=mike',
+      body: RefreshIndicator(
+        onRefresh: () => controller.fetchIdeas(isRefresh: true),
+        color: AppColors.kPrimaryColor,
+        backgroundColor: AppColors.kPrimaryDarkColor3,
+        child: Obx(() {
+          return NotificationListener<ScrollNotification>(
+            onNotification: (notification) {
+              if (notification.metrics.pixels >=
+                  notification.metrics.maxScrollExtent - 100) {
+                controller.loadMore();
+              }
+              return false;
+            },
+            child: CustomScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              slivers: [
+                // 1. Shimmer Loading State
+                if (controller.isLoading.value && controller.ideas.isEmpty)
+                  SliverPadding(
+                    padding: AppPadding.getPadding12(context),
+                    sliver: SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) => _buildShimmerItem(),
+                        childCount: 5,
+                      ),
+                    ),
+                  )
+
+                // 2. Empty State
+                else if (controller.ideas.isEmpty)
+                  const SliverFillRemaining(
+                    hasScrollBody: false,
+                    child: Center(
+                      child: CustomText(
+                        "No ideas yet. Be the first!",
+                        variant: TextVariant.bodyLarge,
+                        color: AppColors.kSecondaryTextColor,
+                      ),
+                    ),
+                  )
+
+                // 3. The List
+                else
+                  SliverPadding(
+                    padding: AppPadding.getPadding12(context),
+                    sliver: SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) {
+                          final idea = controller.ideas[index];
+                          return IdeaCardWidget(
+                            model: idea,
+                            onUpvote: () => controller.toggleUpvote(index),
+                          );
+                        },
+                        childCount: controller.ideas.length,
+                      ),
+                    ),
+                  ),
+
+                // 4. Load More Indicator
+                if (controller.isMoreLoading.value)
+                  const SliverToBoxAdapter(
+                    child: Padding(
+                      padding: EdgeInsets.all(16),
+                      child: Center(
+                        child: CircularProgressIndicator(
+                          color: AppColors.kPrimaryColor,
+                        ),
+                      ),
+                    ),
+                  ),
+
+                // 5. How It Works Widget at bottom
+                const SliverPadding(
+                  padding: EdgeInsets.symmetric(horizontal: 12),
+                  sliver: SliverToBoxAdapter(
+                    child: HowItWorksWidget(),
+                  ),
+                ),
+                const SliverToBoxAdapter(child: SizedBox(height: 30)),
+              ],
             ),
-            const IdeaCardWidget(
-              icon: AppIcons.cell,
-              title: 'Make Decals for Cell Phones',
-              description: 'Make custom decals for all models of cell phones',
-              userName: 'Sarah',
-              date: '4/25/2026',
-              upvotes: 42,
-              userImage: 'https://i.pravatar.cc/150?u=sarah',
-            ),
-            const IdeaCardWidget(
-              icon: AppIcons.colorPlate,
-              title: 'Make Custom Bar Pads',
-              description: 'Make bar pads for dirtbikes that are customizable on the Un4seen website and then we can order',
-              userName: 'Sarah',
-              date: '4/25/2026',
-              upvotes: 42,
-              userImage: 'https://i.pravatar.cc/150?u=sarah2',
-            ),
-            const HowItWorksWidget(),
-          ],
-        ),
+          );
+        }),
+      ),
+    );
+  }
+
+  Widget _buildShimmerItem() {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      height: 120,
+      decoration: BoxDecoration(
+        color: AppColors.kPrimaryDarkColor.withValues(alpha: 0.3),
+        borderRadius: BorderRadius.circular(12),
       ),
     );
   }
