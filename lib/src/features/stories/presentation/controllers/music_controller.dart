@@ -77,7 +77,7 @@ class MusicController extends GetxController {
     musicList.refresh();
 
     try {
-      await _api.patch('/music/favorite/${music.id}');
+      await _api.post('/music/favorite/${music.id}');
     } catch (e) {
       music.isFavorite = original;
       musicList.refresh();

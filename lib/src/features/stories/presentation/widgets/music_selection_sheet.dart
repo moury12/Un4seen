@@ -24,16 +24,28 @@ class MusicSelectionSheet extends StatelessWidget {
           // Handle
           Center(
             child: Container(
-              width: 40, height: 4,
-              decoration: BoxDecoration(color: Colors.white24, borderRadius: BorderRadius.circular(2)),
+              width: 40,
+              height: 4,
+              decoration: BoxDecoration(
+                color: Colors.white24,
+                borderRadius: BorderRadius.circular(2),
+              ),
             ),
           ),
           space12H,
-          CustomText("Add Music", variant: TextVariant.titleLarge, color: Colors.white, fontWeight: FontWeight.bold),
+          const CustomText(
+            "Add Music",
+            variant: TextVariant.titleLarge,
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
           space12H,
           CustomTextField(
             hintText: "Search music...",
-            prefixIcon: const Icon(Icons.search, color: Colors.white54),
+            prefixIcon: const Icon(
+              Icons.search,
+              color: AppColors.kPrimaryDarkColor,
+            ),
             onChanged: (v) {
               controller.searchQuery.value = v;
               controller.fetchMusic();
@@ -41,36 +53,43 @@ class MusicSelectionSheet extends StatelessWidget {
           ),
           space12H,
           // Categories
-          Obx(() => SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: controller.categories.map((cat) {
-                final isSelected = controller.selectedCategory.value == cat;
-                return Padding(
-                  padding: const EdgeInsets.only(right: 8.0),
-                  child: ChoiceChip(
-                    label: CustomText(cat, color: isSelected ? Colors.white : Colors.white70),
-                    selected: isSelected,
-                    onSelected: (v) {
-                      controller.selectedCategory.value = cat;
-                      controller.fetchMusic();
-                    },
-                    selectedColor: AppColors.kPrimaryColor,
-                    backgroundColor: Colors.white10,
-                  ),
-                );
-              }).toList(),
+          Obx(
+            () => SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: controller.categories.map((cat) {
+                  final isSelected = controller.selectedCategory.value == cat;
+                  return Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: ChoiceChip(
+                      label: CustomText(
+                        cat,
+                        color: isSelected ? Colors.white : Colors.black,
+                      ),
+                      selected: isSelected,
+                      onSelected: (v) {
+                        controller.selectedCategory.value = cat;
+                        controller.fetchMusic();
+                      },
+                      selectedColor: AppColors.kPrimaryColor,
+                      backgroundColor: Colors.white10,
+                    ),
+                  );
+                }).toList(),
+              ),
             ),
-          )),
+          ),
           space12H,
           // Music List
           Flexible(
             child: Obx(() {
-              if (controller.isLoading.value) return const Center(child: CircularProgressIndicator());
+              if (controller.isLoading.value)
+                return const Center(child: CircularProgressIndicator());
               return ListView.separated(
                 shrinkWrap: true,
                 itemCount: controller.musicList.length,
-                separatorBuilder: (_, __) => const Divider(color: Colors.white10),
+                separatorBuilder: (_, __) =>
+                    const Divider(color: Colors.white10),
                 itemBuilder: (context, index) {
                   final music = controller.musicList[index];
                   return MusicListItem(

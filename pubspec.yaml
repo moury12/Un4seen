@@ -54,6 +54,7 @@ dependencies:
   path_provider: ^2.1.5
   url_launcher: ^6.3.2
   just_audio: ^0.9.36
+  lindi_sticker_widget: ^1.1.0
 
 dev_dependencies:
   flutter_test:
