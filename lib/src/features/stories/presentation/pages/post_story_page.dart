@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:un4seen/src/features/stories/presentation/controllers/story_controller.dart';
+import 'package:un4seen/src/features/stories/presentation/widgets/category_selection_sheet.dart';
 import 'package:un4seen/src/features/stories/presentation/widgets/music_selection_sheet.dart';
 import 'package:un4seen/src/src_export.dart';
 import '../widgets/post_story_header.dart';
@@ -7,14 +10,6 @@ import 'package:pro_image_editor/pro_image_editor.dart';
 
 class PostStoryPage extends StatelessWidget {
   PostStoryPage({super.key});
-
-  final List<String> categories = [
-    'Bikes',
-    'Orders',
-    'Installs',
-    'Winners',
-    'Behind Scenes',
-  ];
 
   final controller = Get.put(StoryController());
 
@@ -207,6 +202,14 @@ class PostStoryPage extends StatelessWidget {
                       Icons.music_note,
                       () => _showMusicSheet(context),
                     ),
+
+                    space16H,
+
+                    // Category Selection
+                    _buildCircularIconButton(
+                      Icons.label,
+                      () => _showCategorySheet(context),
+                    ),
                   ],
                 ),
               ),
@@ -217,13 +220,29 @@ class PostStoryPage extends StatelessWidget {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
           color: const Color(0xFF0B0B15),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              _buildCircularIconButton(Icons.arrow_forward_ios, () {
-                controller.isEditingDetails.value = true;
-              }),
-            ],
+          child: Obx(
+            () => Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                if (controller.isLoading.value)
+                  CustomText(
+                    controller.loadingStatus.value,
+                    color: Colors.white70,
+                    fontSize: 12,
+                  ),
+                const Spacer(),
+                controller.isLoading.value
+                    ? const SizedBox(
+                        height: 24,
+                        width: 24,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                    : _buildCircularIconButton(
+                        Icons.arrow_forward_ios,
+                        () => controller.createStory(),
+                      ),
+              ],
+            ),
           ),
         ),
       ],
@@ -241,6 +260,14 @@ class PostStoryPage extends StatelessWidget {
         ),
         child: Icon(icon, color: Colors.white, size: 24),
       ),
+    );
+  }
+
+  void _showCategorySheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (context) => const CategorySelectionSheet(),
     );
   }
 

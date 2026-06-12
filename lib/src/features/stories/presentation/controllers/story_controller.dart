@@ -1,11 +1,15 @@
+import 'dart:convert';
 import 'dart:typed_data';
-
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
-
+import 'package:dio/dio.dart' as dio;
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:un4seen/src/core/core_export.dart';
+import 'package:un4seen/src/core/services/api_service.dart';
 
 class StoryController extends GetxController {
   final RxBool isSoundOn = true.obs;
@@ -19,25 +23,39 @@ class StoryController extends GetxController {
   final RxBool isEditingDetails = false.obs;
   final RxString storyText = ''.obs;
   final TextEditingController textController = TextEditingController();
-
+  final GlobalKey boundaryKey = GlobalKey();
+  final ApiService _api = Get.find<ApiService>();
+  final RxString selectedMusicName = 'None'.obs;
+  final RxString selectedMusicId = ''.obs;
+  final RxBool isLoading = false.obs;
+  final RxString loadingStatus = ''.obs;
   final ImagePicker _picker = ImagePicker();
-
+final List<String> categories = [
+    'Bikes',
+    'Orders',
+    'Installs',
+    'Winners',
+    'Behind Scenes',
+  ];
+  
   void toggleSound() {
     isSoundOn.value = !isSoundOn.value;
   }
-// / Inside your StoryController class
-Future<void> updateImageFromBytes(Uint8List bytes) async {
-  try {
-    final tempDir = await getTemporaryDirectory();
-    final file = await File(
-            '${tempDir.path}/edited_story_${DateTime.now().millisecondsSinceEpoch}.png')
-        .create();
-    await file.writeAsBytes(bytes);
-    selectedImage.value = file;
-  } catch (e) {
-    debugPrint("Error saving edited image: $e");
+
+  // / Inside your StoryController class
+  Future<void> updateImageFromBytes(Uint8List bytes) async {
+    try {
+      final tempDir = await getTemporaryDirectory();
+      final file = await File(
+        '${tempDir.path}/edited_story_${DateTime.now().millisecondsSinceEpoch}.png',
+      ).create();
+      await file.writeAsBytes(bytes);
+      selectedImage.value = file;
+    } catch (e) {
+      debugPrint("Error saving edited image: $e");
+    }
   }
-}
+
   void toggleLike() {
     isLiked.value = !isLiked.value;
   }
@@ -60,52 +78,97 @@ Future<void> updateImageFromBytes(Uint8List bytes) async {
 
   void setCategory(String category) => selectedCategory.value = category;
   void setMusic(String music) => selectedMusic.value = music;
-// Future<void> createStory() async {
-//     try {
-//       isLoading.value = true;
+  // ── Create Story API Call (No Caption) ──
+  Future<void> createStory() async {
+    try {
+      isLoading.value = true;
 
-//       // 1. Image Generation Phase
-//       final Uint8List? imageBytes = await _capturePngBytes();
-//       if (imageBytes == null) {
-//         CustomSnackbar.showError("Failed to process image");
-//         return;
-//       }
+      if (selectedImage.value == null) {
+        CustomSnackbar.showError("Please select an image");
+        return;
+      }
 
-//       // 2. Upload Phase
-//       loadingStatus.value = "Uploading to Syndicate..."; // Status Update
+      final Uint8List imageBytes = await selectedImage.value!.readAsBytes();
 
-//       final dataPayload = jsonEncode({
-//         "contentType": "image",
-//         "category": selectedCategory.value,
-//         "caption": captionController.text.trim(),
-//         "mood": selectedMusic.value,
-//         "isPremium": isPremium.value,
-//       });
+      loadingStatus.value = "Uploading to Syndicate...";
 
-//       dio.FormData formData = dio.FormData.fromMap({
-//         'image': dio.MultipartFile.fromBytes(
-//           imageBytes,
-//           filename: 'story_${DateTime.now().millisecondsSinceEpoch}.png',
-//         ),
-//         'data': dataPayload,
-//       });
+      // Payload matching your specific request
+      final Map<String, dynamic> data = {
+        "contentType": "image",
+        "category": selectedCategory.value,
+        "music": selectedMusicId.value,
+        "isPremium": false,
+      };
 
-//       final res = await _api.post('/stories/create', data: formData);
+      dio.FormData formData = dio.FormData.fromMap({
+        'content': dio.MultipartFile.fromBytes(
+          imageBytes,
+          filename: 'story.png',
+        ),
+        'data': jsonEncode(data),
+      });
 
-//       if (res.data['success'] == true) {
-//         CustomSnackbar.showSuccess(res.data['message']);
-//         Get.back(); 
-//       } else {
-//         CustomSnackbar.showError(res.data['message']);
-//       }
-//     } catch (e) {
-//       print("❌ Create Story Error: $e");
-//       CustomSnackbar.showError("Network error. Please try again.");
-//     } finally {
-//       isLoading.value = false;
-//       loadingStatus.value = "";
-//     }
-//   }
+      final res = await _api.post('/stories/create', data: formData);
+
+      if (res.data['success'] == true) {
+        CustomSnackbar.showSuccess(res.data['message']);
+        Get.back();
+      } else {
+        CustomSnackbar.showError(res.data['message']);
+      }
+    } catch (e) {
+      CustomSnackbar.showError("Failed to create story");
+    } finally {
+      isLoading.value = false;
+      loadingStatus.value = "";
+    }
+  }
+  // Future<void> createStory() async {
+  //     try {
+  //       isLoading.value = true;
+
+  //       // 1. Image Generation Phase
+  //       final Uint8List? imageBytes = await _capturePngBytes();
+  //       if (imageBytes == null) {
+  //         CustomSnackbar.showError("Failed to process image");
+  //         return;
+  //       }
+
+  //       // 2. Upload Phase
+  //       loadingStatus.value = "Uploading to Syndicate..."; // Status Update
+
+  //       final dataPayload = jsonEncode({
+  //         "contentType": "image",
+  //         "category": selectedCategory.value,
+  //         "caption": captionController.text.trim(),
+  //         "mood": selectedMusic.value,
+  //         "isPremium": isPremium.value,
+  //       });
+
+  //       dio.FormData formData = dio.FormData.fromMap({
+  //         'image': dio.MultipartFile.fromBytes(
+  //           imageBytes,
+  //           filename: 'story_${DateTime.now().millisecondsSinceEpoch}.png',
+  //         ),
+  //         'data': dataPayload,
+  //       });
+
+  //       final res = await _api.post('/stories/create', data: formData);
+
+  //       if (res.data['success'] == true) {
+  //         CustomSnackbar.showSuccess(res.data['message']);
+  //         Get.back();
+  //       } else {
+  //         CustomSnackbar.showError(res.data['message']);
+  //       }
+  //     } catch (e) {
+  //       print("❌ Create Story Error: $e");
+  //       CustomSnackbar.showError("Network error. Please try again.");
+  //     } finally {
+  //       isLoading.value = false;
+  //       loadingStatus.value = "";
+  //     }
+  //   }
   // Future<void> downloadImage(String imageUrl) async {
   //   try {
   //     var response = await http.get(Uri.parse(imageUrl));
