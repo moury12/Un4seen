@@ -43,7 +43,9 @@ class StoryController extends GetxController {
   final RxList<StoryModel> savedStories = <StoryModel>[].obs;
   final RxBool isStoriesLoading = false.obs;
   final RxBool isSavedLoading = false.obs;
+  final RxBool isViewingSaved = false.obs;
 
+  List<StoryModel> get activeStories => isViewingSaved.value ? savedStories : stories;
 
   final List<String> categories = [
     'Bikes',
@@ -66,9 +68,11 @@ class StoryController extends GetxController {
     super.onInit();
     fetchStories();
       setupSocket();
-isSoundOn.listen((bool on) {
+    isSoundOn.listen((bool on) {
       if (on) {
-        _playStory(stories[currentStoryIndex.value]);
+        if (activeStories.isNotEmpty) {
+          _playStory(activeStories[currentStoryIndex.value]);
+        }
       } else {
         _audioPlayer.pause();
       }
@@ -235,9 +239,12 @@ Future<void> fetchStories() async {
  
   }
   // ── Story Player Logic ─────────────────────────────────
-  void startStoryTimer(int startIndex) {
+  void startStoryTimer(int startIndex, {bool isFromSaved = false}) {
+    isViewingSaved.value = isFromSaved;
     currentStoryIndex.value = startIndex;
-    _playStory(stories[currentStoryIndex.value]);
+    if (activeStories.isNotEmpty) {
+      _playStory(activeStories[currentStoryIndex.value]);
+    }
     _resetTimer();
   }
 
@@ -256,9 +263,9 @@ Future<void> fetchStories() async {
   }
 
   void nextStory() {
-    if (currentStoryIndex.value < stories.length - 1) {
+    if (currentStoryIndex.value < activeStories.length - 1) {
       currentStoryIndex.value++;
-      _playStory(stories[currentStoryIndex.value]);
+      _playStory(activeStories[currentStoryIndex.value]);
       _resetTimer();
     } else {
       _storyTimer?.cancel();
@@ -284,7 +291,7 @@ Future<void> fetchStories() async {
   void previousStory() {
     if (currentStoryIndex.value > 0) {
       currentStoryIndex.value--;
-      _playStory(stories[currentStoryIndex.value]);
+      _playStory(activeStories[currentStoryIndex.value]);
       _resetTimer();
     } else {
       _resetTimer(); // Restart current story if at first index

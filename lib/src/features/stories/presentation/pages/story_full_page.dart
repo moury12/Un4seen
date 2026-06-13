@@ -9,7 +9,12 @@ import '../widgets/story_bottom_bar.dart';
 
 class StoryFullPage extends StatefulWidget {
   final int initialIndex;
-  const StoryFullPage({super.key, required this.initialIndex});
+  final bool isFromSaved;
+  const StoryFullPage({
+    super.key,
+    required this.initialIndex,
+    this.isFromSaved = false,
+  });
 
   @override
   State<StoryFullPage> createState() => _StoryFullPageState();
@@ -63,11 +68,15 @@ class _StoryFullPageState extends State<StoryFullPage>
       ),
     ]).animate(_fireController);
 
-    controller.startStoryTimer(widget.initialIndex);
+    controller.startStoryTimer(
+      widget.initialIndex,
+      isFromSaved: widget.isFromSaved,
+    );
   }
 
   void _handleDoubleTap() {
-    final story = controller.stories[controller.currentStoryIndex.value];
+    if (controller.activeStories.isEmpty) return;
+    final story = controller.activeStories[controller.currentStoryIndex.value];
     setState(() => _showFire = true);
 
     if (!story.isHearted) {
@@ -106,8 +115,9 @@ class _StoryFullPageState extends State<StoryFullPage>
           children: [
             // 1. Content
             Obx(() {
+              if (controller.activeStories.isEmpty) return const SizedBox();
               final story =
-                  controller.stories[controller.currentStoryIndex.value];
+                  controller.activeStories[controller.currentStoryIndex.value];
               return Positioned.fill(
                 child: CustomNetworkImage(
                   imageUrl: story.content,
@@ -127,7 +137,7 @@ class _StoryFullPageState extends State<StoryFullPage>
                         vertical: 8,
                       ),
                       child: Row(
-                        children: List.generate(controller.stories.length, (
+                        children: List.generate(controller.activeStories.length, (
                           index,
                         ) {
                           double progress = 0.0;
@@ -156,8 +166,9 @@ class _StoryFullPageState extends State<StoryFullPage>
                     ),
                   ),
                   Obx(() {
+                    if (controller.activeStories.isEmpty) return const SizedBox();
                     final story =
-                        controller.stories[controller.currentStoryIndex.value];
+                        controller.activeStories[controller.currentStoryIndex.value];
                     return Row(
                       children: [
                         StoryUserInfo(
@@ -220,8 +231,9 @@ class _StoryFullPageState extends State<StoryFullPage>
               left: 20,
               right: 20,
               child: Obx(() {
+                if (controller.activeStories.isEmpty) return const SizedBox();
                 final story =
-                    controller.stories[controller.currentStoryIndex.value];
+                    controller.activeStories[controller.currentStoryIndex.value];
                 return Row(
                   children: [
                     CustomIconButtonWidget(

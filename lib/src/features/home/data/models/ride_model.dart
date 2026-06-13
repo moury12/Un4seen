@@ -44,6 +44,10 @@ class RideModel {
   int heartCount;
   final String rideType;
   bool isHearted;
+  double averageRating;
+  bool isVoted;
+  int myRating;
+  bool isBikeOfTheWeek;
 
   RideModel({
     required this.id,
@@ -54,6 +58,10 @@ class RideModel {
     required this.heartCount,
     required this.rideType,
     required this.isHearted,
+    required this.averageRating,
+    required this.isVoted,
+    required this.myRating,
+    required this.isBikeOfTheWeek,
   });
 
   factory RideModel.fromJson(Map<String, dynamic> json) {
@@ -62,9 +70,13 @@ class RideModel {
       bikeModel: json['bikeModel'] ?? '',
       description: json['description'] ?? '',
       image: json['image'] ?? '',
-      heartCount: json['heartCount'] ?? 0,
+      heartCount: json['flameCount'] ?? json['heartCount'] ?? 0,
       rideType: json['rideType'] ?? '',
       isHearted: json['isHearted'] ?? false,
+      averageRating: (json['averageRating'] ?? 0).toDouble(),
+      isVoted: json['isVoted'] ?? false,
+      myRating: json['myRating'] ?? 0,
+      isBikeOfTheWeek: json['isBikeOfTheWeek'] ?? false,
       user: RideUser.fromJson(json['user'] ?? {}),
     );
   }

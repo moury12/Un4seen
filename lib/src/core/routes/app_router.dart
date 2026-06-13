@@ -3,7 +3,6 @@ import 'package:go_router/go_router.dart';
 import 'package:un4seen/src/core/utils/app_strings.dart';
 import 'package:un4seen/src/features/bike_profiles/presentation/pages/members_page.dart';
 import 'package:un4seen/src/features/competitions/presentation/pages/entries_gallery_page.dart';
-import 'package:un4seen/src/features/stories/data/models/story_model.dart';
 import '../../features/auth/presentation/pages/splash_page.dart';
 import '../../features/auth/presentation/pages/login_page.dart';
 import '../../features/home/presentation/pages/home_page.dart';
@@ -157,8 +156,19 @@ class AppRouter {
         path: AppRoutes.storyFull,
         name: 'storyFull',
         builder: (context, state) {
-          final initialIndex = state.extra as int;
-          return StoryFullPage(initialIndex: initialIndex);
+          int initialIndex = 0;
+          bool isFromSaved = false;
+          if (state.extra is int) {
+            initialIndex = state.extra as int;
+          } else if (state.extra is Map) {
+            final args = state.extra as Map;
+            initialIndex = args['initialIndex'] as int? ?? 0;
+            isFromSaved = args['isFromSaved'] as bool? ?? false;
+          }
+          return StoryFullPage(
+            initialIndex: initialIndex,
+            isFromSaved: isFromSaved,
+          );
         },
       ),
       GoRoute(

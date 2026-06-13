@@ -80,6 +80,40 @@ class RateMyRideController extends GetxController {
     }
   }
 
+  Future<void> submitVote(int index, int rating) async {
+    final ride = rides[index];
+    final originalRating = ride.myRating;
+    final originalIsVoted = ride.isVoted;
+
+    // Instant Optimistic UI Update
+    ride.myRating = rating;
+    ride.isVoted = true;
+    rides[index] = ride;
+    rides.refresh();
+
+    try {
+      final res = await _api.patch(
+        '/rides/${ride.id}/vote',
+        data: {'rating': rating},
+      );
+      if (!res.data['success']) throw Exception();
+      
+      // Update average rating if returned by backend (optional, but good if we have it)
+      if (res.data['data'] != null && res.data['data']['averageRating'] != null) {
+        ride.averageRating = res.data['data']['averageRating'].toDouble();
+        rides[index] = ride;
+        rides.refresh();
+      }
+    } catch (e) {
+      // Rollback on failure
+      ride.myRating = originalRating;
+      ride.isVoted = originalIsVoted;
+      rides[index] = ride;
+      rides.refresh();
+      CustomSnackbar.showError("Failed to submit rating");
+    }
+  }
+
   // Inside RateMyRideController class
   Future<bool> uploadRide(String model, String desc, String type) async {
     // 1. Validation

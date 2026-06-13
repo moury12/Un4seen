@@ -26,7 +26,7 @@ class HomePage extends StatelessWidget {
 
               imageUrl:
                   profileController.userProfile.value.profilePicture ?? "",
-              borderRadius: BorderRadius.circular(360),
+              boxShape: BoxShape.circle,
             );
           }),
         ),

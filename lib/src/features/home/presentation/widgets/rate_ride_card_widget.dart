@@ -1,7 +1,7 @@
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../src_export.dart';
 
-class RateRideCardWidget extends StatelessWidget {
+class RateRideCardWidget extends StatefulWidget {
   final RideModel ride;
   final int index;
   const RateRideCardWidget({
@@ -11,8 +11,30 @@ class RateRideCardWidget extends StatelessWidget {
   });
 
   @override
+  State<RateRideCardWidget> createState() => _RateRideCardWidgetState();
+}
+
+class _RateRideCardWidgetState extends State<RateRideCardWidget> {
+  double _currentRating = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentRating = widget.ride.myRating.toDouble();
+  }
+
+  @override
+  void didUpdateWidget(covariant RateRideCardWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.ride.myRating != widget.ride.myRating) {
+      _currentRating = widget.ride.myRating.toDouble();
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final controller = Get.find<RateMyRideController>();
+    final ride = widget.ride;
 
     return Container(
       decoration: BoxDecoration(
@@ -45,12 +67,18 @@ class RateRideCardWidget extends StatelessWidget {
             left: 12,
             child: Row(
               children: [
-                const CircleAvatar(
-                  radius: 16,
-                  backgroundImage: NetworkImage(
-                    'https://i.pravatar.cc/150?u=jake',
-                  ),
+                CustomNetworkImage(
+                  imageUrl: ride.user.image,
+                  height: 32,
+                  width: 32,
+                  radius: 99,
                 ),
+                // const CircleAvatar(
+                //   radius: 16,
+                //   backgroundImage: NetworkImage(
+                //     'https://i.pravatar.cc/150?u=jake',
+                //   ),
+                // ),
                 space8W,
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -86,32 +114,6 @@ class RateRideCardWidget extends StatelessWidget {
                     fontSize: 13,
                     maxLines: 2,
                   ),
-                  space8H,
-                  GestureDetector(
-                    onTap: () => controller.toggleHeart(index),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SvgPicture.asset(
-                          AppIcons.fire,
-                          height: 24,
-                          colorFilter: ColorFilter.mode(
-                            ride.isHearted
-                                ? AppColors.kPrimaryColor
-                                : Colors.white70,
-                            BlendMode.srcIn,
-                          ),
-                        ),
-                        space8W,
-                        CustomText(
-                          "${ride.heartCount} ${AppStaticStrings.flames.tr}",
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        ),
-                      ],
-                    ),
-                  ),
                   space12H,
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -123,7 +125,7 @@ class RateRideCardWidget extends StatelessWidget {
                       ),
                       Row(
                         children: List.generate(
-                          4,
+                          ride.averageRating.ceil(),
                           (index) => Padding(
                             padding: const EdgeInsets.only(left: 4),
                             child: SvgPicture.asset(
@@ -147,19 +149,40 @@ class RateRideCardWidget extends StatelessWidget {
                       thumbColor: Colors.white,
                       trackHeight: 4,
                     ),
-                    child: Slider(value: 0.4, onChanged: (v) {}),
+                    child: Slider(
+                      value: _currentRating,
+                      min: 0,
+                      max: 10,
+                      divisions: 10,
+                      onChanged: (v) {
+                        setState(() {
+                          _currentRating = v;
+                        });
+                      },
+                      onChangeEnd: (v) {
+                        controller.submitVote(widget.index, v.toInt());
+                      },
+                    ),
                   ),
-                  const Row(
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      CustomText("0", color: Colors.white70, fontSize: 10),
+                      const CustomText(
+                        "0",
+                        color: Colors.white70,
+                        fontSize: 10,
+                      ),
                       CustomText(
-                        "4 / 10",
+                        "${_currentRating.toInt()} / 10",
                         color: AppColors.kPrimaryColor,
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
                       ),
-                      CustomText("10", color: Colors.white70, fontSize: 10),
+                      const CustomText(
+                        "10",
+                        color: Colors.white70,
+                        fontSize: 10,
+                      ),
                     ],
                   ),
                 ],
