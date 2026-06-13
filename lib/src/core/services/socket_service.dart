@@ -11,12 +11,13 @@ class SocketService extends GetxService {
     final token = _storage.accessToken;
     if (token == null) return;
 
-    socket = IO.io('http://10.10.10.106:5011', 
+    socket = IO.io(
+      'https://un4seen-backend.vercel.app',
       IO.OptionBuilder()
-        .setTransports(['websocket'])
-        .setQuery({'token': token})
-        .enableAutoConnect()
-        .build()
+          .setTransports(['websocket'])
+          .setQuery({'token': token})
+          .enableAutoConnect()
+          .build(),
     );
 
     socket!.onConnect((_) => log('📱 Socket Connected'));

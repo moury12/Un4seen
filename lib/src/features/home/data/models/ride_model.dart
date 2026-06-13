@@ -86,11 +86,13 @@ class RideUser {
   final String fullName;
   final String memberNumber;
   final String image;
+  final String country;
 
   RideUser({
     required this.fullName,
     required this.memberNumber,
     required this.image,
+    required this.country,
   });
 
   factory RideUser.fromJson(Map<String, dynamic> json) {
@@ -98,6 +100,7 @@ class RideUser {
       fullName: "${json['firstName'] ?? ''} ${json['lastName'] ?? ''}".trim(),
       memberNumber: json['memberNumber'] ?? '',
       image: json['image'] ?? '',
+      country: json['country'] ?? '',
     );
   }
 }

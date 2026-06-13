@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import '../../domain/entities/item_entity.dart';
 import '../../data/home_data.dart';
 
 class HomeController extends GetxController {
@@ -10,7 +9,7 @@ class HomeController extends GetxController {
   HomeController(this._repository);
 
   // ── State ─────────────────────────────────────────────
-  final RxList<ItemEntity> items = <ItemEntity>[].obs;
+  final Rxn<HomeFeedModel> homeFeedData = Rxn<HomeFeedModel>();
   final RxBool isLoading = false.obs;
   final RxString errorMessage = ''.obs;
 
@@ -20,15 +19,15 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    fetchItems();
+    fetchHomeFeed();
   }
 
   // ── Actions ───────────────────────────────────────────
-  Future<void> fetchItems() async {
+  Future<void> fetchHomeFeed() async {
     try {
       isLoading.value = true;
       errorMessage.value = '';
-      items.value = await _repository.getItems();
+      homeFeedData.value = await _repository.getHomeFeed();
     } catch (e) {
       errorMessage.value = e.toString();
     } finally {
@@ -36,7 +35,7 @@ class HomeController extends GetxController {
     }
   }
 
-  void refresh() => fetchItems();
+  Future<void> refresh() => fetchHomeFeed();
 
   Future<void> pickRideImage() async {
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);

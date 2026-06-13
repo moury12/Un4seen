@@ -28,6 +28,26 @@ class GiveawayPageModel {
   }
 }
 
+class GiveawayWinner {
+  final String fullName;
+  final String memberNumber;
+  final String image;
+
+  GiveawayWinner({
+    required this.fullName,
+    required this.memberNumber,
+    required this.image,
+  });
+
+  factory GiveawayWinner.fromJson(Map<String, dynamic> json) {
+    return GiveawayWinner(
+      fullName: "${json['firstName'] ?? ''} ${json['lastName'] ?? ''}".trim(),
+      memberNumber: json['memberNumber'] ?? '',
+      image: json['image'] ?? '',
+    );
+  }
+}
+
 class GiveawayItem {
   final String id;
   final int weekNumber;
@@ -37,6 +57,7 @@ class GiveawayItem {
   final int valueInNzd;
   final DateTime endDate;
   final bool isMajorGiveaway;
+  final GiveawayWinner? winner;
 
   GiveawayItem({
     required this.id,
@@ -47,6 +68,7 @@ class GiveawayItem {
     required this.valueInNzd,
     required this.endDate,
     required this.isMajorGiveaway,
+    this.winner,
   });
 
   factory GiveawayItem.fromJson(Map<String, dynamic> json) {
@@ -61,6 +83,7 @@ class GiveawayItem {
         json['endDate'] ?? DateTime.now().toIso8601String(),
       ),
       isMajorGiveaway: json['isMajorGiveaway'] ?? false,
+      winner: json['winner'] != null ? GiveawayWinner.fromJson(json['winner']) : null,
     );
   }
 }
