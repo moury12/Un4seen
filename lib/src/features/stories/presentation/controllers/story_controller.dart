@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:typed_data';
@@ -7,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:dio/dio.dart' as dio;
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:un4seen/src/core/core_export.dart';
 import 'package:un4seen/src/core/services/api_service.dart';
@@ -17,6 +19,8 @@ import 'package:un4seen/src/features/stories/data/models/story_model.dart';
 class StoryController extends GetxController {
   final RxBool isSoundOn = true.obs;
   final RxBool isLiked = false.obs;
+    final AudioPlayer _audioPlayer = AudioPlayer();
+
   final Rx<File?> selectedImage = Rx<File?>(null);
   final Rxn<Uint8List> editedImageBytes = Rxn<Uint8List>();
   final RxString selectedCategory = ''.obs;
@@ -34,8 +38,12 @@ class StoryController extends GetxController {
   final RxBool isLoading = false.obs;
   final RxString loadingStatus = ''.obs;
   final ImagePicker _picker = ImagePicker();
-    final RxList<StoryModel> stories = <StoryModel>[].obs;
+// Feed States
+  final RxList<StoryModel> stories = <StoryModel>[].obs;
+  final RxList<StoryModel> savedStories = <StoryModel>[].obs;
   final RxBool isStoriesLoading = false.obs;
+  final RxBool isSavedLoading = false.obs;
+
 
   final List<String> categories = [
     'Bikes',
@@ -45,15 +53,26 @@ class StoryController extends GetxController {
     'Behind Scenes',
   ];
 
-  void toggleSound() {
-    isSoundOn.value = !isSoundOn.value;
-  }
+  // void toggleSound() {
+  //   isSoundOn.value = !isSoundOn.value;
+  // }
+   // Story Player States
+  Timer? _storyTimer;
+  final RxInt currentStoryIndex = 0.obs;
+  final RxDouble currentProgress = 0.0.obs;
+  final int storyDurationSeconds = 5;
 @override
   void onInit() {
     super.onInit();
     fetchStories();
       setupSocket();
-
+isSoundOn.listen((bool on) {
+      if (on) {
+        _playStory(stories[currentStoryIndex.value]);
+      } else {
+        _audioPlayer.pause();
+      }
+    });
   }
   void setupSocket() {
     final socketService = Get.put(SocketService());
@@ -158,67 +177,115 @@ Future<void> fetchStories() async {
     }
     return false;
   }
-  // Future<void> createStory() async {
-  //     try {
-  //       isLoading.value = true;
+  Future<void> fetchSavedStories() async {
+    try {
+      isSavedLoading.value = true;
+      final res = await _api.get('/stories/my-saved');
+      if (res.data['success']) {
+        final List data = res.data['data'];
+        savedStories.assignAll(data.map((e) => StoryModel.fromJson(e)).toList());
+      }
+    } finally {
+      isSavedLoading.value = false;
+    }
+  }
 
-  //       // 1. Image Generation Phase
-  //       final Uint8List? imageBytes = await _capturePngBytes();
-  //       if (imageBytes == null) {
-  //         CustomSnackbar.showError("Failed to process image");
-  //         return;
-  //       }
+  Future<void> toggleHeart(StoryModel story) async {
+    final originalHearted = story.isHearted;
+    final originalCount = story.heartCount;
 
-  //       // 2. Upload Phase
-  //       loadingStatus.value = "Uploading to Syndicate..."; // Status Update
+    // Optimistic UI Update
+    story.isHearted = !originalHearted;
+    story.heartCount = story.isHearted ? originalCount + 1 : originalCount - 1;
+    stories.refresh();
+    savedStories.refresh();
 
-  //       final dataPayload = jsonEncode({
-  //         "contentType": "image",
-  //         "category": selectedCategory.value,
-  //         "caption": captionController.text.trim(),
-  //         "mood": selectedMusic.value,
-  //         "isPremium": isPremium.value,
-  //       });
+    try {
+      await _api.patch('/stories/${story.id}/heart');
+    } catch (e) {
+      story.isHearted = originalHearted;
+      story.heartCount = originalCount;
+      stories.refresh();
+    }
+  }
 
-  //       dio.FormData formData = dio.FormData.fromMap({
-  //         'image': dio.MultipartFile.fromBytes(
-  //           imageBytes,
-  //           filename: 'story_${DateTime.now().millisecondsSinceEpoch}.png',
-  //         ),
-  //         'data': dataPayload,
-  //       });
+  Future<void> toggleSave(StoryModel story) async {
+    final originalSaved = story.isSaved;
+    story.isSaved = !originalSaved;
+    stories.refresh();
 
-  //       final res = await _api.post('/stories/create', data: formData);
+    try {
+      await _api.post('/stories/${story.id}/save');
+      CustomSnackbar.showSuccess(story.isSaved ? "Saved to your collection" : "Removed from saved");
+    } catch (e) {
+      story.isSaved = originalSaved;
+      stories.refresh();
+    }
+  }
 
-  //       if (res.data['success'] == true) {
-  //         CustomSnackbar.showSuccess(res.data['message']);
-  //         Get.back();
-  //       } else {
-  //         CustomSnackbar.showError(res.data['message']);
-  //       }
-  //     } catch (e) {
-  //       print("❌ Create Story Error: $e");
-  //       CustomSnackbar.showError("Network error. Please try again.");
-  //     } finally {
-  //       isLoading.value = false;
-  //       loadingStatus.value = "";
-  //     }
-  //   }
-  // Future<void> downloadImage(String imageUrl) async {
-  //   try {
-  //     var response = await http.get(Uri.parse(imageUrl));
-  //     final result = await ImageGallerySaver.saveImage(
-  //       Uint8List.fromList(response.bodyBytes),
-  //       quality: 100,
-  //       name: "un4seen_story_${DateTime.now().millisecondsSinceEpoch}",
-  //     );
-  //     if (result['isSuccess']) {
-  //       Get.snackbar('Success', 'Image saved to gallery');
-  //     } else {
-  //       Get.snackbar('Error', 'Failed to save image');
-  //     }
-  //   } catch (e) {
-  //     Get.snackbar('Error', 'Failed to download image: $e');
-  //   }
-  // }
+  // ── Story Player Logic ─────────────────────────────────
+  void startStoryTimer(int startIndex) {
+    currentStoryIndex.value = startIndex;
+    _playStory(stories[currentStoryIndex.value]);
+    _resetTimer();
+  }
+
+  void _playStory(StoryModel story) async {
+    if (story.music != null && isSoundOn.value) {
+      try {
+        await _audioPlayer.setUrl(story.music!.audioUrl);
+        _audioPlayer.setLoopMode(LoopMode.one);
+        _audioPlayer.play();
+      } catch (e) {
+        log("Audio error: $e");
+      }
+    } else {
+      _audioPlayer.stop();
+    }
+  }
+
+  void nextStory() {
+    if (currentStoryIndex.value < stories.length - 1) {
+      currentStoryIndex.value++;
+      _playStory(stories[currentStoryIndex.value]);
+      _resetTimer();
+    } else {
+      _storyTimer?.cancel();
+      _audioPlayer.stop();
+      Get.back(); // POP at last index
+    }
+  }
+ void _resetTimer() {
+    _storyTimer?.cancel();
+    currentProgress.value = 0.0;
+    _storyTimer = Timer.periodic(const Duration(milliseconds: 50), (timer) {
+      if (currentProgress.value < 1.0) {
+        currentProgress.value += 0.05 / storyDurationSeconds;
+      } else {
+        nextStory();
+      }
+    });
+  }
+  void pauseStory() {
+    _storyTimer?.cancel();
+    _audioPlayer.pause();
+  }
+  void previousStory() {
+    if (currentStoryIndex.value > 0) {
+      currentStoryIndex.value--;
+      _playStory(stories[currentStoryIndex.value]);
+      _resetTimer();
+    } else {
+      _resetTimer(); // Restart current story if at first index
+    }
+  }
+  void resumeStory() => _resetTimer();
+
+  void toggleSound() => isSoundOn.value = !isSoundOn.value;
+  @override
+  void onClose() {
+    _storyTimer?.cancel();
+    _audioPlayer.dispose();
+    super.onClose();
+  }
 }

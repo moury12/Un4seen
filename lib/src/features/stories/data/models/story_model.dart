@@ -5,9 +5,9 @@ class StoryModel {
   final String contentType;
   final StoryMusic? music;
   final String category;
-  final int heartCount;
-  final bool isHearted;
-  final bool isSaved;
+  int heartCount;
+  bool isHearted;
+  bool isSaved;
   final String timeAgo;
 
   StoryModel({
@@ -24,21 +24,24 @@ class StoryModel {
   });
 
   factory StoryModel.fromJson(Map<String, dynamic> json) {
+    // Handle nested story object if coming from "my-saved" endpoint
+    final Map<String, dynamic> data = json.containsKey('story') ? json['story'] : json;
+    
     return StoryModel(
-      id: json['_id'] ?? '',
-      content: json['content'] ?? '',
-      contentType: json['contentType'] ?? 'image',
-      category: json['category'] ?? 'Bikes',
-      heartCount: json['heartCount'] ?? 0,
-      isHearted: json['isHearted'] ?? false,
-      isSaved: json['isSaved'] ?? false,
+      id: data['_id'] ?? '',
+      content: data['content'] ?? '',
+      contentType: data['contentType'] ?? 'image',
+      category: data['category'] ?? 'Bikes',
+      heartCount: data['heartCount'] ?? 0,
+      isHearted: data['isHearted'] ?? false,
+      isSaved: data['isSaved'] ?? false,
       timeAgo: json['timeAgo'] ?? 'Just now',
-      user: StoryUser.fromJson(json['user'] ?? {}),
-      music: json['music'] != null ? StoryMusic.fromJson(json['music']) : null,
+      user: StoryUser.fromJson(data['user'] ?? {}),
+      music: data['music'] != null ? StoryMusic.fromJson(data['music']) : null,
     );
   }
 }
-
+// ... StoryUser and StoryMusic classes stay the same
 class StoryUser {
   final String id;
   final String fullName;

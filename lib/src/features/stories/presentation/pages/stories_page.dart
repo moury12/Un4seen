@@ -73,8 +73,9 @@ class StoriesPage extends StatelessWidget {
                       }
 
                       // Show actual Stories
-                      final story = controller.stories[index - 1];
-                      return StoryCard(isLeft: index % 2 == 0, story: story);
+                      final actualIndex = index - 1;
+                      final story = controller.stories[actualIndex];
+                      return StoryCard(isLeft: index % 2 == 0, story: story, index: actualIndex,);
                     },
                     childCount:
                         itemCount, // This replaces 'itemCount' parameter

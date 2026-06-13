@@ -1,20 +1,15 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:un4seen/src/core/core_export.dart';
-import 'package:un4seen/src/features/stories/data/models/story_model.dart';
+import '../../../../core/core_export.dart';
 import '../controllers/story_controller.dart';
-import '../widgets/story_progress_bar.dart';
 import '../widgets/story_user_info.dart';
 import '../widgets/story_bottom_bar.dart';
 
 class StoryFullPage extends StatefulWidget {
- final StoryModel storyModel;
-
-  const StoryFullPage({
-    super.key,
-    required this.storyModel,
-  });
+  final int initialIndex;
+  const StoryFullPage({super.key, required this.initialIndex});
 
   @override
   State<StoryFullPage> createState() => _StoryFullPageState();
@@ -22,8 +17,9 @@ class StoryFullPage extends StatefulWidget {
 
 class _StoryFullPageState extends State<StoryFullPage>
     with SingleTickerProviderStateMixin {
-  final controller = Get.put(StoryController());
+  final controller = Get.find<StoryController>();
 
+  // Animation for Heart Pop
   late AnimationController _fireController;
   late Animation<double> _scaleAnimation;
   bool _showFire = false;
@@ -66,22 +62,20 @@ class _StoryFullPageState extends State<StoryFullPage>
         weight: 20,
       ),
     ]).animate(_fireController);
+
+    controller.startStoryTimer(widget.initialIndex);
   }
 
   void _handleDoubleTap() {
-    setState(() {
-      _showFire = true;
-    });
+    final story = controller.stories[controller.currentStoryIndex.value];
+    setState(() => _showFire = true);
 
-    // Update controller state
-    controller.isLiked.value = true;
+    if (!story.isHearted) {
+      controller.toggleHeart(story);
+    }
 
     _fireController.forward(from: 0.0).then((_) {
-      if (mounted) {
-        setState(() {
-          _showFire = false;
-        });
-      }
+      if (mounted) setState(() => _showFire = false);
     });
   }
 
@@ -94,95 +88,167 @@ class _StoryFullPageState extends State<StoryFullPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        foregroundColor: Colors.white,
-      ),
       backgroundColor: Colors.black,
       body: GestureDetector(
         onDoubleTap: _handleDoubleTap,
+        onLongPressStart: (_) => controller.pauseStory(),
+        onLongPressEnd: (_) => controller.resumeStory(),
+        onTapUp: (details) {
+          final width = MediaQuery.of(context).size.width;
+          // ── NAVIGATION ZONES ──
+          if (details.globalPosition.dx < width / 3) {
+            controller.previousStory(); // Left 33% = Previous
+          } else {
+            controller.nextStory(); // Right 66% = Next
+          }
+        },
         child: Stack(
           children: [
-            // Full Screen Content
-            Positioned.fill(
-              child: CustomNetworkImage(
-                imageUrl: widget.storyModel.content,
-                fit: BoxFit.cover,
-              ),
-            ),
+            // 1. Content
+            Obx(() {
+              final story =
+                  controller.stories[controller.currentStoryIndex.value];
+              return Positioned.fill(
+                child: CustomNetworkImage(
+                  imageUrl: story.content,
+                  fit: BoxFit.cover,
+                ),
+              );
+            }),
 
-            // Top Overlays
+            // 2. Progress Bars & Header
             SafeArea(
               child: Column(
                 children: [
-                  // Progress Bar
-                  const StoryProgressBar(segmentCount: 3, activeIndex: 0),
-                  // User Info & Close
-                  StoryUserInfo(
-                    name: widget.storyModel.user.fullName,
-                    time: widget.storyModel.timeAgo,
-                    image: widget.storyModel.user.image,
+                  Obx(
+                    () => Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 8,
+                      ),
+                      child: Row(
+                        children: List.generate(controller.stories.length, (
+                          index,
+                        ) {
+                          double progress = 0.0;
+                          if (index < controller.currentStoryIndex.value)
+                            progress = 1.0;
+                          else if (index == controller.currentStoryIndex.value)
+                            progress = controller.currentProgress.value;
+
+                          return Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 2,
+                              ),
+                              child: LinearProgressIndicator(
+                                value: progress,
+                                backgroundColor: Colors.white24,
+                                valueColor: const AlwaysStoppedAnimation(
+                                  Colors.white,
+                                ),
+                                minHeight: 2,
+                              ),
+                            ),
+                          );
+                        }),
+                      ),
+                    ),
                   ),
+                  Obx(() {
+                    final story =
+                        controller.stories[controller.currentStoryIndex.value];
+                    return Row(
+                      children: [
+                        StoryUserInfo(
+                          name: story.user.fullName,
+                          time: story.timeAgo,
+                          image: story.user.image,
+                        ),
+                        const Spacer(),
+                        ButtonTapWidget(
+                          onTap: () => Navigator.pop(context),
+                          child: Container(
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: AppColors.kPrimaryDarkColor2,
+                            ),
+                            child: const Padding(
+                              padding: const EdgeInsets.all(6.0),
+                              child: Icon(
+                                CupertinoIcons.multiply,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  }),
                 ],
               ),
             ),
 
-            // Fire Animation Overlay
+            // 3. Heart Animation Overlay
             if (_showFire)
               Center(
                 child: AnimatedBuilder(
                   animation: _scaleAnimation,
-                  builder: (context, child) {
-                    return Transform.scale(
-                      scale: _scaleAnimation.value,
-                      child: Opacity(
-                        opacity: _scaleAnimation.value.clamp(0.0, 1.0),
-                        child: child,
-                      ),
-                    );
-                  },
+                  builder: (context, child) => Transform.scale(
+                    scale: _scaleAnimation.value,
+                    child: Opacity(
+                      opacity: _scaleAnimation.value.clamp(0.0, 1.0),
+                      child: child,
+                    ),
+                  ),
                   child: SvgPicture.asset(
                     AppIcons.fire,
                     height: 120,
                     width: 120,
-                    colorFilter: const ColorFilter.mode(
-                      AppColors.kAccentColor,
-                      BlendMode.srcIn,
-                    ),
+                    color: AppColors.kPrimaryColor,
                   ),
                 ),
               ),
 
-            // Sound Toggle & Download (Optional floating buttons or integrated)
+            // 4. Interaction Bar
             Positioned(
-              right: 16,
-              bottom: 16,
-              child: Column(
-                children: [
-                  Obx(
-                    () => CustomIconButtonWidget(
+              bottom: 40,
+              left: 20,
+              right: 20,
+              child: Obx(() {
+                final story =
+                    controller.stories[controller.currentStoryIndex.value];
+                return Row(
+                  children: [
+                    CustomIconButtonWidget(
+                      image: AppIcons.fire,
+                      colorFilter: ColorFilter.mode(
+                        story.isHearted
+                            ? AppColors.kPrimaryColor
+                            : Colors.white,
+                        BlendMode.srcIn,
+                      ),
+                      onPressed: () => controller.toggleHeart(story),
+                    ),
+                    space12W,
+                    CustomIconButtonWidget(
+                      iconData: story.isSaved
+                          ? CupertinoIcons.bookmark_fill
+                          : CupertinoIcons.bookmark,
+                      onPressed: () => controller.toggleSave(story),
+                    ),
+                    const Spacer(),
+                    CustomIconButtonWidget(
                       iconData: controller.isSoundOn.value
                           ? Icons.volume_up
                           : Icons.volume_off,
                       onPressed: controller.toggleSound,
                     ),
-                  ),
-                ],
-              ),
+                  ],
+                );
+              }),
             ),
-
-            // Bottom Bar
           ],
-        ),
-      ),
-      bottomNavigationBar: SafeArea(
-        child: StoryBottomBar(
-          onJoinTap: () {
-            // Navigate to subscription or similar
-          },
-          onMessageSent: (val) {
-            // Handle message
-          },
         ),
       ),
     );

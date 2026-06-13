@@ -157,9 +157,10 @@ class AppRouter {
         path: AppRoutes.storyFull,
         name: 'storyFull',
         builder: (context, state) {
-          final args = state.extra as StoryModel;
+          // final args = state.extra as StoryModel;
           return StoryFullPage(
-           storyModel: args,
+           // storyModel: args,
+           initialIndex: 0,
           );
         },
       ),
