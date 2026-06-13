@@ -56,7 +56,7 @@ class GiveawayPage extends StatelessWidget {
                     child: CustomText(
                       "There is no running giveaway".tr,
                       variant: TextVariant.bodyMedium,
-                      color: AppColors.kSecondaryTextColor,
+                      color: AppColors.kTextColor,
                     ),
                   ),
                 )
@@ -66,7 +66,7 @@ class GiveawayPage extends StatelessWidget {
                   padding: AppPadding.getPadding12H(context),
                   sliver: SliverList(
                     delegate: SliverChildListDelegate([
-                      space12H,
+                      // space12H,
                       CustomText(
                         AppStaticStrings.newPrizeEveryWeek.tr,
                         color: AppColors.kSecondaryTextColor,

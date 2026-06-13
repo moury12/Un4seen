@@ -36,7 +36,7 @@ class ProfilePage extends StatelessWidget {
                 Obx(
                   () => ProfileHeaderWidget(
                     name: profileCtrl.userProfile.value.fullName ?? 'Unknown',
-                    image: 'https://i.pravatar.cc/150?img=11',
+                    image: profileCtrl.userProfile.value.profilePicture ?? "",
                     location:
                         '${profileCtrl.cityController.text}, ${profileCtrl.stateController.text}',
                     syndicateId: profileCtrl.memberNumber.value,
@@ -49,7 +49,11 @@ class ProfilePage extends StatelessWidget {
                 ),
                 space4H,
                 // ── Points balance card ───────────────────
-                const PointsBalanceCardWidget(),
+                Obx(
+                  () => PointsBalanceCardWidget(
+                    point: profileCtrl.shredPoints.value.toString(),
+                  ),
+                ),
 
                 space8H,
 

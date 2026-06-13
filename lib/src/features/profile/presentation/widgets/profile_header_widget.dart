@@ -38,16 +38,23 @@ class ProfileHeaderWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Profile Picture
-        Container(
-          margin: const EdgeInsets.only(top: 20),
-          width: 80,
+        CustomNetworkImage(
+          imageUrl: image,
           height: 80,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(color: AppColors.kPrimaryColor, width: 2),
-          ),
-          child: CircleAvatar(radius: 30, backgroundImage: NetworkImage(image)),
+          width: 80,
+          boxShape: BoxShape.circle,
         ),
+
+        // Container(
+        //   margin: const EdgeInsets.only(top: 20),
+        //   width: 80,
+        //   height: 80,
+        //   decoration: BoxDecoration(
+        //     shape: BoxShape.circle,
+        //     border: Border.all(color: AppColors.kPrimaryColor, width: 2),
+        //   ),
+        //   child: CircleAvatar(radius: 30, backgroundImage: NetworkImage(image)),
+        // ),
 
         // Info Column
         Expanded(
@@ -67,9 +74,10 @@ class ProfileHeaderWidget extends StatelessWidget {
                   // const CustomText('🇺🇸', fontSize: 16),
                   const Spacer(),
                   if (isCurrentUser)
-                    IconButton(
-                      onPressed: () => context.push(AppRoutes.settings),
-                      icon: const Icon(
+                    ButtonTapWidget(
+                      onTap: () => context.push(AppRoutes.settings),
+                      radius: appRadius6,
+                      child: const Icon(
                         Icons.settings_outlined,
                         color: Colors.black,
                         size: 24,
