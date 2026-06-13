@@ -26,25 +26,25 @@ class SavedStoriesPage extends StatelessWidget {
           onPressed: () => Navigator.pop(context),
         ),
       ),
-      body: GridView.builder(
-        padding: const EdgeInsets.all(16),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: 10,
-          mainAxisSpacing: 1,
-          childAspectRatio: 0.65,
-        ),
-        itemCount: 4,
-        itemBuilder: (context, index) {
-          // Alternating slant direction based on column
-          final isLeftColumn = index % 2 == 0;
-          return StoryCard(
-            isFromSaved: true,
-            isLeft: isLeftColumn,
-            imageUrl: _sampleImages[index % _sampleImages.length],
-          );
-        },
-      ),
+      // body: GridView.builder(
+      //   padding: const EdgeInsets.all(16),
+      //   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+      //     crossAxisCount: 2,
+      //     crossAxisSpacing: 10,
+      //     mainAxisSpacing: 1,
+      //     childAspectRatio: 0.65,
+      //   ),
+      //   itemCount: 4,
+      //   itemBuilder: (context, index) {
+      //     // Alternating slant direction based on column
+      //     final isLeftColumn = index % 2 == 0;
+      //     return StoryCard(
+      //       isFromSaved: true,
+      //       isLeft: isLeftColumn,
+      //       imageUrl: _sampleImages[index % _sampleImages.length],
+      //     );
+      //   },
+      // ),
     );
   }
 }

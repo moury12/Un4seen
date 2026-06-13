@@ -2,21 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:un4seen/src/core/core_export.dart';
+import 'package:un4seen/src/features/stories/data/models/story_model.dart';
 import '../controllers/story_controller.dart';
 import '../widgets/story_progress_bar.dart';
 import '../widgets/story_user_info.dart';
 import '../widgets/story_bottom_bar.dart';
 
 class StoryFullPage extends StatefulWidget {
-  final String imageUrl;
-  final String name;
-  final String time;
+ final StoryModel storyModel;
 
   const StoryFullPage({
     super.key,
-    required this.imageUrl,
-    required this.name,
-    required this.time,
+    required this.storyModel,
   });
 
   @override
@@ -109,7 +106,7 @@ class _StoryFullPageState extends State<StoryFullPage>
             // Full Screen Content
             Positioned.fill(
               child: CustomNetworkImage(
-                imageUrl: widget.imageUrl,
+                imageUrl: widget.storyModel.content,
                 fit: BoxFit.cover,
               ),
             ),
@@ -122,9 +119,9 @@ class _StoryFullPageState extends State<StoryFullPage>
                   const StoryProgressBar(segmentCount: 3, activeIndex: 0),
                   // User Info & Close
                   StoryUserInfo(
-                    name: widget.name,
-                    time: widget.time,
-                    image: 'https://i.pravatar.cc/150?img=11',
+                    name: widget.storyModel.user.fullName,
+                    time: widget.storyModel.timeAgo,
+                    image: widget.storyModel.user.image,
                   ),
                 ],
               ),

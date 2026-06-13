@@ -93,6 +93,7 @@ class MusicSelectionSheet extends StatelessWidget {
                     music: music,
                     isSelected: storyCtrl.selectedMusic.value == music.title,
                     onSelect: () {
+                      storyCtrl.selectedMusicModel.value = music;
                       storyCtrl.selectedMusicName.value =
                           music.title; // Display name on UI
                       storyCtrl.selectedMusicId.value =

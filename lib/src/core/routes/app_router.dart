@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:un4seen/src/core/utils/app_strings.dart';
 import 'package:un4seen/src/features/bike_profiles/presentation/pages/members_page.dart';
 import 'package:un4seen/src/features/competitions/presentation/pages/entries_gallery_page.dart';
+import 'package:un4seen/src/features/stories/data/models/story_model.dart';
 import '../../features/auth/presentation/pages/splash_page.dart';
 import '../../features/auth/presentation/pages/login_page.dart';
 import '../../features/home/presentation/pages/home_page.dart';
@@ -156,11 +157,9 @@ class AppRouter {
         path: AppRoutes.storyFull,
         name: 'storyFull',
         builder: (context, state) {
-          final args = state.extra as Map<String, dynamic>? ?? {};
+          final args = state.extra as StoryModel;
           return StoryFullPage(
-            imageUrl: args['imageUrl'] ?? '',
-            name: args['name'] ?? '',
-            time: args['time'] ?? '',
+           storyModel: args,
           );
         },
       ),

@@ -3,18 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:un4seen/src/core/core_export.dart';
 import 'package:un4seen/src/core/routes/app_routes.dart';
+import 'package:un4seen/src/features/stories/data/models/story_model.dart';
 import 'package:un4seen/src/features/stories/presentation/stories_presentation_export.dart';
 import 'package:un4seen/src/features/stories/presentation/widgets/story_bottom_bar.dart';
 import '../widgets/story_card_custom_shape.dart';
 
 class StoryCard extends StatelessWidget {
   final bool isLeft;
-  final String imageUrl;
-  final bool? isFromSaved;
+  final StoryModel story;
+  final bool isFromSaved;
+
   const StoryCard({
     super.key,
     required this.isLeft,
-    required this.imageUrl,
+    required this.story,
     this.isFromSaved = false,
   });
 
@@ -23,46 +25,45 @@ class StoryCard extends StatelessWidget {
     return GestureDetector(
       onTap: () => context.push(
         AppRoutes.storyFull,
-        extra: {
-          'imageUrl': imageUrl,
-          'name': 'Sarah Martinez 🇦🇴',
-          'time': '2h ago',
-        },
+        extra: story,
       ),
       child: GenericSlantedCard(
         isLeft: isLeft,
-        // borderColor: AppColors.kPrimaryColor,
-        // borderWidth: 2,
         borderRadius: 14,
         slantHeight: 25,
         child: Stack(
           children: [
             // Background Image
             Positioned.fill(
-              child: CustomNetworkImage(imageUrl: imageUrl, fit: BoxFit.cover),
+              child: CustomNetworkImage(
+                imageUrl: story.content,
+                fit: BoxFit.cover,
+              ),
             ),
 
-            // Top Left Badges
+            // Top Badges
             Positioned(
               top: 25,
               left: isLeft ? null : 12,
               right: isLeft ? 12 : null,
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: isLeft
+                    ? CrossAxisAlignment.end
+                    : CrossAxisAlignment.start,
                 children: [
-                  buildBadgeWidget('Sarah Martinez 🇦🇴', context),
+                  buildBadgeWidget(story.user.fullName, context),
                   const SizedBox(height: 4),
-                  buildBadgeWidget('#SYN-2847', context),
+                  buildBadgeWidget(story.user.memberNumber, context),
                 ],
               ),
             ),
 
-            // Bookmark Icon
+            // Interaction Icons
             Positioned(
               bottom: 10,
               left: isLeft ? 12 : null,
               right: isLeft ? null : 12,
-              child: isFromSaved == true
+              child: isFromSaved
                   ? Container(
                       padding: const EdgeInsets.all(8),
                       decoration: const BoxDecoration(
@@ -75,18 +76,38 @@ class StoryCard extends StatelessWidget {
                         size: 18,
                       ),
                     )
-                  : const Column(
+                  : Column(
                       spacing: 6,
                       children: [
-                        CustomIconButtonWidget(
-                          padding: 8,
-                          iconSize: 13,
-                          image: AppIcons.fire,
+                        Row(
+                          children: [
+                            CustomIconButtonWidget(
+                              padding: 8,
+                              iconSize: 13,
+                              image: AppIcons.fire,
+                              colorFilter: ColorFilter.mode(
+                                story.isHearted
+                                    ? AppColors.kPrimaryColor
+                                    : Colors.white,
+                                BlendMode.srcIn,
+                              ),
+                            ),
+                            space8W,
+                            if (story.heartCount > 0)
+                              CustomText(
+                                story.heartCount.toString(),
+                                color: Colors.white,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                              ),
+                          ],
                         ),
                         CustomIconButtonWidget(
                           padding: 8,
                           iconSize: 13,
-                          iconData: CupertinoIcons.bookmark,
+                          iconData: story.isSaved
+                              ? CupertinoIcons.bookmark_fill
+                              : CupertinoIcons.bookmark,
                         ),
                       ],
                     ),
@@ -97,13 +118,11 @@ class StoryCard extends StatelessWidget {
               bottom: 30,
               right: isLeft ? 12 : null,
               left: isLeft ? null : 12,
-              child: const Text(
-                '2h ago',
-                style: TextStyle(
-                  color: Colors.black87,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                ),
+              child: CustomText(
+                story.timeAgo,
+                color: Colors.white,
+                fontSize: 10,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ],

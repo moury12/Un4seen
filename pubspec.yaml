@@ -55,6 +55,7 @@ dependencies:
   url_launcher: ^6.3.2
   just_audio: ^0.9.36
   pro_image_editor: ^12.0.0
+  socket_io_client: ^3.1.5
 
 dev_dependencies:
   flutter_test:

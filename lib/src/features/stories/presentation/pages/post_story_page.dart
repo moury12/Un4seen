@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:un4seen/src/features/stories/presentation/controllers/music_controller.dart';
 import 'package:un4seen/src/features/stories/presentation/controllers/story_controller.dart';
 import 'package:un4seen/src/features/stories/presentation/widgets/category_selection_sheet.dart';
 import 'package:un4seen/src/features/stories/presentation/widgets/music_selection_sheet.dart';
@@ -12,6 +13,7 @@ class PostStoryPage extends StatelessWidget {
   PostStoryPage({super.key});
 
   final controller = Get.put(StoryController());
+  final musicController = Get.put(MusicController());
 
   /// Helper to open the Pro Image Editor
   /// [initialTab] allows us to jump straight to Text, Filter, or Paint modes
@@ -165,8 +167,80 @@ class PostStoryPage extends StatelessWidget {
               Positioned(
                 top: 16,
                 left: 16,
-                child: _buildCircularIconButton(Icons.arrow_back_ios_new, () {
-                  controller.selectedImage.value = null;
+                child: Obx(() {
+                  final bool isCurrentPlaying =
+                      musicController.currentPlayingId.value ==
+                      controller.selectedMusicId.value;
+                  final bool isPlaying =
+                      isCurrentPlaying && musicController.isPlaying.value;
+                  return Row(
+                    children: [
+                      _buildCircularIconButton(Icons.arrow_back_ios_new, () {
+                        controller.selectedImage.value = null;
+                      }),
+                      space12W,
+                      if (controller.selectedMusicModel.value != null &&
+                          controller.selectedMusicName.value.isNotEmpty)
+                        Container(
+                          decoration: BoxDecoration(
+                            color: AppColors.kPrimaryDarkColor3.withValues(
+                              alpha: 0.8,
+                            ),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          padding: const EdgeInsets.all(4),
+                          child: Row(
+                            children: [
+                              ButtonTapWidget(
+                                onTap: () => musicController.playToggle(
+                                  controller.selectedMusicModel.value!,
+                                ),
+                                child: Container(
+                                  padding: const EdgeInsets.all(4),
+                                  decoration: BoxDecoration(
+                                    color: AppColors.kPrimaryColor.withOpacity(
+                                      0.1,
+                                    ),
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Icon(
+                                    isPlaying
+                                        ? Icons.pause_circle
+                                        : Icons.play_circle,
+                                    color: AppColors.kPrimaryColor,
+                                  ),
+                                ),
+                              ),
+                              controller.selectedMusicName.value.isNotEmpty
+                                  ? CustomText(
+                                      "♪ ${controller.selectedMusicName.value}",
+                                      variant: TextVariant.titleMedium,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    )
+                                  : const SizedBox.shrink(),
+                            ],
+                          ),
+                        ),
+                      space12W,
+                      if (controller.selectedCategory.value.isNotEmpty)
+                        Container(
+                          decoration: BoxDecoration(
+                            color: AppColors.kPrimaryDarkColor3.withValues(
+                              alpha: 0.8,
+                            ),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          padding: const EdgeInsets.all(6),
+                          child: CustomText(
+                            "${controller.selectedCategory.value}",
+                            variant: TextVariant.titleMedium,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                    ],
+                  );
                 }),
               ),
               // Top Right Editing Tools
@@ -239,7 +313,12 @@ class PostStoryPage extends StatelessWidget {
                       )
                     : _buildCircularIconButton(
                         Icons.arrow_forward_ios,
-                        () => controller.createStory(),
+                        () async {
+                          bool success = await controller.createStory();
+                          if (success) {
+                            Navigator.pop(context);
+                          }
+                        },
                       ),
               ],
             ),
