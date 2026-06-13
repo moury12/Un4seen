@@ -222,7 +222,18 @@ Future<void> fetchStories() async {
       stories.refresh();
     }
   }
-
+ void closeStoryViewer() {
+    // 1. Stop the timer to prevent auto-advancing
+    _storyTimer?.cancel();
+    
+    // 2. Stop the audio immediately
+    _audioPlayer.stop();
+    
+    // 3. Reset progress for next time
+    currentProgress.value = 0.0;
+    
+ 
+  }
   // ── Story Player Logic ─────────────────────────────────
   void startStoryTimer(int startIndex) {
     currentStoryIndex.value = startIndex;

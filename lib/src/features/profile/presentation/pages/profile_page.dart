@@ -59,11 +59,11 @@ class ProfilePage extends StatelessWidget {
                   icon: AppIcons.cell,
                   onTap: () => context.push(AppRoutes.orders),
                 ),
-                ProfileMenuTile(
-                  title: AppStaticStrings.manageSubscription,
-                  icon: AppIcons.subscription,
-                  onTap: () => context.push(AppRoutes.subscription),
-                ),
+                // ProfileMenuTile(
+                //   title: AppStaticStrings.manageSubscription,
+                //   icon: AppIcons.subscription,
+                //   onTap: () => context.push(AppRoutes.subscription),
+                // ),
                 ProfileMenuTile(
                   title: AppStaticStrings.savedStories,
                   icon: AppIcons.bookmark,

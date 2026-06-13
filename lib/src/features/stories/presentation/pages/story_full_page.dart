@@ -167,7 +167,10 @@ class _StoryFullPageState extends State<StoryFullPage>
                         ),
                         const Spacer(),
                         ButtonTapWidget(
-                          onTap: () => Navigator.pop(context),
+                          onTap: () {
+                            controller.closeStoryViewer();
+                            Navigator.pop(context); // Close the story screen
+                          },
                           child: Container(
                             decoration: const BoxDecoration(
                               shape: BoxShape.circle,
@@ -182,6 +185,7 @@ class _StoryFullPageState extends State<StoryFullPage>
                             ),
                           ),
                         ),
+                        space12W,
                       ],
                     );
                   }),

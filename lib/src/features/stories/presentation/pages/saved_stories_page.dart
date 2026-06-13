@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:un4seen/src/core/core_export.dart';
 import 'package:un4seen/src/features/stories/presentation/controllers/story_controller.dart';
 import 'package:un4seen/src/features/stories/presentation/widgets/story_card.dart';
-import '../../../../core/utils/app_strings.dart';
 
 class SavedStoriesPage extends StatelessWidget {
   const SavedStoriesPage({super.key});
@@ -22,7 +22,12 @@ class SavedStoriesPage extends StatelessWidget {
           if (controller.isSavedLoading.value) {
             return const Center(child: CircularProgressIndicator());
           }
-
+          if (controller.savedStories.isEmpty) {
+            return EmptyStateWidget(
+              message: "No saved stories found",
+              onRetry: () => controller.fetchSavedStories(),
+            );
+          }
           return GridView.builder(
             padding: const EdgeInsets.all(16),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
