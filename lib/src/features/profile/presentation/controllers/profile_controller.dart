@@ -74,7 +74,46 @@ class ProfileController extends GetxController {
     super.onInit();
     fetchProfile();
   }
+// Inside ProfileController class
 
+  final referralInputController = TextEditingController();
+
+  Future<void> applyReferral() async {
+    final code = referralInputController.text.trim();
+    
+    if (code.isEmpty) {
+      CustomSnackbar.showError("Please enter a referral code");
+      return;
+    }
+
+    try {
+      isLoading.value = true;
+      final response = await _api.post(
+        '/shred-points/apply-referral', 
+        data: {"code": code},
+      );
+
+      if (response.data['success']) {
+        CustomSnackbar.showSuccess(response.data['message']);
+        referralInputController.clear();
+        fetchProfile(); // Refresh profile to reflect changes
+      } else {
+        CustomSnackbar.showError(response.data['message']);
+      }
+    } catch (e) {
+      print('❌ Apply Referral Error: $e | lib/src/features/profile/presentation/controllers/profile_controller.dart');
+      CustomSnackbar.showError("Failed to apply referral code");
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  @override
+  void onClose() {
+    referralInputController.dispose();
+    // ... dispose other controllers
+    super.onClose();
+  }
   Future<void> fetchProfile() async {
     try {
       isLoading.value = true;

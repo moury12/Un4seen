@@ -1,14 +1,15 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get/get.dart';
-import '../../../../core/core_export.dart';
 import '../../../../core/widgets/gradient_container.dart';
+import '../../../../src_export.dart';
 
 class ReferAndEarnPage extends StatelessWidget {
   const ReferAndEarnPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final profileCtrl = Get.isRegistered<ProfileController>()
+        ? Get.find<ProfileController>()
+        : Get.put(ProfileController());
     return Scaffold(
       body: SafeArea(
         child: CustomScrollView(
@@ -65,18 +66,29 @@ class ReferAndEarnPage extends StatelessWidget {
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(8),
                                 ),
-                                child: const CustomText(
-                                  'UN4SEEN-3',
-                                  variant: TextVariant.titleSmall,
-                                  fontWeight: FontWeight.bold,
-                                  color: AppColors.kTextColor,
+                                child: Obx(
+                                  () => CustomText(
+                                    profileCtrl
+                                            .userProfile
+                                            .value
+                                            .referralCode ??
+                                        "no referral code",
+
+                                    variant: TextVariant.titleSmall,
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColors.kTextColor,
+                                  ),
                                 ),
                               ),
                             ),
                             space12W,
                             GestureDetector(
                               onTap: () {
-                                // Copy to clipboard
+                                final code =
+                                    profileCtrl.userProfile.value.referralCode;
+                                if (code != null && code.isNotEmpty) {
+                                  ClipboardUtils.copyText(code);
+                                }
                               },
                               child: Container(
                                 padding: const EdgeInsets.all(10),
@@ -96,9 +108,11 @@ class ReferAndEarnPage extends StatelessWidget {
                             ),
                           ],
                         ),
+
+                        // Inside the ReferAndEarnPage build method, find the "Enter code" section and update it:
                         space16H,
                         CustomText(
-                          AppStaticStrings.referralLink.tr,
+                          AppStaticStrings.applyReferral.tr,
                           color: Colors.white,
                           variant: TextVariant.labelMedium,
                         ),
@@ -106,42 +120,41 @@ class ReferAndEarnPage extends StatelessWidget {
                         Row(
                           children: [
                             Expanded(
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 12,
-                                  vertical: 10,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: const CustomText(
-                                  'https://un4seendecals.com',
-                                  variant: TextVariant.labelMedium,
-                                  color: AppColors.kTextColor,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
+                              child: CustomTextField(
+                                hintText: "Enter code",
+                                textEditingController:
+                                    profileCtrl.referralInputController,
                               ),
                             ),
                             space12W,
-                            GestureDetector(
-                              onTap: () {
-                                // Copy to clipboard
-                              },
-                              child: Container(
-                                padding: const EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                  color: Colors.white.withValues(alpha: 0.2),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: SvgPicture.asset(
-                                  AppIcons.copy,
-                                  colorFilter: const ColorFilter.mode(
-                                    Colors.white,
-                                    BlendMode.srcIn,
+                            Obx(
+                              () => GestureDetector(
+                                onTap: profileCtrl.isLoading.value
+                                    ? null
+                                    : () => profileCtrl.applyReferral(),
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 16,
+                                    vertical: 10,
                                   ),
-                                  height: 20,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white.withValues(alpha: 0.2),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: profileCtrl.isLoading.value
+                                      ? const SizedBox(
+                                          height: 18,
+                                          width: 18,
+                                          child: CircularProgressIndicator(
+                                            strokeWidth: 2,
+                                            color: Colors.white,
+                                          ),
+                                        )
+                                      : CustomText(
+                                          AppStaticStrings.submit.tr,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                 ),
                               ),
                             ),

@@ -5,15 +5,15 @@ class ProfileModel {
   final String? facebookURL;
   final String? instagramURL;
   final String? tiktokURL;
-  final int? followerCount;
-  final int? followingCount;
+  final int followerCount;
+  final int followingCount;
   final String? id;
   final String? email;
   final String? firstName;
   final String? lastName;
   final String? fullName;
   final String? memberNumber;
-  final int? shredPoints;
+  final int shredPoints;
   final String? country;
   final String? clothingFit;
   final String? tShirtSize;
@@ -21,14 +21,19 @@ class ProfileModel {
   final String? phoneNumber;
   final String? dob;
   final String? profilePicture;
-  // New fields
   final String? lastDailyClaimDate;
   final String? role;
   final String? status;
-  final bool? isProfileComplete;
+  final bool isProfileComplete;
+  final bool isOtpVerified;
+  final bool isProfileBonusClaimed;
+  final int lastBirthdayRewardYear;
+  final String? referralCode;
+  final int referralCount;
+  final String? referredBy;
+  final List<String> referrals;
   final String? createdAt;
   final String? updatedAt;
-  final bool? isOtpVerified;
 
   ProfileModel({
     this.address,
@@ -42,24 +47,30 @@ class ProfileModel {
     this.id,
     this.email,
     this.firstName,
-    this.profilePicture,
     this.lastName,
     this.fullName,
     this.memberNumber,
-    this.shredPoints,
+    this.shredPoints = 0,
     this.country,
     this.clothingFit,
     this.tShirtSize,
     this.hoodieSize,
     this.phoneNumber,
     this.dob,
+    this.profilePicture,
     this.lastDailyClaimDate,
     this.role,
     this.status,
-    this.isProfileComplete,
+    this.isProfileComplete = false,
+    this.isOtpVerified = false,
+    this.isProfileBonusClaimed = false,
+    this.lastBirthdayRewardYear = 0,
+    this.referralCode,
+    this.referralCount = 0,
+    this.referredBy,
+    this.referrals = const [],
     this.createdAt,
     this.updatedAt,
-    this.isOtpVerified,
   });
 
   factory ProfileModel.fromJson(Map<String, dynamic> json) {
@@ -68,12 +79,12 @@ class ProfileModel {
       email: json['email'],
       firstName: json['firstName'],
       lastName: json['lastName'],
-      fullName: "${json['firstName']} ${json['lastName']}",
+      fullName: json['fullName'],
       memberNumber: json['memberNumber'],
       shredPoints: json['shredPoints'] ?? 0,
       country: json['country'],
       aboutMe: json['aboutMe'],
-      profilePicture: json['image'],
+      profilePicture: json['image'], // Mapping 'image' key to profilePicture
       facebookURL: json['facebookURL'],
       instagramURL: json['instagramURL'],
       tiktokURL: json['tiktokURL'],
@@ -87,16 +98,18 @@ class ProfileModel {
       lastDailyClaimDate: json['lastDailyClaimDate'],
       role: json['role'],
       status: json['status'],
-      isProfileComplete: json['isProfileComplete'],
+      isProfileComplete: json['isProfileComplete'] ?? false,
+      isOtpVerified: json['isOtpVerified'] ?? false,
+      isProfileBonusClaimed: json['isProfileBonusClaimed'] ?? false,
+      lastBirthdayRewardYear: json['lastBirthdayRewardYear'] ?? 0,
+      referralCode: json['referralCode'],
+      referralCount: json['referralCount'] ?? 0,
+      referredBy: json['referredBy'],
+      referrals: List<String>.from(json['referrals'] ?? []),
       createdAt: json['createdAt'],
       updatedAt: json['updatedAt'],
-      isOtpVerified: json['isOtpVerified'],
-      address: json['address'] != null
-          ? Address.fromJson(json['address'])
-          : null,
-      rideInfo: json['rideInfo'] != null
-          ? RideInfo.fromJson(json['rideInfo'])
-          : null,
+      address: json['address'] != null ? Address.fromJson(json['address']) : null,
+      rideInfo: json['rideInfo'] != null ? RideInfo.fromJson(json['rideInfo']) : null,
     );
   }
 }

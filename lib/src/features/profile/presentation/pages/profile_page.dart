@@ -29,6 +29,7 @@ class ProfilePage extends StatelessWidget {
             await profileCtrl.fetchProfile();
           },
           child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
             padding: AppPadding.getPadding12H(context),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

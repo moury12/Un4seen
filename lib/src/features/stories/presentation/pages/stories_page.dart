@@ -1,10 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:un4seen/src/features/stories/presentation/controllers/story_controller.dart';
 import '../../../../src_export.dart';
 import '../widgets/post_story_card.dart';
 import '../widgets/stories_header.dart';
-import '../widgets/story_card.dart';
 import '../widgets/story_filter_chips.dart';
 import '../widgets/story_card_custom_shape.dart';
 
@@ -29,10 +26,10 @@ class StoriesPage extends StatelessWidget {
               padding: AppPadding.getPadding12H(context).copyWith(bottom: 12),
               sliver: const SliverToBoxAdapter(child: StoriesHeader()),
             ),
-            SliverPadding(
-              padding: AppPadding.getPadding12H(context),
-              sliver: const SliverToBoxAdapter(child: StoryFilterChips()),
-            ),
+            // SliverPadding(
+            //   padding: AppPadding.getPadding12H(context),
+            //   sliver: const SliverToBoxAdapter(child: StoryFilterChips()),
+            // ),
 
             // 2. The Main Grid
             Obx(() {
@@ -75,7 +72,11 @@ class StoriesPage extends StatelessWidget {
                       // Show actual Stories
                       final actualIndex = index - 1;
                       final story = controller.stories[actualIndex];
-                      return StoryCard(isLeft: index % 2 == 0, story: story, index: actualIndex,);
+                      return StoryCard(
+                        isLeft: index % 2 == 0,
+                        story: story,
+                        index: actualIndex,
+                      );
                     },
                     childCount:
                         itemCount, // This replaces 'itemCount' parameter

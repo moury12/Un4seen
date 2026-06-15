@@ -99,6 +99,8 @@ class AppStaticStrings {
   static const String delete = 'Delete';
   static const String retry = 'Retry';
   static const String submit = 'Submit';
+  static const String applyReferral = 'Apply Referral code';
+
   static const String competitions = 'Competitions';
   static const String giveaway = 'Giveaway';
   static const String points = 'Points';

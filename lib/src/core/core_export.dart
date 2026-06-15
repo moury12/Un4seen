@@ -6,6 +6,7 @@ export 'theme/app_theme.dart';
 export 'utils/app_constants.dart';
 export 'utils/app_strings.dart';
 export 'utils/app_images.dart';
+export 'utils/clipboard_utils.dart';
 
 // Widgets
 export 'widgets/custom_text.dart';

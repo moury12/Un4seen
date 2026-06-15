@@ -187,7 +187,6 @@ class CompetitionsPage extends StatelessWidget {
 
   Widget _buildShimmer(BuildContext context) {
     return SingleChildScrollView(
-      padding: AppPadding.getPadding12H(context),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: List.generate(3, (i) => _buildShimmerCard()),

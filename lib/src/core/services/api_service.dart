@@ -22,6 +22,9 @@ class ApiService {
       InterceptorsWrapper(
         onRequest: (options, handler) {
           log(" token ------------  ${_storage.accessToken ?? "NULL"}");
+          log(
+            " refresh token --------------- ${_storage.refreshToken ?? "NULL"}",
+          );
           final token = _storage.accessToken;
           if (token != null) {
             options.headers['Authorization'] = 'Bearer $token';
@@ -33,27 +36,50 @@ class ApiService {
           _logResponse(response);
           return handler.next(response);
         },
-        onError: (DioException e, handler) async {
+        onError: 
+         (DioException e, handler) async {
           _logError(e);
-          // Handle token refresh on 401
+
+          // ─── 401 UNAUTHORIZED / TOKEN EXPIRED LOGIC ───
           if (e.response?.statusCode == 401) {
-            final refresh = _storage.refreshToken;
-            if (refresh != null) {
+            final String? currentRefreshToken = _storage.refreshToken;
+
+            if (currentRefreshToken != null && currentRefreshToken.isNotEmpty) {
               try {
+                log("🔄 [TOKEN] 401 Detected. Attempting to refresh access token...");
+                
+                // Use a clean Dio instance to avoid interceptor loops
                 final refreshRes = await Dio().post(
                   '${_dio.options.baseUrl}/auth/refresh-token',
-                  data: {'refreshToken': refresh},
+                  data: {'refreshToken': currentRefreshToken},
                 );
 
-                final newAccess = refreshRes.data['data']['accessToken'];
-                final newRefresh = refreshRes.data['data']['refreshToken'];
-                await _storage.saveTokens(newAccess, newRefresh);
+                if (refreshRes.statusCode == 200 && refreshRes.data['success'] == true) {
+                  final String newAccessToken = refreshRes.data['data']['accessToken'];
+                  
+                  log("✅ [TOKEN] New access token retrieved. Updating storage.");
+                  
+                  // Save the new access token. 
+                  // Note: Since the refresh API only returns accessToken, 
+                  // we pass the existing refreshToken back into saveTokens to keep it.
+                  await _storage.saveTokens(newAccessToken, currentRefreshToken);
 
-                e.requestOptions.headers['Authorization'] = 'Bearer $newAccess';
-                return handler.resolve(await _dio.fetch(e.requestOptions));
+                  // Update the header of the original failed request
+                  e.requestOptions.headers['Authorization'] = 'Bearer $newAccessToken';
+
+                  // Retry the original request
+                  log("🔁 [RETRY] Retrying original request: ${e.requestOptions.path}");
+                  final clonedRequest = await _dio.fetch(e.requestOptions);
+                  return handler.resolve(clonedRequest);
+                }
               } catch (refreshError) {
+                log("🚨 [TOKEN] Refresh failed or Refresh Token expired. Clearing session.");
                 await _storage.clear();
+                // Optional: Trigger a redirect to login page here if using a global controller
               }
+            } else {
+              log("🚨 [TOKEN] No refresh token available. User must login again.");
+              await _storage.clear();
             }
           }
           return handler.next(e);
@@ -61,6 +87,10 @@ class ApiService {
       ),
     );
   }
+        
+        
+       
+  
   void _logRequest(RequestOptions o) {
     print('🚀 [API REQUEST] | ${o.method} | ${o.path}');
     print('🔗 File: lib/src/core/services/api_service.dart');
