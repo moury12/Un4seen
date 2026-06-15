@@ -2,6 +2,7 @@ import '../../../../src_export.dart';
 
 class MemberCardWidget extends StatelessWidget {
   final String name;
+  final String userId;  
   final String image;
   final String location;
   final String points;
@@ -17,7 +18,7 @@ class MemberCardWidget extends StatelessWidget {
     required this.points,
     required this.syndicateId,
     required this.memberType,
-    required this.followers,
+    required this.followers, required this.userId,
   });
 
   @override
@@ -34,16 +35,7 @@ class MemberCardWidget extends StatelessWidget {
         onTap: () {
           context.push(
             AppRoutes.memberDetails,
-            extra: {
-              'name': name,
-              'image': image,
-              'location': location,
-              'syndicateId': syndicateId,
-              'memberType': memberType,
-              'points': points,
-              'followers': followers,
-              'following': '156', // Placeholder for following count
-            },
+            extra: userId
           );
         },
         child: Row(

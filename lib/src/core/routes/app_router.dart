@@ -132,11 +132,7 @@ class AppRouter {
         name: 'bikeProfiles',
         builder: (context, state) => const SavedBikeProfilesPage(),
       ),
-      GoRoute(
-        path: AppRoutes.members,
-        name: 'members',
-        builder: (context, state) => const MembersPage(),
-      ),
+
       GoRoute(
         path: AppRoutes.settings,
         name: 'settings',
@@ -227,23 +223,7 @@ class AppRouter {
         name: 'postStory',
         builder: (context, state) => PostStoryPage(),
       ),
-      GoRoute(
-        path: AppRoutes.memberDetails,
-        name: 'memberDetails',
-        builder: (context, state) {
-          final args = state.extra as Map<String, dynamic>? ?? {};
-          return MemberDetailsPage(
-            name: args['name'] ?? '',
-            image: args['image'] ?? '',
-            location: args['location'] ?? '',
-            syndicateId: args['syndicateId'] ?? '',
-            memberType: args['memberType'] ?? '',
-            points: args['points'] ?? '',
-            followers: args['followers'] ?? '',
-            following: args['following'] ?? '',
-          );
-        },
-      ),
+   
       // Add this inside the routes list
       GoRoute(
         path: AppRoutes.entriesGallery,
@@ -285,6 +265,29 @@ class AppRouter {
         name: 'buildsMods',
         builder: (context, state) => const BuildsModsPage(),
       ),
+      // Generic List Route
+GoRoute(
+  path: AppRoutes.members,
+        name: 'members',
+  builder: (context, state) {
+    final extra = state.extra as Map<String, dynamic>;
+    return MembersPage(
+      title: extra['title'],
+      users: extra['list'],
+      onRefresh: extra['refresh'],
+    );
+  },
+),
+
+// Member Details updated to use ID
+GoRoute(
+  path: AppRoutes.memberDetails,
+  name: 'memberDetails',
+  builder: (context, state) {
+    final userId = state.extra as String;
+    return MemberDetailsPage(userId: userId);
+  },
+),
       GoRoute(
         path: AppRoutes.chat,
         name: 'chat',

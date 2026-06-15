@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:dio/dio.dart' as dio;
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:un4seen/src/features/profile/data/models/user_profile_model.dart';
 import '../../../../core/services/api_service.dart';
 import '../../../../core/widgets/custom_snackbar.dart';
 import '../../data/models/profile_model.dart';
@@ -14,6 +15,10 @@ class ProfileController extends GetxController {
 
   final RxBool isLoading = false.obs;
   final Rx<File?> profileImage = Rx<File?>(null);
+  final RxList<UserProfileModel> followersList = <UserProfileModel>[].obs;
+  final RxList<UserProfileModel> followingList = <UserProfileModel>[].obs;
+  final RxBool isListLoading = false.obs;
+  final Rxn<UserProfileModel> targetMemberDetails = Rxn<UserProfileModel>();
 
   // Observables for non-form data
   final followerCount = 0.obs;
@@ -25,8 +30,8 @@ class ProfileController extends GetxController {
   final facebookUrl = '@username'.obs;
   final instagramUrl = '@username'.obs;
   final tiktokUrl = '@username'.obs;
+
   // Form Controllers
-  // final fullNameController = TextEditingController();
   final firstNameController = TextEditingController();
   final lastNameController = TextEditingController();
   final aboutMeController = TextEditingController();
@@ -71,12 +76,126 @@ class ProfileController extends GetxController {
 
   @override
   void onInit() {
+     Future.wait([
+      fetchProfile(),
+      fetchFollowers(),
+      fetchFollowing(),
+    ]);
     super.onInit();
-    fetchProfile();
   }
-// Inside ProfileController class
 
   final referralInputController = TextEditingController();
+
+  int _followersPage = 1;
+  bool _hasMoreFollowers = true;
+  bool _isFollowersLoadingMore = false;
+
+  int _followingPage = 1;
+  bool _hasMoreFollowing = true;
+  bool _isFollowingLoadingMore = false;
+
+  Future<void> fetchFollowers() async {
+    try {
+      _followersPage = 1;
+      _hasMoreFollowers = true;
+      isListLoading.value = true;
+      final res = await _api.get('/user/my-followers?page=$_followersPage&limit=10');
+      if (res.data['success']) {
+        final List result = res.data['data']['result'] ?? [];
+        followersList.assignAll(result.map((e) => UserProfileModel.fromJson(e)).toList());
+        final meta = res.data['data']['meta'];
+        if (meta != null) {
+          final int totalPage = meta['totalPage'] ?? 1;
+          _hasMoreFollowers = _followersPage < totalPage;
+        } else {
+          _hasMoreFollowers = false;
+        }
+      }
+    } finally {
+      isListLoading.value = false;
+    }
+  }
+
+  Future<void> loadMoreFollowers() async {
+    if (!_hasMoreFollowers || _isFollowersLoadingMore || isListLoading.value) return;
+    try {
+      _isFollowersLoadingMore = true;
+      final nextPage = _followersPage + 1;
+      final res = await _api.get('/user/my-followers?page=$nextPage&limit=10');
+      if (res.data['success']) {
+        final List result = res.data['data']['result'] ?? [];
+        followersList.addAll(result.map((e) => UserProfileModel.fromJson(e)).toList());
+        _followersPage = nextPage;
+        final meta = res.data['data']['meta'];
+        if (meta != null) {
+          final int totalPage = meta['totalPage'] ?? 1;
+          _hasMoreFollowers = _followersPage < totalPage;
+        } else {
+          _hasMoreFollowers = false;
+        }
+      }
+    } finally {
+      _isFollowersLoadingMore = false;
+    }
+  }
+
+  Future<void> fetchFollowing() async {
+    try {
+      _followingPage = 1;
+      _hasMoreFollowing = true;
+      isListLoading.value = true;
+      final res = await _api.get('/user/my-following?page=$_followingPage&limit=10');
+      if (res.data['success']) {
+        final List result = res.data['data']['result'] ?? [];
+        followingList.assignAll(result.map((e) => UserProfileModel.fromJson(e)).toList());
+        final meta = res.data['data']['meta'];
+        if (meta != null) {
+          final int totalPage = meta['totalPage'] ?? 1;
+          _hasMoreFollowing = _followingPage < totalPage;
+        } else {
+          _hasMoreFollowing = false;
+        }
+      }
+    } finally {
+      isListLoading.value = false;
+    }
+  }
+
+  Future<void> loadMoreFollowing() async {
+    if (!_hasMoreFollowing || _isFollowingLoadingMore || isListLoading.value) return;
+    try {
+      _isFollowingLoadingMore = true;
+      final nextPage = _followingPage + 1;
+      final res = await _api.get('/user/my-following?page=$nextPage&limit=10');
+      if (res.data['success']) {
+        final List result = res.data['data']['result'] ?? [];
+        followingList.addAll(result.map((e) => UserProfileModel.fromJson(e)).toList());
+        _followingPage = nextPage;
+        final meta = res.data['data']['meta'];
+        if (meta != null) {
+          final int totalPage = meta['totalPage'] ?? 1;
+          _hasMoreFollowing = _followingPage < totalPage;
+        } else {
+          _hasMoreFollowing = false;
+        }
+      }
+    } finally {
+      _isFollowingLoadingMore = false;
+    }
+  }
+
+  Future<void> fetchMemberDetails(String userId) async {
+    try {
+      isLoading.value = true;
+      targetMemberDetails.value = null; // Clear previous
+      final res = await _api.get('/user/$userId');
+      if (res.data['success']) {
+        targetMemberDetails.value = UserProfileModel.fromJson(res.data['data']);
+      }
+    } finally {
+      isLoading.value = false;
+    }
+  }
 
   Future<void> applyReferral() async {
     final code = referralInputController.text.trim();
@@ -114,6 +233,7 @@ class ProfileController extends GetxController {
     // ... dispose other controllers
     super.onClose();
   }
+
   Future<void> fetchProfile() async {
     try {
       isLoading.value = true;
@@ -171,31 +291,6 @@ class ProfileController extends GetxController {
   Future<bool> updateProfile({String? country, String? dob}) async {
     try {
       isLoading.value = true;
-      // {
-      //   "firstName": "Nahid",
-      //   "lastName": "Hossain",
-      //   "aboutMe": "Motocross enthusiast and professional rider. I love customizing my bike with Un4seen decals and hitting the dirt tracks of Canterbury.",
-      //   "facebookURL": "https://facebook.com/nahid.mx",
-      //   "instagramURL": "https://instagram.com/nahid_rider",
-      //   "tiktokURL": "https://tiktok.com/@nahid_mx",
-      //   "phoneNumber": "02-8312024",
-      //   "address": {
-      //     "streetAddress": "45 Raceway Drive",
-      //     "city": "Timaru",
-      //     "postalCode": "7910",
-      //     "state": "Canterbury"
-      //   },
-      //   "clothingFit": "Mens",
-      //   "tShirtSize": "L",
-      //   "hoodieSize": "XL",
-      //   "rideInfo": {
-      //     "bikeModel": "Yamaha YZ450F",
-      //     "year": "2024",
-      //     "rideType": ["MX", "Enduro", "Road"],
-      //     "ridingLevel": "Intermediate"
-      //   },
-      //   "dob": "1995-10-25"
-      // }
       final Map<String, dynamic> payload = {
         "firstName": firstNameController.text,
         "lastName": lastNameController.text,
@@ -238,7 +333,6 @@ class ProfileController extends GetxController {
         );
       }
 
-      // Changed from post to patch
       final response = await _api.patch('/user/update-profile', data: formData);
 
       if (response.data['success']) {
@@ -254,6 +348,38 @@ class ProfileController extends GetxController {
       return false;
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  Future<void> followUser(String targetUserId) async {
+    try {
+      final response = await _api.patch('/user/follow/$targetUserId');
+
+      if (response.data['success']) {
+        CustomSnackbar.showSuccess(response.data['message'] ?? "Followed successfully");
+        fetchProfile(); 
+      } else {
+        CustomSnackbar.showError(response.data['message'] ?? "Failed to follow");
+      }
+    } catch (e) {
+      print('❌ Follow Error: $e | lib/src/features/profile/presentation/controllers/profile_controller.dart');
+      CustomSnackbar.showError("Something went wrong");
+    }
+  }
+
+  Future<void> unfollowUser(String targetUserId) async {
+    try {
+      final response = await _api.patch('/user/unfollow/$targetUserId');
+
+      if (response.data['success']) {
+        CustomSnackbar.showSuccess(response.data['message'] ?? "Unfollowed successfully");
+        fetchProfile();
+      } else {
+        CustomSnackbar.showError(response.data['message'] ?? "Failed to unfollow");
+      }
+    } catch (e) {
+      print('❌ Unfollow Error: $e | lib/src/features/profile/presentation/controllers/profile_controller.dart');
+      CustomSnackbar.showError("Something went wrong");
     }
   }
 

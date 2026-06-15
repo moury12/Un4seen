@@ -16,6 +16,7 @@ class SavedBikeProfilesPage extends StatelessWidget {
         itemCount: 4,
         itemBuilder: (context, index) {
           return MemberCardWidget(
+            userId: "fsdf",
             name: index == 0
                 ? 'Jake Thompson 🇺🇸'
                 : index == 1

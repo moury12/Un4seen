@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/core_export.dart';
 import '../../../../core/routes/app_routes.dart';
+import '../../../../src_export.dart';
 import 'stat_item_widget.dart';
 import 'stat_divider_widget.dart';
 
@@ -201,15 +202,32 @@ class ProfileHeaderWidget extends StatelessWidget {
                     label: AppStaticStrings.points.tr,
                   ),
                   const StatDividerWidget(),
+                  // Inside build Stats Row
                   StatItemWidget(
                     value: followers,
                     label: AppStaticStrings.followers.tr,
+                    onTap: () => context.push(
+                      AppRoutes.members,
+                      extra: {
+                        'title': AppStaticStrings.followers.tr,
+                        'list': Get.find<ProfileController>().followersList,
+                        'refresh': Get.find<ProfileController>().fetchFollowers,
+                      },
+                    ),
                   ),
                   const StatDividerWidget(),
                   StatItemWidget(
                     value: following,
                     label: 'Following',
-                  ), // Add to strings if needed
+                    onTap: () => context.push(
+                      AppRoutes.members,
+                      extra: {
+                        'title': 'Following',
+                        'list': Get.find<ProfileController>().followingList,
+                        'refresh': Get.find<ProfileController>().fetchFollowing,
+                      },
+                    ),
+                  ),
                 ],
               ),
             ],

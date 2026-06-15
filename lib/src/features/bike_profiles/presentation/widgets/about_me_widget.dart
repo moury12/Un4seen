@@ -3,8 +3,9 @@ import '../../../../core/core_export.dart';
 
 class AboutMeWidget extends StatelessWidget {
   final Color bgColor;
+  final String? aboutMe; 
 
-  const AboutMeWidget({super.key, required this.bgColor});
+  const AboutMeWidget({super.key, required this.bgColor, this.aboutMe});
 
   @override
   Widget build(BuildContext context) {
@@ -15,10 +16,10 @@ class AboutMeWidget extends StatelessWidget {
         color: bgColor,
         borderRadius: BorderRadius.circular(16),
       ),
-      child: const Column(
+      child:  Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CustomText(
+        const  CustomText(
             "About Me",
             variant: TextVariant.titleMedium,
             fontWeight: FontWeight.bold,
@@ -26,7 +27,7 @@ class AboutMeWidget extends StatelessWidget {
           ),
           space8H,
           CustomText(
-            "MX rider from LA. Been riding for 10+ years. Love trail Riding and practicing slow wheelies. Always down for a huss!",
+            aboutMe ?? "",
             variant: TextVariant.labelMedium,
             color: Colors.white,
           ),
