@@ -17,6 +17,8 @@ class ProfileController extends GetxController {
   final Rx<File?> profileImage = Rx<File?>(null);
   final RxList<UserProfileModel> followersList = <UserProfileModel>[].obs;
   final RxList<UserProfileModel> followingList = <UserProfileModel>[].obs;
+    final RxList<UserProfileModel> userfollowersList = <UserProfileModel>[].obs;
+  final RxList<UserProfileModel> userfollowingList = <UserProfileModel>[].obs;
   final RxBool isListLoading = false.obs;
   final Rxn<UserProfileModel> targetMemberDetails = Rxn<UserProfileModel>();
 
@@ -138,7 +140,53 @@ class ProfileController extends GetxController {
       _isFollowersLoadingMore = false;
     }
   }
+// Add these to ProfileController class
 
+  // ── Fetch Other User's Followers ──
+  Future<void> fetchOtherFollowers(String userId) async {
+    try {
+      isListLoading.value = true;
+      final res = await _api.get('/user/followers/$userId?page=1&limit=100');
+      if (res.data['success']) {
+        final List result = res.data['data']['result'] ?? [];
+        userfollowersList.assignAll(result.map((e) => UserProfileModel.fromJson(e)).toList());
+      }
+    } finally {
+      isListLoading.value = false;
+    }
+  }
+
+  // ── Fetch Other User's Following ──
+  Future<void> fetchOtherFollowing(String userId) async {
+    try {
+      isListLoading.value = true;
+      final res = await _api.get('/user/following/$userId');
+      if (res.data['success']) {
+        final List result = res.data['data']['result'] ?? [];
+        userfollowingList.assignAll(result.map((e) => UserProfileModel.fromJson(e)).toList());
+      }
+    } finally {
+      isListLoading.value = false;
+    }
+  }
+
+  // ── Toggle Follow (Optimistic UI) ──
+  Future<void> toggleFollow(UserProfileModel user) async {
+    final bool currentlyFollowing = user.isFollowing;
+    final String endpoint = currentlyFollowing ? 'unfollow' : 'follow';
+    
+    try {
+      // Hit API
+      final response = await _api.patch('/user/$endpoint/${user.id}');
+      if (response.data['success']) {
+        CustomSnackbar.showSuccess(response.data['message']);
+        // Refresh the target user details to update counts and button state
+        fetchMemberDetails(user.id!);
+      }
+    } catch (e) {
+      CustomSnackbar.showError("Failed to update follow status");
+    }
+  }
   Future<void> fetchFollowing() async {
     try {
       _followingPage = 1;
@@ -351,39 +399,7 @@ class ProfileController extends GetxController {
     }
   }
 
-  Future<void> followUser(String targetUserId) async {
-    try {
-      final response = await _api.patch('/user/follow/$targetUserId');
-
-      if (response.data['success']) {
-        CustomSnackbar.showSuccess(response.data['message'] ?? "Followed successfully");
-        fetchProfile(); 
-      } else {
-        CustomSnackbar.showError(response.data['message'] ?? "Failed to follow");
-      }
-    } catch (e) {
-      print('❌ Follow Error: $e | lib/src/features/profile/presentation/controllers/profile_controller.dart');
-      CustomSnackbar.showError("Something went wrong");
-    }
-  }
-
-  Future<void> unfollowUser(String targetUserId) async {
-    try {
-      final response = await _api.patch('/user/unfollow/$targetUserId');
-
-      if (response.data['success']) {
-        CustomSnackbar.showSuccess(response.data['message'] ?? "Unfollowed successfully");
-        fetchProfile();
-      } else {
-        CustomSnackbar.showError(response.data['message'] ?? "Failed to unfollow");
-      }
-    } catch (e) {
-      print('❌ Unfollow Error: $e | lib/src/features/profile/presentation/controllers/profile_controller.dart');
-      CustomSnackbar.showError("Something went wrong");
-    }
-  }
-
-  Future<void> pickImage() async {
+    Future<void> pickImage() async {
     final XFile? pickedFile = await _imagePicker.pickImage(
       source: ImageSource.gallery,
     );

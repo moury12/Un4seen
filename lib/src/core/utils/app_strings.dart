@@ -14,6 +14,7 @@ class AppStaticStrings {
   static const String forgotPassword = 'Forgot password?';
   static const String orContinueWith = 'or continue with';
   static const String follow = 'Follow';
+  static const String unfollow = 'Unfollow';
   static const String platform = 'Platform';
   static const String postLink = 'Post Link';
   static const String dontHaveAccountRegister =
@@ -22,7 +23,7 @@ class AppStaticStrings {
   static const String continueWithGoogle = 'Continue with Google';
   static const String getStarted = 'Get Started';
   static const String yourShredPointsBalance = 'Your Shared Points Balance';
-  static const String messageUn4seen = 'Message Un4seen';
+  static const String messageUn4seen = 'Message User';
   static const String myBikeProfile = 'My Bike Profile';
   static const String createAccount = 'Create Account';
   static const String joinSyndicate = 'Join the Un4seen Syndicate today';

@@ -198,11 +198,11 @@ class AppRouter {
         builder: (context, state) => const MyBikeProfilePage(),
       ),
       GoRoute(
-        path: '${AppRoutes.bikeGallery}/:id',
+        path: AppRoutes.bikeGallery,
         name: 'bikeGallery',
         builder: (context, state) {
-          final id = state.pathParameters['id'] ?? '';
-          return BikeGalleryPage(bikeId: id);
+          final bikeId = state.extra as String? ?? '';
+          return BikeGalleryPage(bikeId: bikeId);
         },
       ),
       GoRoute(

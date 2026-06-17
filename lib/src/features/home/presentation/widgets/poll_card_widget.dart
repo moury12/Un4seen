@@ -1,28 +1,21 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:un4seen/src/features/home/presentation/widgets/poll_option_widget.dart';
 import '../../../../src_export.dart';
 
 class PollCardWidget extends StatelessWidget {
-  final String icon;
-  final String title;
-  final String subtitle;
-  final List<Widget> options;
-  final String totalVotes;
-  final String timeLeft;
-  final bool hasVoted;
-
-  const PollCardWidget({
-    super.key,
-    required this.icon,
-    required this.title,
-    required this.subtitle,
-    required this.options,
-    required this.totalVotes,
-    required this.timeLeft,
-    this.hasVoted = false,
-  });
+  final CrewChoiceModel model;
+  const PollCardWidget({super.key, required this.model});
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.find<CrewChoiceController>();
+
+    // ─── FIX LOGIC ───
+    // Check if the icon we are about to use is an SVG or a PNG
+    final String iconPath = model.iconStyle == 'drop' ? AppIcons.logo : AppIcons.reward;
+    final bool isSvg = iconPath.toLowerCase().endsWith('.svg');
+
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       padding: AppPadding.getPadding12(context),
@@ -34,110 +27,62 @@ class PollCardWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
                 padding: const EdgeInsets.all(8),
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  shape: BoxShape.circle,
-                ),
-                child: SvgPicture.asset(
-                  icon,
-                  height: 20,
-                  colorFilter: const ColorFilter.mode(
-                    AppColors.kPrimaryColor,
-                    BlendMode.srcIn,
-                  ),
-                ),
+                decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
+                child: isSvg 
+                  ? SvgPicture.asset(
+                      iconPath,
+                      height: 20, 
+                      colorFilter: const ColorFilter.mode(AppColors.kPrimaryColor, BlendMode.srcIn)
+                    )
+                  : Image.asset(
+                      iconPath,
+                      height: 20,
+                      width: 20,
+                      fit: BoxFit.contain,
+                    ),
               ),
               space12W,
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    CustomText(
-                      title,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
-                    CustomText(
-                      subtitle,
-                      color: Colors.white.withValues(alpha: .9),
-                      fontSize: 11,
-                    ),
+                    CustomText(model.title, color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
+                    CustomText(model.description, color: Colors.white.withValues(alpha: .9), fontSize: 11),
                   ],
                 ),
               ),
             ],
           ),
+          space16H,
+          ...List.generate(model.options.length, (idx) {
+            final option = model.options[idx];
+            return PollOptionWidget(
+              title: option.label,
+              percentage: option.percentage,
+              isSelected: model.mySelectionIndex == idx,
+                onTap:() => controller.castVote(model.id, idx),
+                option: option,
+            );
+          }), 
           space8H,
-          ...options,
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: [
-                  const Icon(
-                    Icons.people_outline,
-                    color: Colors.white,
-                    size: 14,
-                  ),
-                  space4W,
-                  CustomText(
-                    "$totalVotes ${AppStaticStrings.votesCount.tr}",
-                    color: Colors.white,
-                    fontSize: 12,
-                  ),
-                ],
-              ),
+              CustomText("${model.totalVotes} ${AppStaticStrings.votesCount.tr}", color: Colors.white, fontSize: 12),
               Row(
                 children: [
                   Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 4,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.black26,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: CustomText(
-                      timeLeft,
-                      color: Colors.white,
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(color: Colors.black26, borderRadius: BorderRadius.circular(12)),
+                    child: CustomText(model.timeLabel.tr, color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
                   ),
-                  if (hasVoted) ...[
+                  if (model.hasVoted) ...[
                     space8W,
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 4,
-                      ),
-                      decoration: BoxDecoration(
-                        color: AppColors.kPrimaryDarkColor3,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Row(
-                        children: [
-                          const Icon(
-                            Icons.check,
-                            color: Colors.white,
-                            size: 10,
-                          ),
-                          space4W,
-                          CustomText(
-                            AppStaticStrings.voted.tr,
-                            color: Colors.white,
-                            fontSize: 12,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+                    const Icon(Icons.check_circle, color: Colors.white, size: 18),
+                  ]
                 ],
               ),
             ],

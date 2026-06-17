@@ -64,6 +64,8 @@ class MemberDetailsPage extends StatelessWidget {
                     followers: user.followerCount.toString(),
                     following: user.followingCount.toString(),
                     isCurrentUser: false,
+                    isFollowing: user.isFollowing  ,
+                    userId: user.id,
                   ),
                   space8H,
 

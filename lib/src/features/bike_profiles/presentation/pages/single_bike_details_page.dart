@@ -52,7 +52,7 @@ class SingleBikeDetailsPage extends StatelessWidget {
               BikeDetailsContainerWidget(bike: bike),
               GradientContainer(
                 onTap: () =>
-                    context.push('${AppRoutes.bikeGallery}/${bike.id}'),
+                    context.push(AppRoutes.bikeGallery, extra:  bike.id),
                 padding: AppPadding.getPadding12(context),
                 child: Row(
                   spacing: 8,

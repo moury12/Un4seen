@@ -1,9 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get/get.dart';
-import 'package:go_router/go_router.dart';
-import '../../../../core/core_export.dart';
-import '../../../../core/routes/app_routes.dart';
+
 import '../../../../src_export.dart';
 import 'stat_item_widget.dart';
 import 'stat_divider_widget.dart';
@@ -18,7 +14,8 @@ class ProfileHeaderWidget extends StatelessWidget {
   final String followers;
   final String following;
   final bool isCurrentUser;
-
+ final bool isFollowing;
+ final String? userId;
   const ProfileHeaderWidget({
     super.key,
     required this.name,
@@ -29,11 +26,13 @@ class ProfileHeaderWidget extends StatelessWidget {
     required this.points,
     required this.followers,
     required this.following,
-    this.isCurrentUser = false,
+    this.isCurrentUser = false,  this.isFollowing=false, this.userId,
   });
 
   @override
   Widget build(BuildContext context) {
+        final controller = Get.find<ProfileController>();
+
     return Row(
       spacing: 6,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -86,9 +85,48 @@ class ProfileHeaderWidget extends StatelessWidget {
                     ),
                 ],
               ),
-
-              // Message Button
-              Container(
+ if (!isCurrentUser) Row(spacing: 6,
+   children: [
+     Container(
+                    padding: AppPadding.getPadding4(context),
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        colors: [
+                          AppColors.kPrimaryColor,
+                          AppColors.kPrimaryDarkColor,
+                        ],
+                      ),
+                      borderRadius: BorderRadius.circular(appRadius6),
+                    ),
+                    child: ButtonTapWidget(
+                      onTap: () {
+                     
+                          context.push(AppRoutes.channelMembers);
+                        
+                      },
+                      radius: appRadius6,
+                      child: Row(
+                        spacing: 6,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SvgPicture.asset(
+                           AppIcons.chat ,
+                            height: 15,
+                          ),
+                          CustomText(
+                            AppStaticStrings.messageUn4seen.tr ,
+                              
+                            variant: TextVariant.labelSmall,
+                            color: AppColors.kWhiteTextColor,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          if (!isCurrentUser) space4W,
+                        ],
+                      ),
+                    ),
+                  ),
+  
+   Container(
                 padding: AppPadding.getPadding4(context),
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
@@ -100,19 +138,27 @@ class ProfileHeaderWidget extends StatelessWidget {
                   borderRadius: BorderRadius.circular(appRadius6),
                 ),
                 child: ButtonTapWidget(
+                  onTap: () {
+                    if (isCurrentUser) {
+                      context.push(AppRoutes.chat);
+                    } else {
+                                            controller.toggleFollow(controller.targetMemberDetails.value!);
+
+                    }
+                  },
                   radius: appRadius6,
                   child: Row(
                     spacing: 6,
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       SvgPicture.asset(
-                        !isCurrentUser ? AppIcons.addMember : AppIcons.chat,
+                        isCurrentUser ? AppIcons.chat : (isFollowing ? AppIcons.checked : AppIcons.addMember),
                         height: 15,
                       ),
                       CustomText(
-                        !isCurrentUser
-                            ? AppStaticStrings.follow.tr
-                            : AppStaticStrings.messageUn4seen.tr,
+                       isCurrentUser 
+                          ? AppStaticStrings.messageUn4seen.tr 
+                          : (isFollowing ? AppStaticStrings.unfollow.tr : AppStaticStrings.follow.tr),
                         variant: TextVariant.labelSmall,
                         color: AppColors.kWhiteTextColor,
                         fontWeight: FontWeight.bold,
@@ -122,7 +168,11 @@ class ProfileHeaderWidget extends StatelessWidget {
                   ),
                 ),
               ),
-              space4H,
+           ],
+ ),
+            
+
+               if (!isCurrentUser)   space4H,
 
               // ID and Membership Pills
               Row(
@@ -144,26 +194,24 @@ class ProfileHeaderWidget extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Expanded(
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 4,
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        colors: [Color(0xFF00A6FF), Color(0xFF0066CC)],
                       ),
-                      decoration: BoxDecoration(
-                        gradient: const LinearGradient(
-                          colors: [Color(0xFF00A6FF), Color(0xFF0066CC)],
-                        ),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: CustomText(
-                        memberType,
-                        color: Colors.white,
-                        variant: TextVariant.labelSmall,
-                        fontWeight: FontWeight.bold,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: CustomText(
+                      memberType,
+                      color: Colors.white,
+                      variant: TextVariant.labelSmall,
+                      fontWeight: FontWeight.bold,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 ],
@@ -206,27 +254,40 @@ class ProfileHeaderWidget extends StatelessWidget {
                   StatItemWidget(
                     value: followers,
                     label: AppStaticStrings.followers.tr,
-                    onTap: () => context.push(
+                    onTap: ()  {
+                      if (!isCurrentUser) {
+                      controller.fetchOtherFollowers(userId!);
+                    }
+                      context.push(
                       AppRoutes.members,
                       extra: {
                         'title': AppStaticStrings.followers.tr,
-                        'list': Get.find<ProfileController>().followersList,
-                        'refresh': Get.find<ProfileController>().fetchFollowers,
+                        'list':isCurrentUser? Get.find<ProfileController>().followersList : controller.userfollowersList,
+                       'refresh': () => isCurrentUser 
+                          ? controller.fetchFollowers() 
+                          : controller.fetchOtherFollowers(userId!),
                       },
-                    ),
+                    );}
                   ),
                   const StatDividerWidget(),
                   StatItemWidget(
                     value: following,
                     label: 'Following',
-                    onTap: () => context.push(
+                    onTap: () { if (!isCurrentUser) {
+                      controller.fetchOtherFollowing(userId!);
+                    }
+                      
+                      context.push(
+
                       AppRoutes.members,
                       extra: {
                         'title': 'Following',
-                        'list': Get.find<ProfileController>().followingList,
-                        'refresh': Get.find<ProfileController>().fetchFollowing,
+                         'list':  isCurrentUser ? controller.followingList : controller.userfollowingList,
+                      'refresh': () => isCurrentUser 
+                          ? controller.fetchFollowing() 
+                          : controller.fetchOtherFollowing(userId!),
                       },
-                    ),
+                    );}
                   ),
                 ],
               ),

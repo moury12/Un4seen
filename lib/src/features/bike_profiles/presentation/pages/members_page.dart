@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:un4seen/src/core/core_export.dart';
-import 'package:un4seen/src/features/profile/data/models/profile_model.dart';
+import 'package:un4seen/src/features/profile/data/models/user_profile_model.dart';
 import '../widgets/member_card_widget.dart';
 
 class MembersPage extends StatelessWidget {
 final String title;
-  final RxList<ProfileModel> users;
+  final RxList<UserProfileModel> users;
   final Future<void> Function() onRefresh;
 
   const MembersPage({
@@ -41,11 +41,12 @@ final String title;
                         userId: user.id!,
                         name: user.fullName ?? "Unknown",
                         location: user.country ?? "",
-                        image: user.profilePicture ?? "",
+                        image: user.image ?? "",
                         points: user.shredPoints.toString(),
                         syndicateId: user.memberNumber ?? "",
                         memberType: "Syndicate Member",
                         followers: user.followerCount.toString(),
+                       
                       );
                     },
                     childCount: users.length,

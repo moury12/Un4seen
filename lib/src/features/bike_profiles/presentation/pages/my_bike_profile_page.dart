@@ -95,7 +95,8 @@ class MyBikeProfilePage extends StatelessWidget {
                         space8H,
                         GradientContainer(
                           onTap: () => context.push(
-                            '${AppRoutes.bikeGallery}/${bike.id}',
+                            AppRoutes.bikeGallery,
+                            extra: bike.id,
                           ),
                           padding: AppPadding.getPadding12(context),
                           child: Row(
