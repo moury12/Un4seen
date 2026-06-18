@@ -66,11 +66,12 @@ class ChannelListItemWidget extends StatelessWidget {
                   space4H,
                   Row(
                     children: [
-                      const Icon(
-                        Icons.circle,
-                        size: 8,
-                        color: AppColors.kGreenColor,
-                      ),
+                      if (subtitle.contains('Online'))
+                        const Icon(
+                          Icons.circle,
+                          size: 8,
+                          color: AppColors.kGreenColor,
+                        ),
                       space4W,
                       CustomText(
                         subtitle,

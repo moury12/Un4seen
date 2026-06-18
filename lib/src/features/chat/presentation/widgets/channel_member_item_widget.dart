@@ -5,17 +5,23 @@ import '../../../../core/utils/app_constants.dart';
 import '../../../../core/utils/app_strings.dart';
 import '../../../../core/widgets/button_tap_widget.dart';
 import '../../../../core/widgets/custom_text.dart';
-
+import '../../../../core/widgets/custom_network_image.dart';
 class ChannelMemberItemWidget extends StatelessWidget {
   final String name;
+  final String? memberNumber;
+  final String? imageUrl;
   final bool isAdded;
   final bool isAdmin;
+  final VoidCallback? onToggle;
 
   const ChannelMemberItemWidget({
     super.key,
     required this.name,
     required this.isAdded,
+    this.memberNumber,
+    this.imageUrl,
     this.isAdmin = false,
+    this.onToggle,
   });
 
   @override
@@ -28,17 +34,26 @@ class ChannelMemberItemWidget extends StatelessWidget {
       ),
       child: Row(
         children: [
-          const CircleAvatar(
+          CustomNetworkImage(
+            imageUrl: imageUrl ?? '',
+            height: 32,
+            width: 32,
             radius: 16,
-            backgroundImage: AssetImage('assets/images/logo.png'),
           ),
+          // CircleAvatar(
+          //   radius: 16,
+          //   backgroundImage: imageUrl != null && imageUrl!.isNotEmpty
+          //       ? NetworkImage(imageUrl!)
+          //       : const AssetImage('assets/images/logo.png') as ImageProvider,
+          // ),
           space12W,
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CustomText(name, fontWeight: FontWeight.bold),
-                const CustomText("#srt434"),
+                if (memberNumber != null)
+                  CustomText(memberNumber!, fontSize: 11),
               ],
             ),
           ),
@@ -56,25 +71,26 @@ class ChannelMemberItemWidget extends StatelessWidget {
                 color: AppColors.kWhiteTextColor,
               ),
             ),
-          ButtonTapWidget(
-            onTap: () {},
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-              decoration: BoxDecoration(
-                color: isAdded
-                    ? AppColors.kBackgroundColor
-                    : AppColors.kPrimaryColor,
-                borderRadius: BorderRadius.circular(appRadius),
-              ),
-              child: CustomText(
-                isAdded ? AppStaticStrings.remove.tr : AppStaticStrings.add.tr,
-                color: isAdded
-                    ? AppColors.kTextColor
-                    : AppColors.kWhiteTextColor,
-                fontWeight: FontWeight.bold,
+          if (onToggle != null)
+            ButtonTapWidget(
+              onTap: onToggle!,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                decoration: BoxDecoration(
+                  color: isAdded
+                      ? AppColors.kBackgroundColor
+                      : AppColors.kPrimaryColor,
+                  borderRadius: BorderRadius.circular(appRadius),
+                ),
+                child: CustomText(
+                  isAdded ? AppStaticStrings.remove.tr : AppStaticStrings.add.tr,
+                  color: isAdded
+                      ? AppColors.kTextColor
+                      : AppColors.kWhiteTextColor,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
-          ),
         ],
       ),
     );

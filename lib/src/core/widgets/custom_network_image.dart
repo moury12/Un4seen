@@ -142,17 +142,16 @@ class CustomNetworkImage extends StatelessWidget {
 
               color: Colors.grey.withValues(alpha: 0.6),
 
-              // image: DecorationImage(
-              //   image: AssetImage(
+              image: DecorationImage(
+                image: AssetImage(
 
-              //   ),
-              //   fit: BoxFit.cover,
-              // ),
+                  imageErrorUrl ?? 'assets/icons/placeholder.png',
+                
+                ),
+                fit: BoxFit.cover,
+              ),
             ),
-            child: Image.asset(
-              imageErrorUrl ?? 'assets/icons/placeholder.png',
-              fit: BoxFit.cover,
-            ),
+            
           );
         },
       ),

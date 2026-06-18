@@ -3,6 +3,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:un4seen/src/core/utils/app_images.dart';
+import 'package:un4seen/src/features/auth/presentation/controllers/auth_controller.dart';
+import 'package:un4seen/src/features/chat/data/models/chat_models.dart';
+import 'package:un4seen/src/features/chat/presentation/controller/chat_controller.dart';
 
 import '../../../../core/routes/app_routes.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -16,6 +19,7 @@ enum ChatViewType { channel, direct }
 
 class ChatPageArgs {
   final ChatViewType type;
+  final String id;
   final String title;
   final String subtitle;
   final int onlineCount;
@@ -23,6 +27,7 @@ class ChatPageArgs {
 
   const ChatPageArgs({
     required this.type,
+    this.id = '',
     required this.title,
     required this.subtitle,
     this.onlineCount = 0,
@@ -30,40 +35,88 @@ class ChatPageArgs {
   });
 
   const ChatPageArgs.channel({
-    required String title,
-    String subtitle = 'Main Syndicate channel',
-    int onlineCount = 24,
-  }) : this(
-         type: ChatViewType.channel,
-         title: title,
-         subtitle: subtitle,
-         onlineCount: onlineCount,
-       );
+    required this.id,
+    required this.title,
+    this.subtitle = 'Main Syndicate channel',
+    this.onlineCount = 24,
+  }) : type = ChatViewType.channel,
+       avatarUrl = null;
 
   const ChatPageArgs.direct({
-    required String title,
-    String subtitle = 'Online',
-    String? avatarUrl,
-  }) : this(
-         type: ChatViewType.direct,
-         title: title,
-         subtitle: subtitle,
-         avatarUrl: avatarUrl,
-       );
+    required this.id,
+    required this.title,
+    this.subtitle = 'Online',
+    this.avatarUrl,
+  }) : type = ChatViewType.direct,
+       onlineCount = 0;
 }
 
-class ChatPage extends StatelessWidget {
+String _formatChatTime(String isoDate) {
+  try {
+    final dt = DateTime.parse(isoDate).toLocal();
+    final hour = dt.hour % 12 == 0 ? 12 : dt.hour % 12;
+    final minute = dt.minute.toString().padLeft(2, '0');
+    final period = dt.hour >= 12 ? 'pm' : 'am';
+    return '$hour:$minute $period';
+  } catch (_) {
+    return isoDate;
+  }
+}
+
+class ChatPage extends StatefulWidget {
   final ChatPageArgs args;
 
   const ChatPage({super.key, required this.args});
 
+  @override
+  State<ChatPage> createState() => _ChatPageState();
+}
+
+class _ChatPageState extends State<ChatPage> {
+  late final ChatController _controller;
+  final _msgCtrl = TextEditingController();
+  final _scrollCtrl = ScrollController();
+
+  ChatPageArgs get args => widget.args;
   bool get _isChannel => args.type == ChatViewType.channel;
+
+  String? get _currentUserId {
+    if (Get.isRegistered<AuthController>()) {
+      return Get.find<AuthController>().userProfile.value.id;
+    }
+    return null;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = Get.isRegistered<ChatController>()
+        ? Get.find<ChatController>()
+        : Get.put(ChatController());
+    if (args.id.isNotEmpty) {
+      _controller.fetchChatHistory(args.id, _isChannel);
+    }
+  }
+
+  @override
+  void dispose() {
+    _msgCtrl.dispose();
+    _scrollCtrl.dispose();
+    super.dispose();
+  }
+
+  void _sendMessage() {
+    final text = _msgCtrl.text.trim();
+    if (text.isEmpty || args.id.isEmpty) return;
+
+    _controller.sendMsg(args.id, text, _isChannel);
+    _msgCtrl.clear();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFE5F7FF),
-      // drawer: _isChannel ? const _ChannelsDrawer() : null,
       appBar: AppBar(
         title: _isChannel
             ? _ChannelHeader(args: args)
@@ -72,70 +125,77 @@ class ChatPage extends StatelessWidget {
       body: Column(
         children: [
           const Divider(height: 1, color: AppColors.kPrimaryColor),
-          Expanded(
-            child: ListView(
-              padding: const EdgeInsets.fromLTRB(24, 16, 16, 16),
-              children: _isChannel ? _channelMessages() : _directMessages(),
-            ),
+          Expanded(child: _buildMessageList()),
+          _MessageInput(
+            isChannel: _isChannel,
+            title: args.title,
+            controller: _msgCtrl,
+            onSend: _sendMessage,
           ),
-          _MessageInput(isChannel: _isChannel, title: args.title),
         ],
       ),
     );
   }
 
-  List<Widget> _channelMessages() {
-    return const [
-      _ChannelMessage(
-        sender: 'Sarah M',
-        avatarUrl: 'https://i.pravatar.cc/150?u=sarah-m',
-        message: 'Welcome to the Syndicate chat! 🔥',
-        time: '10:00 AM',
-      ),
-      _ChannelMessage(
-        sender: 'Jake',
-        avatarUrl: 'https://i.pravatar.cc/150?u=jake',
-        message: 'Who is hitting the trails this weekend?',
-        time: '10:15 AM',
-      ),
-      _ChannelMessage(
-        sender: 'Sarah',
-        avatarUrl: 'https://i.pravatar.cc/150?u=sarah',
-        message: 'I am down! Venice Beach at 2pm?',
-        time: '10:20 AM',
-      ),
-      _OutgoingMessage(message: 'Hello', time: '3:00 pm'),
-    ];
+  Widget _buildMessageList() {
+    return Obx(() {
+      if (_controller.isChatLoading.value &&
+          _controller.activeMessages.isEmpty) {
+        return const Center(child: CircularProgressIndicator());
+      }
+
+      if (_controller.activeMessages.isEmpty) {
+        return const Center(
+          child: CustomText(
+            'No messages yet',
+            color: AppColors.kSecondaryTextColor,
+          ),
+        );
+      }
+
+      return ListView.builder(
+        controller: _scrollCtrl,
+        padding: const EdgeInsets.fromLTRB(24, 16, 16, 16),
+        itemCount: _controller.activeMessages.length,
+        itemBuilder: (context, index) {
+          final msg = _controller.activeMessages[index];
+          return _buildMessageItem(msg);
+        },
+      );
+    });
   }
 
-  List<Widget> _directMessages() {
-    return [
-      const Center(
-        child: CustomText(
-          'Today',
-          fontSize: 11,
-          color: AppColors.kSecondaryTextColor,
-        ),
-      ),
-      space12H,
-      const _OutgoingMessage(message: 'Hello', time: '3:00 pm'),
-      _DirectIncomingMessage(
-        avatarUrl: args.avatarUrl ?? 'https://i.pravatar.cc/150?u=jake',
-        message: 'How can we help you',
-        time: '3:01 pm',
-      ),
-      const _OutgoingMessage(
-        message:
-            'I need a emergency appointment......... are you available now.',
-        time: '3:01 pm',
-      ),
-      _DirectIncomingMessage(
-        avatarUrl: args.avatarUrl ?? 'https://i.pravatar.cc/150?u=jake',
-        message:
-            'Yes we are available for you , at first book an appointment and come , you can use google map also if you have any problem.',
-        time: '3.02 pm',
-      ),
-    ];
+  Widget _buildMessageItem(ChatMessageModel msg) {
+    final isMe = msg.sender.id == _currentUserId;
+    final time = _formatChatTime(msg.createdAt);
+
+    if (_isChannel) {
+      if (isMe) {
+        return _OutgoingMessage(message: msg.text, time: time, fileUrl: msg.file);
+      }
+      return _ChannelMessage(
+        sender: msg.sender.fullName,
+        avatarUrl: msg.sender.image.isNotEmpty
+            ? msg.sender.image
+            : 'https://i.pravatar.cc/150',
+        message: msg.text,
+        time: time,
+        fileUrl: msg.file,
+      );
+    }
+
+    if (isMe) {
+      return _OutgoingMessage(message: msg.text, time: time, fileUrl: msg.file);
+    }
+
+    return _DirectIncomingMessage(
+      avatarUrl: msg.sender.image.isNotEmpty
+          ? msg.sender.image
+          : (args.avatarUrl ?? 'https://i.pravatar.cc/150'),
+      message: msg.text,
+      time: time,
+      fileUrl: msg.file,
+    );
   }
 }
 
@@ -172,7 +232,12 @@ class _ChannelHeader extends StatelessWidget {
           ),
         ),
         ButtonTapWidget(
-          onTap: () => context.push(AppRoutes.channelMembers),
+          onTap: args.id.isNotEmpty
+              ? () => context.push(
+                  AppRoutes.channelMembers,
+                  extra: args.id,
+                )
+              : () => context.push(AppRoutes.channelMembers),
           child: Container(
             width: 30,
             height: 30,
@@ -248,12 +313,14 @@ class _ChannelMessage extends StatelessWidget {
   final String avatarUrl;
   final String message;
   final String time;
+  final String? fileUrl;
 
   const _ChannelMessage({
     required this.sender,
     required this.avatarUrl,
     required this.message,
     required this.time,
+    this.fileUrl,
   });
 
   @override
@@ -278,6 +345,7 @@ class _ChannelMessage extends StatelessWidget {
                         message: message,
                         time: null,
                         isMe: false,
+                        fileUrl: fileUrl,
                         radius: const BorderRadius.only(
                           topLeft: Radius.circular(4),
                           topRight: Radius.circular(12),
@@ -321,11 +389,13 @@ class _DirectIncomingMessage extends StatelessWidget {
   final String avatarUrl;
   final String message;
   final String time;
+  final String? fileUrl;
 
   const _DirectIncomingMessage({
     required this.avatarUrl,
     required this.message,
     required this.time,
+    this.fileUrl,
   });
 
   @override
@@ -342,6 +412,7 @@ class _DirectIncomingMessage extends StatelessWidget {
               message: message,
               time: time,
               isMe: false,
+              fileUrl: fileUrl,
               radius: const BorderRadius.only(
                 topLeft: Radius.circular(14),
                 topRight: Radius.circular(14),
@@ -360,8 +431,13 @@ class _DirectIncomingMessage extends StatelessWidget {
 class _OutgoingMessage extends StatelessWidget {
   final String message;
   final String time;
+  final String? fileUrl;
 
-  const _OutgoingMessage({required this.message, required this.time});
+  const _OutgoingMessage({
+    required this.message,
+    required this.time,
+    this.fileUrl,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -373,6 +449,7 @@ class _OutgoingMessage extends StatelessWidget {
           message: message,
           time: time,
           isMe: true,
+          fileUrl: fileUrl,
           radius: const BorderRadius.only(
             topLeft: Radius.circular(14),
             topRight: Radius.circular(14),
@@ -389,6 +466,7 @@ class _Bubble extends StatelessWidget {
   final String message;
   final String? time;
   final bool isMe;
+  final String? fileUrl;
   final BorderRadius radius;
 
   const _Bubble({
@@ -396,6 +474,7 @@ class _Bubble extends StatelessWidget {
     required this.time,
     required this.isMe,
     required this.radius,
+    this.fileUrl,
   });
 
   @override
@@ -419,11 +498,24 @@ class _Bubble extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CustomText(
-            message,
-            color: isMe ? Colors.white : AppColors.kTextColor,
-            fontSize: 13,
-          ),
+          if (message.isNotEmpty)
+            CustomText(
+              message,
+              color: isMe ? Colors.white : AppColors.kTextColor,
+              fontSize: 13,
+            ),
+          if (fileUrl != null && fileUrl!.isNotEmpty) ...[
+            if (message.isNotEmpty) const SizedBox(height: 8),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Image.network(
+                fileUrl!,
+                height: 120,
+                width: double.infinity,
+                fit: BoxFit.cover,
+              ),
+            ),
+          ],
           if (time != null) ...[
             const SizedBox(height: 6),
             Align(
@@ -444,13 +536,18 @@ class _Bubble extends StatelessWidget {
 class _MessageInput extends StatelessWidget {
   final bool isChannel;
   final String title;
+  final TextEditingController controller;
+  final VoidCallback onSend;
 
-  const _MessageInput({required this.isChannel, required this.title});
+  const _MessageInput({
+    required this.isChannel,
+    required this.title,
+    required this.controller,
+    required this.onSend,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final hint = isChannel ? 'Message #$title...' : 'Message';
-
     return Container(
       padding: const EdgeInsets.fromLTRB(24, 14, 14, 14),
       decoration: const BoxDecoration(
@@ -471,10 +568,12 @@ class _MessageInput extends StatelessWidget {
                 ),
                 child: Row(
                   children: [
-                    const Expanded(
+                    Expanded(
                       child: CustomTextField(
+                        textEditingController: controller,
                         fillColor: Colors.transparent,
                         borderColor: Colors.transparent,
+                        onFieldSubmitted: (_) => onSend(),
                       ),
                     ),
                     IconButton(
@@ -486,19 +585,22 @@ class _MessageInput extends StatelessWidget {
               ),
             ),
             space8W,
-            Container(
-              padding: AppPadding.getPadding8(context),
-              decoration: const BoxDecoration(
-                color: AppColors.kPrimaryColor,
-                shape: BoxShape.circle,
-              ),
-              child: SvgPicture.asset(
-                AppIcons.sent,
-                colorFilter: const ColorFilter.mode(
-                  Colors.white,
-                  BlendMode.srcIn,
+            ButtonTapWidget(
+              onTap: onSend,
+              child: Container(
+                padding: AppPadding.getPadding8(context),
+                decoration: const BoxDecoration(
+                  color: AppColors.kPrimaryColor,
+                  shape: BoxShape.circle,
                 ),
-                height: 28,
+                child: SvgPicture.asset(
+                  AppIcons.sent,
+                  colorFilter: const ColorFilter.mode(
+                    Colors.white,
+                    BlendMode.srcIn,
+                  ),
+                  height: 28,
+                ),
               ),
             ),
           ],
@@ -596,6 +698,7 @@ class _ChannelsDrawer extends StatelessWidget {
               onTap: () => context.pushReplacement(
                 AppRoutes.chat,
                 extra: ChatPageArgs.channel(
+                  id: '',
                   title: AppStaticStrings.generalChat.tr,
                 ),
               ),
@@ -607,6 +710,7 @@ class _ChannelsDrawer extends StatelessWidget {
               onTap: () => context.pushReplacement(
                 AppRoutes.chat,
                 extra: const ChatPageArgs.channel(
+                  id: '',
                   title: 'Local Rides',
                   subtitle: 'Local rides channel',
                   onlineCount: 12,
@@ -764,7 +868,11 @@ class _DrawerMember extends StatelessWidget {
     return ButtonTapWidget(
       onTap: () => context.push(
         AppRoutes.chat,
-        extra: ChatPageArgs.direct(title: name, avatarUrl: imageUrl),
+        extra: ChatPageArgs.direct(
+          id: '',
+          title: name,
+          avatarUrl: imageUrl,
+        ),
       ),
       child: Container(
         margin: const EdgeInsets.fromLTRB(14, 0, 14, 8),

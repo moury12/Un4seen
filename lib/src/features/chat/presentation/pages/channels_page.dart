@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:un4seen/src/core/core_export.dart';
 import '../../../../core/routes/app_routes.dart';
+import '../controller/chat_controller.dart';
 import 'chat_page.dart';
 import '../widgets/channel_list_item_widget.dart';
 import '../widgets/create_channel_dialog.dart';
@@ -12,11 +13,12 @@ class ChannelsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(ChatController());
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
         title: const Text("Private Channels"),
-
         actions: [
           Container(
             decoration: const BoxDecoration(
@@ -29,127 +31,183 @@ class ChannelsPage extends StatelessWidget {
                 color: AppColors.kWhiteTextColor,
                 size: 30,
               ),
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (context) => const CreateChannelDialog(),
-                );
-              },
+              onPressed: () => showDialog(
+                context: context,
+                builder: (context) => const CreateChannelDialog(),
+              ),
             ),
           ),
           space12W,
         ],
       ),
-      body: Padding(
-        padding: AppPadding.getPadding12(context),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            CustomText(
-              "${AppStaticStrings.channels.tr} (4)",
-              variant: TextVariant.headlineSmall,
-              color: AppColors.kTextColor,
-            ),
-            const CustomText(
-              "+Create a Channel - Admin Approval Required",
-              variant: TextVariant.labelSmall,
-              color: AppColors.kTextColor,
-            ),
+      body: RefreshIndicator(
+        onRefresh: () => controller.fetchSidebar(),
+        color: AppColors.kPrimaryColor,
+        child: Obx(() {
+          // Determine if we should show initial loading
+          final bool isInitialLoading =
+              controller.isChannelsLoading.value &&
+              controller.groupsList.isEmpty &&
+              controller.dmsList.isEmpty;
 
-            space12H,
-            CustomTextField(
-              hintText: AppStaticStrings.searchChannels.tr,
-              prefixIcon: const Icon(
-                Icons.search,
-                color: AppColors.kSecondaryTextColor,
+          return CustomScrollView(
+            // AlwaysScrollableScrollPhysics is key to allowing pull-to-refresh when empty
+            physics: const AlwaysScrollableScrollPhysics(
+              parent: BouncingScrollPhysics(),
+            ),
+            slivers: [
+              // ─── 1. GROUPS SECTION ───
+              SliverPadding(
+                padding: AppPadding.getPadding12(context),
+                sliver: SliverToBoxAdapter(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CustomText(
+                        "${AppStaticStrings.channels.tr} (${controller.groupsList.length})",
+                        variant: TextVariant.headlineSmall,
+                        color: AppColors.kTextColor,
+                      ),
+                      const CustomText(
+                        "+Create a Channel - Admin Approval Required",
+                        variant: TextVariant.labelSmall,
+                        color: AppColors.kTextColor,
+                      ),
+                      space12H,
+                      ButtonTapWidget(
+                        onTap: () {
+                          context.push(AppRoutes.chatSearch);
+                        },
+                        child: CustomTextField(
+                          isEnable: false,
+                          hintText: AppStaticStrings.searchChannels.tr,
+                          prefixIcon: const Icon(
+                            Icons.search,
+                            color: AppColors.kSecondaryTextColor,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
-            ),
-            space12H,
-            Expanded(
-              child: ListView(
-                padding: EdgeInsets.zero,
 
-                children: [
-                  ChannelListItemWidget(
-                    img: "assets/icons/hash_con.svg",
-                    title: AppStaticStrings.generalChat.tr,
-                    subtitle: "24 ${AppStaticStrings.online.tr}",
-                    onTap: () => context.push(
-                      AppRoutes.chat,
-                      extra: ChatPageArgs.channel(
-                        title: AppStaticStrings.generalChat.tr,
+              if (isInitialLoading)
+                const SliverToBoxAdapter(
+                  child: Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(20),
+                      child: CircularProgressIndicator(),
+                    ),
+                  ),
+                )
+              else if (controller.groupsList.isEmpty)
+                SliverToBoxAdapter(
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: CustomText(
+                        "No channels joined".tr,
+                        color: Colors.grey,
                       ),
                     ),
                   ),
-                  space8H,
-                  ChannelListItemWidget(
-                    img: AppIcons.groupPeople,
-                    title: 'Local Rides',
-                    subtitle: "12 ${AppStaticStrings.online.tr}",
-                    onTap: () => context.push(
-                      AppRoutes.chat,
-                      extra: const ChatPageArgs.channel(
-                        title: 'Local Rides',
-                        subtitle: 'Local rides channel',
-                        onlineCount: 12,
+                )
+              else
+                SliverPadding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  sliver: SliverList(
+                    delegate: SliverChildBuilderDelegate((context, index) {
+                      final group = controller.groupsList[index];
+                      return ChannelListItemWidget(
+                        img: "assets/icons/hash_con.svg",
+                        title: group.name,
+                        subtitle:
+                            "${group.onlineCount} ${AppStaticStrings.online.tr}",
+                        onTap: () => context.push(
+                          AppRoutes.chat,
+                          extra: ChatPageArgs.channel(
+                            id: group.id,
+                            title: group.name,
+                            onlineCount: group.onlineCount,
+                          ),
+                        ),
+                      );
+                    }, childCount: controller.groupsList.length),
+                  ),
+                ),
+
+              // ─── 2. DIRECT MESSAGES SECTION ───
+              SliverPadding(
+                padding: const EdgeInsets.all(12),
+                sliver: SliverToBoxAdapter(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      space12H,
+                      const CustomText(
+                        "Direct Messages",
+                        variant: TextVariant.headlineSmall,
+                        color: AppColors.kTextColor,
+                      ),
+                      space12H,
+                      ButtonTapWidget(
+                        onTap: () {
+                          context.push(AppRoutes.chatSearch);
+                        },
+                        child: CustomTextField(
+                          hintText: "Search name...".tr,
+                          isEnable: false,
+                          prefixIcon: const Icon(
+                            Icons.search,
+                            color: AppColors.kSecondaryTextColor,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              if (controller.dmsList.isEmpty && !isInitialLoading)
+                SliverToBoxAdapter(
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: CustomText(
+                        "No messages yet".tr,
+                        color: Colors.grey,
                       ),
                     ),
                   ),
-                  space8H,
-                  ChannelListItemWidget(
-                    img: "assets/icons/chat_icon.svg",
-                    title: 'Kawasaki KLX140',
-                    subtitle: "10 ${AppStaticStrings.online.tr}",
-                    isActive: true,
-                    onTap: () => context.push(AppRoutes.buildsMods),
+                )
+              else
+                SliverPadding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  sliver: SliverList(
+                    delegate: SliverChildBuilderDelegate((context, index) {
+                      final dm = controller.dmsList[index];
+                      return ChannelListItemWidget(
+                        profileImg: dm.image,
+                        title: dm.name,
+                        subtitle: dm.isOnline ? "Online".tr : "Offline".tr,
+                        onTap: () => context.push(
+                          AppRoutes.chat,
+                          extra: ChatPageArgs.direct(
+                            id: dm.userId,
+                            title: dm.name,
+                            avatarUrl: dm.image,
+                          ),
+                        ),
+                      );
+                    }, childCount: controller.dmsList.length),
                   ),
-                ],
-              ),
-            ),
-            const CustomText(
-              "Yamaha 50 Mods & Photos",
-              variant: TextVariant.headlineSmall,
-              color: AppColors.kTextColor,
-            ),
-            space12H,
-            CustomTextField(
-              hintText: AppStaticStrings.searchChannels.tr,
-              prefixIcon: const Icon(
-                Icons.search,
-                color: AppColors.kSecondaryTextColor,
-              ),
-            ),
-            space12H,
-            Expanded(
-              child: ListView(
-                padding: EdgeInsets.zero,
-                children: [
-                  ChannelListItemWidget(
-                    profileImg: "https://i.pravatar.cc/150?img=1",
-                    title: "user 2",
-                    subtitle: " ${AppStaticStrings.online.tr}",
-                    onTap: () => context.push(
-                      AppRoutes.chat,
-                      extra: const ChatPageArgs.direct(title: "User Name"),
-                    ),
-                  ),
-                  space8H,
-                  ChannelListItemWidget(
-                    profileImg: "https://i.pravatar.cc/150?img=1",
-                    title: 'User1',
-                    subtitle: " ${AppStaticStrings.online.tr}",
-                    onTap: () => context.push(
-                      AppRoutes.chat,
-                      extra: const ChatPageArgs.direct(title: "User Name"),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+                ),
 
-            space12H,
-          ],
-        ),
+              const SliverToBoxAdapter(child: SizedBox(height: 40)),
+            ],
+          );
+        }),
       ),
     );
   }
