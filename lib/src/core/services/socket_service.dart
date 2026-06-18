@@ -11,8 +11,13 @@ class SocketService extends GetxService {
     final token = _storage.accessToken;
     if (token == null) return;
 
+    if (socket != null) {
+      log('📱 Existing socket connection found. Disconnecting...');
+      disconnectSocket();
+    }
+
     socket = IO.io(
-      'https://un4seen-backend.vercel.app',
+      'http://10.10.28.81:5011',
       IO.OptionBuilder()
           .setTransports(['websocket'])
           .setQuery({'token': token})
@@ -25,13 +30,20 @@ class SocketService extends GetxService {
     socket!.onConnectError((err) => log('📱 Socket Connection Error: $err'));
   }
 
+  void disconnectSocket() {
+    socket?.disconnect();
+    socket?.dispose();
+    socket = null;
+    log('📱 Socket Disconnected and disposed');
+  }
+
   void listenToEvent(String event, Function(dynamic) callback) {
     socket?.on(event, callback);
   }
 
   @override
   void onClose() {
-    socket?.dispose();
+    disconnectSocket();
     super.onClose();
   }
 }

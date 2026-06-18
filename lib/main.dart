@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'src/core/services/local_storage_service.dart';
+import 'src/core/services/socket_service.dart';
 import 'src/core/widgets/custom_snackbar.dart';
 import 'src/features/auth/presentation/bindings/auth_binding.dart';
 import 'src/features/home/presentation/bindings/home_binding.dart';
@@ -23,6 +24,10 @@ void main() async {
   // Initialize Storage Service globally
   final storage = await LocalStorageService().init();
   Get.put(storage, permanent: true);
+
+  // Initialize Socket Service globally
+  final socketService = Get.put(SocketService(), permanent: true);
+  socketService.initSocket();
 
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,

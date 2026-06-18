@@ -98,3 +98,40 @@ class ChatSender {
     );
   }
 }
+
+class ChannelMemberModel {
+  final String id;
+  final String firstName;
+  final String lastName;
+  final String status;
+  final String memberNumber;
+  final String image;
+  final bool isOnline;
+  final bool isAdmin;
+
+  ChannelMemberModel({
+    required this.id,
+    required this.firstName,
+    required this.lastName,
+    required this.status,
+    required this.memberNumber,
+    required this.image,
+    required this.isOnline,
+    required this.isAdmin,
+  });
+
+  String get fullName => '$firstName $lastName'.trim();
+
+  factory ChannelMemberModel.fromJson(Map<String, dynamic> json) {
+    return ChannelMemberModel(
+      id: json['_id'] ?? '',
+      firstName: json['firstName'] ?? '',
+      lastName: json['lastName'] ?? '',
+      status: json['status'] ?? '',
+      memberNumber: json['memberNumber'] ?? '',
+      image: json['image'] ?? '',
+      isOnline: json['isOnline'] ?? false,
+      isAdmin: json['isAdmin'] ?? false,
+    );
+  }
+}

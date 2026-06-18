@@ -190,7 +190,9 @@ class ChannelsPage extends StatelessWidget {
                       return ChannelListItemWidget(
                         profileImg: dm.image,
                         title: dm.name,
-                        subtitle: dm.isOnline ? "Online".tr : "Offline".tr,
+                        subtitle: controller.isUserOnline(dm.userId)
+                            ? "Online".tr
+                            : "Offline".tr,
                         onTap: () => context.push(
                           AppRoutes.chat,
                           extra: ChatPageArgs.direct(

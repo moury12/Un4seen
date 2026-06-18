@@ -4,6 +4,7 @@ import 'package:get/state_manager.dart';
 import 'package:un4seen/src/features/profile/data/models/profile_model.dart';
 import '../../../../core/widgets/custom_snackbar.dart';
 import '../../../../core/services/local_storage_service.dart';
+import '../../../../core/services/socket_service.dart';
 import '../../../../core/routes/app_router.dart';
 import '../../../../core/routes/app_routes.dart';
 import '../../domain/repositories/auth_repository.dart';
@@ -87,6 +88,9 @@ class AuthController extends getx.GetxController {
           final data = response['data'];
           final storage = getx.Get.find<LocalStorageService>();
           await storage.saveTokens(data['accessToken'], data['refreshToken']);
+          if (getx.Get.isRegistered<SocketService>()) {
+            getx.Get.find<SocketService>().initSocket();
+          }
           status.value = AuthStatus.authenticated;
           userProfile.value = ProfileModel.fromJson(data['user']);
 
@@ -170,6 +174,9 @@ class AuthController extends getx.GetxController {
   Future<void> logout() async {
     final storage = getx.Get.find<LocalStorageService>();
     await storage.clear();
+    if (getx.Get.isRegistered<SocketService>()) {
+      getx.Get.find<SocketService>().disconnectSocket();
+    }
     AppRouter.router.go(AppRoutes.login);
   }
 }

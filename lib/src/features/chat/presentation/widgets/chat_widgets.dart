@@ -2,11 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:un4seen/src/core/utils/app_images.dart';
-import 'package:un4seen/src/features/auth/presentation/controllers/auth_controller.dart';
-import 'package:un4seen/src/features/chat/data/models/chat_models.dart';
-import 'package:un4seen/src/features/chat/presentation/controller/chat_controller.dart';
+import 'package:un4seen/src/features/chat/presentation/pages/chat_page.dart';
 
 import '../../../../core/routes/app_routes.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -16,251 +13,10 @@ import '../../../../core/widgets/button_tap_widget.dart';
 import '../../../../core/widgets/custom_text.dart';
 import '../../../../core/widgets/custom_text_field.dart';
 
-enum ChatViewType { channel, direct }
-
-class ChatPageArgs {
-  final ChatViewType type;
-  final String id;
-  final String title;
-  final String subtitle;
-  final int onlineCount;
-  final String? avatarUrl;
-
-  const ChatPageArgs({
-    required this.type,
-    this.id = '',
-    required this.title,
-    required this.subtitle,
-    this.onlineCount = 0,
-    this.avatarUrl,
-  });
-
-  const ChatPageArgs.channel({
-    required this.id,
-    required this.title,
-    this.subtitle = 'Main Syndicate channel',
-    this.onlineCount = 24,
-  }) : type = ChatViewType.channel,
-       avatarUrl = null;
-
-  const ChatPageArgs.direct({
-    required this.id,
-    required this.title,
-    this.subtitle = 'Online',
-    this.avatarUrl,
-  }) : type = ChatViewType.direct,
-       onlineCount = 0;
-}
-
-String _formatChatTime(String isoDate) {
-  try {
-    final dt = DateTime.parse(isoDate).toLocal();
-    final hour = dt.hour % 12 == 0 ? 12 : dt.hour % 12;
-    final minute = dt.minute.toString().padLeft(2, '0');
-    final period = dt.hour >= 12 ? 'pm' : 'am';
-    return '$hour:$minute $period';
-  } catch (_) {
-    return isoDate;
-  }
-}
-
-class ChatPage extends StatefulWidget {
+class ChannelHeader extends StatelessWidget {
   final ChatPageArgs args;
 
-  const ChatPage({super.key, required this.args});
-
-  @override
-  State<ChatPage> createState() => _ChatPageState();
-}
-
-class _ChatPageState extends State<ChatPage> {
-  late final ChatController _controller;
-  final _msgCtrl = TextEditingController();
-  final _scrollCtrl = ScrollController();
-
-  ChatPageArgs get args => widget.args;
-  bool get _isChannel => args.type == ChatViewType.channel;
-
-  String? get _currentUserId {
-    if (Get.isRegistered<AuthController>()) {
-      return Get.find<AuthController>().userProfile.value.id;
-    }
-    return null;
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = Get.isRegistered<ChatController>()
-        ? Get.find<ChatController>()
-        : Get.put(ChatController());
-    if (args.id.isNotEmpty) {
-      _controller.fetchChatHistory(args.id, _isChannel);
-    }
-    _scrollCtrl.addListener(_onScroll);
-  }
-
-  @override
-  void dispose() {
-    _scrollCtrl.removeListener(_onScroll);
-    _msgCtrl.dispose();
-    _scrollCtrl.dispose();
-    super.dispose();
-  }
-
-  void _onScroll() {
-    if (_scrollCtrl.position.pixels >= _scrollCtrl.position.maxScrollExtent - 200) {
-      _controller.loadNextPage(args.id, _isChannel);
-    }
-  }
-
-  void _sendMessage() {
-    final text = _msgCtrl.text.trim();
-    if (text.isEmpty || args.id.isEmpty) return;
-
-    _controller.sendMsg(args.id, text, _isChannel);
-    _msgCtrl.clear();
-  }
-
-  Future<void> _pickAndSendFile() async {
-    if (args.id.isEmpty) return;
-
-    try {
-      final picker = ImagePicker();
-      final XFile? image = await picker.pickImage(source: ImageSource.gallery);
-      if (image == null) return;
-
-      // Show uploading dialog
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) => const Center(
-          child: Card(
-            child: Padding(
-              padding: EdgeInsets.all(24.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  CircularProgressIndicator(),
-                  SizedBox(height: 16),
-                  Text("Uploading image..."),
-                ],
-              ),
-            ),
-          ),
-        ),
-      );
-
-      final fileUrl = await _controller.uploadChatFile(image.path);
-
-      // Close uploading dialog
-      if (mounted) Navigator.of(context).pop();
-
-      if (fileUrl != null && fileUrl.isNotEmpty) {
-        _controller.sendMsg(args.id, "", _isChannel, fileUrl: fileUrl);
-      }
-    } catch (e) {
-      if (mounted) Navigator.of(context).pop();
-      print("❌ File picking/upload error: $e");
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFE5F7FF),
-      appBar: AppBar(
-        title: _isChannel
-            ? _ChannelHeader(args: args)
-            : _DirectHeader(args: args),
-      ),
-      body: Column(
-        children: [
-          const Divider(height: 1, color: AppColors.kPrimaryColor),
-          Expanded(child: _buildMessageList()),
-          _MessageInput(
-            isChannel: _isChannel,
-            title: args.title,
-            controller: _msgCtrl,
-            onSend: _sendMessage,
-            onSendFile: _pickAndSendFile,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildMessageList() {
-    return Obx(() {
-      if (_controller.isChatLoading.value &&
-          _controller.activeMessages.isEmpty) {
-        return const Center(child: CircularProgressIndicator());
-      }
-
-      if (_controller.activeMessages.isEmpty) {
-        return const Center(
-          child: CustomText(
-            'No messages yet',
-            color: AppColors.kSecondaryTextColor,
-          ),
-        );
-      }
-
-      return ListView.builder(
-        controller: _scrollCtrl,
-        reverse: true,
-        padding: const EdgeInsets.fromLTRB(24, 16, 16, 16),
-        itemCount: _controller.activeMessages.length,
-        itemBuilder: (context, index) {
-          final msg = _controller.activeMessages[index];
-          return _buildMessageItem(msg);
-        },
-      );
-    });
-  }
-
-  Widget _buildMessageItem(ChatMessageModel msg) {
-    final isMe = msg.sender.id == _currentUserId;
-    final time = _formatChatTime(msg.createdAt);
-
-    if (_isChannel) {
-      if (isMe) {
-        return _OutgoingMessage(
-          message: msg.text,
-          time: time,
-          fileUrl: msg.file,
-        );
-      }
-      return _ChannelMessage(
-        sender: msg.sender.fullName,
-        avatarUrl: msg.sender.image.isNotEmpty
-            ? msg.sender.image
-            : 'https://i.pravatar.cc/150',
-        message: msg.text,
-        time: time,
-        fileUrl: msg.file,
-      );
-    }
-
-    if (isMe) {
-      return _OutgoingMessage(message: msg.text, time: time, fileUrl: msg.file);
-    }
-
-    return _DirectIncomingMessage(
-      avatarUrl: msg.sender.image.isNotEmpty
-          ? msg.sender.image
-          : (args.avatarUrl ?? 'https://i.pravatar.cc/150'),
-      message: msg.text,
-      time: time,
-      fileUrl: msg.file,
-    );
-  }
-}
-
-class _ChannelHeader extends StatelessWidget {
-  final ChatPageArgs args;
-
-  const _ChannelHeader({required this.args});
+  const ChannelHeader({super.key, required this.args});
 
   @override
   Widget build(BuildContext context) {
@@ -320,10 +76,10 @@ class _ChannelHeader extends StatelessWidget {
   }
 }
 
-class _DirectHeader extends StatelessWidget {
+class DirectHeader extends StatelessWidget {
   final ChatPageArgs args;
 
-  const _DirectHeader({required this.args});
+  const DirectHeader({required this.args});
 
   @override
   Widget build(BuildContext context) {
@@ -331,7 +87,7 @@ class _DirectHeader extends StatelessWidget {
       padding: const EdgeInsets.only(left: 8, top: 10),
       child: Row(
         children: [
-          _Avatar(
+          Avatar(
             url: args.avatarUrl ?? 'https://i.pravatar.cc/150?u=jake',
             radius: 17,
           ),
@@ -363,14 +119,15 @@ class _DirectHeader extends StatelessWidget {
   }
 }
 
-class _ChannelMessage extends StatelessWidget {
+class ChannelMessage extends StatelessWidget {
   final String sender;
   final String avatarUrl;
   final String message;
   final String time;
   final String? fileUrl;
 
-  const _ChannelMessage({
+  const ChannelMessage({
+    super.key,
     required this.sender,
     required this.avatarUrl,
     required this.message,
@@ -385,7 +142,7 @@ class _ChannelMessage extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _Avatar(url: avatarUrl, radius: 15),
+          Avatar(url: avatarUrl, radius: 15),
           const SizedBox(width: 10),
           Expanded(
             child: Column(
@@ -396,7 +153,7 @@ class _ChannelMessage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Flexible(
-                      child: _Bubble(
+                      child: ChatBubble(
                         message: message,
                         time: null,
                         isMe: false,
@@ -440,13 +197,14 @@ class _ChannelMessage extends StatelessWidget {
   }
 }
 
-class _DirectIncomingMessage extends StatelessWidget {
+class DirectIncomingMessage extends StatelessWidget {
   final String avatarUrl;
   final String message;
   final String time;
   final String? fileUrl;
 
-  const _DirectIncomingMessage({
+  const DirectIncomingMessage({
+    super.key,
     required this.avatarUrl,
     required this.message,
     required this.time,
@@ -460,10 +218,10 @@ class _DirectIncomingMessage extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          _Avatar(url: avatarUrl, radius: 15),
+          Avatar(url: avatarUrl, radius: 15),
           const SizedBox(width: 10),
           Flexible(
-            child: _Bubble(
+            child: ChatBubble(
               message: message,
               time: time,
               isMe: false,
@@ -483,12 +241,13 @@ class _DirectIncomingMessage extends StatelessWidget {
   }
 }
 
-class _OutgoingMessage extends StatelessWidget {
+class OutgoingMessage extends StatelessWidget {
   final String message;
   final String time;
   final String? fileUrl;
 
-  const _OutgoingMessage({
+  const OutgoingMessage({
+    super.key,
     required this.message,
     required this.time,
     this.fileUrl,
@@ -500,7 +259,7 @@ class _OutgoingMessage extends StatelessWidget {
       padding: const EdgeInsets.only(left: 88, bottom: 14),
       child: Align(
         alignment: Alignment.centerRight,
-        child: _Bubble(
+        child: ChatBubble(
           message: message,
           time: time,
           isMe: true,
@@ -517,14 +276,15 @@ class _OutgoingMessage extends StatelessWidget {
   }
 }
 
-class _Bubble extends StatelessWidget {
+class ChatBubble extends StatelessWidget {
   final String message;
   final String? time;
   final bool isMe;
   final String? fileUrl;
   final BorderRadius radius;
 
-  const _Bubble({
+  const ChatBubble({
+    super.key,
     required this.message,
     required this.time,
     required this.isMe,
@@ -588,14 +348,15 @@ class _Bubble extends StatelessWidget {
   }
 }
 
-class _MessageInput extends StatelessWidget {
+class MessageInput extends StatelessWidget {
   final bool isChannel;
   final String title;
   final TextEditingController controller;
   final VoidCallback onSend;
   final VoidCallback onSendFile;
 
-  const _MessageInput({
+  const MessageInput({
+    super.key,
     required this.isChannel,
     required this.title,
     required this.controller,
@@ -618,7 +379,6 @@ class _MessageInput extends StatelessWidget {
             Expanded(
               child: Container(
                 height: 50,
-                // padding: const EdgeInsets.only(left: 10, right: 4),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(22),
@@ -630,7 +390,6 @@ class _MessageInput extends StatelessWidget {
                         textEditingController: controller,
                         fillColor: Colors.transparent,
                         borderColor: Colors.transparent,
-
                         onFieldSubmitted: (_) => onSend(),
                       ),
                     ),
@@ -668,8 +427,8 @@ class _MessageInput extends StatelessWidget {
   }
 }
 
-class _ChannelsDrawer extends StatelessWidget {
-  const _ChannelsDrawer();
+class ChannelsDrawer extends StatelessWidget {
+  const ChannelsDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -748,7 +507,7 @@ class _ChannelsDrawer extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 10),
-            _DrawerChannel(
+            DrawerChannel(
               title: AppStaticStrings.generalChat.tr,
               online: 24,
               icon: Icons.tag,
@@ -761,7 +520,7 @@ class _ChannelsDrawer extends StatelessWidget {
                 ),
               ),
             ),
-            _DrawerChannel(
+            DrawerChannel(
               title: 'Local Rides',
               online: 12,
               icon: Icons.groups_2_outlined,
@@ -775,7 +534,7 @@ class _ChannelsDrawer extends StatelessWidget {
                 ),
               ),
             ),
-            _DrawerChannel(
+            DrawerChannel(
               title: 'Kawasaki KLX140',
               online: 18,
               icon: Icons.chat_bubble_outline,
@@ -803,15 +562,15 @@ class _ChannelsDrawer extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 10),
-            const _DrawerMember(
+            const DrawerMember(
               name: 'Jake',
               imageUrl: 'https://i.pravatar.cc/150?u=jake',
             ),
-            const _DrawerMember(
+            const DrawerMember(
               name: 'Sarah M',
               imageUrl: 'https://i.pravatar.cc/150?u=sarah-m',
             ),
-            const _DrawerMember(
+            const DrawerMember(
               name: 'Sarah',
               imageUrl: 'https://i.pravatar.cc/150?u=sarah',
             ),
@@ -822,9 +581,9 @@ class _ChannelsDrawer extends StatelessWidget {
               color: const Color(0xFFB9EDFF),
               child: const Row(
                 children: [
-                  _Avatar(url: 'https://i.pravatar.cc/150?u=nahid', radius: 16),
+                  Avatar(url: 'https://i.pravatar.cc/150?u=nahid', radius: 16),
                   SizedBox(width: 10),
-                  Expanded(child: _OnlineName(name: 'Nahid Hossain')),
+                  Expanded(child: OnlineName(name: 'Nahid Hossain')),
                 ],
               ),
             ),
@@ -835,7 +594,7 @@ class _ChannelsDrawer extends StatelessWidget {
   }
 }
 
-class _DrawerChannel extends StatelessWidget {
+class DrawerChannel extends StatelessWidget {
   final String title;
   final int online;
   final IconData icon;
@@ -843,7 +602,8 @@ class _DrawerChannel extends StatelessWidget {
   final bool hasRequest;
   final VoidCallback onTap;
 
-  const _DrawerChannel({
+  const DrawerChannel({
+    super.key,
     required this.title,
     required this.online,
     required this.icon,
@@ -915,11 +675,11 @@ class _DrawerChannel extends StatelessWidget {
   }
 }
 
-class _DrawerMember extends StatelessWidget {
+class DrawerMember extends StatelessWidget {
   final String name;
   final String imageUrl;
 
-  const _DrawerMember({required this.name, required this.imageUrl});
+  const DrawerMember({super.key, required this.name, required this.imageUrl});
 
   @override
   Widget build(BuildContext context) {
@@ -938,9 +698,9 @@ class _DrawerMember extends StatelessWidget {
         ),
         child: Row(
           children: [
-            _Avatar(url: imageUrl, radius: 15),
+            Avatar(url: imageUrl, radius: 15),
             space8W,
-            Expanded(child: _OnlineName(name: name)),
+            Expanded(child: OnlineName(name: name)),
           ],
         ),
       ),
@@ -948,10 +708,10 @@ class _DrawerMember extends StatelessWidget {
   }
 }
 
-class _OnlineName extends StatelessWidget {
+class OnlineName extends StatelessWidget {
   final String name;
 
-  const _OnlineName({required this.name});
+  const OnlineName({super.key, required this.name});
 
   @override
   Widget build(BuildContext context) {
@@ -975,11 +735,11 @@ class _OnlineName extends StatelessWidget {
   }
 }
 
-class _Avatar extends StatelessWidget {
+class Avatar extends StatelessWidget {
   final String url;
   final double radius;
 
-  const _Avatar({required this.url, required this.radius});
+  const Avatar({super.key, required this.url, required this.radius});
 
   @override
   Widget build(BuildContext context) {
