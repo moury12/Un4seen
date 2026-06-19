@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:un4seen/src/core/core_export.dart';
 import 'package:un4seen/src/core/routes/app_routes.dart';
+import 'package:un4seen/src/features/bike_profiles/presentation/controllers/members_controller.dart';
 import 'package:un4seen/src/features/profile/presentation/widgets/profile_menu_tile.dart';
 import 'package:un4seen/src/features/profile/profile_export.dart';
 
@@ -11,6 +12,7 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final MembersController controller = Get.put(MembersController());
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -63,7 +65,14 @@ class SettingsPage extends StatelessWidget {
               ProfileMenuTile(
                 title: AppStaticStrings.members.tr,
                 icon: AppIcons.groupPeople,
-                onTap: () => context.push(AppRoutes.members),
+                onTap: () => context.push(
+                      AppRoutes.members,
+                      extra: {
+                        'title': AppStaticStrings.all.tr,
+                        'list':Get.find<MembersController>().members ,
+                       'refresh': () => Get.find<MembersController>().fetchMembers(),
+                      },
+                    ),
               ),
               ProfileMenuTile(
                 title: AppStaticStrings.referAndEarn.tr,

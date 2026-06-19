@@ -45,10 +45,12 @@ class _SearchChatPageState extends State<SearchChatPage> {
       body: RefreshIndicator(
         onRefresh: () => controller.globalSearch(searchCtrl.text),
         child: Obx(() {
-          final isInitialLoading = controller.isSearchLoading.value &&
+          final isInitialLoading =
+              controller.isSearchLoading.value &&
               controller.searchRiderResults.isEmpty &&
               controller.discoveredChannels.isEmpty;
-          final hasResults = controller.discoveredChannels.isNotEmpty ||
+          final hasResults =
+              controller.discoveredChannels.isNotEmpty ||
               controller.searchRiderResults.isNotEmpty;
 
           return CustomScrollView(
@@ -78,10 +80,15 @@ class _SearchChatPageState extends State<SearchChatPage> {
                     ),
                   ),
                 ],
+                _buildHeader(AppStaticStrings.rideProfile.tr),
                 if (controller.searchRiderResults.isNotEmpty)
                   SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (context, index) => RiderSearchTile(
+                        onTap: () => context.push(
+                          AppRoutes.memberDetails,
+                          extra: controller.searchRiderResults[index].id,
+                        ),
                         model: controller.searchRiderResults[index],
                       ),
                       childCount: controller.searchRiderResults.length,

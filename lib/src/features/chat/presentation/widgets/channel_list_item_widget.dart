@@ -6,7 +6,8 @@ class ChannelListItemWidget extends StatelessWidget {
   final String subtitle;
   final String? img;
   final String? profileImg;
-
+  final String channelId;
+  final bool? fromChannel;
   final bool isActive;
   final VoidCallback onTap;
 
@@ -18,6 +19,7 @@ class ChannelListItemWidget extends StatelessWidget {
     required this.onTap,
     this.img,
     this.profileImg,
+    this.fromChannel = false, this.channelId="",
   });
 
   @override
@@ -26,7 +28,7 @@ class ChannelListItemWidget extends StatelessWidget {
       onTap: onTap,
       child: Container(
         margin: const EdgeInsets.only(bottom: 8),
-        padding: AppPadding.getPadding12(context),
+        padding: AppPadding.getPadding6(context),
         decoration: BoxDecoration(
           color: AppColors.kPrimaryColor.withValues(alpha: .3),
           borderRadius: BorderRadius.circular(appRadius),
@@ -95,6 +97,31 @@ class ChannelListItemWidget extends StatelessWidget {
                   color: Colors.white,
                   fontSize: 10,
                   fontWeight: FontWeight.bold,
+                ),
+              ),
+
+            if (fromChannel == true && channelId.isNotEmpty)
+              Container(
+                decoration: BoxDecoration(
+                  color: AppColors.kPrimaryColor,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: ButtonTapWidget(
+                  onTap: () {
+                    context.push(AppRoutes.buildsMods,extra:{
+                      "channelId":channelId,
+                      "channelName":title,
+                    } );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: CustomText(
+                      "Feed",
+                      color: Colors.white,
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
               ),
           ],

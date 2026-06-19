@@ -1,12 +1,14 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:un4seen/src/core/core_export.dart';
 import 'package:un4seen/src/core/utils/app_images.dart';
-import 'package:un4seen/src/features/auth/presentation/controllers/auth_controller.dart';
 import 'package:un4seen/src/features/chat/data/models/chat_models.dart';
 import 'package:un4seen/src/features/chat/presentation/controller/chat_controller.dart';
+import 'package:un4seen/src/features/profile/presentation/profile_presentation_export.dart';
 
 import '../../../../core/routes/app_routes.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -82,8 +84,8 @@ class _ChatPageState extends State<ChatPage> {
   bool get _isChannel => args.type == ChatViewType.channel;
 
   String? get _currentUserId {
-    if (Get.isRegistered<AuthController>()) {
-      return Get.find<AuthController>().userProfile.value.id;
+    if (Get.isRegistered<ProfileController>()) {
+      return Get.find<ProfileController>().userProfile.value.id;
     }
     return null;
   }
@@ -94,8 +96,13 @@ class _ChatPageState extends State<ChatPage> {
     _controller = Get.isRegistered<ChatController>()
         ? Get.find<ChatController>()
         : Get.put(ChatController());
+
     if (args.id.isNotEmpty) {
       _controller.fetchChatHistory(args.id, _isChannel);
+      // ─── ADD THIS LINE ───
+      if (_isChannel) {
+        _controller.fetchChannelMembers(args.id);
+      }
     }
     _scrollCtrl.addListener(_onScroll);
   }
@@ -109,7 +116,8 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   void _onScroll() {
-    if (_scrollCtrl.position.pixels >= _scrollCtrl.position.maxScrollExtent - 200) {
+    if (_scrollCtrl.position.pixels >=
+        _scrollCtrl.position.maxScrollExtent - 200) {
       _controller.loadNextPage(args.id, _isChannel);
     }
   }
@@ -223,14 +231,8 @@ class _ChatPageState extends State<ChatPage> {
     final isMe = msg.sender.id == _currentUserId;
     final time = _formatChatTime(msg.createdAt);
 
+    // If it's a Channel/Group chat
     if (_isChannel) {
-      if (isMe) {
-        return _OutgoingMessage(
-          message: msg.text,
-          time: time,
-          fileUrl: msg.file,
-        );
-      }
       return _ChannelMessage(
         sender: msg.sender.fullName,
         avatarUrl: msg.sender.image.isNotEmpty
@@ -239,9 +241,11 @@ class _ChatPageState extends State<ChatPage> {
         message: msg.text,
         time: time,
         fileUrl: msg.file,
+        isMe: isMe, // Pass isMe to the widget
       );
     }
 
+    // If it's a Direct Message (1 to 1)
     if (isMe) {
       return _OutgoingMessage(message: msg.text, time: time, fileUrl: msg.file);
     }
@@ -264,6 +268,8 @@ class _ChannelHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.find<ChatController>();
+
     return Row(
       children: [
         Container(
@@ -308,12 +314,13 @@ class _ChannelHeader extends StatelessWidget {
           ),
         ),
         space8W,
-        const Icon(Icons.circle, size: 7, color: AppColors.kGreenColor),
-        const SizedBox(width: 4),
-        CustomText(
-          '${args.onlineCount}',
-          color: AppColors.kSecondaryTextColor,
-          fontSize: 12,
+
+        Obx(
+          () => CustomText(
+            '(${controller.channelMembers.length})',
+            color: AppColors.kSecondaryTextColor,
+            fontSize: 12,
+          ),
         ),
       ],
     );
@@ -327,38 +334,33 @@ class _DirectHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 8, top: 10),
-      child: Row(
-        children: [
-          _Avatar(
-            url: args.avatarUrl ?? 'https://i.pravatar.cc/150?u=jake',
-            radius: 17,
-          ),
-          const SizedBox(width: 10),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              CustomText(args.title, fontSize: 16, fontWeight: FontWeight.bold),
-              Row(
-                children: [
-                  const Icon(
-                    Icons.circle,
-                    size: 7,
-                    color: AppColors.kGreenColor,
-                  ),
-                  space4W,
-                  CustomText(
-                    args.subtitle,
-                    fontSize: 12,
-                    color: AppColors.kTextColor,
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ],
-      ),
+    return Row(
+      children: [
+        CustomNetworkImage(
+          imageUrl: args.avatarUrl ?? 'https://i.pravatar.cc/150?u=jake',
+          radius: 17,
+          width: 34,
+          height: 34,
+        ),
+        space12W,
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CustomText(args.title, fontSize: 16, fontWeight: FontWeight.bold),
+            Row(
+              children: [
+                const Icon(Icons.circle, size: 7, color: AppColors.kGreenColor),
+                space4W,
+                CustomText(
+                  args.subtitle,
+                  fontSize: 12,
+                  color: AppColors.kTextColor,
+                ),
+              ],
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
@@ -369,6 +371,7 @@ class _ChannelMessage extends StatelessWidget {
   final String message;
   final String time;
   final String? fileUrl;
+  final bool isMe; // Added this
 
   const _ChannelMessage({
     required this.sender,
@@ -376,6 +379,7 @@ class _ChannelMessage extends StatelessWidget {
     required this.message,
     required this.time,
     this.fileUrl,
+    this.isMe = false, // Default to false
   });
 
   @override
@@ -383,46 +387,72 @@ class _ChannelMessage extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 14),
       child: Row(
+        // ─── THE CORE FIX ───
+        // If it's me, align to end (right), otherwise start (left)
+        mainAxisAlignment: isMe
+            ? MainAxisAlignment.end
+            : MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _Avatar(url: avatarUrl, radius: 15),
-          const SizedBox(width: 10),
+          if (!isMe) ...[
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: _Avatar(url: avatarUrl, radius: 15),
+            ),
+            // const SizedBox(width: 10),
+          ],
           Expanded(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: isMe
+                  ? CrossAxisAlignment.end
+                  : CrossAxisAlignment.start,
               children: [
-                CustomText(sender, fontSize: 12, fontWeight: FontWeight.w600),
+                CustomText(
+                  isMe ? "You" : sender,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  color: isMe ? AppColors.kPrimaryColor : AppColors.kTextColor,
+                ),
                 Row(
+                  mainAxisAlignment: isMe
+                      ? MainAxisAlignment.end
+                      : MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    if (isMe) ...[
+                      // Interaction icon on left if message is on right
+                      const SizedBox(width: 20),
+                    ],
                     Flexible(
                       child: _Bubble(
                         message: message,
                         time: null,
-                        isMe: false,
+                        isMe: isMe,
                         fileUrl: fileUrl,
-                        radius: const BorderRadius.only(
-                          topLeft: Radius.circular(4),
-                          topRight: Radius.circular(12),
-                          bottomLeft: Radius.circular(12),
-                          bottomRight: Radius.circular(12),
+                        radius: BorderRadius.only(
+                          topLeft: const Radius.circular(12),
+                          topRight: const Radius.circular(12),
+                          bottomLeft: Radius.circular(isMe ? 12 : 2),
+                          bottomRight: Radius.circular(isMe ? 2 : 12),
                         ),
                       ),
                     ),
-                    space4W,
-                    Container(
-                      width: 20,
-                      height: 20,
-                      decoration: const BoxDecoration(
-                        color: AppColors.kPrimaryColor,
-                        shape: BoxShape.circle,
+                    if (!isMe) ...[
+                      space4W,
+                      Container(
+                        width: 20,
+                        height: 20,
+                        decoration: const BoxDecoration(
+                          color: AppColors.kPrimaryColor,
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(
+                          Icons.flag_outlined,
+                          color: Colors.white,
+                          size: 13,
+                        ),
                       ),
-                      child: const Icon(
-                        Icons.flag_outlined,
-                        color: Colors.white,
-                        size: 13,
-                      ),
-                    ),
+                    ],
                   ],
                 ),
                 space4H,
@@ -434,6 +464,10 @@ class _ChannelMessage extends StatelessWidget {
               ],
             ),
           ),
+          if (isMe) ...[
+            const SizedBox(width: 10),
+            _Avatar(url: avatarUrl, radius: 15),
+          ],
         ],
       ),
     );
@@ -458,6 +492,7 @@ class _DirectIncomingMessage extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 14),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.start, // বাম পাশে
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           _Avatar(url: avatarUrl, radius: 15),
@@ -471,18 +506,19 @@ class _DirectIncomingMessage extends StatelessWidget {
               radius: const BorderRadius.only(
                 topLeft: Radius.circular(14),
                 topRight: Radius.circular(14),
-                bottomLeft: Radius.circular(2),
+                bottomLeft: Radius.circular(2), // চিকন কোণা বামে
                 bottomRight: Radius.circular(14),
               ),
             ),
           ),
-          const SizedBox(width: 48),
+          const SizedBox(width: 48), // ডানপাশে জায়গা রাখা
         ],
       ),
     );
   }
 }
 
+// ৩. আউটগোয়িং ডিরেক্ট মেসেজ (ডান পাশে - আপনার মেসেজ)
 class _OutgoingMessage extends StatelessWidget {
   final String message;
   final String time;
@@ -497,26 +533,34 @@ class _OutgoingMessage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 88, bottom: 14),
-      child: Align(
-        alignment: Alignment.centerRight,
-        child: _Bubble(
-          message: message,
-          time: time,
-          isMe: true,
-          fileUrl: fileUrl,
-          radius: const BorderRadius.only(
-            topLeft: Radius.circular(14),
-            topRight: Radius.circular(14),
-            bottomLeft: Radius.circular(14),
-            bottomRight: Radius.circular(2),
+      padding: const EdgeInsets.only(bottom: 14),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end, // ─── ডান পাশে এলাইনমেন্ট ───
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          const SizedBox(width: 48), // বামপাশে জায়গা রাখা
+          Flexible(
+            child: _Bubble(
+              message: message,
+              time: time,
+              isMe: true,
+              fileUrl: fileUrl,
+              radius: const BorderRadius.only(
+                topLeft: Radius.circular(14),
+                topRight: Radius.circular(14),
+                bottomLeft: Radius.circular(14),
+                bottomRight: Radius.circular(2), // চিকন কোণা ডানে
+              ),
+            ),
           ),
-        ),
+          // নিজের প্রোফাইল পিকচার দেখাতে চাইলে এখানে _Avatar যোগ করতে পারেন (যেমনটা চ্যানেলে করা হয়েছে)
+        ],
       ),
     );
   }
 }
 
+// ৪. বাবল উইজেট (কালার এবং টেক্সট এলাইনমেন্ট হ্যান্ডলিং)
 class _Bubble extends StatelessWidget {
   final String message;
   final String? time;
@@ -535,52 +579,40 @@ class _Bubble extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      constraints: BoxConstraints(
-        maxWidth: MediaQuery.of(context).size.width * 0.62,
-      ),
-      padding: const EdgeInsets.fromLTRB(12, 10, 12, 9),
       decoration: BoxDecoration(
-        color: isMe ? AppColors.kPrimaryColor : Colors.white,
+        color: Colors.white,
         borderRadius: radius,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.12),
+            color: Colors.black.withOpacity(0.08),
             blurRadius: 5,
             offset: const Offset(0, 2),
           ),
         ],
       ),
+      padding: const EdgeInsets.all(12),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: isMe
+            ? CrossAxisAlignment.end
+            : CrossAxisAlignment.start,
         children: [
           if (message.isNotEmpty)
             CustomText(
               message,
-              color: isMe ? Colors.white : AppColors.kTextColor,
+              color: AppColors.kTextColor,
               fontSize: 13,
+              textAlign: isMe ? TextAlign.right : TextAlign.left,
             ),
           if (fileUrl != null && fileUrl!.isNotEmpty) ...[
             if (message.isNotEmpty) const SizedBox(height: 8),
             ClipRRect(
               borderRadius: BorderRadius.circular(8),
-              child: Image.network(
-                fileUrl!,
-                height: 120,
-                width: double.infinity,
-                fit: BoxFit.cover,
-              ),
+              child: Image.network(fileUrl!, fit: BoxFit.cover),
             ),
           ],
           if (time != null) ...[
-            const SizedBox(height: 6),
-            Align(
-              alignment: Alignment.bottomRight,
-              child: CustomText(
-                time!,
-                fontSize: 10,
-                color: isMe ? Colors.white : AppColors.kSecondaryTextColor,
-              ),
-            ),
+            const SizedBox(height: 4),
+            CustomText(time!, fontSize: 9, color: Colors.black45),
           ],
         ],
       ),
@@ -983,10 +1015,17 @@ class _Avatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CircleAvatar(
-      radius: radius + 1,
-      backgroundColor: AppColors.kPrimaryColor,
-      child: CircleAvatar(radius: radius, backgroundImage: NetworkImage(url)),
+    return Padding(
+      padding: const EdgeInsets.only(top: 9.0),
+      child: CircleAvatar(
+        radius: radius + 1,
+
+        backgroundColor: AppColors.kPrimaryColor,
+        child: CircleAvatar(
+          radius: radius,
+          backgroundImage: CachedNetworkImageProvider(url),
+        ),
+      ),
     );
   }
 }

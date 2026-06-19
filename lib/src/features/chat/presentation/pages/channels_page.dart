@@ -122,6 +122,8 @@ class ChannelsPage extends StatelessWidget {
                       return ChannelListItemWidget(
                         img: "assets/icons/hash_con.svg",
                         title: group.name,
+                        fromChannel: true,
+                        channelId: group.id,
                         subtitle:
                             "${group.onlineCount} ${AppStaticStrings.online.tr}",
                         onTap: () => context.push(
@@ -139,18 +141,18 @@ class ChannelsPage extends StatelessWidget {
 
               // ─── 2. DIRECT MESSAGES SECTION ───
               SliverPadding(
-                padding: const EdgeInsets.all(12),
+                padding: AppPadding.getPadding12H(context),
                 sliver: SliverToBoxAdapter(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      space12H,
+                      // space12H,
                       const CustomText(
                         "Direct Messages",
                         variant: TextVariant.headlineSmall,
                         color: AppColors.kTextColor,
                       ),
-                      space12H,
+                      space8H,
                       ButtonTapWidget(
                         onTap: () {
                           context.push(AppRoutes.chatSearch);
@@ -164,6 +166,7 @@ class ChannelsPage extends StatelessWidget {
                           ),
                         ),
                       ),
+                      space8H,
                     ],
                   ),
                 ),

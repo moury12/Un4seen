@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:un4seen/src/core/core_export.dart';
+import 'package:un4seen/src/features/profile/presentation/controllers/test_rider_controller.dart';
 import '../widgets/benefit_card_widget.dart';
 import '../widgets/bullet_text_widget.dart';
 
@@ -9,6 +10,7 @@ class TestRiderProgramPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(TestRiderController());
     return Scaffold(
       appBar: AppBar(title: Text(AppStaticStrings.testRiderProgram.tr)),
       body: SafeArea(
@@ -154,9 +156,10 @@ class TestRiderProgramPage extends StatelessWidget {
                             variant: TextVariant.labelMedium,
                             color: AppColors.kTextColor,
                           ),
-                          const CustomTextField(
+                          CustomTextField(
                             maxLines: 3,
                             hintText: "",
+                            textEditingController: controller.textController,
                             borderColor: Colors.transparent,
                           ),
                         ],
@@ -165,11 +168,16 @@ class TestRiderProgramPage extends StatelessWidget {
                     space8H,
                     SizedBox(
                       width: double.infinity,
-                      child: CustomButton(
-                        text: AppStaticStrings.submitApplication.tr,
-                        onPressed: () {},
-                        icon: Icons.send,
-                        // icon:  Icon(AppIcons.access,
+                      child: Obx(
+                        () => CustomButton(
+                          isLoading: controller.isLoading.value,
+                          text: AppStaticStrings.submitApplication.tr,
+                          onPressed: () {
+                            controller.applyForProgram();
+                          },
+                          icon: Icons.send,
+                          // icon:  Icon(AppIcons.access,
+                        ),
                       ),
                     ),
                   ],

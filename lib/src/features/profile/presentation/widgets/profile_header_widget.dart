@@ -1,4 +1,5 @@
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:un4seen/src/features/chat/presentation/pages/chat_page.dart';
 
 import '../../../../src_export.dart';
 import 'stat_item_widget.dart';
@@ -101,8 +102,14 @@ class ProfileHeaderWidget extends StatelessWidget {
                     child: ButtonTapWidget(
                       onTap: () {
                      
-                          context.push(AppRoutes.channelMembers);
-                        
+context.push(
+                          AppRoutes.chat,
+                          extra: ChatPageArgs.direct(
+                            id: userId??'',
+                            title: name,
+                            avatarUrl: image,
+                          ),
+                        );                    
                       },
                       radius: appRadius6,
                       child: Row(

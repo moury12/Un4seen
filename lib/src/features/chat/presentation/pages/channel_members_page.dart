@@ -1,6 +1,4 @@
 import 'package:un4seen/src/features/chat/presentation/controller/chat_controller.dart';
-import 'package:un4seen/src/features/auth/presentation/controllers/auth_controller.dart';
-
 import '../../../../core/widgets/custom_scaffold.dart';
 import '../../../../src_export.dart';
 import '../widgets/channel_member_item_widget.dart';

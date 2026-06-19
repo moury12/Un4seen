@@ -176,7 +176,10 @@ class _CustomTextFieldState extends State<CustomTextField> {
               enabledBorder: _border(
                 widget.borderColor ?? AppColors.kAccentColor,
               ),
-              focusedBorder: _border(AppColors.kPrimaryColor, width: 1),
+              focusedBorder: _border(
+                widget.borderColor ?? AppColors.kPrimaryColor,
+                width: 1,
+              ),
               errorBorder: _border(AppColors.kRedColor, width: 1),
               focusedErrorBorder: _border(AppColors.kRedColor, width: 1),
             ),

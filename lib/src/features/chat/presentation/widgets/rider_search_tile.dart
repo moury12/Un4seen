@@ -4,42 +4,54 @@ import '../../../../src_export.dart';
 
 class RiderSearchTile extends StatelessWidget {
   final RiderSearchResultModel model;
-  const RiderSearchTile({super.key, required this.model});
+  final VoidCallback? onTap;
+  const RiderSearchTile({super.key, required this.model, this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: AppColors.kBackgroundColor,
         borderRadius: BorderRadius.circular(12),
       ),
-      child: Row(
-        children: [
-          CircleAvatar(
-            backgroundImage: NetworkImage(model.image ?? 'https://i.pravatar.cc/150'),
-            radius: 20,
+      child: ButtonTapWidget(
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Row(
+            children: [
+              CircleAvatar(
+                backgroundImage: NetworkImage(
+                  model.image ?? 'https://i.pravatar.cc/150',
+                ),
+                radius: 20,
+              ),
+              space12W,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CustomText(model.fullName, fontWeight: FontWeight.bold),
+                    CustomText(
+                      model.memberNumber,
+                      fontSize: 11,
+                      color: AppColors.kSecondaryTextColor,
+                    ),
+                  ],
+                ),
+              ),
+              // CustomButton(
+              //   text: "Message",
+              //   onPressed: () {}, // Route to ChatPage logic
+              //   isExpanding: false,
+
+              //   borderRadius: 8,
+
+              // ),
+            ],
           ),
-          space12W,
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CustomText(model.fullName, fontWeight: FontWeight.bold),
-                CustomText(model.memberNumber, fontSize: 11, color: AppColors.kSecondaryTextColor),
-              ],
-            ),
-          ),
-          // CustomButton(
-          //   text: "Message", 
-          //   onPressed: () {}, // Route to ChatPage logic
-          //   isExpanding: false, 
-           
-          //   borderRadius: 8, 
-        
-          // ),
-        ],
+        ),
       ),
     );
   }

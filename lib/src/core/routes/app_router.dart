@@ -264,7 +264,14 @@ class AppRouter {
       GoRoute(
         path: AppRoutes.buildsMods,
         name: 'buildsMods',
-        builder: (context, state) => const BuildsModsPage(),
+        builder: (context, state) {
+           final extra = state.extra as Map<String, dynamic>;
+
+          return BuildsModsPage(
+            channelId: extra['channelId']??"",
+            channelName: extra['channelName']??"",
+          );
+        },
       ),
       GoRoute(
         path: AppRoutes.chatSearch,

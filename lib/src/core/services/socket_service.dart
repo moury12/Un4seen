@@ -8,13 +8,10 @@ class SocketService extends GetxService {
   final LocalStorageService _storage = Get.find<LocalStorageService>();
 
   void initSocket() {
+    if (socket != null && socket!.connected) return; 
+
     final token = _storage.accessToken;
     if (token == null) return;
-
-    if (socket != null) {
-      log('📱 Existing socket connection found. Disconnecting...');
-      disconnectSocket();
-    }
 
     socket = IO.io(
       'http://10.10.28.81:5011',

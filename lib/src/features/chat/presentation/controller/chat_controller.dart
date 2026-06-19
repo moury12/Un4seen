@@ -149,13 +149,26 @@ class ChatController extends GetxController {
 
   void _initSocketListeners() {
     _socket.listenToEvent('RECEIVE_GROUP_MESSAGE', (data) {
-      log("---------- receive group msg -----------");
-      log(data);
-      final msg = ChatMessageModel.fromJson(data);
-      if (activeChatIsChannel && msg.channel == activeChatId) {
-        activeMessages.insert(0, msg);
+      log("📥 [SOCKET] Received Group Message");
+
+      try {
+        final msg = ChatMessageModel.fromJson(data);
+
+        // Only insert if the user is currently looking at this specific channel
+        if (activeChatIsChannel && msg.channel == activeChatId) {
+          activeMessages.insert(0, msg);
+          log("✅ [UI] Message inserted into active list");
+        } else {
+          log(
+            "ℹ️ [UI] Message for different channel ignored (Current: $activeChatId, Incoming: ${msg.channel})",
+          );
+        }
+
+        // Refresh sidebar to show latest message preview or unread status
+        fetchSidebar();
+      } catch (e) {
+        log("❌ [SOCKET] Error parsing group message: $e");
       }
-      fetchSidebar();
     });
 
     _socket.listenToEvent('RECEIVE_PRIVATE_MESSAGE', (data) {
@@ -216,7 +229,10 @@ class ChatController extends GetxController {
       currentPage = 1;
       hasMoreMessages = true;
 
-      if (isChannel) _socket.socket?.emit('JOIN_CHANNEL', id);
+      if (isChannel) {
+        _socket.socket?.emit('JOIN_CHANNEL', id);
+        log("--------- channel joined id : $id------------");
+      }
 
       final endpoint = isChannel
           ? '/channels/$id/messages' // Keep limit/page if needed, otherwise default
@@ -257,7 +273,7 @@ class ChatController extends GetxController {
     try {
       isLoadMoreLoading.value = true;
       final nextPage = currentPage + 1;
-      
+
       final endpoint = isChannel
           ? '/channels/$id/messages?page=$nextPage&limit=120' // If group has pages
           : '/channels/private-history/$id?page=$nextPage&limit=120';
@@ -269,7 +285,7 @@ class ChatController extends GetxController {
           final newMessages = results
               .map((e) => ChatMessageModel.fromJson(e))
               .toList();
-          
+
           activeMessages.addAll(newMessages);
           currentPage = nextPage;
         }
