@@ -6,7 +6,12 @@ import '../widgets/upgrade_category_widget.dart';
 
 class SingleBikeDetailsPage extends StatelessWidget {
   final String bikeId;
-  const SingleBikeDetailsPage({super.key, required this.bikeId});
+  final bool fromMember;
+  const SingleBikeDetailsPage({
+    super.key,
+    required this.bikeId,
+    this.fromMember = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -20,10 +25,42 @@ class SingleBikeDetailsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Bike Details".tr,
+          fromMember ? "Bike Details".tr : "My Bike Details".tr,
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
+        actions: [
+          fromMember
+              ? Container(
+                  margin: const EdgeInsets.only(right: 12),
+                  decoration: const BoxDecoration(
+                    color: AppColors.kPrimaryDarkColor2,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Obx(
+                    ()  {
+                      final bike = controller.singleBikeDetails.value;
+                  final isSaved = bike?.isSaved ?? false;
+                      return ButtonTapWidget(
+                        onTap: bike == null 
+                        ? null 
+                        : () => controller.toggleSaveBike(bike.id),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Icon(
+                          (controller.singleBikeDetails.value?.isSaved ?? false) ==
+                                  false
+                              ? Icons.bookmark_outline
+                              : Icons.bookmark,
+                          color: AppColors.kWhiteTextColor,
+                          size: 20,
+                                              ),
+                        ),
+                      );}
+                  ),
+                )
+              : const SizedBox.shrink(),
+        ],
       ),
       body: Obx(() {
         if (controller.isLoading.value) {
@@ -52,7 +89,7 @@ class SingleBikeDetailsPage extends StatelessWidget {
               BikeDetailsContainerWidget(bike: bike),
               GradientContainer(
                 onTap: () =>
-                    context.push(AppRoutes.bikeGallery, extra:  bike.id),
+                    context.push(AppRoutes.bikeGallery, extra: bike.id),
                 padding: AppPadding.getPadding12(context),
                 child: Row(
                   spacing: 8,

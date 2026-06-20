@@ -59,9 +59,84 @@ class BikeProfilesController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    fetchBikeProfile();
+    Future.wait([fetchBikeProfile(), fetchSavedBikes()]);
   }
 
+  final RxBool isSavedLoading = false.obs;
+  // Strongly-typed reactive collection array
+  final RxList<SavedBikeItem> savedBikes = <SavedBikeItem>[].obs;
+
+  Future<void> fetchSavedBikes() async {
+    try {
+      isSavedLoading.value = true;
+      final res = await _api.get('/bikes/my-saved');
+      if (res.data['success'] == true) {
+        final List listData = res.data['data'] ?? [];
+
+        // Purely object-oriented model parsing layout
+        final parsedItems = listData
+            .map((jsonItem) => SavedBikeItem.fromJson(jsonItem))
+            .toList();
+
+        savedBikes.assignAll(parsedItems);
+      }
+    } catch (e) {
+      print('❌ Fetch Saved Bikes Parsing Stream Error: $e');
+    } finally {
+      isSavedLoading.value = false;
+    }
+  }
+Future<void> toggleSaveBike(String bikeId) async {
+    final bike = singleBikeDetails.value;
+    if (bike == null || bike.id != bikeId) return;
+
+    // 1. Optimistic UI Update
+    final updatedBike = BikeModel(
+      id: bike.id,
+      image: bike.image,
+      year: bike.year,
+      make: bike.make,
+      model: bike.model,
+      bikeType: bike.bikeType,
+      color: bike.color,
+      upgrades: bike.upgrades,
+      gallery: bike.gallery,
+      isRetired: bike.isRetired,
+      isSaved: !bike.isSaved,
+    );
+    singleBikeDetails.value = updatedBike;
+
+    try {
+      final res = await _api.post('/bikes/save/$bikeId');
+      if (res.data['success'] == true) {
+        // Sync true state from backend response map container
+        final bool serverIsSaved = res.data['data']['isSaved'] ?? !bike.isSaved;
+        
+        singleBikeDetails.value = BikeModel(
+          id: bike.id,
+          image: bike.image,
+          year: bike.year,
+          make: bike.make,
+          model: bike.model,
+          bikeType: bike.bikeType,
+          color: bike.color,
+          upgrades: bike.upgrades,
+          gallery: bike.gallery,
+          isRetired: bike.isRetired,
+          isSaved: serverIsSaved,
+        );
+        CustomSnackbar.showSuccess(res.data['message'] ?? "Saved status updated");
+        
+        // Quietly refresh list array if user has it active in memory
+        fetchSavedBikes();
+      }
+    } catch (e) {
+      // Rollback to original state on exception
+      singleBikeDetails.value = bike;
+      print('❌ Toggle Save Bike Profile Exception: $e');
+      CustomSnackbar.showError("Failed to update saved item tracking");
+    }
+  }
   Future<void> fetchBikeProfile() async {
     try {
       isLoading.value = true;

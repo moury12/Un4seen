@@ -1,4 +1,5 @@
 import 'package:un4seen/src/core/widgets/custom_scaffold.dart';
+import 'package:un4seen/src/features/home/presentation/pages/notification_page.dart';
 import 'package:un4seen/src/features/home/presentation/widgets/activity_summary_tile_widget.dart';
 import 'package:un4seen/src/features/home/presentation/widgets/bike_of_the_week_widget.dart';
 import 'package:un4seen/src/features/home/presentation/widgets/quick_action_row_widget.dart';
@@ -25,8 +26,7 @@ class HomePage extends StatelessWidget {
             return CustomNetworkImage(
               height: 40,
               width: 40,
-              imageUrl:
-                  homeController.homeFeedData.value?.user?.image ?? "",
+              imageUrl: homeController.homeFeedData.value?.user?.image ?? "",
               boxShape: BoxShape.circle,
             );
           }),
@@ -46,7 +46,9 @@ class HomePage extends StatelessWidget {
               );
             }),
             Obx(() {
-              final isSyndicate = homeController.homeFeedData.value?.user?.isSyndicateMember ?? false;
+              final isSyndicate =
+                  homeController.homeFeedData.value?.user?.isSyndicateMember ??
+                  false;
               if (!isSyndicate) return const SizedBox.shrink();
               return Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
@@ -65,30 +67,35 @@ class HomePage extends StatelessWidget {
           ],
         ),
         actions: [
-          Container(
-            margin: const EdgeInsets.only(right: 8.0),
+          ButtonTapWidget(
+            onTap: () {
+              context.push(AppRoutes.notification);
+            },
+            child: Container(
+              margin: const EdgeInsets.only(right: 8.0),
 
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  AppColors.kPrimaryColor.withValues(alpha: .8),
-                  AppColors.kPrimaryDarkColor,
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    AppColors.kPrimaryColor.withValues(alpha: .8),
+                    AppColors.kPrimaryDarkColor,
+                  ],
+                ),
+                borderRadius: BorderRadius.circular(appRadius),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.kTextColor.withValues(alpha: 0.3),
+                    blurRadius: 6,
+                    offset: const Offset(0, 3),
+                  ),
                 ],
               ),
-              borderRadius: BorderRadius.circular(appRadius),
-              boxShadow: [
-                BoxShadow(
-                  color: AppColors.kTextColor.withValues(alpha: 0.3),
-                  blurRadius: 6,
-                  offset: const Offset(0, 3),
-                ),
-              ],
-            ),
-            child: const Icon(
-              Icons.notifications_outlined,
-              color: Colors.white,
-              size: 20,
+              child: const Icon(
+                Icons.notifications_outlined,
+                color: Colors.white,
+                size: 20,
+              ),
             ),
           ),
         ],
@@ -119,17 +126,25 @@ class HomePage extends StatelessWidget {
                   // We still use giveawayController for currentWeekly as requested
                   Obx(() {
                     if (giveawayController.isLoading.value) {
-                      return _shimmerBox(height: 120, width: double.infinity, color: AppColors.kPrimaryDarkColor.withValues(alpha: 0.3));
+                      return _shimmerBox(
+                        height: 120,
+                        width: double.infinity,
+                        color: AppColors.kPrimaryDarkColor.withValues(
+                          alpha: 0.3,
+                        ),
+                      );
                     }
                     final gData = giveawayController.pageData.value;
                     if (gData == null || gData.currentWeekly == null)
                       return const SizedBox.shrink();
-                    return WeeklyPrizeCardWidget(giveaway: gData.currentWeekly!);
+                    return WeeklyPrizeCardWidget(
+                      giveaway: gData.currentWeekly!,
+                    );
                   }),
 
                   const QuickActionRowWidget(),
                   const BikeOfTheWeekWidget(),
-                  
+
                   CustomButton(
                     text: AppStaticStrings.rateMyRide.tr,
                     onPressed: () => context.push(AppRoutes.rateMyRide),
@@ -138,22 +153,23 @@ class HomePage extends StatelessWidget {
                   ),
 
                   if (homeData.majorGiveaway != null)
-                    MajorGiveawayCardWidget(
-                      giveaway: homeData.majorGiveaway!,
-                    ),
-                  
+                    MajorGiveawayCardWidget(giveaway: homeData.majorGiveaway!),
+
                   if (homeData.recentWinners.isNotEmpty) ...[
                     CustomText(
                       AppStaticStrings.recentWeeklyWinners.tr,
                       variant: TextVariant.titleLarge,
                       fontWeight: FontWeight.bold,
                     ),
-                    ...homeData.recentWinners.map((winner) => WeeklyWinnerCardWidget(
-                          week: "WEEK ${winner.weekNumber} WINNER",
-                          name: winner.winner?.fullName ?? "",
-                          prize: winner.title,
-                          image: winner.winner?.image ?? "https://i.pravatar.cc/150",
-                        )),
+                    ...homeData.recentWinners.map(
+                      (winner) => WeeklyWinnerCardWidget(
+                        week: "WEEK ${winner.weekNumber} WINNER",
+                        name: winner.winner?.fullName ?? "",
+                        prize: winner.title,
+                        image:
+                            winner.winner?.image ?? "https://i.pravatar.cc/150",
+                      ),
+                    ),
                   ],
 
                   if (homeData.thisWeekStats != null) ...[
@@ -164,12 +180,14 @@ class HomePage extends StatelessWidget {
                     ),
                     ActivitySummaryTileWidget(
                       icon: AppIcons.badge,
-                      title: "+${homeData.thisWeekStats!.pointsEarned} points earned",
+                      title:
+                          "+${homeData.thisWeekStats!.pointsEarned} points earned",
                       subtitle: AppStaticStrings.keepShredding.tr,
                     ),
                     ActivitySummaryTileWidget(
                       icon: AppIcons.camera,
-                      title: "${homeData.thisWeekStats!.newStoriesPosted} ${AppStaticStrings.newStoriesPosted.tr}",
+                      title:
+                          "${homeData.thisWeekStats!.newStoriesPosted} ${AppStaticStrings.newStoriesPosted.tr}",
                       subtitle: AppStaticStrings.checkOutLatestStories.tr,
                     ),
                   ],
@@ -189,23 +207,63 @@ class HomePage extends StatelessWidget {
       children: [
         _shimmerBox(height: 100, width: double.infinity, color: baseColor),
         space8H,
-        _shimmerBox(height: 140, width: double.infinity, borderRadius: 20, color: baseColor),
+        _shimmerBox(
+          height: 140,
+          width: double.infinity,
+          borderRadius: 20,
+          color: baseColor,
+        ),
         space12H,
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            _shimmerBox(height: 60, width: 80, borderRadius: 12, color: baseColor),
-            _shimmerBox(height: 60, width: 80, borderRadius: 12, color: baseColor),
-            _shimmerBox(height: 60, width: 80, borderRadius: 12, color: baseColor),
-            _shimmerBox(height: 60, width: 80, borderRadius: 12, color: baseColor),
+            _shimmerBox(
+              height: 60,
+              width: 80,
+              borderRadius: 12,
+              color: baseColor,
+            ),
+            _shimmerBox(
+              height: 60,
+              width: 80,
+              borderRadius: 12,
+              color: baseColor,
+            ),
+            _shimmerBox(
+              height: 60,
+              width: 80,
+              borderRadius: 12,
+              color: baseColor,
+            ),
+            _shimmerBox(
+              height: 60,
+              width: 80,
+              borderRadius: 12,
+              color: baseColor,
+            ),
           ],
         ),
         space12H,
-        _shimmerBox(height: 200, width: double.infinity, borderRadius: 16, color: baseColor),
+        _shimmerBox(
+          height: 200,
+          width: double.infinity,
+          borderRadius: 16,
+          color: baseColor,
+        ),
         space12H,
-        _shimmerBox(height: 50, width: double.infinity, borderRadius: 12, color: baseColor),
+        _shimmerBox(
+          height: 50,
+          width: double.infinity,
+          borderRadius: 12,
+          color: baseColor,
+        ),
         space12H,
-        _shimmerBox(height: 250, width: double.infinity, borderRadius: 16, color: baseColor),
+        _shimmerBox(
+          height: 250,
+          width: double.infinity,
+          borderRadius: 16,
+          color: baseColor,
+        ),
       ],
     );
   }

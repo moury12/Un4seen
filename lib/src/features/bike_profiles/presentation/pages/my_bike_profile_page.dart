@@ -14,24 +14,7 @@ class MyBikeProfilePage extends StatelessWidget {
     final controller = Get.put(BikeProfilesController());
     final profileCntrl = Get.put(ProfileController());
     return Scaffold(
-      appBar: AppBar(
-        title: Text(AppStaticStrings.myBikeProfile.tr),
-        actions: [
-          Container(
-            margin: const EdgeInsets.only(right: 12),
-            padding: const EdgeInsets.all(8),
-            decoration: const BoxDecoration(
-              color: AppColors.kPrimaryDarkColor2,
-              shape: BoxShape.circle,
-            ),
-            child: const Icon(
-              Icons.bookmark_outline,
-              color: AppColors.kWhiteTextColor,
-              size: 20,
-            ),
-          ),
-        ],
-      ),
+      appBar: AppBar(title: Text(AppStaticStrings.myBikeProfile.tr)),
       body: SafeArea(
         child: RefreshIndicator(
           onRefresh: controller.fetchBikeProfile,
@@ -202,6 +185,7 @@ class MyBikeProfilePage extends StatelessWidget {
                           imageUrl: rb.image,
                           onTap: () => context.push(
                             '${AppRoutes.singleBikeDetails}/${rb.id}',
+                            extra: {'fromMember': false},
                           ),
                         ),
                       );

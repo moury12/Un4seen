@@ -22,9 +22,11 @@ class BikeProfileTileWidget extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         if (hasBike && activeBike!.id != null) {
-          context.push('${AppRoutes.singleBikeDetails}/${activeBike!.id}');
+          context.push('${AppRoutes.singleBikeDetails}/${activeBike!.id}', extra: {
+            'fromMember': true
+          } );
         } else {
-          context.push(AppRoutes.bikeProfiles);
+          CustomSnackbar.showError("No active bike profile found");
         }
       },
       child: Container(
@@ -35,7 +37,9 @@ class BikeProfileTileWidget extends StatelessWidget {
         ),
         child: Row(
           children: [
-            if (hasBike && activeBike!.image != null && activeBike!.image!.isNotEmpty)
+            if (hasBike &&
+                activeBike!.image != null &&
+                activeBike!.image!.isNotEmpty)
               ClipRRect(
                 borderRadius: BorderRadius.circular(8),
                 child: CustomNetworkImage(
@@ -64,15 +68,18 @@ class BikeProfileTileWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   CustomText(
-                    hasBike 
-                        ? "${activeBike!.year ?? ''} ${activeBike!.make ?? ''} ${activeBike!.model ?? ''}".trim()
+                    hasBike
+                        ? "${activeBike!.year ?? ''} ${activeBike!.make ?? ''} ${activeBike!.model ?? ''}"
+                              .trim()
                         : "Bike Profile",
                     variant: TextVariant.titleMedium,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                   ),
                   CustomText(
-                    hasBike ? "View full bike setup & upgrades" : "No active bike setup",
+                    hasBike
+                        ? "View full bike setup & upgrades"
+                        : "No active bike setup",
                     variant: TextVariant.labelMedium,
                     color: Colors.white70,
                   ),
@@ -86,4 +93,3 @@ class BikeProfileTileWidget extends StatelessWidget {
     );
   }
 }
-

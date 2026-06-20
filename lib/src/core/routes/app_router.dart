@@ -4,6 +4,7 @@ import 'package:un4seen/src/core/utils/app_strings.dart';
 import 'package:un4seen/src/features/bike_profiles/presentation/pages/members_page.dart';
 import 'package:un4seen/src/features/chat/presentation/pages/search_chat_page.dart';
 import 'package:un4seen/src/features/competitions/presentation/pages/entries_gallery_page.dart';
+import 'package:un4seen/src/features/home/presentation/pages/notification_page.dart';
 import '../../features/auth/presentation/pages/splash_page.dart';
 import '../../features/auth/presentation/pages/login_page.dart';
 import '../../features/home/presentation/pages/home_page.dart';
@@ -216,7 +217,9 @@ class AppRouter {
         name: 'singleBikeDetails',
         builder: (context, state) {
           final id = state.pathParameters['id'] ?? '';
-          return SingleBikeDetailsPage(bikeId: id);
+           final extra = state.extra as Map<String, dynamic>;
+           final fromMember = extra['fromMember'] ?? false;
+          return SingleBikeDetailsPage(bikeId: id, fromMember: fromMember);
         },
       ),
       GoRoute(
@@ -224,7 +227,11 @@ class AppRouter {
         name: 'postStory',
         builder: (context, state) => PostStoryPage(),
       ),
-   
+   GoRoute(
+        path: AppRoutes.notification,
+        name: 'notification',
+        builder: (context, state) => const NotificationsPage(),
+      ),
       // Add this inside the routes list
       GoRoute(
         path: AppRoutes.entriesGallery,

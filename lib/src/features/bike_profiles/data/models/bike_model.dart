@@ -18,6 +18,49 @@ class BikeProfileResponse {
   }
 }
 
+// lib/src/features/bike_profiles/data/models/bike_model.dart
+
+class BikeOwner {
+  final String id;
+  final String firstName;
+  final String lastName;
+  final String image;
+
+  String get fullName => '$firstName $lastName'.trim();
+
+  BikeOwner({
+    required this.id,
+    required this.firstName,
+    required this.lastName,
+    required this.image,
+  });
+
+  factory BikeOwner.fromJson(Map<String, dynamic> json) {
+    return BikeOwner(
+      id: json['_id'] ?? '',
+      firstName: json['firstName'] ?? '',
+      lastName: json['lastName'] ?? '',
+      image: json['image'] ?? '',
+    );
+  }
+}
+
+class SavedBikeItem {
+  final String id;
+  final BikeModel bike;
+
+  SavedBikeItem({required this.id, required this.bike});
+
+  factory SavedBikeItem.fromJson(Map<String, dynamic> json) {
+    return SavedBikeItem(
+      id: json['_id'] ?? '',
+      bike: BikeModel.fromJson(json['bike'] ?? {}),
+    );
+  }
+}
+
+// lib/src/features/bike_profiles/data/models/bike_model.dart
+
 class BikeModel {
   final String id;
   final String image;
@@ -30,6 +73,7 @@ class BikeModel {
   final List<String> gallery;
   final bool isRetired;
   final bool isSaved;
+  final BikeOwner? user; 
 
   BikeModel({
     required this.id,
@@ -43,9 +87,25 @@ class BikeModel {
     required this.gallery,
     required this.isRetired,
     required this.isSaved,
+    this.user,
   });
 
   factory BikeModel.fromJson(Map<String, dynamic> json) {
+    // Dynamic type check to handle both Populated Object and Plain String ID
+    BikeOwner? parsedUser;
+    if (json['user'] != null) {
+      if (json['user'] is Map<String, dynamic>) {
+        parsedUser = BikeOwner.fromJson(json['user']);
+      } else if (json['user'] is String) {
+        parsedUser = BikeOwner(
+          id: json['user'],
+          firstName: '',
+          lastName: '',
+          image: '',
+        );
+      }
+    }
+
     return BikeModel(
       id: json['_id'] ?? '',
       image: json['image'] ?? '',
@@ -54,14 +114,13 @@ class BikeModel {
       model: json['model'] ?? '',
       bikeType: json['bikeType'] ?? '',
       color: json['color'] ?? '',
-      upgrades:
-          (json['upgrades'] as List?)
+      upgrades: (json['upgrades'] as List?)
               ?.map((e) => BikeUpgrade.fromJson(e))
-              .toList() ??
-          [],
+              .toList() ?? [],
       gallery: List<String>.from(json['gallery'] ?? []),
       isRetired: json['isRetired'] ?? false,
       isSaved: json['isSaved'] ?? false,
+      user: parsedUser,
     );
   }
 }
