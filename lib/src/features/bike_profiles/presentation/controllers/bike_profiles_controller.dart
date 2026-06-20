@@ -86,7 +86,8 @@ class BikeProfilesController extends GetxController {
       isSavedLoading.value = false;
     }
   }
-Future<void> toggleSaveBike(String bikeId) async {
+
+  Future<void> toggleSaveBike(String bikeId) async {
     final bike = singleBikeDetails.value;
     if (bike == null || bike.id != bikeId) return;
 
@@ -111,7 +112,7 @@ Future<void> toggleSaveBike(String bikeId) async {
       if (res.data['success'] == true) {
         // Sync true state from backend response map container
         final bool serverIsSaved = res.data['data']['isSaved'] ?? !bike.isSaved;
-        
+
         singleBikeDetails.value = BikeModel(
           id: bike.id,
           image: bike.image,
@@ -125,8 +126,10 @@ Future<void> toggleSaveBike(String bikeId) async {
           isRetired: bike.isRetired,
           isSaved: serverIsSaved,
         );
-        CustomSnackbar.showSuccess(res.data['message'] ?? "Saved status updated");
-        
+        CustomSnackbar.showSuccess(
+          res.data['message'] ?? "Saved status updated",
+        );
+
         // Quietly refresh list array if user has it active in memory
         fetchSavedBikes();
       }
@@ -137,6 +140,7 @@ Future<void> toggleSaveBike(String bikeId) async {
       CustomSnackbar.showError("Failed to update saved item tracking");
     }
   }
+
   Future<void> fetchBikeProfile() async {
     try {
       isLoading.value = true;
@@ -225,7 +229,7 @@ Future<void> toggleSaveBike(String bikeId) async {
       List<Map<String, dynamic>> formattedNotes = buildNoteSets.map((set) {
         return {
           "title": set.titleController.text.trim(),
-          "points": set.pointControllers.map((c) => c.text.trim()).toList(),
+          "items": set.pointControllers.map((c) => c.text.trim()).toList(),
         };
       }).toList();
 
@@ -237,7 +241,7 @@ Future<void> toggleSaveBike(String bikeId) async {
           "model": model,
           "bikeType": type,
           "color": color,
-          "buildNotes": formattedNotes,
+          "upgrades": formattedNotes,
         }),
       });
 

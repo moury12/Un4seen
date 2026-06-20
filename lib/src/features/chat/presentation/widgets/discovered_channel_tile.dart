@@ -1,3 +1,5 @@
+import 'package:un4seen/src/features/chat/presentation/controller/chat_controller.dart';
+
 import '../../../../src_export.dart';
 import '../../data/models/search_conversation_model.dart';
 
@@ -28,13 +30,22 @@ class DiscoveredChannelTile extends StatelessWidget {
               ],
             ),
           ),
-          Container(
-            padding: AppPadding.getPadding6(context),
-            decoration: BoxDecoration(
-              color: model.isJoined ? Colors.grey : AppColors.kPrimaryColor,
-              borderRadius: BorderRadius.circular(8),
+          GestureDetector(
+            onTap: () {
+             if(model.isJoined){
+              //  context.push(AppRoutes.chat);
+             } else if (!model.isPending) {
+               Get.find<ChatController>().requestJoinChannel(model.id);
+             }
+            },
+            child: Container(
+              padding: AppPadding.getPadding6(context),
+              decoration: BoxDecoration(
+                color: model.isJoined ? Colors.grey : AppColors.kPrimaryColor,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: CustomText(model.isJoined ? "Joined" : (model.isPending ? "Pending" : "Join"), fontSize: 12, color: Colors.white),
             ),
-            child: CustomText(model.isJoined ? "Joined" : (model.isPending ? "Pending" : "Join"), fontSize: 12, color: Colors.white),
           )
        
           

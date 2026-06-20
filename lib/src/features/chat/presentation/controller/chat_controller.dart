@@ -5,6 +5,7 @@ import 'package:un4seen/src/core/services/socket_service.dart';
 import 'package:un4seen/src/core/widgets/custom_snackbar.dart';
 import 'package:un4seen/src/features/chat/data/models/chat_models.dart';
 import 'package:un4seen/src/features/chat/data/models/search_conversation_model.dart';
+import 'package:un4seen/src/features/profile/data/models/user_profile_model.dart';
 
 import '../../../../core/services/api_service.dart';
 
@@ -121,6 +122,102 @@ class ChatController extends GetxController {
 
       CustomSnackbar.showError(
         res.data['message'] ?? 'Failed to update member',
+      );
+      return false;
+    } catch (e) {
+      CustomSnackbar.showError(e.toString());
+      return false;
+    }
+  }
+
+  Future<bool> requestJoinChannel(String channelId) async {
+    try {
+      final res = await _api.post(
+        '/channels/request-join',
+        data: {'channelId': channelId},
+      );
+
+      if (res.data['success'] == true) {
+        CustomSnackbar.showSuccess(res.data['message'] ?? 'Join request sent');
+        return true;
+      }
+
+      CustomSnackbar.showError(
+        res.data['message'] ?? 'Failed to send request',
+      );
+      return false;
+    } catch (e) {
+      CustomSnackbar.showError(e.toString());
+      return false;
+    }
+  }
+
+  final RxList<UserProfileModel> pendingRequests = <UserProfileModel>[].obs;
+  final RxBool isPendingRequestsLoading = false.obs;
+
+  Future<void> fetchPendingRequests(String channelId) async {
+    try {
+      isPendingRequestsLoading.value = true;
+      final res = await _api.get('/channels/requests/$channelId');
+      if (res.data['success'] == true) {
+        final List data = res.data['data'] ?? [];
+        pendingRequests.value = data.map((e) {
+          final userJson = e['user'] as Map<String, dynamic>;
+          final userProfile = UserProfileModel.fromJson(userJson);
+          userProfile.joinRequestId = e['_id'];
+          return userProfile;
+        }).toList();
+      }
+    } catch (e) {
+      print('Fetch pending requests error: $e');
+    } finally {
+      isPendingRequestsLoading.value = false;
+    }
+  }
+
+  Future<bool> handleJoinRequest(String requestId, String status) async {
+    try {
+      final res = await _api.patch(
+        '/channels/handle-request',
+        data: {
+          'requestId': requestId,
+          'status': status,
+        },
+      );
+
+      if (res.data['success'] == true) {
+        CustomSnackbar.showSuccess(res.data['message'] ?? 'Request $status');
+        return true;
+      }
+
+      CustomSnackbar.showError(
+        res.data['message'] ?? 'Failed to update request',
+      );
+      return false;
+    } catch (e) {
+      CustomSnackbar.showError(e.toString());
+      return false;
+    }
+  }
+
+  Future<bool> reportMessage(String messageId, String reason, String details) async {
+    try {
+      final res = await _api.post(
+        '/channels/report',
+        data: {
+          'message': messageId,
+          'reason': reason,
+          'details': details,
+        },
+      );
+
+      if (res.data['success'] == true) {
+        CustomSnackbar.showSuccess(res.data['message'] ?? 'Message reported successfully');
+        return true;
+      }
+
+      CustomSnackbar.showError(
+        res.data['message'] ?? 'Failed to report message',
       );
       return false;
     } catch (e) {

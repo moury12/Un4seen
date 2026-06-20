@@ -7,6 +7,7 @@ import '../../../../core/services/local_storage_service.dart';
 import '../../../../core/services/socket_service.dart';
 import '../../../../core/routes/app_router.dart';
 import '../../../../core/routes/app_routes.dart';
+import '../../../../src_export.dart';
 import '../../domain/repositories/auth_repository.dart';
 
 enum AuthStatus { initial, loading, authenticated, unauthenticated, error }
@@ -24,6 +25,7 @@ class AuthController extends getx.GetxController {
 
   bool get isLoading => status.value == AuthStatus.loading;
   Rx<ProfileModel> userProfile = ProfileModel().obs;
+
   @override
   void onClose() {
     _timer?.cancel();
@@ -67,7 +69,6 @@ class AuthController extends getx.GetxController {
       CustomSnackbar.showSuccess(message);
       onSuccess();
     } else {
-      // Specifically showing error based on JSON "success: false"
       CustomSnackbar.showError(message);
       status.value = AuthStatus.error;
     }
@@ -93,7 +94,7 @@ class AuthController extends getx.GetxController {
           }
           status.value = AuthStatus.authenticated;
           userProfile.value = ProfileModel.fromJson(data['user']);
-
+  _reinitializeAllBindings();
           if (userProfile.value.isProfileComplete == false ||
               userProfile.value.isProfileComplete == null) {
             AppRouter.router.go(AppRoutes.setupProfile);
@@ -104,25 +105,31 @@ class AuthController extends getx.GetxController {
       );
     } catch (e) {
       status.value = AuthStatus.error;
-      // Note: Catch is only for network/hard crashes, UI logic is in _handleApiResponse
-      print(
-        'Hard Error at lib/src/features/auth/presentation/controllers/auth_controller.dart:51',
-      );
+      print('Hard Error at login: $e');
     }
   }
-
+// Helper method to refresh everything
+void _reinitializeAllBindings() {
+  HomeBinding().dependencies();
+  NavigationBinding().dependencies();
+  CompetitionsBinding().dependencies();
+  GiveawayBinding().dependencies();
+  PointsBinding().dependencies();
+  StoriesBinding().dependencies();
+  ProfileBinding().dependencies();
+  OrdersBinding().dependencies();
+  SubscriptionBinding().dependencies();
+  BikeProfilesBinding().dependencies();
+}
   // ── Forgot Password ───────────────────────────────────
   Future<void> forgotPassword(String email) async {
     try {
       status.value = AuthStatus.loading;
       await (_repository as dynamic).forgotPassword(email: email);
 
-      // If your repository returns the raw Map, use _handleApiResponse.
-      // If it returns a string, handle success here:
       CustomSnackbar.showSuccess('OTP sent to your email');
       status.value = AuthStatus.initial;
 
-      // GoRouter Navigation
       AppRouter.router.push(
         AppRoutes.otpVerification,
         extra: {'email': email, 'isForResetPass': true},
@@ -163,20 +170,48 @@ class AuthController extends getx.GetxController {
       CustomSnackbar.showSuccess(msg);
       status.value = AuthStatus.initial;
 
-      // GoRouter Navigation
       AppRouter.router.go(AppRoutes.login);
     } catch (e) {
       status.value = AuthStatus.error;
     }
   }
 
-  // ── Logout ────────────────────────────────────────────
-  Future<void> logout() async {
-    final storage = getx.Get.find<LocalStorageService>();
-    await storage.clear();
+  // ── Smart Logout ──────────────────────────────────────
+ // lib/src/features/auth/presentation/controllers/auth_controller.dart
+
+Future<void> logout() async {
+  try {
+    // 1. Safely disconnect socket
     if (getx.Get.isRegistered<SocketService>()) {
       getx.Get.find<SocketService>().disconnectSocket();
     }
+
+    // 2. Clear local storage (Tokens, etc.)
+    final storage = getx.Get.find<LocalStorageService>();
+    await storage.clear();
+
+    // 3. THE MAGIC: Wipe all GetX controllers, bindings, and instances from memory
+    // This ensures no "ProfileController" or "HomeController" from the old user stays alive.
+    getx.Get.reset();
+
+    // 4. Re-initialize essential global services required for the app to function
+    // We need Storage and AuthBinding so the Login page can work again.
+    final newStorage = await LocalStorageService().init();
+    getx.Get.put(newStorage, permanent: true);
+    
+    // Put SocketService back (but don't init until login)
+    getx.Get.put(SocketService(), permanent: true);
+
+    // Re-run AuthBinding so the Login/Splash page can find the AuthController
+    AuthBinding().dependencies();
+
+    // 5. Force navigate to Login
+    // Since we reset everything, this is like a fresh boot
+await Future.delayed(const Duration(milliseconds: 100));
+AppRouter.router.go(AppRoutes.login);  } catch (e) {
+    print("Error during hard logout: $e");
+    // Fallback navigation
     AppRouter.router.go(AppRoutes.login);
   }
 }
+  }

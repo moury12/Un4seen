@@ -106,7 +106,7 @@ class _SearchChatPageState extends State<SearchChatPage> {
   Widget _buildHeader(String title) {
     return SliverToBoxAdapter(
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 20, 16, 8),
+        padding: AppPadding.getPadding12H(context),
         child: CustomText(
           title,
           variant: TextVariant.titleMedium,

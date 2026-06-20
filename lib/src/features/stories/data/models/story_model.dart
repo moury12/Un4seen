@@ -24,38 +24,70 @@ class StoryModel {
   });
 
   factory StoryModel.fromJson(Map<String, dynamic> json) {
-    // Handle nested story object if coming from "my-saved" endpoint
-    final Map<String, dynamic> data = json.containsKey('story') ? json['story'] : json;
+    // 1. Identify if the data is nested (for "my-saved" endpoint)
+    // We check if 'story' exists and is actually a Map
+    final bool hasNestedStory = json['story'] != null && json['story'] is Map;
     
+    // 2. Safely extract the Map. If nested, use json['story'], otherwise use the root json.
+    final Map<String, dynamic> data = hasNestedStory 
+        ? Map<String, dynamic>.from(json['story']) 
+        : json;
+
     return StoryModel(
-      id: data['_id'] ?? '',
-      content: data['content'] ?? '',
-      contentType: data['contentType'] ?? 'image',
-      category: data['category'] ?? 'Bikes',
-      heartCount: data['heartCount'] ?? 0,
+      // Use ?.toString() and ?? '' to prevent any Null type errors
+      id: data['_id']?.toString() ?? json['_id']?.toString() ?? '',
+      content: data['content']?.toString() ?? '',
+      contentType: data['contentType']?.toString() ?? 'image',
+      category: data['category']?.toString() ?? 'Bikes',
+      heartCount: data['heartCount'] is int ? data['heartCount'] : 0,
       isHearted: data['isHearted'] ?? false,
-      isSaved: data['isSaved'] ?? false,
-      timeAgo: json['timeAgo'] ?? 'Just now',
-      user: StoryUser.fromJson(data['user'] ?? {}),
-      music: data['music'] != null ? StoryMusic.fromJson(data['music']) : null,
+      // If it comes from the 'my-saved' endpoint (nested), isSaved is likely true
+      isSaved: data['isSaved'] ?? hasNestedStory, 
+      // Pick timeAgo from the root json first, then fallback to nested data
+      timeAgo: json['timeAgo']?.toString() ?? data['timeAgo']?.toString() ?? 'Just now',
+      
+      // Handle User object safely
+      user: StoryUser.fromJson(
+        (data['user'] != null && data['user'] is Map) 
+            ? Map<String, dynamic>.from(data['user']) 
+            : {}
+      ),
+      
+      // Handle Music object safely
+      music: (data['music'] != null && data['music'] is Map)
+          ? StoryMusic.fromJson(Map<String, dynamic>.from(data['music']))
+          : null,
     );
   }
 }
-// ... StoryUser and StoryMusic classes stay the same
+
 class StoryUser {
   final String id;
   final String fullName;
   final String memberNumber;
   final String image;
 
-  StoryUser({required this.id, required this.fullName, required this.memberNumber, required this.image});
+  StoryUser({
+    required this.id, 
+    required this.fullName, 
+    required this.memberNumber, 
+    required this.image
+  });
 
   factory StoryUser.fromJson(Map<String, dynamic> json) {
+    // Check for nested name structure (firstName/lastName) vs fullName
+    String name = "Unknown";
+    if (json['fullName'] != null) {
+      name = json['fullName'];
+    } else if (json['firstName'] != null) {
+      name = "${json['firstName']} ${json['lastName'] ?? ''}".trim();
+    }
+
     return StoryUser(
-      id: json['_id'] ?? '',
-      fullName: json['fullName'] ?? (json['firstName'] != null ? "${json['firstName']} ${json['lastName']}" : "Unknown"),
-      memberNumber: json['memberNumber'] ?? '',
-      image: json['image'] ?? '',
+      id: json['_id']?.toString() ?? json['id']?.toString() ?? '',
+      fullName: name,
+      memberNumber: json['memberNumber']?.toString() ?? '',
+      image: json['image']?.toString() ?? '',
     );
   }
 }
@@ -68,8 +100,8 @@ class StoryMusic {
 
   factory StoryMusic.fromJson(Map<String, dynamic> json) {
     return StoryMusic(
-      title: json['title'] ?? '',
-      audioUrl: json['audioUrl'] ?? '',
+      title: json['title']?.toString() ?? '',
+      audioUrl: json['audioUrl']?.toString() ?? '',
     );
   }
 }

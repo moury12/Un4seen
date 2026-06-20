@@ -23,6 +23,7 @@ class _ChannelMembersPageState extends State<ChannelMembersPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       controller.fetchChannelMembers(widget.channelId);
       controller.globalSearch('');
+      controller.fetchPendingRequests(widget.channelId);
     });
   }
 
@@ -82,7 +83,7 @@ class _ChannelMembersPageState extends State<ChannelMembersPage> {
         ),
       ),
       body: DefaultTabController(
-        length: 2,
+        length: 3,
         child: Column(
           children: [
             TabBar(
@@ -92,6 +93,7 @@ class _ChannelMembersPageState extends State<ChannelMembersPage> {
               tabs: [
                 Tab(text: 'Members'.tr),
                 Tab(text: 'Add Riders'.tr),
+                Tab(text: 'Requests'.tr),
               ],
             ),
             Expanded(
@@ -99,6 +101,7 @@ class _ChannelMembersPageState extends State<ChannelMembersPage> {
                 children: [
                   _buildMembersTab(),
                   _buildAddRidersTab(),
+                  _buildRequestsTab(),
                 ],
               ),
             ),
@@ -180,9 +183,11 @@ class _ChannelMembersPageState extends State<ChannelMembersPage> {
                 separatorBuilder: (_, __) => space8H,
                 itemBuilder: (context, index) {
                   final rider = controller.searchRiderResults[index];
-                  final isAlreadyInChannel =
-                      controller.channelMembers.any((m) => m.id == rider.id);
-                  final isAdded = isAlreadyInChannel || addedMemberIds.contains(rider.id);
+                  final isAlreadyInChannel = controller.channelMembers.any(
+                    (m) => m.id == rider.id,
+                  );
+                  final isAdded =
+                      isAlreadyInChannel || addedMemberIds.contains(rider.id);
 
                   return ChannelMemberItemWidget(
                     name: rider.fullName,
@@ -197,6 +202,98 @@ class _ChannelMembersPageState extends State<ChannelMembersPage> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildRequestsTab() {
+    return Padding(
+      padding: AppPadding.getPadding12(context),
+      child: Obx(() {
+        if (controller.isPendingRequestsLoading.value) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        if (controller.pendingRequests.isEmpty) {
+          return Center(
+            child: CustomText(
+              'No pending requests'.tr,
+              color: AppColors.kSecondaryTextColor,
+            ),
+          );
+        }
+
+        return ListView.separated(
+          itemCount: controller.pendingRequests.length,
+          separatorBuilder: (_, __) => space8H,
+          itemBuilder: (context, index) {
+            final user = controller.pendingRequests[index];
+            return Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: AppColors.kSurfaceColor,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Column(
+                children: [
+                  ChannelMemberItemWidget(
+                    name: "${user.firstName} ${user.lastName}",
+                    memberNumber: user.memberNumber,
+                    imageUrl: user.image,
+                    isAdded: false,
+                    onToggle: null,
+                  ),
+                  // const SizedBox(height: 12),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Expanded(
+                        child: CustomButton(
+                          text: "Accept",
+
+                          onPressed: () {
+                            controller
+                                .handleJoinRequest(
+                                  user.joinRequestId!,
+                                  'accepted',
+                                )
+                                .then((_) {
+                                  controller.fetchPendingRequests(
+                                    widget.channelId,
+                                  );
+                                  controller.fetchChannelMembers(
+                                    widget.channelId,
+                                  );
+                                });
+                          },
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: CustomButton(
+                          text: "Reject",
+                          backgroundColor: AppColors.kRedColor,
+                          onPressed: () {
+                            controller
+                                .handleJoinRequest(
+                                  user.joinRequestId!,
+                                  'rejected',
+                                )
+                                .then((_) {
+                                  controller.fetchPendingRequests(
+                                    widget.channelId,
+                                  );
+                                });
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      }),
     );
   }
 }

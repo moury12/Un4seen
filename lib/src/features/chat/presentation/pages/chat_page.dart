@@ -234,6 +234,7 @@ class _ChatPageState extends State<ChatPage> {
     // If it's a Channel/Group chat
     if (_isChannel) {
       return _ChannelMessage(
+        messageId: msg.id,
         sender: msg.sender.fullName,
         avatarUrl: msg.sender.image.isNotEmpty
             ? msg.sender.image
@@ -366,6 +367,7 @@ class _DirectHeader extends StatelessWidget {
 }
 
 class _ChannelMessage extends StatelessWidget {
+  final String messageId;
   final String sender;
   final String avatarUrl;
   final String message;
@@ -374,6 +376,7 @@ class _ChannelMessage extends StatelessWidget {
   final bool isMe; // Added this
 
   const _ChannelMessage({
+    required this.messageId,
     required this.sender,
     required this.avatarUrl,
     required this.message,
@@ -439,17 +442,20 @@ class _ChannelMessage extends StatelessWidget {
                     ),
                     if (!isMe) ...[
                       space4W,
-                      Container(
-                        width: 20,
-                        height: 20,
-                        decoration: const BoxDecoration(
-                          color: AppColors.kPrimaryColor,
-                          shape: BoxShape.circle,
-                        ),
-                        child: const Icon(
-                          Icons.flag_outlined,
-                          color: Colors.white,
-                          size: 13,
+                      GestureDetector(
+                        onTap: () => _showReportDialog(context, messageId),
+                        child: Container(
+                          width: 20,
+                          height: 20,
+                          decoration: const BoxDecoration(
+                            color: AppColors.kPrimaryColor,
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(
+                            Icons.flag_outlined,
+                            color: Colors.white,
+                            size: 13,
+                          ),
                         ),
                       ),
                     ],
@@ -1028,4 +1034,63 @@ class _Avatar extends StatelessWidget {
       ),
     );
   }
+}
+
+void _showReportDialog(BuildContext context, String messageId) {
+  final detailsCtrl = TextEditingController();
+  String selectedReason = 'Harassment';
+  final reasons = ['Harassment', 'Spam', 'Inappropriate Content', 'Other'];
+
+  showDialog(
+    context: context,
+    builder: (ctx) {
+      return StatefulBuilder(
+        builder: (context, setState) {
+          return AlertDialog(
+            title: const Text('Report Message'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                DropdownButtonFormField<String>(
+                  value: selectedReason,
+                  items: reasons.map((r) => DropdownMenuItem(value: r, child: Text(r))).toList(),
+                  onChanged: (val) {
+                    if (val != null) {
+                      setState(() {
+                        selectedReason = val;
+                      });
+                    }
+                  },
+                  decoration: const InputDecoration(labelText: 'Reason'),
+                ),
+                const SizedBox(height: 12),
+                TextField(
+                  controller: detailsCtrl,
+                  decoration: const InputDecoration(
+                    labelText: 'Details',
+                    border: OutlineInputBorder(),
+                  ),
+                  maxLines: 3,
+                ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(ctx),
+                child: const Text('Cancel'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Get.find<ChatController>().reportMessage(messageId, selectedReason, detailsCtrl.text);
+                  Navigator.pop(ctx);
+                },
+                child: const Text('Report'),
+              ),
+            ],
+          );
+        }
+      );
+    },
+  );
 }

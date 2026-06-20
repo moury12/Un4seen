@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:un4seen/src/core/core_export.dart';
 import 'package:un4seen/src/features/bike_profiles/presentation/controllers/members_controller.dart';
+import 'package:un4seen/src/features/chat/presentation/controller/chat_controller.dart';
 import 'package:un4seen/src/features/profile/data/models/user_profile_model.dart';
 import '../widgets/member_card_widget.dart';
 
@@ -59,15 +60,72 @@ class MembersPage extends StatelessWidget {
                   sliver: SliverList(
                     delegate: SliverChildBuilderDelegate((context, index) {
                       final user = users[index];
-                      return MemberCardWidget(
-                        userId: user.id!,
-                        name: user.fullName ?? "Unknown",
-                        location: user.country ?? "",
-                        image: user.image ?? "",
-                        points: user.shredPoints.toString(),
-                        syndicateId: user.memberNumber ?? "",
-                        memberType: "Syndicate Member",
-                        followers: user.followerCount.toString(),
+                      return Column(
+                        children: [
+                          MemberCardWidget(
+                            userId: user.id ?? "",
+                            name: user.fullName ?? "Unknown",
+                            location: user.country ?? "",
+                            image: user.image ?? "",
+                            points: user.shredPoints.toString(),
+                            syndicateId: user.memberNumber ?? "",
+                            memberType: "Syndicate Member",
+                            followers: user.followerCount.toString(),
+                          ),
+
+                          // if (user.joinRequestId != null)
+                          // Padding(
+                          //   padding: const EdgeInsets.only(bottom: 12.0),
+                          //   child: Row(
+                          //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          //     children: [
+                          //       Expanded(
+                          //         child: ElevatedButton(
+                          //           style: ElevatedButton.styleFrom(
+                          //             backgroundColor: Colors.green,
+                          //           ),
+                          //           onPressed: () {
+                          //             Get.find<ChatController>()
+                          //                 .handleJoinRequest(
+                          //                   user.joinRequestId!,
+                          //                   'accepted',
+                          //                 )
+                          //                 .then((_) {
+                          //                   onRefresh();
+                          //                 });
+                          //           },
+                          //           child: const Text(
+                          //             'Accept',
+                          //             style: TextStyle(color: Colors.white),
+                          //           ),
+                          //         ),
+                          //       ),
+                          //       const SizedBox(width: 12),
+                          //       Expanded(
+                          //         child: ElevatedButton(
+                          //           style: ElevatedButton.styleFrom(
+                          //             backgroundColor: Colors.red,
+                          //           ),
+                          //           onPressed: () {
+                          //             Get.find<ChatController>()
+                          //                 .handleJoinRequest(
+                          //                   user.joinRequestId!,
+                          //                   'rejected',
+                          //                 )
+                          //                 .then((_) {
+                          //                   onRefresh();
+                          //                 });
+                          //           },
+                          //           child: const Text(
+                          //             'Reject',
+                          //             style: TextStyle(color: Colors.white),
+                          //           ),
+                          //         ),
+                          //       ),
+                          //     ],
+                          //   ),
+                          // ),
+                        ],
                       );
                     }, childCount: users.length),
                   ),

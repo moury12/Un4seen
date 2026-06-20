@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -45,9 +46,9 @@ class ProfileSettingPage extends StatelessWidget {
                                     ),
                                     fit: BoxFit.cover,
                                   )
-                                : const DecorationImage(
-                                    image: NetworkImage(
-                                      'https://i.pravatar.cc/150?img=11',
+                                : DecorationImage(
+                                    image: CachedNetworkImageProvider(
+                                      controller.userProfile.value.profilePicture??'',
                                     ),
                                     fit: BoxFit.cover,
                                   ),

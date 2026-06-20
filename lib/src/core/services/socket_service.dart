@@ -18,7 +18,7 @@ class SocketService extends GetxService {
       IO.OptionBuilder()
           .setTransports(['websocket'])
           .setQuery({'token': token})
-          .enableAutoConnect()
+          .enableAutoConnect() .enableForceNew()
           .build(),
     );
 

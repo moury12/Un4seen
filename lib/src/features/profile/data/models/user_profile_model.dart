@@ -37,6 +37,7 @@ class UserProfileModel {
   final Journey? journey;
   final String? createdAt;
   final String? updatedAt;
+  String? joinRequestId; // Added for channel join requests
 
   UserProfileModel({
     this.id,
@@ -77,6 +78,7 @@ class UserProfileModel {
     this.journey,
     this.createdAt,
     this.updatedAt,
+    this.joinRequestId,
   });
 
   factory UserProfileModel.fromJson(Map<String, dynamic> json) {
