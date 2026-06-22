@@ -60,9 +60,9 @@ class ProfilePage extends StatelessWidget {
 
                 // ── Menu tiles ────────────────────────────
                 ProfileMenuTile(
-                  title: AppStaticStrings.myOrders,
-                  icon: AppIcons.cell,
-                  onTap: () => context.push(AppRoutes.orders),
+                  title: AppStaticStrings.referAndEarn.tr,
+                  icon: AppIcons.share,
+                  onTap: () => context.push(AppRoutes.referAndEarn),
                 ),
                 // ProfileMenuTile(
                 //   title: AppStaticStrings.manageSubscription,

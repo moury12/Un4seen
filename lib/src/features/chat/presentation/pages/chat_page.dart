@@ -24,7 +24,7 @@ class ChatPageArgs {
   final ChatViewType type;
   final String id;
   final String title;
-  final String subtitle;
+  final String? subtitle;
   final int onlineCount;
   final String? avatarUrl;
 
@@ -48,7 +48,7 @@ class ChatPageArgs {
   const ChatPageArgs.direct({
     required this.id,
     required this.title,
-    this.subtitle = 'Online',
+    this.subtitle,
     this.avatarUrl,
   }) : type = ChatViewType.direct,
        onlineCount = 0;
@@ -289,7 +289,7 @@ class _ChannelHeader extends StatelessWidget {
             children: [
               CustomText(args.title, fontSize: 16, fontWeight: FontWeight.bold),
               CustomText(
-                args.subtitle,
+                args.subtitle??"Active Status",
                 fontSize: 12,
                 color: AppColors.kSecondaryTextColor,
               ),
@@ -350,10 +350,12 @@ class _DirectHeader extends StatelessWidget {
             CustomText(args.title, fontSize: 16, fontWeight: FontWeight.bold),
             Row(
               children: [
-                const Icon(Icons.circle, size: 7, color: AppColors.kGreenColor),
+                Icon(Icons.circle, size: 7, color: args.subtitle=="Online"?
+                 AppColors.kGreenColor:args.subtitle=="Offline"?
+                 AppColors.kRedColor:AppColors.kSecondaryTextColor),
                 space4W,
                 CustomText(
-                  args.subtitle,
+                  args.subtitle??"Active Status",
                   fontSize: 12,
                   color: AppColors.kTextColor,
                 ),
@@ -1054,7 +1056,9 @@ void _showReportDialog(BuildContext context, String messageId) {
               children: [
                 DropdownButtonFormField<String>(
                   value: selectedReason,
-                  items: reasons.map((r) => DropdownMenuItem(value: r, child: Text(r))).toList(),
+                  items: reasons
+                      .map((r) => DropdownMenuItem(value: r, child: Text(r)))
+                      .toList(),
                   onChanged: (val) {
                     if (val != null) {
                       setState(() {
@@ -1082,14 +1086,18 @@ void _showReportDialog(BuildContext context, String messageId) {
               ),
               ElevatedButton(
                 onPressed: () {
-                  Get.find<ChatController>().reportMessage(messageId, selectedReason, detailsCtrl.text);
+                  Get.find<ChatController>().reportMessage(
+                    messageId,
+                    selectedReason,
+                    detailsCtrl.text,
+                  );
                   Navigator.pop(ctx);
                 },
                 child: const Text('Report'),
               ),
             ],
           );
-        }
+        },
       );
     },
   );

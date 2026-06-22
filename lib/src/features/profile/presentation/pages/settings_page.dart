@@ -74,11 +74,7 @@ class SettingsPage extends StatelessWidget {
                       },
                     ),
               ),
-              ProfileMenuTile(
-                title: AppStaticStrings.referAndEarn.tr,
-                icon: AppIcons.share,
-                onTap: () => context.push(AppRoutes.referAndEarn),
-              ),
+            
               ProfileMenuTile(
                 title: AppStaticStrings.changePassword.tr,
                 iconWidget: const Icon(

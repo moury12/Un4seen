@@ -137,43 +137,46 @@ class _StoryFullPageState extends State<StoryFullPage>
                         vertical: 8,
                       ),
                       child: Row(
-                        children: List.generate(controller.activeStories.length, (
-                          index,
-                        ) {
-                          double progress = 0.0;
-                          if (index < controller.currentStoryIndex.value)
-                            progress = 1.0;
-                          else if (index == controller.currentStoryIndex.value)
-                            progress = controller.currentProgress.value;
+                        children: List.generate(
+                          controller.activeStories.length,
+                          (index) {
+                            double progress = 0.0;
+                            if (index < controller.currentStoryIndex.value)
+                              progress = 1.0;
+                            else if (index ==
+                                controller.currentStoryIndex.value)
+                              progress = controller.currentProgress.value;
 
-                          return Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 2,
-                              ),
-                              child: LinearProgressIndicator(
-                                value: progress,
-                                backgroundColor: Colors.white24,
-                                valueColor: const AlwaysStoppedAnimation(
-                                  Colors.white,
+                            return Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 2,
                                 ),
-                                minHeight: 2,
+                                child: LinearProgressIndicator(
+                                  value: progress,
+                                  backgroundColor: Colors.white24,
+                                  valueColor: const AlwaysStoppedAnimation(
+                                    Colors.white,
+                                  ),
+                                  minHeight: 2,
+                                ),
                               ),
-                            ),
-                          );
-                        }),
+                            );
+                          },
+                        ),
                       ),
                     ),
                   ),
                   Obx(() {
-                    if (controller.activeStories.isEmpty) return const SizedBox();
-                    final story =
-                        controller.activeStories[controller.currentStoryIndex.value];
+                    if (controller.activeStories.isEmpty)
+                      return const SizedBox();
+                    final story = controller
+                        .activeStories[controller.currentStoryIndex.value];
                     return Row(
                       children: [
                         StoryUserInfo(
                           name: story.user.fullName,
-                          time: story.timeAgo,
+                          time: story.user.memberNumber,
                           image: story.user.image,
                         ),
                         const Spacer(),
@@ -232,8 +235,8 @@ class _StoryFullPageState extends State<StoryFullPage>
               right: 20,
               child: Obx(() {
                 if (controller.activeStories.isEmpty) return const SizedBox();
-                final story =
-                    controller.activeStories[controller.currentStoryIndex.value];
+                final story = controller
+                    .activeStories[controller.currentStoryIndex.value];
                 return Row(
                   children: [
                     CustomIconButtonWidget(

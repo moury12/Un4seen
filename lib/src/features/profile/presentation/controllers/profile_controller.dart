@@ -5,6 +5,7 @@ import 'package:dio/dio.dart' as dio;
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:un4seen/src/features/profile/data/models/user_profile_model.dart';
+import '../../../../core/routes/app_router.dart';
 import '../../../../core/services/api_service.dart';
 import '../../../../core/widgets/custom_snackbar.dart';
 import '../../data/models/profile_model.dart';
@@ -75,7 +76,42 @@ class ProfileController extends GetxController {
     'Intermediate',
     'Recreational',
   ];
+final RxBool isPasswordLoading = false.obs;
 
+  // ── Change Password ───────────────────────────────────
+  Future<void> changePassword({
+    required String oldPassword,
+    required String newPassword,
+  }) async {
+    try {
+      isPasswordLoading.value = true;
+
+      final response = await _api.post(
+        '/auth/change-password',
+        data: {
+          'oldPassword': oldPassword,
+          'newPassword': newPassword,
+        },
+      );
+
+      final dynamic data = response.data;
+      final bool isSuccess = data['success'] ?? false;
+      final String message = data['message'] ?? 'Action failed';
+
+      if (isSuccess) {
+        CustomSnackbar.showSuccess(message);
+        // Cleanly pop the user back to the profile screen settings menu
+        AppRouter.router.pop();
+      } else {
+        CustomSnackbar.showError(message);
+      }
+    } catch (e) {
+      print('Error at changePassword inside ProfileController: $e');
+      CustomSnackbar.showError('Something went wrong. Please try again.');
+    } finally {
+      isPasswordLoading.value = false;
+    }
+  }
   @override
   void onInit() {
      Future.wait([

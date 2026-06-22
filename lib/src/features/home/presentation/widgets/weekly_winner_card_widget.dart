@@ -5,6 +5,7 @@ class WeeklyWinnerCardWidget extends StatelessWidget {
   final String name;
   final String prize;
   final String image;
+  final VoidCallback? onTap;
 
   const WeeklyWinnerCardWidget({
     super.key,
@@ -12,6 +13,7 @@ class WeeklyWinnerCardWidget extends StatelessWidget {
     required this.name,
     required this.prize,
     required this.image,
+    this.onTap,
   });
 
   @override
@@ -61,6 +63,7 @@ class WeeklyWinnerCardWidget extends StatelessWidget {
                   fontSize: 14,
                 ),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     const Icon(
                       Icons.card_giftcard,
@@ -89,13 +92,13 @@ class WeeklyWinnerCardWidget extends StatelessWidget {
                 size: 20,
               ),
               SizedBox(
-                width: 80,
+                width: 90,
                 height: 30,
                 child: CustomButton(
-                  text: AppStaticStrings.follow.tr,
+                  text: "View Profile",
                   textColor: AppColors.kWhiteTextColor,
-                  onPressed: () {},
-                  isExpanding: false,
+                  onPressed: onTap ?? () {},
+                  // isExpanding: true,
                   borderRadius: 20,
                   // padding:0,
                   textStyle: Theme.of(context).textTheme.titleSmall?.copyWith(

@@ -168,6 +168,12 @@ class HomePage extends StatelessWidget {
                         prize: winner.title,
                         image:
                             winner.winner?.image ?? "https://i.pravatar.cc/150",
+                        onTap: () {
+                          context.push(
+                            AppRoutes.memberDetails,
+                            extra: winner.winner?.id,
+                          );
+                        },
                       ),
                     ),
                   ],

@@ -29,11 +29,13 @@ class GiveawayPageModel {
 }
 
 class GiveawayWinner {
+  final String id;
   final String fullName;
   final String memberNumber;
   final String image;
 
   GiveawayWinner({
+    required this.id,
     required this.fullName,
     required this.memberNumber,
     required this.image,
@@ -41,6 +43,7 @@ class GiveawayWinner {
 
   factory GiveawayWinner.fromJson(Map<String, dynamic> json) {
     return GiveawayWinner(
+      id: json['_id'] ?? '',
       fullName: "${json['firstName'] ?? ''} ${json['lastName'] ?? ''}".trim(),
       memberNumber: json['memberNumber'] ?? '',
       image: json['image'] ?? '',

@@ -19,7 +19,7 @@ class _LoginPageState extends State<LoginPage> {
     text: kDebugMode ? 'tanzibamouri28@gmail.com' : '',
   );
   final passwordCtrl = TextEditingController(
-    text: kDebugMode ? 'Test1234' : '',
+    text: kDebugMode ? '12345678' : '',
   );
 
   @override

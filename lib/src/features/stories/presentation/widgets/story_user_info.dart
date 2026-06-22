@@ -26,9 +26,9 @@ class StoryUserInfo extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              buildBadgeWidget('Sarah Martinez 🇦🇴', context),
+              buildBadgeWidget(name, context),
               const SizedBox(height: 4),
-              buildBadgeWidget('#SYN-2847', context),
+              buildBadgeWidget(time, context),
             ],
           ),
         ],
