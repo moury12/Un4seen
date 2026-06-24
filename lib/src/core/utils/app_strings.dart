@@ -20,7 +20,7 @@ class AppStaticStrings {
   static const String dontHaveAccountRegister =
       "Don't have an account? Register";
   static const String details = 'Details';
-  static const String continueWithGoogle = 'Continue with Google';
+  static const String continueWithGuest = 'Continue as guest';
   static const String getStarted = 'Get Started';
   static const String yourShredPointsBalance = 'Your Shared Points Balance';
   static const String messageUn4seen = 'Message User';

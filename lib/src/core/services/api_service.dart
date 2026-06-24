@@ -7,8 +7,8 @@ import 'local_storage_service.dart';
 class ApiService {
   final Dio _dio = Dio(
     BaseOptions(
-      baseUrl: 'http://10.10.28.81:5011/api/v1',
-      // baseUrl: 'https://un4seen-backend.vercel.app/api/v1',
+     baseUrl: 'http://13.238.237.114/api/v1',
+      //  baseUrl: 'https://un4seen-backend.vercel.app/api/v1',
       connectTimeout: const Duration(seconds: 30),
       receiveTimeout: const Duration(seconds: 30),
       contentType: 'application/json',
@@ -36,8 +36,7 @@ class ApiService {
           _logResponse(response);
           return handler.next(response);
         },
-        onError: 
-         (DioException e, handler) async {
+        onError: (DioException e, handler) async {
           _logError(e);
 
           // ─── 401 UNAUTHORIZED / TOKEN EXPIRED LOGIC ───
@@ -46,39 +45,55 @@ class ApiService {
 
             if (currentRefreshToken != null && currentRefreshToken.isNotEmpty) {
               try {
-                log("🔄 [TOKEN] 401 Detected. Attempting to refresh access token...");
-                
+                log(
+                  "🔄 [TOKEN] 401 Detected. Attempting to refresh access token...",
+                );
+
                 // Use a clean Dio instance to avoid interceptor loops
                 final refreshRes = await Dio().post(
                   '${_dio.options.baseUrl}/auth/refresh-token',
                   data: {'refreshToken': currentRefreshToken},
                 );
 
-                if (refreshRes.statusCode == 200 && refreshRes.data['success'] == true) {
-                  final String newAccessToken = refreshRes.data['data']['accessToken'];
-                  
-                  log("✅ [TOKEN] New access token retrieved. Updating storage.");
-                  
-                  // Save the new access token. 
-                  // Note: Since the refresh API only returns accessToken, 
+                if (refreshRes.statusCode == 200 &&
+                    refreshRes.data['success'] == true) {
+                  final String newAccessToken =
+                      refreshRes.data['data']['accessToken'];
+
+                  log(
+                    "✅ [TOKEN] New access token retrieved. Updating storage.",
+                  );
+
+                  // Save the new access token.
+                  // Note: Since the refresh API only returns accessToken,
                   // we pass the existing refreshToken back into saveTokens to keep it.
-                  await _storage.saveTokens(newAccessToken, currentRefreshToken);
+                  await _storage.saveTokens(
+                    newAccessToken,
+                    currentRefreshToken,
+                  );
 
                   // Update the header of the original failed request
-                  e.requestOptions.headers['Authorization'] = 'Bearer $newAccessToken';
+                  e.requestOptions.headers['Authorization'] =
+                      'Bearer $newAccessToken';
 
                   // Retry the original request
-                  log("🔁 [RETRY] Retrying original request: ${e.requestOptions.path}");
+                  log(
+                    "🔁 [RETRY] Retrying original request: ${e.requestOptions.path}",
+                  );
                   final clonedRequest = await _dio.fetch(e.requestOptions);
                   return handler.resolve(clonedRequest);
                 }
               } catch (refreshError) {
-                log("🚨 [TOKEN] Refresh failed or Refresh Token expired. Clearing session.");
+                log(
+                  "🚨 [TOKEN] Refresh failed or Refresh Token expired. Clearing session.",
+                );
                 await _storage.clear();
                 // Optional: Trigger a redirect to login page here if using a global controller
               }
             } else {
-              log("🚨 [TOKEN] No refresh token available. User must login again.");
+              log(
+                "🚨 [TOKEN] No refresh token available. User must login again.",
+              );
               await _storage.clear();
             }
           }
@@ -87,10 +102,7 @@ class ApiService {
       ),
     );
   }
-        
-        
-       
-  
+
   void _logRequest(RequestOptions o) {
     print('🚀 [API REQUEST] | ${o.method} | ${o.path}');
     print('🔗 File: lib/src/core/services/api_service.dart');

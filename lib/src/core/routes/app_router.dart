@@ -10,7 +10,6 @@ import '../../features/auth/presentation/pages/login_page.dart';
 import '../../features/home/presentation/pages/home_page.dart';
 import 'app_routes.dart';
 
-import '../../features/auth/presentation/pages/register_page.dart';
 import '../../features/auth/presentation/pages/otp_verification_page.dart';
 import '../../features/auth/presentation/pages/email_confirmation_page.dart';
 import '../../features/auth/presentation/pages/reset_password_page.dart';
@@ -63,11 +62,11 @@ class AppRouter {
         name: 'login',
         builder: (context, state) => const LoginPage(),
       ),
-      GoRoute(
-        path: AppRoutes.register,
-        name: 'register',
-        builder: (context, state) => const RegisterPage(),
-      ),
+      // GoRoute(
+      //   path: AppRoutes.register,
+      //   name: 'register',
+      //   builder: (context, state) => const RegisterPage(),
+      // ),
       GoRoute(
         path: AppRoutes.otpVerification,
         name: 'otpVerification',

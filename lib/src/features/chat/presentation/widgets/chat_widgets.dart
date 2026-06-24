@@ -38,7 +38,7 @@ class ChannelHeader extends StatelessWidget {
             children: [
               CustomText(args.title, fontSize: 16, fontWeight: FontWeight.bold),
               CustomText(
-                args.subtitle,
+                args.subtitle ??"",
                 fontSize: 12,
                 color: AppColors.kSecondaryTextColor,
               ),
@@ -105,7 +105,7 @@ class DirectHeader extends StatelessWidget {
                   ),
                   space4W,
                   CustomText(
-                    args.subtitle,
+                    args.subtitle??"",
                     fontSize: 12,
                     color: AppColors.kTextColor,
                   ),

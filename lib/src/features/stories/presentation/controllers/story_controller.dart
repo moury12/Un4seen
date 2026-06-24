@@ -19,7 +19,7 @@ import 'package:un4seen/src/features/stories/data/models/story_model.dart';
 class StoryController extends GetxController {
   final RxBool isSoundOn = true.obs;
   final RxBool isLiked = false.obs;
-    final AudioPlayer _audioPlayer = AudioPlayer();
+  final AudioPlayer _audioPlayer = AudioPlayer();
 
   final Rx<File?> selectedImage = Rx<File?>(null);
   final Rxn<Uint8List> editedImageBytes = Rxn<Uint8List>();
@@ -38,14 +38,15 @@ class StoryController extends GetxController {
   final RxBool isLoading = false.obs;
   final RxString loadingStatus = ''.obs;
   final ImagePicker _picker = ImagePicker();
-// Feed States
+  // Feed States
   final RxList<StoryModel> stories = <StoryModel>[].obs;
   final RxList<StoryModel> savedStories = <StoryModel>[].obs;
   final RxBool isStoriesLoading = false.obs;
   final RxBool isSavedLoading = false.obs;
   final RxBool isViewingSaved = false.obs;
 
-  List<StoryModel> get activeStories => isViewingSaved.value ? savedStories : stories;
+  List<StoryModel> get activeStories =>
+      isViewingSaved.value ? savedStories : stories;
 
   final List<String> categories = [
     'Bikes',
@@ -58,16 +59,16 @@ class StoryController extends GetxController {
   // void toggleSound() {
   //   isSoundOn.value = !isSoundOn.value;
   // }
-   // Story Player States
+  // Story Player States
   Timer? _storyTimer;
   final RxInt currentStoryIndex = 0.obs;
   final RxDouble currentProgress = 0.0.obs;
-  final int storyDurationSeconds = 5;
-@override
+  final int storyDurationSeconds = 15;
+  @override
   void onInit() {
     super.onInit();
     fetchStories();
-      setupSocket();
+    setupSocket();
     isSoundOn.listen((bool on) {
       if (on) {
         if (activeStories.isNotEmpty) {
@@ -78,16 +79,18 @@ class StoryController extends GetxController {
       }
     });
   }
+
   void setupSocket() {
     final socketService = Get.put(SocketService());
     socketService.initSocket();
-    
+
     socketService.listenToEvent('NEW_STORY', (data) {
       log("🔔 New Story received via Socket");
       final newStory = StoryModel.fromJson(data);
       stories.insert(0, newStory); // Add to top of list
     });
   }
+
   // / Inside your StoryController class
   Future<void> updateImageFromBytes(Uint8List bytes) async {
     try {
@@ -105,7 +108,8 @@ class StoryController extends GetxController {
   void toggleLike() {
     isLiked.value = !isLiked.value;
   }
-Future<void> fetchStories() async {
+
+  Future<void> fetchStories() async {
     try {
       isStoriesLoading.value = true;
       final res = await _api.get('/stories');
@@ -117,6 +121,7 @@ Future<void> fetchStories() async {
       isStoriesLoading.value = false;
     }
   }
+
   Future<void> pickImage() async {
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
     if (image != null) {
@@ -181,13 +186,16 @@ Future<void> fetchStories() async {
     }
     return false;
   }
+
   Future<void> fetchSavedStories() async {
     try {
       isSavedLoading.value = true;
       final res = await _api.get('/stories/my-saved');
       if (res.data['success']) {
         final List data = res.data['data'];
-        savedStories.assignAll(data.map((e) => StoryModel.fromJson(e)).toList());
+        savedStories.assignAll(
+          data.map((e) => StoryModel.fromJson(e)).toList(),
+        );
       }
     } finally {
       isSavedLoading.value = false;
@@ -220,24 +228,26 @@ Future<void> fetchStories() async {
 
     try {
       await _api.post('/stories/${story.id}/save');
-      CustomSnackbar.showSuccess(story.isSaved ? "Saved to your collection" : "Removed from saved");
+      CustomSnackbar.showSuccess(
+        story.isSaved ? "Saved to your collection" : "Removed from saved",
+      );
     } catch (e) {
       story.isSaved = originalSaved;
       stories.refresh();
     }
   }
- void closeStoryViewer() {
+
+  void closeStoryViewer() {
     // 1. Stop the timer to prevent auto-advancing
     _storyTimer?.cancel();
-    
+
     // 2. Stop the audio immediately
     _audioPlayer.stop();
-    
+
     // 3. Reset progress for next time
     currentProgress.value = 0.0;
-    
- 
   }
+
   // ── Story Player Logic ─────────────────────────────────
   void startStoryTimer(int startIndex, {bool isFromSaved = false}) {
     isViewingSaved.value = isFromSaved;
@@ -273,7 +283,8 @@ Future<void> fetchStories() async {
       Get.back(); // POP at last index
     }
   }
- void _resetTimer() {
+
+  void _resetTimer() {
     _storyTimer?.cancel();
     currentProgress.value = 0.0;
     _storyTimer = Timer.periodic(const Duration(milliseconds: 50), (timer) {
@@ -284,10 +295,12 @@ Future<void> fetchStories() async {
       }
     });
   }
+
   void pauseStory() {
     _storyTimer?.cancel();
     _audioPlayer.pause();
   }
+
   void previousStory() {
     if (currentStoryIndex.value > 0) {
       currentStoryIndex.value--;
@@ -297,6 +310,7 @@ Future<void> fetchStories() async {
       _resetTimer(); // Restart current story if at first index
     }
   }
+
   void resumeStory() => _resetTimer();
 
   void toggleSound() => isSoundOn.value = !isSoundOn.value;

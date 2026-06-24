@@ -14,7 +14,7 @@ class SocketService extends GetxService {
     if (token == null) return;
 
     socket = IO.io(
-      'http://10.10.28.81:5011',
+      'http://13.238.237.114',
       IO.OptionBuilder()
           .setTransports(['websocket'])
           .setQuery({'token': token})

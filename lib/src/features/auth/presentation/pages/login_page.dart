@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/core_export.dart';
@@ -131,45 +132,45 @@ class _LoginPageState extends State<LoginPage> {
 
                 space12H,
 
-                //   Row(
-                //     children: [
-                //       const Expanded(child: Divider()),
-                //       Padding(
-                //         padding: AppPadding.getPadding12H(context),
-                //         child: const CustomText(
-                //           AppStaticStrings.orContinueWith,
-                //           variant: TextVariant.labelMedium,
-                //           color: AppColors.kSecondaryTextColor,
-                //         ),
+                // Row(
+                //   children: [
+                //     const Expanded(child: Divider()),
+                //     Padding(
+                //       padding: AppPadding.getPadding12H(context),
+                //       child: const CustomText(
+                //         AppStaticStrings.orContinueWith,
+                //         variant: TextVariant.labelMedium,
+                //         color: AppColors.kSecondaryTextColor,
                 //       ),
-                //       const Expanded(child: Divider()),
+                //     ),
+                //     const Expanded(child: Divider()),
+                //   ],
+                // ),
+
+                // space12H,
+
+                // OutlinedButton(
+                //   onPressed: () {},
+                //   style: OutlinedButton.styleFrom(
+                //     minimumSize: const Size(double.infinity, 50),
+                //     shape: RoundedRectangleBorder(
+                //       borderRadius: BorderRadius.circular(appRadius),
+                //     ),
+                //     side: const BorderSide(color: Color(0xFFE5E7EB)),
+                //   ),
+                //   child: Row(
+                //     mainAxisAlignment: MainAxisAlignment.center,
+                //     children: [
+                //       SvgPicture.asset(AppIcons.person, width: 20, height: 20),
+                //       space8W,
+                //       const CustomText(
+                //         AppStaticStrings.continueWithGuest,
+                //         variant: TextVariant.labelLarge,
+                //         fontWeight: FontWeight.w600,
+                //       ),
                 //     ],
                 //   ),
-
-                //   space12H,
-
-                //   OutlinedButton(
-                //     onPressed: () {},
-                //     style: OutlinedButton.styleFrom(
-                //       minimumSize: const Size(double.infinity, 50),
-                //       shape: RoundedRectangleBorder(
-                //         borderRadius: BorderRadius.circular(appRadius),
-                //       ),
-                //       side: const BorderSide(color: Color(0xFFE5E7EB)),
-                //     ),
-                //     child: Row(
-                //       mainAxisAlignment: MainAxisAlignment.center,
-                //       children: [
-                //         SvgPicture.asset(AppIcons.google, width: 20, height: 20),
-                //         space8W,
-                //         const CustomText(
-                //           AppStaticStrings.continueWithGoogle,
-                //           variant: TextVariant.labelLarge,
-                //           fontWeight: FontWeight.w600,
-                //         ),
-                //       ],
-                //     ),
-                //   ),
+                // ),
               ],
             ),
           ),
