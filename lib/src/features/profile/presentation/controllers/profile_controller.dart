@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:dio/dio.dart' as dio;
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:un4seen/src/core/utils/image_cropper_utils.dart';
 import 'package:un4seen/src/features/profile/data/models/user_profile_model.dart';
 import '../../../../core/routes/app_router.dart';
 import '../../../../core/services/api_service.dart';
@@ -435,12 +436,15 @@ final RxBool isPasswordLoading = false.obs;
     }
   }
 
-    Future<void> pickImage() async {
+  Future<void> pickImage() async {
     final XFile? pickedFile = await _imagePicker.pickImage(
       source: ImageSource.gallery,
     );
     if (pickedFile != null) {
-      profileImage.value = File(pickedFile.path);
+      final cropped = await ImageCropperUtils.cropImage(pickedFile.path, isProfile: true);
+      if (cropped != null) {
+        profileImage.value = cropped;
+      }
     }
   }
 

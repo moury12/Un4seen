@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:un4seen/src/core/utils/image_cropper_utils.dart';
 import '../../data/home_data.dart';
 
 class HomeController extends GetxController {
@@ -40,14 +41,20 @@ class HomeController extends GetxController {
   Future<void> pickRideImage() async {
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
     if (image != null) {
-      selectedRideImage.value = File(image.path);
+      final cropped = await ImageCropperUtils.cropImage(image.path);
+      if (cropped != null) {
+        selectedRideImage.value = cropped;
+      }
     }
   }
 
   Future<void> pickRideImageFromCamera() async {
     final XFile? image = await _picker.pickImage(source: ImageSource.camera);
     if (image != null) {
-      selectedRideImage.value = File(image.path);
+      final cropped = await ImageCropperUtils.cropImage(image.path);
+      if (cropped != null) {
+        selectedRideImage.value = cropped;
+      }
     }
   }
 }

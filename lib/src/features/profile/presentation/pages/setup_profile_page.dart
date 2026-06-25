@@ -41,11 +41,17 @@ class _SetupProfilePageState extends State<SetupProfilePage> {
     (index) => (DateTime.now().year - index).toString(),
   );
   final List<String> _countries = [
-    'New Zealand',
-    'Australia',
-    'United States',
-    'United Kingdom',
-    'Canada',
+    'New Zealand 🇳🇿',
+    'Australia 🇦🇺',
+    'United States 🇺🇸',
+    'United Kingdom 🇬🇧',
+    'Canada 🇨🇦',
+    'India 🇮🇳',
+    'Germany 🇩🇪',
+    'France 🇫🇷',
+    'Japan 🇯🇵',
+    'China 🇨🇳',
+    'Brazil 🇧🇷',
   ];
   final List<String> _fits = ['Mens', 'Womens', 'Unisex'];
   final List<String> _sizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL', '3XL'];
@@ -120,7 +126,7 @@ class _SetupProfilePageState extends State<SetupProfilePage> {
             color: AppColors.kTextColor,
             size: 20,
           ),
-          onPressed: () => context.pop(),
+          onPressed: () => context.go(AppRoutes.navigation),
         ),
       ),
       body: SafeArea(
@@ -199,13 +205,13 @@ class _SetupProfilePageState extends State<SetupProfilePage> {
                 title: AppStaticStrings.mobileNumber,
                 textEditingController: ctrl.mobileController,
                 isRequired: false,
-                prefixIcon: const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 12.0),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [Text('🇺🇸', style: TextStyle(fontSize: 18))],
-                  ),
-                ),
+                // prefixIcon: const Padding(
+                //   padding: EdgeInsets.symmetric(horizontal: 12.0),
+                //   child: Row(
+                //     mainAxisSize: MainAxisSize.min,
+                //     children: [Text('🇺🇸', style: TextStyle(fontSize: 18))],
+                //   ),
+                // ),
               ),
               space8H,
 

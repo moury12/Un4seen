@@ -18,7 +18,7 @@ class ChannelsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: const Text("Private Channels"),
+        title: const Text("Un4seen Chats"),
         actions: [
           Container(
             decoration: const BoxDecoration(
@@ -113,7 +113,7 @@ class ChannelsPage extends StatelessWidget {
                     ),
                   ),
                 )
-              else
+              else ...[
                 SliverPadding(
                   padding: const EdgeInsets.symmetric(horizontal: 12),
                   sliver: SliverList(
@@ -135,9 +135,29 @@ class ChannelsPage extends StatelessWidget {
                           ),
                         ),
                       );
-                    }, childCount: controller.groupsList.length),
+                    }, childCount: controller.groupsList.length > 2 ? 2 : controller.groupsList.length),
                   ),
                 ),
+                if (controller.groupsList.length > 2)
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      child: ButtonTapWidget(
+                        onTap: () => context.push(AppRoutes.allChannels),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            CustomText(
+                              AppStaticStrings.viewAll.tr,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.kPrimaryColor,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
 
               // ─── 2. DIRECT MESSAGES SECTION ───
               SliverPadding(

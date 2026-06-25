@@ -163,23 +163,23 @@ class _UploadRideDialogState extends State<UploadRideDialog> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              space12H,
-              CustomTextField(
-                fillColor: Colors.transparent,
-                hintStyle: const TextStyle(
-                  color: AppColors.kWhiteTextColor,
-                  fontSize: 10,
-                ),
-                title: AppStaticStrings.bikeTypeLabel.tr,
-                hintText: "MX",
-                textEditingController: _rideTypeCtrl,
+              // space12H,
+              // CustomTextField(
+              //   fillColor: Colors.transparent,
+              //   hintStyle: const TextStyle(
+              //     color: AppColors.kWhiteTextColor,
+              //     fontSize: 10,
+              //   ),
+              //   title: AppStaticStrings.bikeTypeLabel.tr,
+              //   hintText: "MX",
+              //   textEditingController: _rideTypeCtrl,
 
-                inputTextStyle: const TextStyle(color: Colors.white),
-                titleStyle: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+              //   inputTextStyle: const TextStyle(color: Colors.white),
+              //   titleStyle: const TextStyle(
+              //     color: Colors.white,
+              //     fontWeight: FontWeight.bold,
+              //   ),
+              // ),
               space12H,
               CustomTextField(
                 fillColor: Colors.transparent,

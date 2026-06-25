@@ -164,7 +164,7 @@ class _AddNewBikePageState extends State<AddNewBikePage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 LabeledInputField(
-                                  label: "Note Title",
+                                  label: "Upgrade Category",
                                   hint: "e.g., Engine Mods",
                                   controller: noteSet.titleController,
                                 ),
@@ -185,7 +185,7 @@ class _AddNewBikePageState extends State<AddNewBikePage> {
                                               Expanded(
                                                 child: LabeledInputField(
                                                   label:
-                                                      "Point ${pointIdx + 1}",
+                                                      "Point ${pointIdx + 1} of upgrade ${noteIdx + 1}",
                                                   hint: "e.g., Ported Head",
                                                   controller: noteSet
                                                       .pointControllers[pointIdx],
@@ -226,7 +226,7 @@ class _AddNewBikePageState extends State<AddNewBikePage> {
 
                     // Outlined Add Build Note Button
                     CustomButton(
-                      text: "Add Build Note",
+                      text: "Add Build Upgrades",
                       onPressed: () {
                         controller.addNewBuildNote();
                       },

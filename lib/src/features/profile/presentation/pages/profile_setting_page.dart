@@ -48,7 +48,11 @@ class ProfileSettingPage extends StatelessWidget {
                                   )
                                 : DecorationImage(
                                     image: CachedNetworkImageProvider(
-                                      controller.userProfile.value.profilePicture??'',
+                                      controller
+                                              .userProfile
+                                              .value
+                                              .profilePicture ??
+                                          '',
                                     ),
                                     fit: BoxFit.cover,
                                   ),
@@ -96,7 +100,7 @@ class ProfileSettingPage extends StatelessWidget {
                 space4H,
                 Center(
                   child: CustomText(
-                    '🇳🇿 ${controller.countryName.value}',
+                    controller.countryName.value,
                     variant: TextVariant.labelMedium,
                     color: AppColors.kTextColor,
                     fontWeight: FontWeight.w600,

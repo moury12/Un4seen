@@ -157,8 +157,9 @@ class StoryController extends GetxController {
       // Payload matching your specific request
       final Map<String, dynamic> data = {
         "contentType": "image",
-        "category": selectedCategory.value,
-        "music": selectedMusicId.value,
+        if (selectedCategory.value.isNotEmpty)
+          "category": selectedCategory.value,
+        if (selectedMusic.value.isNotEmpty) "music": selectedMusicId.value,
         "isPremium": false,
       };
 
@@ -174,6 +175,19 @@ class StoryController extends GetxController {
 
       if (res.data['success'] == true) {
         CustomSnackbar.showSuccess(res.data['message']);
+        
+        // Reset state after successful creation
+        selectedImage.value = null;
+        editedImageBytes.value = null;
+        selectedCategory.value = '';
+        selectedMusic.value = '';
+        selectedMusicId.value = '';
+        selectedMusicName.value = 'None';
+        selectedFilter.value = 'None';
+        storyText.value = '';
+        textController.clear();
+        selectedMusicModel.value = null;
+        
         return true;
       } else {
         CustomSnackbar.showError(res.data['message']);

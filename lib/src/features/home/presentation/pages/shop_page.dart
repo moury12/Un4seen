@@ -1,7 +1,9 @@
+import 'package:un4seen/src/core/utils/url_launcher_utils.dart';
 import 'package:un4seen/src/features/profile/presentation/controllers/shop_controller.dart';
 
 import '../../../../src_export.dart';
 import '../widgets/shop_product_card.dart';
+
 class ShopPage extends StatelessWidget {
   const ShopPage({super.key});
 
@@ -24,7 +26,8 @@ class ShopPage extends StatelessWidget {
 
           return NotificationListener<ScrollNotification>(
             onNotification: (ScrollNotification scrollInfo) {
-              if (scrollInfo.metrics.pixels == scrollInfo.metrics.maxScrollExtent) {
+              if (scrollInfo.metrics.pixels ==
+                  scrollInfo.metrics.maxScrollExtent) {
                 controller.loadMore();
               }
               return false;
@@ -34,12 +37,36 @@ class ShopPage extends StatelessWidget {
               slivers: [
                 SliverToBoxAdapter(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 4,
+                      horizontal: 12,
+                    ),
                     child: Center(
-                      child: CustomText(
-                        AppStaticStrings.exclusiveUn4seenProducts.tr,
-                        color: AppColors.kSecondaryTextColor,
-                        fontSize: 12,
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: CustomText(
+                              AppStaticStrings.someBestSellingProducts.tr,
+                              color: AppColors.kSecondaryTextColor,
+                              fontSize: 15,
+                            ),
+                          ),
+                          Container(
+                            alignment: Alignment.centerRight,
+                            child: ButtonTapWidget(
+                              onTap: () {
+                                UrlLauncherUtils.launchExternalUrl(
+                                  "https://un4seendecals.com/products",
+                                );
+                              },
+                              child: CustomText(
+                                AppStaticStrings.viewAll.tr,
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.kPrimaryColor,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
@@ -47,14 +74,16 @@ class ShopPage extends StatelessWidget {
                 SliverPadding(
                   padding: AppPadding.getPadding12H(context),
                   sliver: SliverGrid(
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      mainAxisSpacing: 12,
-                      crossAxisSpacing: 12,
-                      childAspectRatio: 0.8,
-                    ),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          mainAxisSpacing: 12,
+                          crossAxisSpacing: 12,
+                          childAspectRatio: 0.8,
+                        ),
                     delegate: SliverChildBuilderDelegate(
-                      (context, index) => ShopProductCard(product: controller.products[index]),
+                      (context, index) =>
+                          ShopProductCard(product: controller.products[index]),
                       childCount: controller.products.length,
                     ),
                   ),

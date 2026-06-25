@@ -66,15 +66,17 @@ class SettingsPage extends StatelessWidget {
                 title: AppStaticStrings.members.tr,
                 icon: AppIcons.groupPeople,
                 onTap: () => context.push(
-                      AppRoutes.members,
-                      extra: {
-                        'title': AppStaticStrings.all.tr,
-                        'list':Get.find<MembersController>().members ,
-                       'refresh': () => Get.find<MembersController>().fetchMembers(),
-                      },
+                  AppRoutes.members,
+                  extra: {
+                    'title': AppStaticStrings.all.tr,
+                    'list': Get.find<MembersController>().members,
+                    'refresh': () => Get.find<MembersController>().fetchMembers(
+                      isRefresh: true,
                     ),
+                  },
+                ),
               ),
-            
+
               ProfileMenuTile(
                 title: AppStaticStrings.changePassword.tr,
                 iconWidget: const Icon(

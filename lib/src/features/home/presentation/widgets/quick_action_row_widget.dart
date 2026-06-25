@@ -33,7 +33,7 @@ class QuickActionRowWidget extends StatelessWidget {
                   ),
                   _actionItem(
                     AppIcons.reward,
-                    AppStaticStrings.competitions.tr,
+                    "Comps",
                     1,
                     onTap: () {
                       if (Get.isRegistered<NavigationController>()) {
@@ -58,11 +58,12 @@ class QuickActionRowWidget extends StatelessWidget {
                     onTap: () => context.push(AppRoutes.ideasFeedback),
                   ),
                   _actionItem(
-                    AppIcons.crew,
-                    "Crew",
+                    AppIcons.chat,
+                    AppStaticStrings.chat.tr,
                     4,
-                    onTap: () => context.push(AppRoutes.crewChoice),
+                    onTap: () => context.push(AppRoutes.channels),
                   ),
+
                   _actionItem(
                     AppIcons.world,
                     "World",
@@ -70,10 +71,10 @@ class QuickActionRowWidget extends StatelessWidget {
                     onTap: () => context.push(AppRoutes.un4seenWorld),
                   ),
                   _actionItem(
-                    AppIcons.chat,
-                    AppStaticStrings.chat.tr,
+                    AppIcons.crew,
+                    "Crew",
                     6,
-                    onTap: () => context.push(AppRoutes.channels),
+                    onTap: () => context.push(AppRoutes.crewChoice),
                   ),
                   _actionItem(
                     AppIcons.bag,
@@ -143,7 +144,7 @@ class QuickActionRowWidget extends StatelessWidget {
         child: ButtonTapWidget(
           onTap: onTap,
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8),
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
             child: Column(
               children: [
                 SvgPicture.asset(

@@ -65,39 +65,46 @@ class _RateRideCardWidgetState extends State<RateRideCardWidget> {
           Positioned(
             top: 12,
             left: 12,
-            child: Row(
-              children: [
-                CustomNetworkImage(
-                  imageUrl: ride.user.image,
-                  height: 32,
-                  width: 32,
-                  radius: 99,
-                ),
-                // const CircleAvatar(
-                //   radius: 16,
-                //   backgroundImage: NetworkImage(
-                //     'https://i.pravatar.cc/150?u=jake',
-                //   ),
-                // ),
-                space8W,
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CustomText(
-                      ride.user.fullName,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 13,
-                    ),
-                    CustomText(
-                      "${ride.user.memberNumber} ${ride.rideType}",
-                      color: AppColors.kPrimaryColor,
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ],
-                ),
-              ],
+            child: Container(
+              padding: EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: Colors.black.withAlpha(80),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Row(
+                children: [
+                  CustomNetworkImage(
+                    imageUrl: ride.user.image,
+                    height: 32,
+                    width: 32,
+                    radius: 99,
+                  ),
+                  // const CircleAvatar(
+                  //   radius: 16,
+                  //   backgroundImage: NetworkImage(
+                  //     'https://i.pravatar.cc/150?u=jake',
+                  //   ),
+                  // ),
+                  space8W,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CustomText(
+                        ride.user.fullName,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                      ),
+                      CustomText(
+                        "${ride.user.memberNumber}",
+                        color: AppColors.kPrimaryColor,
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
           Positioned(

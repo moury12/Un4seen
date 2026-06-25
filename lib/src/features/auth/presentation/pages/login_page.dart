@@ -13,14 +13,13 @@ class LoginPage extends StatefulWidget {
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
-
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   final emailCtrl = TextEditingController(
-    text: kDebugMode ? 'tanzibamouri28@gmail.com' : '',
+    text: kDebugMode ? 'fefixe3255@cadebek.com' : '',
   );
   final passwordCtrl = TextEditingController(
-    text: kDebugMode ? '12345678' : '',
+    text: kDebugMode ? '8dydq5hm@MX' : '',
   );
 
   @override

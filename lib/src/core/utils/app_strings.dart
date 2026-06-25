@@ -17,6 +17,7 @@ class AppStaticStrings {
   static const String unfollow = 'Unfollow';
   static const String platform = 'Platform';
   static const String postLink = 'Post Link';
+  static const String viewAll = 'View All';
   static const String dontHaveAccountRegister =
       "Don't have an account? Register";
   static const String details = 'Details';
@@ -125,6 +126,7 @@ class AppStaticStrings {
   static const String upload = 'Upload';
   static const String description = 'Description';
   static const String shopTitle = 'SHOP';
+  static const String someBestSellingProducts = 'Some Best Selling Products';
   static const String exclusiveUn4seenProducts = 'Exclusive Un4seen products';
   static const String findPerfectKit = 'Find Your Perfect Graphics Kit';
   static const String shopDesc1 =
@@ -163,7 +165,7 @@ class AppStaticStrings {
   static const String startWeeklySubscription = 'Start 1-Week Subscription';
   static const String rideProfile = 'Ride Profile';
   static const String pointsBalance = 'Your Shred Points Balance';
-  static const String shredPoints = 'Shared Points';
+  static const String shredPoints = 'Shred Points';
   static const String earnPointsUnlockRewards =
       'Earn points, unlock rewards (Points do not expire)';
   static const String dailyLoginRedeem = 'Daily login to redeem Shred Points';
@@ -224,7 +226,7 @@ class AppStaticStrings {
   static const String logoutPopup = 'Logout Popup';
 
   // Form fields
-  static const String aboutMe = 'About Me';
+  static const String aboutMe = 'About';
   static const String facebookUrl = 'Facebook URL';
   static const String instagramUrl = 'Instagram URL';
   static const String tiktokUrl = 'TikTok URL';
@@ -299,7 +301,7 @@ class AppStaticStrings {
   static const String model = 'Model';
   static const String color = 'Color';
   static const String type = 'Type';
-  static const String myBikeGallery = 'My Bike Gallery';
+  static const String myBikeGallery = 'Bike Gallery';
   static const String rideUpgrades = 'Ride Upgrades';
   static const String plastics = 'Plastics';
   static const String exhaust = 'Exhaust';

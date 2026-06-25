@@ -43,6 +43,7 @@ class AppRoutes {
   static const String channels = '/channels';
   static const String buildsMods = '/builds-mods';
   static const String chat = '/chat';
+  static const String allChannels = '/all-channels';
   static const String channelMembers = '/channel-members';
   static const String notification = '/notification';
 }

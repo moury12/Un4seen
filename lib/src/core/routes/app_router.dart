@@ -41,6 +41,7 @@ import '../../features/home/presentation/pages/un4seen_world_page.dart';
 import '../../features/home/presentation/pages/rate_my_ride_page.dart';
 import '../../features/home/presentation/pages/shop_page.dart';
 import '../../features/chat/presentation/pages/channels_page.dart';
+import '../../features/chat/presentation/pages/all_channels_page.dart';
 import '../../features/chat/presentation/pages/chat_page.dart';
 import '../../features/chat/presentation/pages/channel_members_page.dart';
 import '../../features/chat/presentation/pages/builds_mods_page.dart';
@@ -266,6 +267,11 @@ class AppRouter {
         path: AppRoutes.channels,
         name: 'channels',
         builder: (context, state) => const ChannelsPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.allChannels,
+        name: 'allChannels',
+        builder: (context, state) => const AllChannelsPage(),
       ),
       GoRoute(
         path: AppRoutes.buildsMods,

@@ -18,14 +18,18 @@ class ConnectSectionWidget extends StatelessWidget {
   });
 
   String _formatUrl(String? urlOrUsername, String defaultUrl) {
-    if (urlOrUsername == null || urlOrUsername.trim().isEmpty || urlOrUsername.trim() == '@username') {
+    if (urlOrUsername == null ||
+        urlOrUsername.trim().isEmpty ||
+        urlOrUsername.trim() == '@username') {
       return defaultUrl;
     }
     final trimmed = urlOrUsername.trim();
     if (trimmed.startsWith("http://") || trimmed.startsWith("https://")) {
       return trimmed;
     }
-    final cleanHandle = trimmed.startsWith('@') ? trimmed.substring(1) : trimmed;
+    final cleanHandle = trimmed.startsWith('@')
+        ? trimmed.substring(1)
+        : trimmed;
     if (defaultUrl.contains("facebook.com")) {
       return "https://www.facebook.com/$cleanHandle";
     } else if (defaultUrl.contains("instagram.com")) {
@@ -64,9 +68,24 @@ class ConnectSectionWidget extends StatelessWidget {
             child: Row(
               spacing: 8,
               children: [
-                _buildSocialButton(AppIcons.fb, "Facebook", Colors.blue, fbLink),
-                _buildSocialButton(AppIcons.ig, "Instagram", Colors.pink, igLink),
-                _buildSocialButton(AppIcons.tictok, "TikTok", Colors.black, ttLink),
+                _buildSocialButton(
+                  AppIcons.fb,
+                  "Facebook",
+                  Colors.blue,
+                  fbLink,
+                ),
+                _buildSocialButton(
+                  AppIcons.ig,
+                  "Instagram",
+                  Colors.pink,
+                  igLink,
+                ),
+                _buildSocialButton(
+                  AppIcons.tictok,
+                  "TikTok",
+                  Colors.black,
+                  ttLink,
+                ),
               ],
             ),
           ),
@@ -75,7 +94,12 @@ class ConnectSectionWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildSocialButton(String icon, String label, Color iconColor, String targetUrl) {
+  Widget _buildSocialButton(
+    String icon,
+    String label,
+    Color iconColor,
+    String targetUrl,
+  ) {
     return GestureDetector(
       onTap: () => UrlLauncherUtils.launchExternalUrl(targetUrl),
       child: Container(
@@ -90,12 +114,7 @@ class ConnectSectionWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SvgPicture.asset(icon),
-            CustomText(
-              label,
-              variant: TextVariant.labelMedium,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            ),
+
             const Icon(Icons.open_in_new, size: 18, color: Colors.grey),
           ],
         ),
@@ -103,4 +122,3 @@ class ConnectSectionWidget extends StatelessWidget {
     );
   }
 }
-

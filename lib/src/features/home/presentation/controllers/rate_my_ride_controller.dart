@@ -97,9 +97,10 @@ class RateMyRideController extends GetxController {
         data: {'rating': rating},
       );
       if (!res.data['success']) throw Exception();
-      
+
       // Update average rating if returned by backend (optional, but good if we have it)
-      if (res.data['data'] != null && res.data['data']['averageRating'] != null) {
+      if (res.data['data'] != null &&
+          res.data['data']['averageRating'] != null) {
         ride.averageRating = res.data['data']['averageRating'].toDouble();
         rides[index] = ride;
         rides.refresh();
@@ -117,7 +118,7 @@ class RateMyRideController extends GetxController {
   // Inside RateMyRideController class
   Future<bool> uploadRide(String model, String desc, String type) async {
     // 1. Validation
-    if (model.isEmpty || desc.isEmpty || type.isEmpty) {
+    if (model.isEmpty || desc.isEmpty) {
       CustomSnackbar.showError("Please fill in all fields");
       return false;
     }
@@ -136,7 +137,7 @@ class RateMyRideController extends GetxController {
       final payload = jsonEncode({
         "bikeModel": model,
         "description": desc,
-        "rideType": type,
+        "rideType": "no data",
       });
 
       dio.FormData formData = dio.FormData.fromMap({
