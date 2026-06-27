@@ -18,6 +18,7 @@ class AppStaticStrings {
   static const String platform = 'Platform';
   static const String postLink = 'Post Link';
   static const String viewAll = 'View All';
+  static const String updateBike = 'Update Bike Profile';
   static const String dontHaveAccountRegister =
       "Don't have an account? Register";
   static const String details = 'Details';
@@ -113,7 +114,7 @@ class AppStaticStrings {
   static const String rateMyRide = 'Rate My Ride';
   static const String rateMyRideTitle = 'Rate My Ride';
   static const String rateMyRideDesc =
-      'Upload your best photo of your bike and be into win shred points & become next weeks bike of the week! Good Luck';
+      'Upload your best photo of your bike and be into win shred points & You must have Un4seen decals on your bike to enter.';
   static const String votingEndsSunday = 'Week 18 - Voting Ends Sunday';
   static const String flames = 'flames';
   static const String yourRating = 'Your Rating:';

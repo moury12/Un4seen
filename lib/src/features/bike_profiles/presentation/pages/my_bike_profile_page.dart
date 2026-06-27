@@ -14,7 +14,25 @@ class MyBikeProfilePage extends StatelessWidget {
     final controller = Get.put(BikeProfilesController());
     final profileCntrl = Get.put(ProfileController());
     return Scaffold(
-      appBar: AppBar(title: Text(AppStaticStrings.myBikeProfile.tr)),
+      appBar: AppBar(
+        title: Text(AppStaticStrings.myBikeProfile.tr),
+        actions: [
+          ButtonTapWidget(
+            onTap: () {
+              if (controller.activeBike.value != null) {
+                context.push(
+                  AppRoutes.addNewBike,
+                  extra: controller.activeBike.value,
+                );
+              }
+            },
+            child: const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Icon(Icons.edit, color: AppColors.kPrimaryColor),
+            ),
+          ),
+        ],
+      ),
       body: SafeArea(
         child: RefreshIndicator(
           onRefresh: controller.fetchBikeProfile,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:un4seen/src/core/utils/app_strings.dart';
+import 'package:un4seen/src/features/bike_profiles/bike_profiles_export.dart';
 import 'package:un4seen/src/features/bike_profiles/presentation/pages/members_page.dart';
 import 'package:un4seen/src/features/chat/presentation/pages/search_chat_page.dart';
 import 'package:un4seen/src/features/competitions/presentation/pages/entries_gallery_page.dart';
@@ -210,7 +211,10 @@ class AppRouter {
       GoRoute(
         path: AppRoutes.addNewBike,
         name: 'addNewBike',
-        builder: (context, state) => const AddNewBikePage(),
+        builder: (context, state) {
+          final bike = state.extra as BikeModel?;
+          return AddNewBikePage(bikeToEdit: bike);
+        },
       ),
       GoRoute(
         path: '${AppRoutes.singleBikeDetails}/:id',

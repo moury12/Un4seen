@@ -5,7 +5,8 @@ import '../../../../src_export.dart';
 import '../widgets/image_upload_section.dart';
 
 class AddNewBikePage extends StatefulWidget {
-  const AddNewBikePage({super.key});
+  final BikeModel? bikeToEdit;
+  const AddNewBikePage({super.key, this.bikeToEdit});
 
   @override
   State<AddNewBikePage> createState() => _AddNewBikePageState();
@@ -17,6 +18,8 @@ class _AddNewBikePageState extends State<AddNewBikePage> {
   final modelCtrl = TextEditingController(text: kDebugMode ? "CRF250R" : "");
   final typeCtrl = TextEditingController(text: kDebugMode ? "250R" : "");
   final colorCtrl = TextEditingController(text: kDebugMode ? "Red" : "");
+  final bikeHoursCtrl = TextEditingController(text: kDebugMode ? "12.5" : "");
+  final estimatedCostCtrl = TextEditingController(text: kDebugMode ? "2850" : "");
   final noteTitleCtrl = TextEditingController(
     text: kDebugMode ? "test Title" : "",
   );
@@ -25,12 +28,42 @@ class _AddNewBikePageState extends State<AddNewBikePage> {
   );
 
   @override
+  void initState() {
+    super.initState();
+    if (widget.bikeToEdit != null) {
+      final bike = widget.bikeToEdit!;
+      yearCtrl.text = bike.year;
+      makeCtrl.text = bike.make;
+      modelCtrl.text = bike.model;
+      typeCtrl.text = bike.bikeType;
+      colorCtrl.text = bike.color;
+      
+      final controller = Get.find<BikeProfilesController>();
+      // Pre-fill build notes (upgrades)
+      if (bike.upgrades.isNotEmpty) {
+        controller.buildNoteSets.clear();
+        for (var upgrade in bike.upgrades) {
+          final noteSet = BuildNoteSet();
+          noteSet.titleController.text = upgrade.title;
+          noteSet.pointControllers.clear();
+          for (var item in upgrade.items) {
+            noteSet.pointControllers.add(TextEditingController(text: item));
+          }
+          controller.buildNoteSets.add(noteSet);
+        }
+      }
+    }
+  }
+
+  @override
   void dispose() {
     yearCtrl.dispose();
     makeCtrl.dispose();
     modelCtrl.dispose();
     typeCtrl.dispose();
     colorCtrl.dispose();
+    bikeHoursCtrl.dispose();
+    estimatedCostCtrl.dispose();
     noteTitleCtrl.dispose();
     notePointCtrl.dispose();
     super.dispose();
@@ -65,18 +98,19 @@ class _AddNewBikePageState extends State<AddNewBikePage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         CustomText(
-                          AppStaticStrings.addNewBike.tr,
+                          widget.bikeToEdit != null ? AppStaticStrings.updateBike.tr : AppStaticStrings.addNewBike.tr,
                           variant: TextVariant.titleLarge,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
                         ),
-                        CustomText(
-                          AppStaticStrings
-                              .yourCurrentBikeWillBeMovedToRetiredBikes
-                              .tr,
-                          variant: TextVariant.labelSmall,
-                          color: Colors.white.withOpacity(0.8),
-                        ),
+                        if (widget.bikeToEdit == null)
+                          CustomText(
+                            AppStaticStrings
+                                .yourCurrentBikeWillBeMovedToRetiredBikes
+                                .tr,
+                            variant: TextVariant.labelSmall,
+                            color: Colors.white.withOpacity(0.8),
+                          ),
                       ],
                     ),
                   ),
@@ -138,6 +172,18 @@ class _AddNewBikePageState extends State<AddNewBikePage> {
                       label: "Color",
                       hint: "e.g., Red",
                       controller: colorCtrl,
+                    ),
+
+                    LabeledInputField(
+                      label: "Bike Hours",
+                      hint: "e.g., 12.5",
+                      controller: bikeHoursCtrl,
+                    ),
+
+                    LabeledInputField(
+                      label: "Estimated Cost",
+                      hint: "e.g., 2850",
+                      controller: estimatedCostCtrl,
                     ),
                     const CustomText(
                       "Build Note",
@@ -236,39 +282,52 @@ class _AddNewBikePageState extends State<AddNewBikePage> {
                       borderColor: borderColor,
                     ),
 
-                    // --- BLUE INFO NOTE BOX ---
-                    Container(
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: noteBoxBg.withOpacity(0.4),
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: borderColor),
+                    if (widget.bikeToEdit == null)
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: noteBoxBg.withOpacity(0.4),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: borderColor),
+                        ),
+                        child: const CustomText(
+                          "Note: Your current bike will be automatically moved to the retired bikes section. You can add upgrades to this bike after creating it.",
+                          color: Colors.white,
+                          variant: TextVariant.labelSmall,
+                        ),
                       ),
-                      child: const CustomText(
-                        "Note: Your current bike will be automatically moved to the retired bikes section. You can add upgrades to this bike after creating it.",
-                        color: Colors.white,
-                        variant: TextVariant.labelSmall,
-                      ),
-                    ),
 
                     // --- MAIN ADD BIKE BUTTON ---
                     Obx(
                       () => CustomButton(
-                        text: "Add Bike",
+                        text: widget.bikeToEdit != null ? "Update Bike" : "Add Bike",
                         isLoading: controller.isLoading.value,
                         onPressed: () async {
-                          final res = await controller.addBike(
-                            year: yearCtrl.text.trim(),
-                            make: makeCtrl.text.trim(),
-                            model: modelCtrl.text.trim(),
-                            type: typeCtrl.text.trim(),
-                            color: colorCtrl.text.trim(),
-                          );
+                          final res = widget.bikeToEdit != null
+                              ? await controller.updateBike(
+                                  bikeId: widget.bikeToEdit!.id,
+                                  year: yearCtrl.text.trim(),
+                                  make: makeCtrl.text.trim(),
+                                  model: modelCtrl.text.trim(),
+                                  type: typeCtrl.text.trim(),
+                                  color: colorCtrl.text.trim(),
+                                  bikeHours: bikeHoursCtrl.text.trim(),
+                                  estimatedCost: estimatedCostCtrl.text.trim(),
+                                )
+                              : await controller.addBike(
+                                  year: yearCtrl.text.trim(),
+                                  make: makeCtrl.text.trim(),
+                                  model: modelCtrl.text.trim(),
+                                  type: typeCtrl.text.trim(),
+                                  color: colorCtrl.text.trim(),
+                                  bikeHours: bikeHoursCtrl.text.trim(),
+                                  estimatedCost: estimatedCostCtrl.text.trim(),
+                                );
                           if (res) {
                             context.pop();
                           }
                         },
-                        icon: Icons.add,
+                        icon: widget.bikeToEdit != null ? Icons.save : Icons.add,
                         backgroundColor: AppColors.kPrimaryColor,
                       ),
                     ),

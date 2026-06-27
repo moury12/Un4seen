@@ -19,7 +19,7 @@ class ProfileController extends GetxController {
   final Rx<File?> profileImage = Rx<File?>(null);
   final RxList<UserProfileModel> followersList = <UserProfileModel>[].obs;
   final RxList<UserProfileModel> followingList = <UserProfileModel>[].obs;
-    final RxList<UserProfileModel> userfollowersList = <UserProfileModel>[].obs;
+  final RxList<UserProfileModel> userfollowersList = <UserProfileModel>[].obs;
   final RxList<UserProfileModel> userfollowingList = <UserProfileModel>[].obs;
   final RxBool isListLoading = false.obs;
   final Rxn<UserProfileModel> targetMemberDetails = Rxn<UserProfileModel>();
@@ -77,7 +77,7 @@ class ProfileController extends GetxController {
     'Intermediate',
     'Recreational',
   ];
-final RxBool isPasswordLoading = false.obs;
+  final RxBool isPasswordLoading = false.obs;
 
   // ── Change Password ───────────────────────────────────
   Future<void> changePassword({
@@ -89,10 +89,7 @@ final RxBool isPasswordLoading = false.obs;
 
       final response = await _api.post(
         '/auth/change-password',
-        data: {
-          'oldPassword': oldPassword,
-          'newPassword': newPassword,
-        },
+        data: {'oldPassword': oldPassword, 'newPassword': newPassword},
       );
 
       final dynamic data = response.data;
@@ -113,13 +110,10 @@ final RxBool isPasswordLoading = false.obs;
       isPasswordLoading.value = false;
     }
   }
+
   @override
   void onInit() {
-     Future.wait([
-      fetchProfile(),
-      fetchFollowers(),
-      fetchFollowing(),
-    ]);
+    Future.wait([fetchProfile(), fetchFollowers(), fetchFollowing()]);
     super.onInit();
   }
 
@@ -138,10 +132,14 @@ final RxBool isPasswordLoading = false.obs;
       _followersPage = 1;
       _hasMoreFollowers = true;
       isListLoading.value = true;
-      final res = await _api.get('/user/my-followers?page=$_followersPage&limit=10');
+      final res = await _api.get(
+        '/user/my-followers?page=$_followersPage&limit=10',
+      );
       if (res.data['success']) {
         final List result = res.data['data']['result'] ?? [];
-        followersList.assignAll(result.map((e) => UserProfileModel.fromJson(e)).toList());
+        followersList.assignAll(
+          result.map((e) => UserProfileModel.fromJson(e)).toList(),
+        );
         final meta = res.data['data']['meta'];
         if (meta != null) {
           final int totalPage = meta['totalPage'] ?? 1;
@@ -156,14 +154,17 @@ final RxBool isPasswordLoading = false.obs;
   }
 
   Future<void> loadMoreFollowers() async {
-    if (!_hasMoreFollowers || _isFollowersLoadingMore || isListLoading.value) return;
+    if (!_hasMoreFollowers || _isFollowersLoadingMore || isListLoading.value)
+      return;
     try {
       _isFollowersLoadingMore = true;
       final nextPage = _followersPage + 1;
       final res = await _api.get('/user/my-followers?page=$nextPage&limit=10');
       if (res.data['success']) {
         final List result = res.data['data']['result'] ?? [];
-        followersList.addAll(result.map((e) => UserProfileModel.fromJson(e)).toList());
+        followersList.addAll(
+          result.map((e) => UserProfileModel.fromJson(e)).toList(),
+        );
         _followersPage = nextPage;
         final meta = res.data['data']['meta'];
         if (meta != null) {
@@ -177,7 +178,7 @@ final RxBool isPasswordLoading = false.obs;
       _isFollowersLoadingMore = false;
     }
   }
-// Add these to ProfileController class
+  // Add these to ProfileController class
 
   // ── Fetch Other User's Followers ──
   Future<void> fetchOtherFollowers(String userId) async {
@@ -186,7 +187,9 @@ final RxBool isPasswordLoading = false.obs;
       final res = await _api.get('/user/followers/$userId?page=1&limit=100');
       if (res.data['success']) {
         final List result = res.data['data']['result'] ?? [];
-        userfollowersList.assignAll(result.map((e) => UserProfileModel.fromJson(e)).toList());
+        userfollowersList.assignAll(
+          result.map((e) => UserProfileModel.fromJson(e)).toList(),
+        );
       }
     } finally {
       isListLoading.value = false;
@@ -200,7 +203,9 @@ final RxBool isPasswordLoading = false.obs;
       final res = await _api.get('/user/following/$userId');
       if (res.data['success']) {
         final List result = res.data['data']['result'] ?? [];
-        userfollowingList.assignAll(result.map((e) => UserProfileModel.fromJson(e)).toList());
+        userfollowingList.assignAll(
+          result.map((e) => UserProfileModel.fromJson(e)).toList(),
+        );
       }
     } finally {
       isListLoading.value = false;
@@ -211,7 +216,7 @@ final RxBool isPasswordLoading = false.obs;
   Future<void> toggleFollow(UserProfileModel user) async {
     final bool currentlyFollowing = user.isFollowing;
     final String endpoint = currentlyFollowing ? 'unfollow' : 'follow';
-    
+
     try {
       // Hit API
       final response = await _api.patch('/user/$endpoint/${user.id}');
@@ -224,15 +229,20 @@ final RxBool isPasswordLoading = false.obs;
       CustomSnackbar.showError("Failed to update follow status");
     }
   }
+
   Future<void> fetchFollowing() async {
     try {
       _followingPage = 1;
       _hasMoreFollowing = true;
       isListLoading.value = true;
-      final res = await _api.get('/user/my-following?page=$_followingPage&limit=10');
+      final res = await _api.get(
+        '/user/my-following?page=$_followingPage&limit=10',
+      );
       if (res.data['success']) {
         final List result = res.data['data']['result'] ?? [];
-        followingList.assignAll(result.map((e) => UserProfileModel.fromJson(e)).toList());
+        followingList.assignAll(
+          result.map((e) => UserProfileModel.fromJson(e)).toList(),
+        );
         final meta = res.data['data']['meta'];
         if (meta != null) {
           final int totalPage = meta['totalPage'] ?? 1;
@@ -247,14 +257,17 @@ final RxBool isPasswordLoading = false.obs;
   }
 
   Future<void> loadMoreFollowing() async {
-    if (!_hasMoreFollowing || _isFollowingLoadingMore || isListLoading.value) return;
+    if (!_hasMoreFollowing || _isFollowingLoadingMore || isListLoading.value)
+      return;
     try {
       _isFollowingLoadingMore = true;
       final nextPage = _followingPage + 1;
       final res = await _api.get('/user/my-following?page=$nextPage&limit=10');
       if (res.data['success']) {
         final List result = res.data['data']['result'] ?? [];
-        followingList.addAll(result.map((e) => UserProfileModel.fromJson(e)).toList());
+        followingList.addAll(
+          result.map((e) => UserProfileModel.fromJson(e)).toList(),
+        );
         _followingPage = nextPage;
         final meta = res.data['data']['meta'];
         if (meta != null) {
@@ -284,7 +297,7 @@ final RxBool isPasswordLoading = false.obs;
 
   Future<void> applyReferral() async {
     final code = referralInputController.text.trim();
-    
+
     if (code.isEmpty) {
       CustomSnackbar.showError("Please enter a referral code");
       return;
@@ -293,7 +306,7 @@ final RxBool isPasswordLoading = false.obs;
     try {
       isLoading.value = true;
       final response = await _api.post(
-        '/shred-points/apply-referral', 
+        '/shred-points/apply-referral',
         data: {"code": code},
       );
 
@@ -305,7 +318,9 @@ final RxBool isPasswordLoading = false.obs;
         CustomSnackbar.showError(response.data['message']);
       }
     } catch (e) {
-      print('❌ Apply Referral Error: $e | lib/src/features/profile/presentation/controllers/profile_controller.dart');
+      print(
+        '❌ Apply Referral Error: $e | lib/src/features/profile/presentation/controllers/profile_controller.dart',
+      );
       CustomSnackbar.showError("Failed to apply referral code");
     } finally {
       isLoading.value = false;
@@ -441,7 +456,7 @@ final RxBool isPasswordLoading = false.obs;
       source: ImageSource.gallery,
     );
     if (pickedFile != null) {
-      final cropped = await ImageCropperUtils.cropImage(pickedFile.path, isProfile: true);
+      final cropped = await ImageCropperUtils.cropImage(pickedFile.path);
       if (cropped != null) {
         profileImage.value = cropped;
       }

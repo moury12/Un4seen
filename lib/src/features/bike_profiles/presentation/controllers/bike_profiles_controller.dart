@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:dio/dio.dart' as dio;
 import 'package:image_picker/image_picker.dart';
+import '../../../../core/utils/image_cropper_utils.dart';
 import '../../../../src_export.dart';
 import '../../../../core/services/api_service.dart';
 
@@ -216,6 +217,8 @@ class BikeProfilesController extends GetxController {
     required String model,
     required String type,
     required String color,
+    String? bikeHours,
+    String? estimatedCost,
   }) async {
     if (profileImage.value == null) {
       CustomSnackbar.showError("Please upload a bike image");
@@ -241,6 +244,8 @@ class BikeProfilesController extends GetxController {
           "model": model,
           "bikeType": type,
           "color": color,
+          if (bikeHours != null) "bikeHours": bikeHours,
+          if (estimatedCost != null) "estimatedCost": estimatedCost,
           "upgrades": formattedNotes,
         }),
       });
@@ -256,6 +261,70 @@ class BikeProfilesController extends GetxController {
     } catch (e) {
       log(e.toString());
       CustomSnackbar.showError("Failed to add bike");
+    } finally {
+      isLoading.value = false;
+    }
+    return false;
+  }
+
+  Future<bool> updateBike({
+    required String bikeId,
+    required String year,
+    required String make,
+    required String model,
+    required String type,
+    required String color,
+    required String bikeHours,
+    required String estimatedCost,
+  }) async {
+    try {
+      isLoading.value = true;
+
+      // Map dynamic controllers to the required JSON structure
+      List<Map<String, dynamic>> formattedNotes = buildNoteSets.map((set) {
+        return {
+          "title": set.titleController.text.trim(),
+          "items": set.pointControllers.map((c) => c.text.trim()).toList(),
+        };
+      }).toList();
+
+      final dataMap = {
+        "year": year,
+        "make": make,
+        "model": model,
+        "bikeType": type,
+        "color": color,
+        "bikeHours": bikeHours,
+        "estimatedCost": estimatedCost,
+        "upgrades": formattedNotes,
+      };
+
+      dio.FormData formData;
+      if (profileImage.value != null) {
+        formData = dio.FormData.fromMap({
+          'image': await dio.MultipartFile.fromFile(profileImage.value!.path),
+          'data': jsonEncode(dataMap),
+        });
+      } else {
+        formData = dio.FormData.fromMap({
+          'data': jsonEncode(dataMap),
+        });
+      }
+
+      final res = await _api.patch('/bikes/$bikeId', data: formData);
+      if (res.data['success'] == true) {
+        CustomSnackbar.showSuccess(res.data['message'] ?? "Bike updated successfully");
+        profileImage.value = null;
+
+        fetchBikeProfile();
+        if (singleBikeDetails.value?.id == bikeId) {
+          fetchSingleBike(bikeId);
+        }
+        return true;
+      }
+    } catch (e) {
+      log(e.toString());
+      CustomSnackbar.showError("Failed to update bike");
     } finally {
       isLoading.value = false;
     }
@@ -297,9 +366,12 @@ class BikeProfilesController extends GetxController {
         imageQuality: 85,
       );
 
-      if (pickedFile != null) {
-        profileImage.value = File(pickedFile.path);
+   if (pickedFile != null) {
+      final cropped = await ImageCropperUtils.cropImage(pickedFile.path, isProfile: true);
+      if (cropped != null) {
+        profileImage.value = cropped;
       }
+    }
     } catch (e) {
       Get.snackbar('Error', 'Failed to pick image: $e');
     }
