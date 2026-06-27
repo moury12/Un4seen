@@ -14,6 +14,9 @@ class RateMyRideController extends GetxController {
   final RxBool isMoreLoading = false.obs;
   final RxBool isSubmitting = false.obs;
 
+  final RxList<RideModel> myRides = <RideModel>[].obs;
+  final RxBool isMyRidesLoading = false.obs;
+
   int _currentPage = 1;
   int _totalPage = 1;
 
@@ -175,5 +178,33 @@ class RateMyRideController extends GetxController {
       isSubmitting.value = false;
     }
     return false;
+  }
+
+  Future<void> fetchMyRides() async {
+    try {
+      isMyRidesLoading.value = true;
+      final response = await _api.get('/rides/my-rides');
+      if (response.data['success']) {
+        final feed = RideFeedModel.fromJson(response.data['data']);
+        myRides.value = feed.result;
+      }
+    } catch (e) {
+      CustomSnackbar.showError("Failed to load my rides");
+    } finally {
+      isMyRidesLoading.value = false;
+    }
+  }
+
+  Future<void> deleteMyRide(String rideId) async {
+    try {
+      final res = await _api.delete('/rides/$rideId');
+      if (res.data['success']) {
+        myRides.removeWhere((ride) => ride.id == rideId);
+        rides.removeWhere((ride) => ride.id == rideId);
+        CustomSnackbar.showSuccess("Ride deleted successfully");
+      }
+    } catch (e) {
+      CustomSnackbar.showError("Failed to delete ride");
+    }
   }
 }

@@ -40,6 +40,7 @@ import '../../features/home/presentation/pages/ideas_feedback_page.dart';
 import '../../features/home/presentation/pages/crew_choice_page.dart';
 import '../../features/home/presentation/pages/un4seen_world_page.dart';
 import '../../features/home/presentation/pages/rate_my_ride_page.dart';
+import '../../features/home/presentation/pages/my_rides_page.dart';
 import '../../features/home/presentation/pages/shop_page.dart';
 import '../../features/chat/presentation/pages/channels_page.dart';
 import '../../features/chat/presentation/pages/all_channels_page.dart';
@@ -261,6 +262,11 @@ class AppRouter {
         path: AppRoutes.rateMyRide,
         name: 'rateMyRide',
         builder: (context, state) => const RateRidePage(),
+      ),
+      GoRoute(
+        path: AppRoutes.myRides,
+        name: 'myRides',
+        builder: (context, state) => const MyRidesPage(),
       ),
       GoRoute(
         path: AppRoutes.shop,

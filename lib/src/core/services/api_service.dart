@@ -174,4 +174,16 @@ class ApiService {
       rethrow;
     }
   }
+
+  Future<Response> delete(String path, {dynamic data}) async {
+    try {
+      return await _dio.delete(
+        path,
+        data: data,
+        options: Options(validateStatus: (status) => status! < 500),
+      );
+    } on DioException {
+      rethrow;
+    }
+  }
 }

@@ -39,6 +39,7 @@ class AppRoutes {
   static const String crewChoice = '/crew-choice';
   static const String un4seenWorld = '/un4seen-world';
   static const String rateMyRide = '/rate-my-ride';
+  static const String myRides = '/my-rides';
   static const String shop = '/shop';
   static const String channels = '/channels';
   static const String buildsMods = '/builds-mods';

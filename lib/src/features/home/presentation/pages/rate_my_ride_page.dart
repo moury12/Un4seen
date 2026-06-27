@@ -1,3 +1,4 @@
+import 'package:go_router/go_router.dart';
 import '../../../../src_export.dart';
 import '../widgets/upload_ride_dialog.dart';
 
@@ -53,13 +54,32 @@ class RateRidePage extends StatelessWidget {
                   padding: AppPadding.getPadding12(context),
                   sliver: SliverToBoxAdapter(
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      spacing: 6,
                       children: [
                         CustomText(
                           AppStaticStrings.rateMyRideDesc.tr,
                           color: AppColors.kTextColor,
                           fontSize: 12,
                         ),
-                        space12H,
+                        ButtonTapWidget(
+                          child: const Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              CustomText(
+                                'My Rides',
+                                color: AppColors.kPrimaryColor,
+                              ),
+                              space12W,
+                              Icon(
+                                Icons.arrow_forward,
+                                color: AppColors.kPrimaryColor,
+                              ),
+                            ],
+                          ),
+                          onTap: () => context.push(AppRoutes.myRides),
+                        ),
+
                         Container(
                           width: double.infinity,
                           padding: const EdgeInsets.all(12),
