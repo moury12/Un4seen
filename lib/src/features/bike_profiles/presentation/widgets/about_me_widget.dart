@@ -20,7 +20,7 @@ class AboutMeWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
         const  CustomText(
-            "About Me",
+            "About",
             variant: TextVariant.titleMedium,
             fontWeight: FontWeight.bold,
             color: Colors.white,

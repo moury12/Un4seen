@@ -231,7 +231,7 @@ class _AddNewBikePageState extends State<AddNewBikePage> {
                                               Expanded(
                                                 child: LabeledInputField(
                                                   label:
-                                                      "Point ${pointIdx + 1} of upgrade ${noteIdx + 1}",
+                                                      "Upgrade ${pointIdx + 1} ",
                                                   hint: "e.g., Ported Head",
                                                   controller: noteSet
                                                       .pointControllers[pointIdx],
