@@ -21,7 +21,7 @@ class StoryFullPage extends StatefulWidget {
 }
 
 class _StoryFullPageState extends State<StoryFullPage>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   final controller = Get.find<StoryController>();
 
   // Animation for Heart Pop
@@ -32,6 +32,7 @@ class _StoryFullPageState extends State<StoryFullPage>
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _fireController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 700),
@@ -90,8 +91,19 @@ class _StoryFullPageState extends State<StoryFullPage>
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    controller.closeStoryViewer();
     _fireController.dispose();
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused || state == AppLifecycleState.inactive) {
+      controller.pauseStory();
+    } else if (state == AppLifecycleState.resumed) {
+      controller.resumeStory();
+    }
   }
 
   @override

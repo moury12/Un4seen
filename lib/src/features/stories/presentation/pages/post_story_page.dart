@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:un4seen/src/features/stories/presentation/controllers/music_controller.dart';
 import 'package:un4seen/src/features/stories/presentation/controllers/story_controller.dart';
 import 'package:un4seen/src/features/stories/presentation/widgets/category_selection_sheet.dart';
@@ -9,11 +7,38 @@ import '../widgets/post_story_header.dart';
 import 'package:flutter/foundation.dart';
 import 'package:pro_image_editor/pro_image_editor.dart';
 
-class PostStoryPage extends StatelessWidget {
-  PostStoryPage({super.key});
+class PostStoryPage extends StatefulWidget {
+  const PostStoryPage({super.key});
 
-  final controller = Get.put(StoryController());
-  final musicController = Get.put(MusicController());
+  @override
+  State<PostStoryPage> createState() => _PostStoryPageState();
+}
+
+class _PostStoryPageState extends State<PostStoryPage> with WidgetsBindingObserver {
+  late final StoryController controller;
+  late final MusicController musicController;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = Get.put(StoryController());
+    musicController = Get.put(MusicController());
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    musicController.stop();
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused || state == AppLifecycleState.inactive) {
+      musicController.pause();
+    }
+  }
 
   /// Helper to open the Pro Image Editor
   /// [initialTab] allows us to jump straight to Text, Filter, or Paint modes

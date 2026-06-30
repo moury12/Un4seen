@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
 import '../../../../core/services/api_service.dart';
@@ -35,7 +36,7 @@ class MusicController extends GetxController {
         categories.assignAll(['All', ...List<String>.from(res.data['data'])]);
       }
     } catch (e) {
-      print("Error categories: $e");
+      debugPrint("Error categories: $e");
     }
   }
 
@@ -81,6 +82,23 @@ class MusicController extends GetxController {
     } catch (e) {
       music.isFavorite = original;
       musicList.refresh();
+    }
+  }
+
+  Future<void> stop() async {
+    try {
+      await _audioPlayer.stop();
+      currentPlayingId.value = '';
+    } catch (e) {
+      debugPrint("Error stopping music: $e");
+    }
+  }
+
+  Future<void> pause() async {
+    try {
+      await _audioPlayer.pause();
+    } catch (e) {
+      debugPrint("Error pausing music: $e");
     }
   }
 

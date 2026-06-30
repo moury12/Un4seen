@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:typed_data';
-import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:dio/dio.dart' as dio;
@@ -159,7 +158,7 @@ class StoryController extends GetxController {
         "contentType": "image",
         if (selectedCategory.value.isNotEmpty)
           "category": selectedCategory.value,
-        if (selectedMusic.value.isNotEmpty) "music": selectedMusicId.value,
+        if (selectedMusicId.value.isNotEmpty) "music": selectedMusicId.value,
         "isPremium": false,
       };
 
@@ -274,14 +273,16 @@ class StoryController extends GetxController {
 
   void _playStory(StoryModel story) async {
     if (story.music != null && isSoundOn.value) {
+      log("🎵 Playing music: ${story.music!.title} — ${story.music!.audioUrl}");
       try {
         await _audioPlayer.setUrl(story.music!.audioUrl);
         _audioPlayer.setLoopMode(LoopMode.one);
         _audioPlayer.play();
       } catch (e) {
-        log("Audio error: $e");
+        log("❌ Audio error: $e");
       }
     } else {
+      log("🔇 No music on this story (music field is null). Stopping player.");
       _audioPlayer.stop();
     }
   }
@@ -325,7 +326,15 @@ class StoryController extends GetxController {
     }
   }
 
-  void resumeStory() => _resetTimer();
+  void resumeStory() {
+    _resetTimer();
+    if (activeStories.isNotEmpty) {
+      final story = activeStories[currentStoryIndex.value];
+      if (story.music != null && isSoundOn.value) {
+        _audioPlayer.play();
+      }
+    }
+  }
 
   void toggleSound() => isSoundOn.value = !isSoundOn.value;
   @override

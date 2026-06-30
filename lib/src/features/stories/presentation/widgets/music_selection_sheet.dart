@@ -3,8 +3,23 @@ import '../controllers/music_controller.dart';
 import '../controllers/story_controller.dart';
 import 'music_list_item.dart';
 
-class MusicSelectionSheet extends StatelessWidget {
+class MusicSelectionSheet extends StatefulWidget {
   const MusicSelectionSheet({super.key});
+
+  @override
+  State<MusicSelectionSheet> createState() => _MusicSelectionSheetState();
+}
+
+class _MusicSelectionSheetState extends State<MusicSelectionSheet> {
+  @override
+  void dispose() {
+    final controller = Get.find<MusicController>();
+    final storyCtrl = Get.find<StoryController>();
+    if (controller.currentPlayingId.value != storyCtrl.selectedMusicId.value) {
+      controller.stop();
+    }
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,6 +109,7 @@ class MusicSelectionSheet extends StatelessWidget {
                     isSelected: storyCtrl.selectedMusic.value == music.title,
                     onSelect: () {
                       storyCtrl.selectedMusicModel.value = music;
+                      storyCtrl.selectedMusic.value = music.title; // Needed for payload guard
                       storyCtrl.selectedMusicName.value =
                           music.title; // Display name on UI
                       storyCtrl.selectedMusicId.value =
