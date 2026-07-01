@@ -76,7 +76,9 @@ class _MusicSelectionSheetState extends State<MusicSelectionSheet> {
                     child: ChoiceChip(
                       label: CustomText(
                         cat,
-                        color: isSelected ? Colors.white : Colors.white70,
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        color: isSelected ? Colors.white : Colors.black,
                       ),
                       selected: isSelected,
                       onSelected: (v) {
@@ -109,7 +111,8 @@ class _MusicSelectionSheetState extends State<MusicSelectionSheet> {
                     isSelected: storyCtrl.selectedMusic.value == music.title,
                     onSelect: () {
                       storyCtrl.selectedMusicModel.value = music;
-                      storyCtrl.selectedMusic.value = music.title; // Needed for payload guard
+                      storyCtrl.selectedMusic.value =
+                          music.title; // Needed for payload guard
                       storyCtrl.selectedMusicName.value =
                           music.title; // Display name on UI
                       storyCtrl.selectedMusicId.value =

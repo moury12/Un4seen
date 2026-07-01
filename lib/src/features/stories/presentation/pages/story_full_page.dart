@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
+import 'package:un4seen/src/core/routes/app_routes.dart';
 import '../../../../core/core_export.dart';
 import '../controllers/story_controller.dart';
 import '../widgets/story_user_info.dart';
@@ -99,7 +101,8 @@ class _StoryFullPageState extends State<StoryFullPage>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.paused || state == AppLifecycleState.inactive) {
+    if (state == AppLifecycleState.paused ||
+        state == AppLifecycleState.inactive) {
       controller.pauseStory();
     } else if (state == AppLifecycleState.resumed) {
       controller.resumeStory();
@@ -186,12 +189,88 @@ class _StoryFullPageState extends State<StoryFullPage>
                         .activeStories[controller.currentStoryIndex.value];
                     return Row(
                       children: [
-                        StoryUserInfo(
-                          name: story.user.fullName,
-                          time: story.user.memberNumber,
-                          image: story.user.image,
+                        ButtonTapWidget(
+                          onTap: () {
+                            controller.pauseStory();
+                            if (!story.isOwnStory) {
+                              context
+                                  .push(
+                                    AppRoutes.memberDetails,
+                                    extra: story.user.id,
+                                  )
+                                  .then((_) {
+                                    controller.resumeStory();
+                                  });
+                            } else {
+                              context.push(AppRoutes.myBikeProfile);
+                            }
+                          },
+                          child: StoryUserInfo(
+                            name: story.user.fullName,
+                            time: story.user.memberNumber,
+                            image: story.user.image,
+                          ),
                         ),
                         const Spacer(),
+                        if (story.isOwnStory)
+                          ButtonTapWidget(
+                            onTap: () {
+                              controller.pauseStory();
+                              showDialog(
+                                context: context, // Passed correctly here
+                                barrierDismissible:
+                                    false, // Prevents closing by tapping outside without resuming the story
+                                builder: (dialogContext) => AlertDialog(
+                                  title: const Text("Delete Story"),
+                                  content: const Text(
+                                    "Are you sure you want to delete this story?",
+                                  ),
+                                  actions: [
+                                    // Cancel Button
+                                    TextButton(
+                                      onPressed: () {
+                                        controller.resumeStory();
+                                        Navigator.pop(
+                                          dialogContext,
+                                        ); // Closes the dialog
+                                      },
+                                      child: const Text("Cancel"),
+                                    ),
+                                    // Delete Button
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(
+                                          dialogContext,
+                                        ); // Closes the dialog
+                                        controller.deleteStory(story.id);
+                                        controller
+                                            .closeStoryViewer(); // Closes the story screen
+                                      },
+                                      child: const Text(
+                                        "Delete",
+                                        style: TextStyle(color: Colors.red),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                            child: Container(
+                              margin: const EdgeInsets.only(right: 8),
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: AppColors.kAccentColor,
+                              ),
+                              child: const Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Icon(
+                                  Icons.delete,
+                                  color: Colors.redAccent,
+                                  size: 18,
+                                ),
+                              ),
+                            ),
+                          ),
                         ButtonTapWidget(
                           onTap: () {
                             controller.closeStoryViewer();

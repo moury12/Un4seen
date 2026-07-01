@@ -35,9 +35,9 @@ class StoriesPage extends StatelessWidget {
             Obx(() {
               int itemCount =
                   controller.isStoriesLoading.value &&
-                      controller.stories.isEmpty
+                      controller.allStories.isEmpty
                   ? 6
-                  : controller.stories.length + 1;
+                  : controller.allStories.length + 1;
 
               return SliverPadding(
                 padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -58,7 +58,7 @@ class StoriesPage extends StatelessWidget {
 
                       // While Loading, show Shimmer placeholders
                       if (controller.isStoriesLoading.value &&
-                          controller.stories.isEmpty) {
+                          controller.allStories.isEmpty) {
                         return GenericSlantedCard(
                           isLeft: index % 2 == 0,
                           child: Container(
@@ -71,7 +71,7 @@ class StoriesPage extends StatelessWidget {
 
                       // Show actual Stories
                       final actualIndex = index - 1;
-                      final story = controller.stories[actualIndex];
+                      final story = controller.allStories[actualIndex];
                       return StoryCard(
                         isLeft: index % 2 == 0,
                         story: story,

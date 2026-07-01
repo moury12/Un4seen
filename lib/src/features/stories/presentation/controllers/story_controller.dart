@@ -39,13 +39,21 @@ class StoryController extends GetxController {
   final ImagePicker _picker = ImagePicker();
   // Feed States
   final RxList<StoryModel> stories = <StoryModel>[].obs;
+  final RxList<StoryModel> myStories = <StoryModel>[].obs;
   final RxList<StoryModel> savedStories = <StoryModel>[].obs;
   final RxBool isStoriesLoading = false.obs;
   final RxBool isSavedLoading = false.obs;
   final RxBool isViewingSaved = false.obs;
 
+  List<StoryModel> get allStories {
+    final List<StoryModel> combined = [];
+    combined.addAll(myStories);
+    combined.addAll(stories.where((s) => !myStories.any((ms) => ms.id == s.id)));
+    return combined;
+  }
+
   List<StoryModel> get activeStories =>
-      isViewingSaved.value ? savedStories : stories;
+      isViewingSaved.value ? savedStories : allStories;
 
   final List<String> categories = [
     'Bikes',
@@ -67,6 +75,7 @@ class StoryController extends GetxController {
   void onInit() {
     super.onInit();
     fetchStories();
+    fetchMyStories();
     setupSocket();
     isSoundOn.listen((bool on) {
       if (on) {
@@ -111,13 +120,40 @@ class StoryController extends GetxController {
   Future<void> fetchStories() async {
     try {
       isStoriesLoading.value = true;
-      final res = await _api.get('/stories');
+      final res = await _api.get('/stories?isDeleted=false');
       if (res.data['success']) {
         final List data = res.data['data'];
         stories.assignAll(data.map((e) => StoryModel.fromJson(e)).toList());
       }
     } finally {
       isStoriesLoading.value = false;
+    }
+  }
+
+  Future<void> fetchMyStories() async {
+    try {
+      final res = await _api.get('/stories?isDeleted=false&isOwnStory=true');
+      if (res.data['success']) {
+        final List data = res.data['data'];
+        myStories.assignAll(data.map((e) => StoryModel.fromJson(e)).toList());
+      }
+    } catch (e) {
+      log("Error fetching my stories: $e");
+    }
+  }
+
+  Future<void> deleteStory(String id) async {
+    try {
+      final res = await _api.delete('/stories/$id');
+      if (res.data['success'] == true) {
+        CustomSnackbar.showSuccess('Story deleted successfully');
+        myStories.removeWhere((s) => s.id == id);
+        stories.removeWhere((s) => s.id == id);
+        savedStories.removeWhere((s) => s.id == id);
+      }
+    } catch (e) {
+      log(e.toString());
+      CustomSnackbar.showError('Failed to delete story');
     }
   }
 

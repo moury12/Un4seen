@@ -1,5 +1,4 @@
 import 'package:un4seen/src/core/widgets/custom_scaffold.dart';
-import 'package:un4seen/src/features/home/presentation/pages/notification_page.dart';
 import 'package:un4seen/src/features/home/presentation/widgets/activity_summary_tile_widget.dart';
 import 'package:un4seen/src/features/home/presentation/widgets/bike_of_the_week_widget.dart';
 import 'package:un4seen/src/features/home/presentation/widgets/quick_action_row_widget.dart';
@@ -15,7 +14,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final giveawayController = Get.find<GiveawayController>();
-
+    final profileController = Get.find<ProfileController>();
     final homeController = Get.find<HomeController>();
 
     return CustomScaffold(
@@ -50,18 +49,51 @@ class HomePage extends StatelessWidget {
                   homeController.homeFeedData.value?.user?.isSyndicateMember ??
                   false;
               if (!isSyndicate) return const SizedBox.shrink();
-              return Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                decoration: BoxDecoration(
-                  color: AppColors.kPrimaryColor,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: CustomText(
-                  AppStaticStrings.exclusiveSyndicateMember.tr,
-                  color: Colors.white,
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                ),
+              return Row(
+                spacing: 6,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: AppColors.kPrimaryColor,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: CustomText(
+                      profileController.userProfile.value.memberNumber
+                          .toString(),
+                      color: Colors.white,
+                      variant: TextVariant.labelSmall,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 4,
+                      ),
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          colors: [Color(0xFF00A6FF), Color(0xFF0066CC)],
+                        ),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: CustomText(
+                        isSyndicate
+                            ? AppStaticStrings.exclusiveSyndicateMember.tr
+                            : "Guest Member",
+                        color: Colors.white,
+                        variant: TextVariant.labelSmall,
+                        fontWeight: FontWeight.bold,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ),
+                ],
               );
             }),
           ],

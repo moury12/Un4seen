@@ -205,6 +205,19 @@ class MyBikeProfilePage extends StatelessWidget {
                             '${AppRoutes.singleBikeDetails}/${rb.id}',
                             extra: {'fromMember': false},
                           ),
+                          onDelete: () {
+                            Get.defaultDialog(
+                              title: "Delete Bike",
+                              middleText: "Are you sure you want to delete this retired bike?",
+                              textConfirm: "Delete",
+                              textCancel: "Cancel",
+                              confirmTextColor: Colors.white,
+                              onConfirm: () {
+                                Get.back();
+                                controller.deleteRetiredBike(rb.id);
+                              },
+                            );
+                          },
                         ),
                       );
                     }, childCount: controller.retiredBikes.length),

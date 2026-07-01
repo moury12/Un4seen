@@ -67,7 +67,7 @@ class RateRidePage extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               CustomText(
-                                'My Rides',
+                                'My Ride Uploads',
                                 color: AppColors.kPrimaryColor,
                               ),
                               space12W,

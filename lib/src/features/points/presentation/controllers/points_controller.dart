@@ -37,7 +37,7 @@ class PointsController extends GetxController {
           response.data['data'],
         );
         if (dashboardData.value?.dailyLogin.canClaimDaily == true) {
-          claimDaily();
+          // claimDaily();
         }
       }
     } catch (e) {

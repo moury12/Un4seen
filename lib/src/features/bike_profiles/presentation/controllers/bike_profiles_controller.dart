@@ -158,6 +158,22 @@ class BikeProfilesController extends GetxController {
     }
   }
 
+  Future<void> deleteRetiredBike(String id) async {
+    try {
+      isLoading.value = true;
+      final res = await _api.delete('/bikes/retired/$id');
+      if (res.data['success']) {
+        CustomSnackbar.showSuccess(res.data['message'] ?? 'Retired bike deleted');
+        fetchBikeProfile();
+      }
+    } catch (e) {
+      log(e.toString());
+      CustomSnackbar.showError('Failed to delete retired bike');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
   Future<void> fetchSingleBike(String id) async {
     try {
       isLoading.value = true;

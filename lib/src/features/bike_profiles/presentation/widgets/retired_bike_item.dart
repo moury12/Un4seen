@@ -6,6 +6,7 @@ class RetiredBikeItem extends StatelessWidget {
   final String subtitle;
   final String imageUrl;
   final VoidCallback? onTap;
+  final VoidCallback? onDelete;
 
   const RetiredBikeItem({
     super.key,
@@ -13,6 +14,7 @@ class RetiredBikeItem extends StatelessWidget {
     required this.subtitle,
     required this.imageUrl,
     this.onTap,
+    this.onDelete,
   });
 
   @override
@@ -69,18 +71,11 @@ class RetiredBikeItem extends StatelessWidget {
               ),
             ),
           ),
-          // CustomButton(
-          //   text: 'View Details',
-          //   onPressed: () {},
-          //   isExpanding: false,
-          //   borderRadius: 8,
-          //   textStyle: const TextStyle(
-          //     fontSize: 10,
-          //     fontWeight: FontWeight.bold,
-          //   ),
-          //   backgroundColor: Colors.white,
-          //   textColor: AppColors.kPrimaryColor,
-          // ),
+          if (onDelete != null)
+            IconButton(
+              icon: const Icon(Icons.delete, color: Colors.redAccent),
+              onPressed: onDelete,
+            ),
         ],
       ),
     );

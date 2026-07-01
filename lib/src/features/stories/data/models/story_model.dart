@@ -7,6 +7,7 @@ class StoryModel {
   final String category;
   int heartCount;
   bool isHearted;
+  bool isOwnStory;
   bool isSaved;
   final String timeAgo;
 
@@ -20,6 +21,7 @@ class StoryModel {
     required this.heartCount,
     required this.isHearted,
     required this.isSaved,
+    required this.isOwnStory,
     required this.timeAgo,
   });
 
@@ -41,6 +43,7 @@ class StoryModel {
       category: data['category']?.toString() ?? 'Bikes',
       heartCount: data['heartCount'] is int ? data['heartCount'] : 0,
       isHearted: data['isHearted'] ?? false,
+      isOwnStory: data['isOwnStory'] ?? false,
       // If it comes from the 'my-saved' endpoint (nested), isSaved is likely true
       isSaved: data['isSaved'] ?? hasNestedStory, 
       // Pick timeAgo from the root json first, then fallback to nested data

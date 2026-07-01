@@ -22,7 +22,7 @@ class _MyRidesPageState extends State<MyRidesPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text("My Rides"),
+        title: const Text("My Ride Uploads"),
       ),
       body: Obx(() {
         if (controller.isMyRidesLoading.value) {
