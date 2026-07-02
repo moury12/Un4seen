@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
+import 'package:un4seen/src/core/routes/app_routes.dart';
 import 'package:un4seen/src/core/utils/url_launcher_utils.dart';
 import 'package:un4seen/src/features/points/points_export.dart';
 import 'package:un4seen/src/features/points/presentation/widgets/activity_log_tile.dart';
@@ -211,10 +213,13 @@ class _PointsPageState extends State<PointsPage> {
                                 ),
                               ),
                       ),
-                      PointsActionCard(
-                        title: AppStaticStrings.referralBonus.tr,
-                        subtitle: AppStaticStrings.referralBonusDesc.tr,
-                        icon: AppIcons.share,
+                      GestureDetector(
+                        onTap: () => context.push(AppRoutes.referAndEarn),
+                        child: PointsActionCard(
+                          title: AppStaticStrings.referralBonus.tr,
+                          subtitle: AppStaticStrings.referralBonusDesc.tr,
+                          icon: AppIcons.share,
+                        ),
                       ),
                       space8H,
 
@@ -285,7 +290,7 @@ class _PointsPageState extends State<PointsPage> {
                       ),
                       space8H,
                       _milestoneRewardTile(
-                        "assets/icons/dollar_icon.svg",
+                        AppIcons.google,
                         AppStaticStrings.storeCreditTitle.tr,
                         AppStaticStrings.reviewComplete.tr,
                         () {
@@ -294,6 +299,7 @@ class _PointsPageState extends State<PointsPage> {
                             builder: (context) => SubmitProofDialog(
                               platformCtrl: _platformCtrl,
                               postLinkCtrl: _postLinkCtrl,
+                              hint: "Google Review."
                             ),
                           );
                         },

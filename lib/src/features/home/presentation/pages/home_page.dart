@@ -224,11 +224,18 @@ class HomePage extends StatelessWidget {
                       variant: TextVariant.titleLarge,
                       fontWeight: FontWeight.bold,
                     ),
-                    ActivitySummaryTileWidget(
-                      icon: AppIcons.badge,
-                      title:
-                          "+${homeData.thisWeekStats!.pointsEarned} points earned",
-                      subtitle: AppStaticStrings.keepShredding.tr,
+                    ButtonTapWidget(
+                      onTap: () {
+                        if (Get.isRegistered<NavigationController>()) {
+                          Get.find<NavigationController>().changeIndex(3);
+                        }
+                      },
+                      child: ActivitySummaryTileWidget(
+                        icon: AppIcons.badge,
+                        title:
+                            "+${homeData.thisWeekStats!.pointsEarned} points earned",
+                        subtitle: AppStaticStrings.keepShredding.tr,
+                      ),
                     ),
                     ActivitySummaryTileWidget(
                       icon: AppIcons.camera,

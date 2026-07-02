@@ -15,7 +15,15 @@ class ShopPage extends StatelessWidget {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(AppStaticStrings.shopTitle.tr),
-        actions: [Image.asset(AppIcons.logo, height: 44), space12W],
+        actions: [
+          ButtonTapWidget(
+            onTap: () => UrlLauncherUtils.launchExternalUrl(
+              "https://www.un4seendecals.com/",
+            ),
+            child: Image.asset(AppIcons.logo, height: 44),
+          ),
+          space12W,
+        ],
       ),
       body: RefreshIndicator(
         onRefresh: () => controller.fetchProducts(isRefresh: true),
@@ -56,7 +64,7 @@ class ShopPage extends StatelessWidget {
                             child: ButtonTapWidget(
                               onTap: () {
                                 UrlLauncherUtils.launchExternalUrl(
-                                  "https://un4seendecals.com/products",
+                                  "https://www.un4seendecals.com/",
                                 );
                               },
                               child: CustomText(

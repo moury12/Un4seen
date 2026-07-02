@@ -102,7 +102,8 @@ class AppStaticStrings {
   static const String delete = 'Delete';
   static const String retry = 'Retry';
   static const String submit = 'Submit';
-  static const String applyReferral = 'Apply Referral code';
+  static const String applyReferral =
+      'Enter the referral code shared by your friend. Reward points will be applied after successful verification.';
 
   static const String competitions = 'Competitions';
   static const String giveaway = 'Giveaway';
@@ -421,7 +422,7 @@ class AppStaticStrings {
   static const String ended = 'ENDED';
   static const String howCompetitionsWork = 'How Competitions Work';
   static const String submitYourDesign = 'Submit Your Design';
-  static const String uploadDesignImage = 'Image Upload';
+  static const String uploadDesignImage = 'upload screen shot image of review';
   static const String designNameLabel = 'Design Name';
   static const String designNameHint = 'e.g., Flame Thunder, Neon Storm...';
   static const String submitEntry = 'Submit Entry';

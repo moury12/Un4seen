@@ -1,19 +1,6 @@
-import 'package:un4seen/src/src_export.dart';
 
 
-class ShopStoreFeedModel {
-  final List<ProductModel> result;
-  final PaginationMeta meta;
 
-  ShopStoreFeedModel({required this.result, required this.meta});
-
-  factory ShopStoreFeedModel.fromJson(Map<String, dynamic> json) {
-    return ShopStoreFeedModel(
-      result: (json['result'] as List).map((e) => ProductModel.fromJson(e)).toList(),
-      meta: PaginationMeta.fromJson(json['meta']),
-    );
-  }
-}
 
 class ProductModel {
   final int id;

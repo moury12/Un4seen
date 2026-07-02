@@ -8,7 +8,7 @@ class ShopController extends GetxController {
   final RxList<ProductModel> products = <ProductModel>[].obs;
   final RxBool isLoading = false.obs;
   final RxBool isMoreLoading = false.obs;
-  
+
   int _currentPage = 1;
   int _totalPage = 1;
 
@@ -25,18 +25,24 @@ class ShopController extends GetxController {
     }
 
     try {
-      if (_currentPage == 1) isLoading.value = true;
-      else isMoreLoading.value = true;
+      if (_currentPage == 1)
+        isLoading.value = true;
+      else
+        isMoreLoading.value = true;
 
-      final response = await _api.get('/shopify/store-feed?page=$_currentPage&limit=10');
-      
+      final response = await _api.get('/shopify/app-store');
+
       if (response.data['success']) {
-        final feed = ShopStoreFeedModel.fromJson(response.data['data']);
-        products.addAll(feed.result);
-        _totalPage = feed.meta.totalPage;
+        products.value = (response.data['data'] as List)
+            .map((e) => ProductModel.fromJson(e))
+            .toList();
+
+        // _totalPage = feed.meta.totalPage;
       }
     } catch (e) {
-      print('❌ Shop Fetch Error: $e | lib/src/features/home/presentation/controllers/shop_controller.dart');
+      print(
+        '❌ Shop Fetch Error: $e | lib/src/features/home/presentation/controllers/shop_controller.dart',
+      );
     } finally {
       isLoading.value = false;
       isMoreLoading.value = false;

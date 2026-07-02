@@ -132,11 +132,13 @@ class SubmitProofDialog extends StatelessWidget {
     super.key,
     required TextEditingController platformCtrl,
     required TextEditingController postLinkCtrl,
+    this.hint,
   }) : _platformCtrl = platformCtrl,
        _postLinkCtrl = postLinkCtrl;
 
   final TextEditingController _platformCtrl;
   final TextEditingController _postLinkCtrl;
+  final String? hint;
 
   @override
   Widget build(BuildContext context) {
@@ -246,7 +248,7 @@ class SubmitProofDialog extends StatelessWidget {
                   fontSize: 10,
                 ),
                 title: AppStaticStrings.platform.tr,
-                hintText: "Eg. Facebook",
+                hintText: hint ?? "Eg. Facebook",
                 textEditingController: _platformCtrl,
 
                 inputTextStyle: const TextStyle(color: Colors.white),
