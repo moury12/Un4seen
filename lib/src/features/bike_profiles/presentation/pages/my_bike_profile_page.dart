@@ -206,16 +206,48 @@ class MyBikeProfilePage extends StatelessWidget {
                             extra: {'fromMember': false},
                           ),
                           onDelete: () {
-                            Get.defaultDialog(
-                              title: "Delete Bike",
-                              middleText: "Are you sure you want to delete this retired bike?",
-                              textConfirm: "Delete",
-                              textCancel: "Cancel",
-                              confirmTextColor: Colors.white,
-                              onConfirm: () {
-                                Get.back();
-                                controller.deleteRetiredBike(rb.id);
-                              },
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                title: const Text("Delete Bike"),
+                                titlePadding: const EdgeInsets.all(
+                                  12,
+                                ).copyWith(bottom: 0),
+                                contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                ),
+                                content: const Text(
+                                  "Are you sure you want to delete this retired bike?",
+                                ),
+                                actions: [
+                                  // Cancel Button
+                                  ButtonTapWidget(
+                                    onTap: () {
+                                      Navigator.pop(
+                                        context,
+                                      ); // Closes the dialog
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: CustomText(
+                                        AppStaticStrings.cancel.tr,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                  // Confirm Button (using ElevatedButton to keep the white text look)
+                                  CustomButton(
+                                    text: AppStaticStrings.delete.tr,
+                                    onPressed: () {
+                                      Navigator.pop(
+                                        context,
+                                      ); // Closes the dialog
+                                      controller.deleteRetiredBike(rb.id);
+                                    },
+                                  ),
+                                ],
+                              ),
                             );
                           },
                         ),
