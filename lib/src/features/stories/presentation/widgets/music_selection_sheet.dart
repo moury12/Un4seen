@@ -55,13 +55,30 @@ class _MusicSelectionSheetState extends State<MusicSelectionSheet> {
             fontWeight: FontWeight.bold,
           ),
           space12H,
-          CustomTextField(
-            hintText: "Search music...",
-            prefixIcon: const Icon(Icons.search, color: Colors.white54),
-            onChanged: (v) {
-              controller.searchQuery.value = v;
-              controller.fetchMusic();
-            },
+          Row(
+            children: [
+              Expanded(
+                child: CustomTextField(
+                  hintText: "Search music...",
+                  prefixIcon: const Icon(Icons.search, color: Colors.black),
+                  onChanged: (v) {
+                    controller.searchQuery.value = v;
+                    controller.fetchMusic();
+                  },
+                ),
+              ),
+              space12W,
+              ButtonTapWidget(
+                onTap: () => controller.fetchMusic(),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: const Icon(
+                    Icons.refresh,
+                    color: AppColors.kPrimaryColor,
+                  ),
+                ),
+              ),
+            ],
           ),
           space12H,
           // Categories

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "889628891642",
+    "project_id": "un4seen-ea8bf",
+    "storage_bucket": "un4seen-ea8bf.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:889628891642:android:bb0cff5120c1b5694eac43",
+        "android_client_info": {
+          "package_name": "com.jam.un4seen.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCeTmcfQkbdv5SmIbgogi_JLEKin5-wq14"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

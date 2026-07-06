@@ -57,7 +57,7 @@ class GiveawayItem {
   final String title;
   final String prizeDescription;
   final String image;
-  final int valueInNzd;
+  final num valueInNzd;
   final DateTime endDate;
   final bool isMajorGiveaway;
   final GiveawayWinner? winner;

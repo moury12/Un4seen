@@ -142,11 +142,7 @@ class HomePage extends StatelessWidget {
             padding: AppPadding.getPadding12(context),
             child: Obx(() {
               if (homeController.isLoading.value) {
-                return SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.8,
-                  width: double.infinity,
-                  child: _buildShimmerLoading(),
-                );
+                return _buildShimmerLoading();
               }
 
               final homeData = homeController.homeFeedData.value;
