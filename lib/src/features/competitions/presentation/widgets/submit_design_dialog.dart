@@ -169,6 +169,8 @@ class _SubmitDesignDialogState extends State<SubmitDesignDialog> {
                       imagePath,
                     );
                     if (success) {
+                      _designNameController.clear();
+                      homeController.selectedRideImage.value = null;
                       context.pop();
                       return;
                     } else {

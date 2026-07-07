@@ -1,12 +1,9 @@
 import 'dart:async';
 import 'package:get/get.dart' as getx;
-import 'package:get/state_manager.dart';
 import 'package:un4seen/src/features/profile/data/models/profile_model.dart';
-import '../../../../core/widgets/custom_snackbar.dart';
 import '../../../../core/services/local_storage_service.dart';
 import '../../../../core/services/socket_service.dart';
-import '../../../../core/routes/app_router.dart';
-import '../../../../core/routes/app_routes.dart';
+
 import '../../../../src_export.dart';
 import '../../domain/repositories/auth_repository.dart';
 
@@ -19,7 +16,7 @@ class AuthController extends getx.GetxController {
   final getx.Rx<AuthStatus> status = AuthStatus.initial.obs;
 
   // --- Timer Observables ---
-  final getx.RxInt resendSeconds = 60.obs;
+  final getx.RxInt resendSeconds = 120.obs;
   final getx.RxBool canResend = false.obs;
   Timer? _timer;
 
@@ -34,7 +31,7 @@ class AuthController extends getx.GetxController {
 
   void startResendTimer() {
     canResend.value = false;
-    resendSeconds.value = 60;
+    resendSeconds.value = 120;
     _timer?.cancel();
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (resendSeconds.value > 0) {
@@ -152,6 +149,8 @@ void _reinitializeAllBindings() {
           AppRouter.router.push(AppRoutes.setupProfile);
         }
       } else {
+              status.value = AuthStatus.error;
+
         CustomSnackbar.showError('Invalid OTP');
       }
     } catch (e) {

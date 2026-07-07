@@ -175,18 +175,20 @@ class MyBikeProfilePage extends StatelessWidget {
                         ),
                         space8H,
                       ],
-                      Row(
-                        spacing: 8,
-                        children: [
-                          SvgPicture.asset(AppIcons.settings),
-                          CustomText(
-                            AppStaticStrings.retiredBikes.tr,
-                            variant: TextVariant.titleMedium,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ],
-                      ),
-                      space8H,
+                      if (controller.retiredBikes.isNotEmpty) ...[
+                        Row(
+                          spacing: 8,
+                          children: [
+                            SvgPicture.asset(AppIcons.settings),
+                            CustomText(
+                              AppStaticStrings.retiredBikes.tr,
+                              variant: TextVariant.titleMedium,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ],
+                        ),
+                        space8H,
+                      ],
                     ]),
                   ),
                 ),

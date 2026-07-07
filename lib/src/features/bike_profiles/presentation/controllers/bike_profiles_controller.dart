@@ -42,6 +42,13 @@ class BikeProfilesController extends GetxController {
     buildNoteSets[noteIndex].pointControllers.add(TextEditingController());
   }
 
+  void removePointFromNote(int noteIndex, int pointIndex) {
+    if (buildNoteSets[noteIndex].pointControllers.length > 1) {
+      buildNoteSets[noteIndex].pointControllers[pointIndex].dispose();
+      buildNoteSets[noteIndex].pointControllers.removeAt(pointIndex);
+    }
+  }
+
   void removeBuildNote(int index) {
     if (buildNoteSets.length > 1) {
       buildNoteSets[index].dispose();
@@ -163,7 +170,9 @@ class BikeProfilesController extends GetxController {
       isLoading.value = true;
       final res = await _api.delete('/bikes/retired/$id');
       if (res.data['success']) {
-        CustomSnackbar.showSuccess(res.data['message'] ?? 'Retired bike deleted');
+        CustomSnackbar.showSuccess(
+          res.data['message'] ?? 'Retired bike deleted',
+        );
         fetchBikeProfile();
       }
     } catch (e) {
@@ -273,6 +282,8 @@ class BikeProfilesController extends GetxController {
 
         fetchBikeProfile();
         return true;
+      } else {
+        CustomSnackbar.showError(res.data['message']);
       }
     } catch (e) {
       log(e.toString());
@@ -322,14 +333,14 @@ class BikeProfilesController extends GetxController {
           'data': jsonEncode(dataMap),
         });
       } else {
-        formData = dio.FormData.fromMap({
-          'data': jsonEncode(dataMap),
-        });
+        formData = dio.FormData.fromMap({'data': jsonEncode(dataMap)});
       }
 
       final res = await _api.patch('/bikes/$bikeId', data: formData);
       if (res.data['success'] == true) {
-        CustomSnackbar.showSuccess(res.data['message'] ?? "Bike updated successfully");
+        CustomSnackbar.showSuccess(
+          res.data['message'] ?? "Bike updated successfully",
+        );
         profileImage.value = null;
 
         fetchBikeProfile();
@@ -382,12 +393,15 @@ class BikeProfilesController extends GetxController {
         imageQuality: 85,
       );
 
-   if (pickedFile != null) {
-      final cropped = await ImageCropperUtils.cropImage(pickedFile.path, isProfile: true);
-      if (cropped != null) {
-        profileImage.value = cropped;
+      if (pickedFile != null) {
+        final cropped = await ImageCropperUtils.cropImage(
+          pickedFile.path,
+          isProfile: true,
+        );
+        if (cropped != null) {
+          profileImage.value = cropped;
+        }
       }
-    }
     } catch (e) {
       Get.snackbar('Error', 'Failed to pick image: $e');
     }

@@ -1,14 +1,49 @@
+import 'dart:async';
+
 import 'package:flutter_svg/svg.dart';
 
 import '../../../../src_export.dart';
 
-class MajorGiveawayCardWidget extends StatelessWidget {
+class MajorGiveawayCardWidget extends StatefulWidget {
   final GiveawayItem giveaway;
   const MajorGiveawayCardWidget({super.key, required this.giveaway});
 
   @override
+  State<MajorGiveawayCardWidget> createState() => _MajorGiveawayCardWidgetState();
+}
+
+class _MajorGiveawayCardWidgetState extends State<MajorGiveawayCardWidget> {
+  late Timer _timer;
+  late DateTime _now;
+
+  @override
+  void initState() {
+    super.initState();
+    _now = DateTime.now();
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (mounted) {
+        setState(() {
+          _now = DateTime.now();
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final controller = Get.find<GiveawayController>();
+    final diff = widget.giveaway.endDate.difference(_now);
+    final isNegative = diff.isNegative;
+
+    final String mo = isNegative ? '00' : (diff.inDays ~/ 30).toString().padLeft(2, '0');
+    final String d = isNegative ? '00' : (diff.inDays % 30).toString().padLeft(2, '0');
+    final String h = isNegative ? '00' : (diff.inHours % 24).toString().padLeft(2, '0');
+    final String m = isNegative ? '00' : (diff.inMinutes % 60).toString().padLeft(2, '0');
 
     return Container(
       decoration: BoxDecoration(
@@ -25,7 +60,7 @@ class MajorGiveawayCardWidget extends StatelessWidget {
                   top: Radius.circular(appRadius16),
                 ),
                 child: CustomNetworkImage(
-                  imageUrl: giveaway.image,
+                  imageUrl: widget.giveaway.image,
                   height: 200,
                   width: double.infinity,
                 ),
@@ -87,13 +122,11 @@ class MajorGiveawayCardWidget extends StatelessWidget {
                           size: 14,
                         ),
                         space8W,
-                        Obx(
-                          () => CustomText(
-                            "DRAW IN: Only ${controller.majorMonths.value} Months Away",
-                            color: Colors.white,
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                          ),
+                        CustomText(
+                          "DRAW IN: Only $mo Months Away",
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
                         ),
                       ],
                     ),
@@ -101,38 +134,24 @@ class MajorGiveawayCardWidget extends StatelessWidget {
                 ),
                 space12H,
                 // --- DYNAMIC MAJOR COUNTDOWN ---
-                Obx(
-                  () => Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    spacing: 12,
-                    children: [
-                      CountdownUnitWidget(
-                        value: controller.majorMonths.value,
-                        label: "MO",
-                      ),
-                      CountdownUnitWidget(
-                        value: controller.majorDays.value,
-                        label: "D",
-                      ),
-                      CountdownUnitWidget(
-                        value: controller.majorHours.value,
-                        label: "H",
-                      ),
-                      CountdownUnitWidget(
-                        value: controller.majorMins.value,
-                        label: "M",
-                      ),
-                    ],
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  spacing: 12,
+                  children: [
+                    CountdownUnitWidget(value: mo, label: "MO"),
+                    CountdownUnitWidget(value: d, label: "D"),
+                    CountdownUnitWidget(value: h, label: "H"),
+                    CountdownUnitWidget(value: m, label: "M"),
+                  ],
                 ),
                 space12H,
                 CustomText(
-                  giveaway.title,
+                  widget.giveaway.title,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
                 ),
                 CustomText(
-                  giveaway.prizeDescription,
+                  widget.giveaway.prizeDescription,
                   color: Colors.white70,
                   fontSize: 12,
                 ),
@@ -144,7 +163,7 @@ class MajorGiveawayCardWidget extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
                 CustomText(
-                  giveaway.title,
+                  widget.giveaway.title,
                   variant: TextVariant.headlineSmall,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
@@ -161,7 +180,7 @@ class MajorGiveawayCardWidget extends StatelessWidget {
                     border: Border.all(color: Colors.white24),
                   ),
                   child: CustomText(
-                    "${AppStaticStrings.rrp.tr} \$${giveaway.valueInNzd} nzd",
+                    "${AppStaticStrings.rrp.tr} \$${widget.giveaway.valueInNzd} nzd",
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),

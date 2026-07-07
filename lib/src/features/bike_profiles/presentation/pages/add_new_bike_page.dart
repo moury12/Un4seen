@@ -143,7 +143,7 @@ class _AddNewBikePageState extends State<AddNewBikePage> {
                   spacing: 10,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Center(child: ImageUploadSection()),
+                    Center(child: ImageUploadSection(initialImageUrl: widget.bikeToEdit?.image)),
                     LabeledInputField(
                       label: "Year",
                       hint: "e.g., 2024",
@@ -209,10 +209,21 @@ class _AddNewBikePageState extends State<AddNewBikePage> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                LabeledInputField(
-                                  label: "Upgrade Category",
-                                  hint: "e.g., Engine Mods",
-                                  controller: noteSet.titleController,
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: LabeledInputField(
+                                        label: "Upgrade Category",
+                                        hint: "e.g., Engine Mods",
+                                        controller: noteSet.titleController,
+                                      ),
+                                    ),
+                                    if (controller.buildNoteSets.length > 1)
+                                      IconButton(
+                                        icon: const Icon(Icons.delete_outline, color: Colors.redAccent),
+                                        onPressed: () => controller.removeBuildNote(noteIdx),
+                                      ),
+                                  ],
                                 ),
                                 space12H,
 
@@ -237,6 +248,11 @@ class _AddNewBikePageState extends State<AddNewBikePage> {
                                                       .pointControllers[pointIdx],
                                                 ),
                                               ),
+                                              if (noteSet.pointControllers.length > 1)
+                                                IconButton(
+                                                  icon: const Icon(Icons.remove_circle_outline, color: Colors.redAccent, size: 20),
+                                                  onPressed: () => controller.removePointFromNote(noteIdx, pointIdx),
+                                                ),
                                             ],
                                           ),
                                         );
@@ -303,6 +319,15 @@ class _AddNewBikePageState extends State<AddNewBikePage> {
                         text: widget.bikeToEdit != null ? "Update Bike" : "Add Bike",
                         isLoading: controller.isLoading.value,
                         onPressed: () async {
+                          if (yearCtrl.text.trim().isEmpty ||
+                              makeCtrl.text.trim().isEmpty ||
+                              modelCtrl.text.trim().isEmpty ||
+                              typeCtrl.text.trim().isEmpty ||
+                              colorCtrl.text.trim().isEmpty) {
+                            CustomSnackbar.showError("Please fill all required fields");
+                            return;
+                          }
+
                           final res = widget.bikeToEdit != null
                               ? await controller.updateBike(
                                   bikeId: widget.bikeToEdit!.id,
@@ -324,6 +349,15 @@ class _AddNewBikePageState extends State<AddNewBikePage> {
                                   estimatedCost: estimatedCostCtrl.text.trim(),
                                 );
                           if (res) {
+                            yearCtrl.clear();
+                            makeCtrl.clear();
+                            modelCtrl.clear();
+                            typeCtrl.clear();
+                            colorCtrl.clear();
+                            bikeHoursCtrl.clear();
+                            estimatedCostCtrl.clear();
+                            controller.buildNoteSets.clear();
+                            controller.buildNoteSets.add(BuildNoteSet());
                             context.pop();
                           }
                         },

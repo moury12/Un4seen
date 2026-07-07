@@ -289,20 +289,28 @@ class _PointsPageState extends State<PointsPage> {
                         fontWeight: FontWeight.bold,
                       ),
                       space8H,
-                      _milestoneRewardTile(
-                        AppIcons.google,
-                        AppStaticStrings.storeCreditTitle.tr,
-                        AppStaticStrings.reviewComplete.tr,
-                        () {
-                          showDialog(
-                            context: context,
-                            builder: (context) => SubmitProofDialog(
-                              platformCtrl: _platformCtrl,
-                              postLinkCtrl: _postLinkCtrl,
-                              hint: "Google Review."
-                            ),
+                      GestureDetector(
+                        onTap: () {
+                          UrlLauncherUtils.launchExternalUrl(
+                            "https://maps.app.goo.gl/onunNcUsNmj7EJGn9",
                           );
                         },
+                        child: _milestoneRewardTile(
+                          AppIcons.google,
+
+                          AppStaticStrings.storeCreditTitle.tr,
+                          AppStaticStrings.reviewComplete.tr,
+                          () {
+                            showDialog(
+                              context: context,
+                              builder: (context) => SubmitProofDialog(
+                                platformCtrl: _platformCtrl,
+                                postLinkCtrl: _postLinkCtrl,
+                                hint: "Google Review.",
+                              ),
+                            );
+                          },
+                        ),
                       ),
 
                       CustomText(

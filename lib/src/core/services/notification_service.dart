@@ -1,9 +1,12 @@
 import 'dart:io';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class NotificationService {
   final FirebaseMessaging messaging = FirebaseMessaging.instance;
+  final FlutterLocalNotificationsPlugin localNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
 
   Future<void> initialize() async {
     await messaging.requestPermission(
@@ -21,6 +24,24 @@ class NotificationService {
       );
     }
 
+    // Initialize Local Notifications
+    const AndroidInitializationSettings initializationSettingsAndroid =
+        AndroidInitializationSettings('@mipmap/ic_launcher');
+    
+    const DarwinInitializationSettings initializationSettingsIOS =
+        DarwinInitializationSettings(
+      requestSoundPermission: true,
+      requestBadgePermission: true,
+      requestAlertPermission: true,
+    );
+    
+    const InitializationSettings initializationSettings = InitializationSettings(
+      android: initializationSettingsAndroid,
+      iOS: initializationSettingsIOS,
+    );
+    
+    await localNotificationsPlugin.initialize(initializationSettings);
+
     String? token = await messaging.getToken();
 
     print("FCM Token:");
@@ -29,6 +50,7 @@ class NotificationService {
     FirebaseMessaging.onMessage.listen((message) {
       print(message.notification?.title);
       print(message.notification?.body);
+      _showLocalNotification(message);
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((message) {
@@ -40,7 +62,29 @@ class NotificationService {
         print("Opened from terminated state");
       }
     });
+  }
 
-   
+  Future<void> _showLocalNotification(RemoteMessage message) async {
+    if (message.notification == null) return;
+
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+        AndroidNotificationDetails(
+      'high_importance_channel', // id
+      'High Importance Notifications', // title
+      importance: Importance.max,
+      priority: Priority.high,
+      icon: '@mipmap/ic_launcher',
+    );
+    
+    const NotificationDetails platformChannelSpecifics = NotificationDetails(
+      android: androidPlatformChannelSpecifics,
+    );
+    
+    await localNotificationsPlugin.show(
+      message.notification.hashCode,
+      message.notification?.title,
+      message.notification?.body,
+      platformChannelSpecifics,
+    );
   }
 }
