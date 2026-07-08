@@ -4,6 +4,7 @@ abstract class AuthRepository {
   Future<Map<String, dynamic>> login({
     required String email,
     required String password,
+    required String token,
   });
   Future<String> forgotPassword({required String email});
   Future<bool> verifyOtp({required String email, required String otp});

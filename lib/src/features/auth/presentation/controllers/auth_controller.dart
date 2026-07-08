@@ -4,6 +4,8 @@ import 'package:un4seen/src/features/profile/data/models/profile_model.dart';
 import '../../../../core/services/local_storage_service.dart';
 import '../../../../core/services/socket_service.dart';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
+
 import '../../../../src_export.dart';
 import '../../domain/repositories/auth_repository.dart';
 
@@ -75,9 +77,18 @@ class AuthController extends getx.GetxController {
   Future<void> login(String email, String password) async {
     try {
       status.value = AuthStatus.loading;
+      
+      String token = '';
+      try {
+        token = await FirebaseMessaging.instance.getToken() ?? '';
+      } catch (e) {
+        print('Error getting FCM token: $e');
+      }
+
       final response = await _repository.login(
         email: email,
         password: password,
+        token: token,
       );
 
       _handleApiResponse(
@@ -185,7 +196,12 @@ Future<void> logout() async {
       getx.Get.find<SocketService>().disconnectSocket();
     }
 
-    // 2. Clear local storage (Tokens, etc.)
+    // 2. Call logout API and clear local storage (Tokens, etc.)
+    try {
+      await _repository.logout();
+    } catch (e) {
+      print("Error calling logout API: $e");
+    }
     final storage = getx.Get.find<LocalStorageService>();
     await storage.clear();
 

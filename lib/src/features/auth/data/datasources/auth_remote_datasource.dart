@@ -4,6 +4,7 @@ abstract class AuthRemoteDataSource {
   Future<Map<String, dynamic>> login({
     required String email,
     required String password,
+    required String token,
   });
   Future<String> forgotPassword({required String email});
   Future<bool> verifyOtp({required String email, required String otp});
@@ -12,6 +13,7 @@ abstract class AuthRemoteDataSource {
     required String newPassword,
   });
   Future<void> resendOtp({required String email});
+  Future<void> logout();
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
@@ -22,10 +24,11 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<Map<String, dynamic>> login({
     required String email,
     required String password,
+    required String token,
   }) async {
     final response = await _api.post(
       '/auth/login',
-      data: {'email': email, 'password': password},
+      data: {'email': email, 'password': password, 'fcmToken': token},
     );
     return response.data;
   }
@@ -63,5 +66,10 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   Future<void> resendOtp({required String email}) async {
     await _api.post('/auth/resend-otp', data: {'email': email});
+  }
+
+  @override
+  Future<void> logout() async {
+    await _api.post('/auth/logout');
   }
 }

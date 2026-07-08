@@ -11,7 +11,9 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Map<String, dynamic>> login({
     required String email,
     required String password,
-  }) => _remote.login(email: email, password: password);
+    required String token
+  }) =>
+      _remote.login(email: email, password: password, token: token);
 
   @override
   Future<String> forgotPassword({required String email}) =>
@@ -33,7 +35,7 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<void> logout() async {
-    // TODO: Implement logout
+    await _remote.logout();
   }
 
   @override

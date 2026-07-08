@@ -94,6 +94,7 @@ class StoryController extends GetxController {
 
     socketService.listenToEvent('NEW_STORY', (data) {
       log("🔔 New Story received via Socket");
+      log(data);
       final newStory = StoryModel.fromJson(data);
       stories.insert(0, newStory); // Add to top of list
     });
