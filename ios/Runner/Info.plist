@@ -63,5 +63,7 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSMicrophoneUsageDescription</key>
+<string>This app does not use the microphone directly. This permission is included because of integrated libraries that support optional media features.</string>
 </dict>
 </plist>
