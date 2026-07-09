@@ -40,7 +40,7 @@ class NotificationService {
       iOS: initializationSettingsIOS,
     );
     
-    await localNotificationsPlugin.initialize(initializationSettings);
+    await localNotificationsPlugin.initialize(settings: initializationSettings);
 
     String? token = await messaging.getToken();
 
@@ -81,10 +81,10 @@ class NotificationService {
     );
     
     await localNotificationsPlugin.show(
-      message.notification.hashCode,
-      message.notification?.title,
-      message.notification?.body,
-      platformChannelSpecifics,
+      id: message.notification.hashCode,
+      title: message.notification?.title,
+      body: message.notification?.body,
+      notificationDetails: platformChannelSpecifics,
     );
   }
 }
