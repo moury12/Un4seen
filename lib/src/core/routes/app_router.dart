@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:un4seen/src/core/utils/app_strings.dart';
 import 'package:un4seen/src/features/bike_profiles/bike_profiles_export.dart';
@@ -53,6 +54,7 @@ class AppRouter {
 
   static final GoRouter router = GoRouter(
     initialLocation: AppRoutes.splash,
+    navigatorKey: Get.key,
     debugLogDiagnostics: true,
     routes: [
       GoRoute(

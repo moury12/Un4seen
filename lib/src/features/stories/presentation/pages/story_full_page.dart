@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -328,6 +330,9 @@ class _StoryFullPageState extends State<StoryFullPage>
                 if (controller.activeStories.isEmpty) return const SizedBox();
                 final story = controller
                     .activeStories[controller.currentStoryIndex.value];
+                log(
+                  "-------------------- ${story.isSaved.toString()} ,, ${story.id}",
+                );
                 return Row(
                   children: [
                     CustomIconButtonWidget(

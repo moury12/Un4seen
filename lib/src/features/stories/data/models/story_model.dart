@@ -42,10 +42,12 @@ class StoryModel {
       contentType: data['contentType']?.toString() ?? 'image',
       category: data['category']?.toString() ?? 'Bikes',
       heartCount: data['heartCount'] is int ? data['heartCount'] : 0,
-      isHearted: data['isHearted'] ?? false,
-      isOwnStory: data['isOwnStory'] ?? false,
-      // If it comes from the 'my-saved' endpoint (nested), isSaved is likely true
-      isSaved: data['isSaved'] ?? hasNestedStory, 
+      
+      // In saved stories, these flags are at the root level (json), not inside 'story' (data)
+      isHearted: json['isHearted'] ?? data['isHearted'] ?? false,
+      isOwnStory: json['isOwnStory'] ?? data['isOwnStory'] ?? false,
+      isSaved: json['isSaved'] ?? data['isSaved'] ?? hasNestedStory, 
+      
       // Pick timeAgo from the root json first, then fallback to nested data
       timeAgo: json['timeAgo']?.toString() ?? data['timeAgo']?.toString() ?? 'Just now',
       

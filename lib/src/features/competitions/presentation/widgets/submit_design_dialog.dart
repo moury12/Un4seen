@@ -174,6 +174,8 @@ class _SubmitDesignDialogState extends State<SubmitDesignDialog> {
                       context.pop();
                       return;
                     } else {
+                      _designNameController.clear();
+                      homeController.selectedRideImage.value = null;
                       context.pop();
                       // CustomSnackbar.showError('Please enter a design name.');
                       return;

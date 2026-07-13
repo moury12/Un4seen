@@ -13,6 +13,7 @@ class AddNewBikePage extends StatefulWidget {
 }
 
 class _AddNewBikePageState extends State<AddNewBikePage> {
+  final _formKey = GlobalKey<FormState>();
   final yearCtrl = TextEditingController(text: kDebugMode ? "2024" : "");
   final makeCtrl = TextEditingController(text: kDebugMode ? "Honda" : "");
   final modelCtrl = TextEditingController(text: kDebugMode ? "CRF250R" : "");
@@ -52,6 +53,20 @@ class _AddNewBikePageState extends State<AddNewBikePage> {
           controller.buildNoteSets.add(noteSet);
         }
       }
+    }else{
+      final controller = Get.find<BikeProfilesController>();
+      controller.buildNoteSets.clear();
+      yearCtrl.clear();
+      makeCtrl.clear();
+      modelCtrl.clear();
+      typeCtrl.clear();
+      colorCtrl.clear();
+      bikeHoursCtrl.clear();
+      estimatedCostCtrl.clear();
+      noteTitleCtrl.clear();
+      notePointCtrl.clear();
+      controller.buildNoteSets.add(BuildNoteSet());
+
     }
   }
 
@@ -137,12 +152,14 @@ class _AddNewBikePageState extends State<AddNewBikePage> {
 
             // --- CONTENT SECTION ---
             Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  spacing: 10,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+              child: Form(
+                key: _formKey,
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    spacing: 10,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
                     Center(child: ImageUploadSection(initialImageUrl: widget.bikeToEdit?.image)),
                     LabeledInputField(
                       label: "Year",
@@ -319,11 +336,7 @@ class _AddNewBikePageState extends State<AddNewBikePage> {
                         text: widget.bikeToEdit != null ? "Update Bike" : "Add Bike",
                         isLoading: controller.isLoading.value,
                         onPressed: () async {
-                          if (yearCtrl.text.trim().isEmpty ||
-                              makeCtrl.text.trim().isEmpty ||
-                              modelCtrl.text.trim().isEmpty ||
-                              typeCtrl.text.trim().isEmpty ||
-                              colorCtrl.text.trim().isEmpty) {
+                          if (!_formKey.currentState!.validate()) {
                             CustomSnackbar.showError("Please fill all required fields");
                             return;
                           }
@@ -370,9 +383,9 @@ class _AddNewBikePageState extends State<AddNewBikePage> {
                 ),
               ),
             ),
-          ],
-        ),
-      ),
-    );
+        )],
+          ),)
+      );
+   
   }
 }

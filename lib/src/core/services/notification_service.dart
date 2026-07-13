@@ -72,7 +72,7 @@ class NotificationService {
       'high_importance_channel', // id
       'High Importance Notifications', // title
       importance: Importance.max,
-      priority: Priority.high,
+      priority: Priority.high, 
       icon: '@mipmap/ic_launcher',
     );
     
