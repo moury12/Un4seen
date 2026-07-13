@@ -11,6 +11,8 @@ class PointsController extends GetxController {
 
   final RxBool isLoading = false.obs;
   final RxBool isSubmittingProof = false.obs;
+  final RxBool isRedeeming = false.obs;
+  final RxList<String> redeemedCodes = <String>[].obs;
   final Rxn<PointsDashboardModel> dashboardData = Rxn<PointsDashboardModel>();
   final Rx<File?> selectedProofImage = Rx<File?>(null);
   final ImagePicker _picker = ImagePicker();
@@ -19,6 +21,7 @@ class PointsController extends GetxController {
   void onInit() {
     super.onInit();
     fetchDashboard();
+    fetchRedeemedCodes();
   }
 
   Future<void> pickProofImage() async {
@@ -152,5 +155,41 @@ class PointsController extends GetxController {
       isSubmittingProof.value = false;
     }
     return false;
+  }
+
+  // ── Fetch Redeemed Codes ──────────────────────────────────
+  Future<void> fetchRedeemedCodes() async {
+    try {
+      final res = await _api.get('/shred-points/my-history?source=redeem');
+      if (res.data['success']) {
+        final List<dynamic> history = res.data['data'];
+        redeemedCodes.value = history
+            .map((item) => item['shopifyDiscountCode']?.toString() ?? '')
+            .where((code) => code.isNotEmpty)
+            .toList();
+      }
+    } catch (e) {
+      print('❌ Fetch Redeemed Codes Error: $e');
+    }
+  }
+
+  // ── Redeem Points for Shopify Code ───────────────────────
+  Future<void> redeemPoints() async {
+    try {
+      isRedeeming.value = true;
+      final res = await _api.post('/shred-points/redeem');
+      if (res.data['success']) {
+        CustomSnackbar.showSuccess(res.data['message']);
+        fetchDashboard();
+        fetchRedeemedCodes();
+      } else {
+        CustomSnackbar.showError(res.data['message']);
+      }
+    } catch (e) {
+      print('❌ Redeem Points Error: $e');
+      CustomSnackbar.showError("Failed to redeem points");
+    } finally {
+      isRedeeming.value = false;
+    }
   }
 }

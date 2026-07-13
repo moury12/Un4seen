@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
@@ -324,6 +325,104 @@ class _PointsPageState extends State<PointsPage> {
                       ) {
                         final reward = data.individualMilestones[index];
                         return MilestoneRewardWidget(data: reward);
+                      }),
+
+                      space8H,
+
+                      CustomText(
+                        "Shopify Rewards",
+                        variant: TextVariant.titleLarge,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      space8H,
+                      Obx(() {
+                        if (controller.redeemedCodes.isEmpty) {
+                          return GradientContainer(
+                            gradientColors: const [
+                              AppColors.kPrimaryDarkColor,
+                              AppColors.kPrimaryColor,
+                            ],
+                            child: Column(
+                              children: [
+                                const CustomText(
+                                  "You haven't redeemed any Shopify discount codes yet. Redeem 1000 points for a store credit!",
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                  textAlign: TextAlign.center,
+                                ),
+                                space12H,
+                                CustomButton(
+                                  text: "Redeem Points",
+                                  isLoading: controller.isRedeeming.value,
+                                  onPressed: controller.redeemPoints,
+                                  backgroundColor: Colors.white.withValues(
+                                    alpha: 0.2,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        } else {
+                          return Column(
+                            children: [
+                              ...controller.redeemedCodes.map(
+                                (code) => GradientContainer(
+                                  margin: const EdgeInsets.only(bottom: 8),
+                                  gradientColors: const [
+                                    AppColors.kPrimaryDarkColor,
+                                    AppColors.kPrimaryColor,
+                                  ],
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          const CustomText(
+                                            "Discount Code",
+                                            color: Colors.white70,
+                                            fontSize: 10,
+                                          ),
+                                          CustomText(
+                                            code,
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16,
+                                          ),
+                                        ],
+                                      ),
+                                      ButtonTapWidget(
+                                        onTap: () {
+                                          Clipboard.setData(
+                                            ClipboardData(text: code),
+                                          );
+                                          CustomSnackbar.showSuccess(
+                                            "Code copied to clipboard!",
+                                          );
+                                        },
+                                        child: const Icon(
+                                          Icons.copy,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              space8H,
+                              CustomButton(
+                                text: "Redeem More Points",
+                                isLoading: controller.isRedeeming.value,
+                                onPressed: controller.redeemPoints,
+                                isOutlined: true,
+                                borderColor: AppColors.kPrimaryColor,
+                                textColor: AppColors.kPrimaryColor,
+                              ),
+                            ],
+                          );
+                        }
                       }),
 
                       space8H,

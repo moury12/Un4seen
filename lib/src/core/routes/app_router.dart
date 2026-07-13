@@ -51,10 +51,11 @@ import '../../features/chat/presentation/pages/builds_mods_page.dart';
 
 class AppRouter {
   AppRouter._();
-
+static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
   static final GoRouter router = GoRouter(
     initialLocation: AppRoutes.splash,
     navigatorKey: Get.key,
+    
     debugLogDiagnostics: true,
     routes: [
       GoRoute(

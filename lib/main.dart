@@ -68,12 +68,15 @@ class MyApp extends StatelessWidget {
     SubscriptionBinding().dependencies();
     BikeProfilesBinding().dependencies();
 
-    return MaterialApp.router(
+    return GetMaterialApp.router(
       title: 'UN4SEEN',
       // scaffoldMessengerKey: CustomSnackbar.messengerKey,
       debugShowCheckedModeBanner: false,
       theme: AppTheme.light,
-      routerConfig: AppRouter.router,
+      routeInformationProvider: AppRouter.router.routeInformationProvider,
+      routeInformationParser: AppRouter.router.routeInformationParser,
+      routerDelegate: AppRouter.router.routerDelegate,
+      backButtonDispatcher: AppRouter.router.backButtonDispatcher,
     );
   }
 }

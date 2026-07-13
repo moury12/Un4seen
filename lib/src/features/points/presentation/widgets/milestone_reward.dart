@@ -45,7 +45,7 @@ class MilestoneRewardWidget extends StatelessWidget {
                   ],
                 ),
               ),
-              if (!data.isClaimed && data.isUnlocked)
+              if (data.isUnlocked)
                 ButtonTapWidget(
                   child: Container(
                     padding: const EdgeInsets.symmetric(
@@ -68,13 +68,17 @@ class MilestoneRewardWidget extends StatelessWidget {
                             ),
                           )
                         : CustomText(
-                            AppStaticStrings.claim.tr,
+                            data.isClaimed
+                                ? AppStaticStrings.claimed.tr
+                                : AppStaticStrings.claim.tr,
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
                           ),
                   ),
                   onTap: () {
-                    controller.claimMilestone(data.id);
+                    if (!data.isClaimed) {
+                      controller.claimMilestone(data.id);
+                    }
                   },
                 ),
 

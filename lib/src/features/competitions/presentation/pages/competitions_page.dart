@@ -38,9 +38,16 @@ class CompetitionsPage extends StatelessWidget {
           ],
         ),
         actions: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Image.asset(AppIcons.logo, height: 38),
+          ButtonTapWidget(
+            onTap: () {
+              if (Get.isRegistered<NavigationController>()) {
+                Get.find<NavigationController>().changeIndex(0);
+              }
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Image.asset(AppIcons.logo, height: 38),
+            ),
           ),
         ],
       ),

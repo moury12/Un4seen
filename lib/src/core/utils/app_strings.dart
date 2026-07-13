@@ -18,6 +18,7 @@ class AppStaticStrings {
   static const String platform = 'Platform';
   static const String postLink = 'Post Link';
   static const String viewAll = 'View All';
+  static const String claimed= "Claimed";
   static const String updateBike = 'Update Bike Profile';
   static const String dontHaveAccountRegister =
       "Don't have an account? Register";
@@ -401,18 +402,19 @@ class AppStaticStrings {
   static const String ebikeChallenge = 'Ebike Front Plate Graphics Challenge';
   static const String bmxToEbike = 'bmx to Ebike';
   static const String howCompetitionsWorkDesc = 'How Competitions Work';
+  
   static const String submitPhase =
-      'Submit Phase: Upload your design during the open entry period';
+      'Submit Phase: Upload your design during the open entry window';
   static const String votingPhase =
-      'Voting Phase: Community votes on their favorite designs';
-  static const String winnerAnnounced =
-      'Winner Announced: Highest votes wins the prize';
+      'Voting Phase: The Syndicate community votes for their favourite designs';
+  static const String winnerSelection =
+      'Winner Selection: The highest voted design is chosen as the winner';
   static const String productionPhase =
-      'Production: Winning design gets professionally rendered';
+      'produced & Showcased: Winning design is featured on www.un4seendecals.com';
   static const String websiteFeature =
       'Website Feature: Your design showcased on Un4seen.com';
   static const String prizeDelivery =
-      'Prize Delivery: Winner receives their custom product (freight only)';
+      'Prize Delivery: Winner receives their custom made product (pay freight only)';
   static const String winnersCircle = 'Winner\'s Circle';
   static const String thisWeek = 'This Week';
   static const String viewEntries = 'View Entries';
