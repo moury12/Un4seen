@@ -1,22 +1,43 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:un4seen/src/core/theme/app_colors.dart';
 import 'package:un4seen/src/core/utils/app_constants.dart';
 import 'package:un4seen/src/core/utils/app_images.dart';
 import 'package:un4seen/src/core/utils/app_strings.dart';
 import 'package:un4seen/src/core/widgets/custom_scaffold.dart';
+import 'package:un4seen/src/core/utils/url_launcher_utils.dart';
+import '../controllers/orders_controller.dart';
+import '../../data/models/shopify_order_model.dart';
 
 class OrdersPage extends StatelessWidget {
   const OrdersPage({super.key});
 
+  String _formatDate(String dateStr) {
+    try {
+      final dateTime = DateTime.parse(dateStr);
+      final months = [
+        'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+      ];
+      return "${months[dateTime.month - 1]} ${dateTime.day}, ${dateTime.year}";
+    } catch (e) {
+      return dateStr;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final controller = Get.isRegistered<OrdersController>()
+        ? Get.find<OrdersController>()
+        : Get.put(OrdersController());
+
     return CustomScaffold(
       appBar: AppBar(
         title: const Text(
           AppStaticStrings.myOrders,
           style: TextStyle(
-            color: Color(0xFF1A1A2E), // Dark color as per image
+            color: Color(0xFF1A1A2E),
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -28,89 +49,89 @@ class OrdersPage extends StatelessWidget {
           onPressed: () => Navigator.pop(context),
         ),
       ),
-      body: ListView(
-        padding: AppPadding.getPadding12H(context),
-        children: [
-          _buildOrderCard(
-            title: AppStaticStrings.syndicateTShirt,
-            orderDetail: 'Order #ORD-2834 • Apr 20, 2026',
-            status: 'SHIPPED',
-            estimatedDelivery: 'Apr 28, 2026',
-            steps: [
-              _OrderStepModel(
-                title: 'Order Placed',
-                icon: AppIcons.cell,
-                isCompleted: true,
-              ),
-              _OrderStepModel(
-                title: 'In Production',
-                icon: AppIcons.cell,
-                isCompleted: true,
-              ),
-              _OrderStepModel(
-                title: 'Ready',
-                icon: AppIcons.checked,
-                isCompleted: true,
-              ),
-              _OrderStepModel(
-                title: 'Shipped',
-                icon: AppIcons.car,
-                isCompleted: true,
-                isCurrent: true,
-              ),
-            ],
+      body: Obx(() {
+        if (controller.isLoading.value) {
+          return const Center(
+            child: CircularProgressIndicator(
+              color: AppColors.kPrimaryColor,
+            ),
+          );
+        }
+
+        if (controller.ordersList.isEmpty) {
+          return RefreshIndicator(
+            onRefresh: () => controller.fetchOrders(),
+            child: ListView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              children: [
+                SizedBox(height: MediaQuery.of(context).size.height * 0.3),
+                const Center(
+                  child: Text(
+                    'No orders found.',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.grey,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        }
+
+        return RefreshIndicator(
+          onRefresh: () => controller.fetchOrders(),
+          child: ListView.builder(
+            padding: AppPadding.getPadding12H(context),
+            itemCount: controller.ordersList.length,
+            itemBuilder: (context, index) {
+              final order = controller.ordersList[index];
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 20),
+                child: _buildOrderCard(context, order),
+              );
+            },
           ),
-          const SizedBox(height: 20),
-          _buildOrderCard(
-            title: 'Yamaha Graphics Kit- Quik Blue',
-            orderDetail: 'Order #41899 • Apr 18th, 2026',
-            status: 'DELIVERED',
-            estimatedDelivery: 'Apr 28, 2026',
-            steps: [
-              _OrderStepModel(
-                title: 'Order Placed',
-                icon: AppIcons.cell,
-                isCompleted: true,
-              ),
-              _OrderStepModel(
-                title: 'In Print Que is its own step. After design proof',
-                icon: AppIcons.cell,
-                isCompleted: true,
-              ),
-              _OrderStepModel(
-                title: 'Lamination & Cut Process',
-                icon: AppIcons.checked,
-                isCompleted: true,
-              ),
-              _OrderStepModel(
-                title: 'Packaging',
-                icon: AppIcons.checked,
-                isCompleted: true,
-              ),
-              _OrderStepModel(
-                title: 'Ready',
-                icon: AppIcons.checked,
-                isCompleted: true,
-              ),
-              _OrderStepModel(
-                title: 'Shipped',
-                icon: AppIcons.car,
-                isCompleted: true,
-              ),
-            ],
-          ),
-        ],
-      ),
+        );
+      }),
     );
   }
 
-  Widget _buildOrderCard({
-    required String title,
-    required String orderDetail,
-    required String status,
-    required String estimatedDelivery,
-    required List<_OrderStepModel> steps,
-  }) {
+  Widget _buildOrderCard(BuildContext context, ShopifyOrder order) {
+    final title = order.items.isNotEmpty
+        ? order.items.map((e) => e.title).join(', ')
+        : 'No items';
+    
+    final orderDetail = 'Order ${order.orderNumber} • ${_formatDate(order.date)}';
+    
+    String estimatedDelivery = 'Not available';
+    try {
+      final orderDate = DateTime.parse(order.date);
+      final deliveryDate = orderDate.add(const Duration(days: 7));
+      estimatedDelivery = _formatDate(deliveryDate.toIso8601String());
+    } catch (_) {}
+
+    final lowercaseTitle = title.toLowerCase();
+    final isGraphicsKit = lowercaseTitle.contains('graphics') || lowercaseTitle.contains('kit');
+    
+    final List<_OrderStepModel> steps = isGraphicsKit
+        ? [
+            _OrderStepModel(title: 'Order Placed', icon: AppIcons.cell),
+            _OrderStepModel(title: 'In Print Que', icon: AppIcons.cell),
+            _OrderStepModel(title: 'Lamination & Cut Process', icon: AppIcons.checked),
+            _OrderStepModel(title: 'Packaging', icon: AppIcons.checked),
+            _OrderStepModel(title: 'Ready', icon: AppIcons.checked),
+            _OrderStepModel(title: 'Shipped', icon: AppIcons.car),
+          ]
+        : [
+            _OrderStepModel(title: 'Order Placed', icon: AppIcons.cell),
+            _OrderStepModel(title: 'In Production', icon: AppIcons.cell),
+            _OrderStepModel(title: 'Ready', icon: AppIcons.checked),
+            _OrderStepModel(title: 'Shipped', icon: AppIcons.car),
+          ];
+
+    final isDelivered = order.orderStatus.toLowerCase() == 'delivered';
+
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -128,7 +149,6 @@ class OrdersPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -157,16 +177,13 @@ class OrdersPage extends StatelessWidget {
                 ),
               ),
               Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 6,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
-                  status,
+                  order.orderStatus.toUpperCase(),
                   style: const TextStyle(
                     color: AppColors.kPrimaryColor,
                     fontSize: 10,
@@ -177,11 +194,11 @@ class OrdersPage extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 24),
-
-          // Stepper
           ...List.generate(steps.length, (index) {
             final step = steps[index];
             final isLast = index == steps.length - 1;
+            final isStepCompleted = isDelivered || index <= order.currentStep;
+            final isStepCurrent = !isDelivered && index == order.currentStep;
 
             return IntrinsicHeight(
               child: Row(
@@ -193,14 +210,9 @@ class OrdersPage extends StatelessWidget {
                         width: 40,
                         height: 40,
                         decoration: BoxDecoration(
-                          color: step.isCurrent
-                              ? Colors.white
-                              : AppColors.kPrimaryColor,
+                          color: isStepCurrent ? Colors.white : AppColors.kPrimaryColor,
                           shape: BoxShape.circle,
-                          border: Border.all(
-                            color: Colors.white.withOpacity(0.2),
-                            width: 1,
-                          ),
+                          border: Border.all(color: Colors.white.withOpacity(0.2), width: 1),
                         ),
                         child: Center(
                           child: SvgPicture.asset(
@@ -208,7 +220,7 @@ class OrdersPage extends StatelessWidget {
                             width: 20,
                             height: 20,
                             colorFilter: ColorFilter.mode(
-                              step.isCurrent ? Colors.black : Colors.white,
+                              isStepCurrent ? Colors.black : Colors.white,
                               BlendMode.srcIn,
                             ),
                           ),
@@ -229,19 +241,13 @@ class OrdersPage extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const SizedBox(
-                          height: 10,
-                        ), // Alignment with icon center
+                        const SizedBox(height: 10),
                         Text(
                           step.title,
                           style: TextStyle(
-                            color: Colors.white.withOpacity(
-                              step.isCompleted ? 1 : 0.6,
-                            ),
+                            color: Colors.white.withOpacity(isStepCompleted ? 1 : 0.6),
                             fontSize: 13,
-                            fontWeight: step.isCompleted
-                                ? FontWeight.w500
-                                : FontWeight.normal,
+                            fontWeight: isStepCompleted ? FontWeight.w500 : FontWeight.normal,
                           ),
                         ),
                         if (!isLast) const SizedBox(height: 24),
@@ -252,7 +258,6 @@ class OrdersPage extends StatelessWidget {
               ),
             );
           }),
-
           const SizedBox(height: 20),
           Center(
             child: Text(
@@ -263,6 +268,23 @@ class OrdersPage extends StatelessWidget {
               ),
             ),
           ),
+          if (order.trackingInfo != null && order.trackingInfo!.url.isNotEmpty) ...[
+            const SizedBox(height: 16),
+            Center(
+              child: ElevatedButton.icon(
+                onPressed: () => UrlLauncherUtils.launchExternalUrl(order.trackingInfo!.url),
+                icon: const Icon(Icons.track_changes, color: AppColors.kPrimaryColor),
+                label: Text(
+                  'Track Order (${order.trackingInfo!.company})',
+                  style: const TextStyle(color: AppColors.kPrimaryColor),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                ),
+              ),
+            ),
+          ],
         ],
       ),
     );
@@ -272,13 +294,6 @@ class OrdersPage extends StatelessWidget {
 class _OrderStepModel {
   final String title;
   final String icon;
-  final bool isCompleted;
-  final bool isCurrent;
 
-  _OrderStepModel({
-    required this.title,
-    required this.icon,
-    this.isCompleted = false,
-    this.isCurrent = false,
-  });
+  _OrderStepModel({required this.title, required this.icon});
 }
