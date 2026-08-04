@@ -252,12 +252,12 @@ class ChatController extends GetxController {
         final msg = ChatMessageModel.fromJson(data);
 
         // Only insert if the user is currently looking at this specific channel
-        if (activeChatIsChannel && msg.channel == activeChatId) {
+        if (activeChatIsChannel && msg.channelId == activeChatId) {
           activeMessages.insert(0, msg);
           log("✅ [UI] Message inserted into active list");
         } else {
           log(
-            "ℹ️ [UI] Message for different channel ignored (Current: $activeChatId, Incoming: ${msg.channel})",
+            "ℹ️ [UI] Message for different channel ignored (Current: $activeChatId, Incoming: ${msg.channelId})",
           );
         }
 
@@ -271,13 +271,13 @@ class ChatController extends GetxController {
     _socket.listenToEvent('RECEIVE_PRIVATE_MESSAGE', (data) {
       final msg = ChatMessageModel.fromJson(data);
       if (!activeChatIsChannel && activeChatId != null) {
-        if (activeDmChannelId == null && msg.channel.isNotEmpty) {
-          activeDmChannelId = msg.channel;
+        if (activeDmChannelId == null && msg.channelId.isNotEmpty) {
+          activeDmChannelId = msg.channelId;
         }
         final dm = dmsList.firstWhereOrNull((e) => e.userId == activeChatId);
         final isMatch =
-            (activeDmChannelId != null && msg.channel == activeDmChannelId) ||
-            (dm != null && msg.channel == dm.id) ||
+            (activeDmChannelId != null && msg.channelId == activeDmChannelId) ||
+            (dm != null && msg.channelId == dm.id) ||
             (msg.sender.id == activeChatId);
         if (isMatch) {
           activeMessages.insert(0, msg);

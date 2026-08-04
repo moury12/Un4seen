@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -34,6 +35,45 @@ class CustomNetworkImage extends StatelessWidget {
     this.fit,
     this.isImagePreview = false,
   });
+
+  bool get _isLocalFile {
+    final trimmed = imageUrl.trim();
+    return trimmed.startsWith('file://') || trimmed.startsWith('/');
+  }
+
+  String _getCleanFilePath(String path) {
+    final trimmed = path.trim();
+    if (trimmed.startsWith('file://')) {
+      try {
+        return Uri.parse(trimmed).toFilePath();
+      } catch (_) {
+        return trimmed.substring(7);
+      }
+    }
+    return trimmed;
+  }
+
+  Widget _buildFallbackWidget() {
+    return Container(
+      height: height,
+      width: width,
+      decoration: BoxDecoration(
+        border: border,
+        shape: boxShape,
+        borderRadius: boxShape == BoxShape.circle
+            ? null
+            : BorderRadius.circular(radius ?? 8),
+        color: Colors.grey.withValues(alpha: 0.6),
+        image: DecorationImage(
+          image: AssetImage(
+            imageErrorUrl ?? 'assets/icons/placeholder.png',
+          ),
+          fit: BoxFit.cover,
+        ),
+      ),
+    );
+  }
+
   void showCustomDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -48,14 +88,22 @@ class CustomNetworkImage extends StatelessWidget {
                 panEnabled: true,
                 minScale: 0.5,
                 maxScale: 4.0,
-                child: CachedNetworkImage(
-                  imageUrl: imageUrl,
-
-                  fit: BoxFit.contain,
-                  placeholder: (context, url) => const Center(
-                    child: CircularProgressIndicator(color: Colors.white),
-                  ),
-                ),
+                child: _isLocalFile
+                    ? Image.file(
+                        File(_getCleanFilePath(imageUrl)),
+                        fit: BoxFit.contain,
+                        errorBuilder: (context, error, stackTrace) =>
+                            _buildFallbackWidget(),
+                      )
+                    : CachedNetworkImage(
+                        imageUrl: imageUrl,
+                        fit: BoxFit.contain,
+                        placeholder: (context, url) => const Center(
+                          child: CircularProgressIndicator(color: Colors.white),
+                        ),
+                        errorWidget: (context, url, error) =>
+                            _buildFallbackWidget(),
+                      ),
               ),
               Positioned(
                 top: 0,
@@ -80,84 +128,102 @@ class CustomNetworkImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+   final trimmedUrl = imageUrl.trim();
+  
+  // এটা add করো temporarily
+  // debugPrint('🔍 URL received: "$trimmedUrl"');
+  
+  if (trimmedUrl.isEmpty || 
+      trimmedUrl == 'file:///' ||
+      trimmedUrl == 'file://' ||
+      !trimmedUrl.startsWith('http') && !_isLocalFile) {
+    debugPrint('❌ BAD URL blocked: "$trimmedUrl"');
+    return _buildFallbackWidget();
+  }
+
     return GestureDetector(
       onTap: isImagePreview == true
           ? () {
               showCustomDialog(context);
             }
           : null,
-      child: CachedNetworkImage(
-        imageUrl: imageUrl,
-        memCacheHeight: (height != null && height!.isFinite)
-            ? height!.toInt()
-            : 300,
-        memCacheWidth: (width != null && width!.isFinite)
-            ? width!.toInt()
-            : 300,
-        imageBuilder: (context, imageProvider) {
-          return Container(
-            height: height,
-            width: width,
-            decoration: BoxDecoration(
-              border: border,
-              borderRadius: boxShape == BoxShape.circle
-                  ? null
-                  : borderRadius ?? BorderRadius.circular(radius ?? 8),
-              shape: boxShape,
-              color: backgroundColor,
-              image: DecorationImage(
-                image: imageProvider,
-                fit: fit ?? BoxFit.cover,
-                colorFilter: colorFilter,
+      child: _isLocalFile
+          ? Container(
+              height: height,
+              width: width,
+              decoration: BoxDecoration(
+                border: border,
+                borderRadius: boxShape == BoxShape.circle
+                    ? null
+                    : borderRadius ?? BorderRadius.circular(radius ?? 8),
+                shape: boxShape,
+                color: backgroundColor,
               ),
-            ),
-            child: child,
-          );
-        },
-        placeholder: (context, url) {
-          return SizedBox(
-            height: height,
-            width: width,
-            child: Center(
-              child: Padding(
-                padding: AppPadding.getPadding8(context),
-                child: const CircularProgressIndicator(
-                  color: AppColors.kPrimaryColor,
-                  strokeWidth: 1,
+              child: ClipRRect(
+                borderRadius: boxShape == BoxShape.circle
+                    ? BorderRadius.circular(9999)
+                    : borderRadius ?? BorderRadius.circular(radius ?? 8),
+                child: Image.file(
+                  File(_getCleanFilePath(imageUrl)),
+                  height: height,
+                  width: width,
+                  fit: fit ?? BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) =>
+                      _buildFallbackWidget(),
                 ),
               ),
+            )
+          : CachedNetworkImage(
+              imageUrl: imageUrl,
+              memCacheHeight: (height != null && height!.isFinite)
+                  ? height!.toInt()
+                  : 300,
+              memCacheWidth: (width != null && width!.isFinite)
+                  ? width!.toInt()
+                  : 300,
+              imageBuilder: (context, imageProvider) {
+                return Container(
+                  height: height,
+                  width: width,
+                  decoration: BoxDecoration(
+                    border: border,
+                    borderRadius: boxShape == BoxShape.circle
+                        ? null
+                        : borderRadius ?? BorderRadius.circular(radius ?? 8),
+                    shape: boxShape,
+                    color: backgroundColor,
+                    image: DecorationImage(
+                      image: imageProvider,
+                      fit: fit ?? BoxFit.cover,
+                      colorFilter: colorFilter,
+                    ),
+                  ),
+                  child: child,
+                );
+              },
+              placeholder: (context, url) {
+                return SizedBox(
+                  height: height,
+                  width: width,
+                  child: Center(
+                    child: Padding(
+                      padding: AppPadding.getPadding8(context),
+                      child: const CircularProgressIndicator(
+                        color: AppColors.kPrimaryColor,
+                        strokeWidth: 1,
+                      ),
+                    ),
+                  ),
+                );
+              },
+              errorWidget: (context, url, error) {
+                return _buildFallbackWidget();
+              },
             ),
-          );
-        },
-        errorWidget: (context, url, error) {
-          return Container(
-            height: height,
-            width: width,
-            decoration: BoxDecoration(
-              border: border,
-              shape: boxShape,
-              borderRadius: boxShape == BoxShape.circle
-                  ? null
-                  : BorderRadius.circular(radius ?? 8),
-
-              color: Colors.grey.withValues(alpha: 0.6),
-
-              image: DecorationImage(
-                image: AssetImage(
-
-                  imageErrorUrl ?? 'assets/icons/placeholder.png',
-                
-                ),
-                fit: BoxFit.cover,
-              ),
-            ),
-            
-          );
-        },
-      ),
     );
   }
 }
+
 
 // class ListOfImages extends StatelessWidget {
 //   final bool isNetworkImage ;

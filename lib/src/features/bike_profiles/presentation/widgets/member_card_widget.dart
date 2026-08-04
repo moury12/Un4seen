@@ -2,7 +2,7 @@ import '../../../../src_export.dart';
 
 class MemberCardWidget extends StatelessWidget {
   final String name;
-  final String userId;  
+  final String userId;
   final String image;
   final String location;
   final String points;
@@ -18,7 +18,8 @@ class MemberCardWidget extends StatelessWidget {
     required this.points,
     required this.syndicateId,
     required this.memberType,
-    required this.followers, required this.userId,
+    required this.followers,
+    required this.userId,
   });
 
   @override
@@ -33,10 +34,7 @@ class MemberCardWidget extends StatelessWidget {
       child: ButtonTapWidget(
         radius: appRadius16,
         onTap: () {
-          context.push(
-            AppRoutes.memberDetails,
-            extra: userId
-          );
+          context.push(AppRoutes.memberDetails, extra: userId);
         },
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,

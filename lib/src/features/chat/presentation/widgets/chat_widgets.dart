@@ -10,6 +10,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/app_constants.dart';
 import '../../../../core/utils/app_strings.dart';
 import '../../../../core/widgets/button_tap_widget.dart';
+import '../../../../core/widgets/custom_network_image.dart';
 import '../../../../core/widgets/custom_text.dart';
 import '../../../../core/widgets/custom_text_field.dart';
 
@@ -38,7 +39,7 @@ class ChannelHeader extends StatelessWidget {
             children: [
               CustomText(args.title, fontSize: 16, fontWeight: FontWeight.bold),
               CustomText(
-                args.subtitle ??"",
+                args.subtitle ?? "",
                 fontSize: 12,
                 color: AppColors.kSecondaryTextColor,
               ),
@@ -105,7 +106,7 @@ class DirectHeader extends StatelessWidget {
                   ),
                   space4W,
                   CustomText(
-                    args.subtitle??"",
+                    args.subtitle ?? "",
                     fontSize: 12,
                     color: AppColors.kTextColor,
                   ),
@@ -321,14 +322,12 @@ class ChatBubble extends StatelessWidget {
             ),
           if (fileUrl != null && fileUrl!.isNotEmpty) ...[
             if (message.isNotEmpty) const SizedBox(height: 8),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: Image.network(
-                fileUrl!,
-                height: 120,
-                width: double.infinity,
-                fit: BoxFit.cover,
-              ),
+            CustomNetworkImage(
+              imageUrl: fileUrl!,
+              height: 120,
+              width: double.infinity,
+              radius: 8,
+              fit: BoxFit.cover,
             ),
           ],
           if (time != null) ...[

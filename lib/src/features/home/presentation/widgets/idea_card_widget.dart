@@ -133,15 +133,17 @@ class IdeaCardWidget extends StatelessWidget {
                   Icon(
                     model.isUpvoted ? Icons.thumb_up : Icons.thumb_up_outlined,
                     size: 16,
-                    color:
-                        model.isUpvoted ? AppColors.kPrimaryColor : Colors.white,
+                    color: model.isUpvoted
+                        ? AppColors.kPrimaryColor
+                        : Colors.white,
                   ),
                   space4H,
                   CustomText(
                     model.upvoteCount.toString(),
                     variant: TextVariant.labelSmall,
-                    color:
-                        model.isUpvoted ? AppColors.kPrimaryColor : Colors.white,
+                    color: model.isUpvoted
+                        ? AppColors.kPrimaryColor
+                        : Colors.white,
                     fontWeight: FontWeight.bold,
                   ),
                 ],

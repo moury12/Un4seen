@@ -55,32 +55,54 @@ class DirectMessageModel {
     );
   }
 }
-
 class ChatMessageModel {
   final String id;
-  final String text;
-  final String? file;
+  final String channelId;
   final ChatSender sender;
-  final String createdAt;
-  final String channel;
+  final String? text;
+  final String? file;      // ← nullable রাখো, empty string না
+  final bool isRead;
+  final bool isReported;
+  final DateTime createdAt;
+  final DateTime updatedAt;
 
   ChatMessageModel({
-    required this.id, required this.text, this.file,
-    required this.sender, required this.createdAt, required this.channel,
+    required this.id,
+    required this.channelId,
+    required this.sender,
+    this.text,
+    this.file,
+    required this.isRead,
+    required this.isReported,
+    required this.createdAt,
+    required this.updatedAt,
   });
 
+  bool get hasImage => file != null && file!.isNotEmpty && file!.startsWith('http');
+  bool get hasText  => text != null && text!.isNotEmpty;
+
   factory ChatMessageModel.fromJson(Map<String, dynamic> json) {
+    // file field safe parse
+    final rawFile = json['file'];
+    final safeFile = (rawFile is String && rawFile.isNotEmpty && rawFile.startsWith('http'))
+        ? rawFile
+        : null;   // ← http না হলে null করে দাও
+
     return ChatMessageModel(
-      id: json['_id'] ?? '',
-      text: json['text'] ?? '',
-      file: json['file'],
-      channel: json['channel'] ?? '',
-      createdAt: json['createdAt'] ?? '',
-      sender: ChatSender.fromJson(json['sender'] ?? {}),
+      id:        json['_id'] ?? '',
+      channelId: json['channel'] ?? '',
+      sender:    ChatSender.fromJson(json['sender'] as Map<String, dynamic>),
+      text:      json['text'] is String && (json['text'] as String).isNotEmpty
+                     ? json['text']
+                     : null,
+      file:      safeFile,   // ← এটাই fix
+      isRead:    json['isRead'] ?? false,
+      isReported: json['isReported'] ?? false,
+      createdAt: DateTime.parse(json['createdAt']),
+      updatedAt: DateTime.parse(json['updatedAt']),
     );
   }
 }
-
 class ChatSender {
   final String id;
   final String fullName;

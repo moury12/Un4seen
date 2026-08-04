@@ -14,7 +14,7 @@ import '../../../../core/routes/app_routes.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/app_constants.dart';
 import '../../../../core/utils/app_strings.dart';
-import '../../../../core/widgets/button_tap_widget.dart';
+import '../../../../core/widgets/custom_network_image.dart';
 import '../../../../core/widgets/custom_text.dart';
 import '../../../../core/widgets/custom_text_field.dart';
 
@@ -229,7 +229,7 @@ class _ChatPageState extends State<ChatPage> {
 
   Widget _buildMessageItem(ChatMessageModel msg) {
     final isMe = msg.sender.id == _currentUserId;
-    final time = _formatChatTime(msg.createdAt);
+    final time = _formatChatTime(msg.createdAt.toString());
 
     // If it's a Channel/Group chat
     if (_isChannel) {
@@ -239,7 +239,7 @@ class _ChatPageState extends State<ChatPage> {
         avatarUrl: msg.sender.image.isNotEmpty
             ? msg.sender.image
             : 'https://i.pravatar.cc/150',
-        message: msg.text,
+        message: msg.text ?? "",
         time: time,
         fileUrl: msg.file,
         isMe: isMe, // Pass isMe to the widget
@@ -248,14 +248,18 @@ class _ChatPageState extends State<ChatPage> {
 
     // If it's a Direct Message (1 to 1)
     if (isMe) {
-      return _OutgoingMessage(message: msg.text, time: time, fileUrl: msg.file);
+      return _OutgoingMessage(
+        message: msg.text ?? "",
+        time: time,
+        fileUrl: msg.file,
+      );
     }
 
     return _DirectIncomingMessage(
       avatarUrl: msg.sender.image.isNotEmpty
           ? msg.sender.image
           : (args.avatarUrl ?? 'https://i.pravatar.cc/150'),
-      message: msg.text,
+      message: msg.text ?? "",
       time: time,
       fileUrl: msg.file,
     );
@@ -289,7 +293,7 @@ class _ChannelHeader extends StatelessWidget {
             children: [
               CustomText(args.title, fontSize: 16, fontWeight: FontWeight.bold),
               CustomText(
-                args.subtitle??"Active Status",
+                args.subtitle ?? "Active Status",
                 fontSize: 12,
                 color: AppColors.kSecondaryTextColor,
               ),
@@ -350,12 +354,18 @@ class _DirectHeader extends StatelessWidget {
             CustomText(args.title, fontSize: 16, fontWeight: FontWeight.bold),
             Row(
               children: [
-                Icon(Icons.circle, size: 7, color: args.subtitle=="Online"?
-                 AppColors.kGreenColor:args.subtitle=="Offline"?
-                 AppColors.kRedColor:AppColors.kSecondaryTextColor),
+                Icon(
+                  Icons.circle,
+                  size: 7,
+                  color: args.subtitle == "Online"
+                      ? AppColors.kGreenColor
+                      : args.subtitle == "Offline"
+                      ? AppColors.kRedColor
+                      : AppColors.kSecondaryTextColor,
+                ),
                 space4W,
                 CustomText(
-                  args.subtitle??"Active Status",
+                  args.subtitle ?? "Active Status",
                   fontSize: 12,
                   color: AppColors.kTextColor,
                 ),
@@ -586,6 +596,7 @@ class _Bubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint("fileUrl------: $fileUrl");
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -613,9 +624,12 @@ class _Bubble extends StatelessWidget {
             ),
           if (fileUrl != null && fileUrl!.isNotEmpty) ...[
             if (message.isNotEmpty) const SizedBox(height: 8),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: Image.network(fileUrl!, fit: BoxFit.cover),
+            CustomNetworkImage(
+              imageUrl: fileUrl!,
+              height: 200,
+              width: double.infinity,
+              radius: 8,
+              fit: BoxFit.cover,
             ),
           ],
           if (time != null) ...[

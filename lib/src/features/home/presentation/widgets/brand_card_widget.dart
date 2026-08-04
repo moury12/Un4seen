@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart'; // Make sure to add url_launcher to pubspec.yaml
 import '../../../../core/core_export.dart';
+import '../../../../core/widgets/custom_network_image.dart';
 import '../../data/models/brand_model.dart';
 
 class BrandCardWidget extends StatelessWidget {
@@ -37,15 +38,12 @@ class BrandCardWidget extends StatelessWidget {
         children: [
           // Dynamic Image Section from Cloudinary API Payload
           if (brand.image.isNotEmpty) ...[
-            ClipRRect(
-              borderRadius: BorderRadius.circular(12),
-              child: Image.network(
-                brand.image,
-                height: 140,
-                width: double.infinity,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) => const SizedBox(),
-              ),
+            CustomNetworkImage(
+              imageUrl: brand.image,
+              height: 140,
+              width: double.infinity,
+              radius: 12,
+              fit: BoxFit.cover,
             ),
             space8H,
           ],

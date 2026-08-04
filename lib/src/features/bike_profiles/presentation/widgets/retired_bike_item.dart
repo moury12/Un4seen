@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../core/core_export.dart';
+import '../../../../core/widgets/custom_network_image.dart';
 
 class RetiredBikeItem extends StatelessWidget {
   final String title;
@@ -28,14 +29,12 @@ class RetiredBikeItem extends StatelessWidget {
       ),
       child: Row(
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: Image.network(
-              imageUrl,
-              width: 60,
-              height: 40,
-              fit: BoxFit.cover,
-            ),
+          CustomNetworkImage(
+            imageUrl: imageUrl,
+            width: 60,
+            height: 40,
+            radius: 8,
+            fit: BoxFit.cover,
           ),
           space8W,
           Expanded(
