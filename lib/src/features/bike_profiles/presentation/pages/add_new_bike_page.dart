@@ -17,7 +17,7 @@ class _AddNewBikePageState extends State<AddNewBikePage> {
   final yearCtrl = TextEditingController(text: kDebugMode ? "2024" : "");
   final makeCtrl = TextEditingController(text: kDebugMode ? "Honda" : "");
   final modelCtrl = TextEditingController(text: kDebugMode ? "CRF250R" : "");
-  final typeCtrl = TextEditingController(text: kDebugMode ? "250R" : "");
+  final typeCtrl = TextEditingController(text: kDebugMode ? "Motocross" : "");
   final colorCtrl = TextEditingController(text: kDebugMode ? "Red" : "");
   final bikeHoursCtrl = TextEditingController(text: kDebugMode ? "12.5" : "");
   final estimatedCostCtrl = TextEditingController(text: kDebugMode ? "2850" : "");
@@ -28,9 +28,50 @@ class _AddNewBikePageState extends State<AddNewBikePage> {
     text: kDebugMode ? "test Point 1" : "",
   );
 
+  final List<String> bikeTypes = [
+    "Motocross",
+    "Enduro",
+    "ATV",
+    "Mini Bike",
+    "Pit Bike",
+    "Road",
+    "Super Moto",
+    "Ebike",
+    "Other",
+  ];
+
+  final List<String> makes = [
+    "Honda",
+    "Yamaha",
+    "Kawasaki",
+    "KTM",
+    "Husqvarna",
+    "GasGas",
+    "Suzuki",
+    "Sherco",
+    "Stark",
+    "Ducati",
+    "Harley Davidson",
+    "Triumph",
+    "Cobra",
+    "Tm",
+    "CF Moto",
+    "Surron",
+    "Other",
+  ];
+
+  String? selectedMake;
+  String? selectedType;
+  bool showCustomMakeField = false;
+  bool showCustomTypeField = false;
+
   @override
   void initState() {
     super.initState();
+    if (kDebugMode && widget.bikeToEdit == null) {
+      selectedMake = "Honda";
+      selectedType = "Motocross";
+    }
     if (widget.bikeToEdit != null) {
       final bike = widget.bikeToEdit!;
       yearCtrl.text = bike.year;
@@ -38,6 +79,26 @@ class _AddNewBikePageState extends State<AddNewBikePage> {
       modelCtrl.text = bike.model;
       typeCtrl.text = bike.bikeType;
       colorCtrl.text = bike.color;
+
+      // Make selection init
+      final cleanMake = makes.firstWhere((m) => m.toLowerCase() == bike.make.toLowerCase().trim(), orElse: () => "");
+      if (cleanMake.isNotEmpty) {
+        selectedMake = cleanMake;
+        showCustomMakeField = false;
+      } else {
+        selectedMake = "Other";
+        showCustomMakeField = true;
+      }
+
+      // Bike Type selection init
+      final cleanType = bikeTypes.firstWhere((t) => t.toLowerCase() == bike.bikeType.toLowerCase().trim(), orElse: () => "");
+      if (cleanType.isNotEmpty) {
+        selectedType = cleanType;
+        showCustomTypeField = false;
+      } else {
+        selectedType = "Other";
+        showCustomTypeField = true;
+      }
       
       final controller = Get.find<BikeProfilesController>();
       // Pre-fill build notes (upgrades)
@@ -167,11 +228,30 @@ class _AddNewBikePageState extends State<AddNewBikePage> {
                       controller: yearCtrl,
                     ),
 
-                    LabeledInputField(
+                    _buildDropdownField(
                       label: "Make",
-                      hint: "e.g., Honda",
-                      controller: makeCtrl,
+                      hint: "Select Make",
+                      value: selectedMake,
+                      items: makes,
+                      onChanged: (val) {
+                        setState(() {
+                          selectedMake = val;
+                          if (val == "Other") {
+                            showCustomMakeField = true;
+                            makeCtrl.clear();
+                          } else {
+                            showCustomMakeField = false;
+                            makeCtrl.text = val ?? "";
+                          }
+                        });
+                      },
                     ),
+                    if (showCustomMakeField)
+                      LabeledInputField(
+                        label: "Custom Make",
+                        hint: "Enter custom make",
+                        controller: makeCtrl,
+                      ),
 
                     LabeledInputField(
                       label: "Model",
@@ -179,11 +259,30 @@ class _AddNewBikePageState extends State<AddNewBikePage> {
                       controller: modelCtrl,
                     ),
 
-                    LabeledInputField(
+                    _buildDropdownField(
                       label: "Bike Type",
-                      hint: "type here..",
-                      controller: typeCtrl,
+                      hint: "Select Bike Type",
+                      value: selectedType,
+                      items: bikeTypes,
+                      onChanged: (val) {
+                        setState(() {
+                          selectedType = val;
+                          if (val == "Other") {
+                            showCustomTypeField = true;
+                            typeCtrl.clear();
+                          } else {
+                            showCustomTypeField = false;
+                            typeCtrl.text = val ?? "";
+                          }
+                        });
+                      },
                     ),
+                    if (showCustomTypeField)
+                      LabeledInputField(
+                        label: "Custom Bike Type",
+                        hint: "Enter custom bike type",
+                        controller: typeCtrl,
+                      ),
 
                     LabeledInputField(
                       label: "Color",
@@ -199,14 +298,20 @@ class _AddNewBikePageState extends State<AddNewBikePage> {
 
                     LabeledInputField(
                       label: "Estimated Cost",
-                      hint: "e.g., 2850",
+                      hint: "e.g., \$8500",
+                      
                       controller: estimatedCostCtrl,
                     ),
                     const CustomText(
-                      "Build Note",
+                      "MY BIKE BUILD",
                       fontWeight: FontWeight.bold,
                       variant: TextVariant.titleMedium,
                       color: Colors.white,
+                    ),
+                    CustomText(
+                      "What have you done to your bike?",
+                      variant: TextVariant.labelSmall,
+                      color: Colors.white.withValues(alpha: 0.7),
                     ),
 
                     // --- DYNAMIC BUILD NOTES SECTION ---
@@ -230,8 +335,8 @@ class _AddNewBikePageState extends State<AddNewBikePage> {
                                   children: [
                                     Expanded(
                                       child: LabeledInputField(
-                                        label: "Upgrade Category",
-                                        hint: "e.g., Engine Mods",
+                                        label: "Category",
+                                        hint: "e.g., Engine & Performance",
                                         controller: noteSet.titleController,
                                       ),
                                     ),
@@ -258,9 +363,8 @@ class _AddNewBikePageState extends State<AddNewBikePage> {
                                             children: [
                                               Expanded(
                                                 child: LabeledInputField(
-                                                  label:
-                                                      "Upgrade ${pointIdx + 1} ",
-                                                  hint: "e.g., Ported Head",
+                                                  label: "Mod / Upgrade",
+                                                  hint: "e.g., Ported cylinder",
                                                   controller: noteSet
                                                       .pointControllers[pointIdx],
                                                 ),
@@ -290,7 +394,7 @@ class _AddNewBikePageState extends State<AddNewBikePage> {
                                       color: AppColors.kPrimaryColor,
                                     ),
                                     label: const CustomText(
-                                      "Add Point",
+                                      "+ Add another upgrade",
                                       color: AppColors.kPrimaryColor,
                                       fontSize: 12,
                                     ),
@@ -305,7 +409,7 @@ class _AddNewBikePageState extends State<AddNewBikePage> {
 
                     // Outlined Add Build Note Button
                     CustomButton(
-                      text: "Add Build Upgrades",
+                      text: "+ Add another category",
                       onPressed: () {
                         controller.addNewBuildNote();
                       },
@@ -387,5 +491,73 @@ class _AddNewBikePageState extends State<AddNewBikePage> {
           ),)
       );
    
+  }
+
+  Widget _buildDropdownField({
+    required String label,
+    required String hint,
+    required String? value,
+    required List<String> items,
+    required ValueChanged<String?> onChanged,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        CustomText(
+          label,
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Colors.white),
+        ),
+        const SizedBox(height: 8),
+        DropdownButtonFormField<String>(
+          value: value,
+          hint: CustomText(
+            hint,
+            color: Colors.white.withValues(alpha: 0.5),
+            fontSize: 13,
+          ),
+          dropdownColor: AppColors.kPrimaryDarkColor3,
+          icon: const Icon(Icons.keyboard_arrow_down, color: Colors.white),
+          decoration: InputDecoration(
+            filled: true,
+            fillColor: Colors.transparent,
+            contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: const BorderSide(color: AppColors.kPrimaryDarkColor),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: const BorderSide(color: AppColors.kPrimaryColor),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: const BorderSide(color: Colors.redAccent),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: const BorderSide(color: Colors.redAccent),
+            ),
+          ),
+          style: const TextStyle(
+            fontSize: 13,
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+          validator: (val) => val == null ? "This field is required" : null,
+          items: items.map((String item) {
+            return DropdownMenuItem<String>(
+              value: item,
+              child: CustomText(
+                item,
+                color: Colors.white,
+                fontSize: 13,
+                fontWeight: FontWeight.bold,
+              ),
+            );
+          }).toList(),
+          onChanged: onChanged,
+        ),
+      ],
+    );
   }
 }

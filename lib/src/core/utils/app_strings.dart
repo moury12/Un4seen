@@ -318,7 +318,7 @@ class AppStaticStrings {
   static const String addNewBike = 'Add New Bike';
   static const String bikeGallery = 'Bike Gallery';
   static const String imageUpload = 'Image Upload';
-  static const String buildNote = 'Build Note';
+  static const String buildNote = 'Bike Details';
   static const String addBuildNote = 'Add Build Note';
   static const String viewAllPhotosOfThisBike = 'View all photos of this bike';
   static const String updatePasswordBtn = 'Update Password';

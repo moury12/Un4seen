@@ -16,11 +16,14 @@ class HomeHeaderWidget extends StatelessWidget {
                 fontWeight: FontWeight.bold,
                 fontSize: 14,
               ),
-              CustomText(
-                AppStaticStrings.neverGiveUp.tr,
-                color: AppColors.kSecondaryTextColor,
-                fontSize: 12,
-              ),
+              Obx(() {
+                final quote = Get.find<HomeController>().todayQuote.value;
+                return CustomText(
+                  quote.isEmpty ? AppStaticStrings.neverGiveUp.tr : quote,
+                  color: AppColors.kSecondaryTextColor,
+                  fontSize: 12,
+                );
+              }),
             ],
           ),
         ),

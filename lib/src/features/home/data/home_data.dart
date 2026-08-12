@@ -80,6 +80,7 @@ class HomeFeedModel {
 // ── DataSource ────────────────────────────────────────────
 abstract class HomeRemoteDataSource {
   Future<HomeFeedModel> getHomeFeed();
+  Future<String> getTodayQuote();
 }
 
 class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
@@ -94,11 +95,25 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
       throw Exception(response.data['message'] ?? 'Failed to fetch home feed');
     }
   }
+
+  @override
+  Future<String> getTodayQuote() async {
+    try {
+      final response = await _api.get('/motivational-quotes/today');
+      if (response.data['success'] == true && response.data['data'] != null) {
+        return response.data['data']['text'] ?? '';
+      }
+    } catch (e) {
+      // Return empty string on failure to let the UI fallback
+    }
+    return '';
+  }
 }
 
 // ── Repository abstract ───────────────────────────────────
 abstract class HomeRepository {
   Future<HomeFeedModel> getHomeFeed();
+  Future<String> getTodayQuote();
 }
 
 // ── Repository impl ───────────────────────────────────────
@@ -110,5 +125,10 @@ class HomeRepositoryImpl implements HomeRepository {
   @override
   Future<HomeFeedModel> getHomeFeed() {
     return remoteDataSource.getHomeFeed();
+  }
+
+  @override
+  Future<String> getTodayQuote() {
+    return remoteDataSource.getTodayQuote();
   }
 }

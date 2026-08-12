@@ -150,6 +150,8 @@ class TestRiderProgramPage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(appRadius),
                       ),
                       child: Column(
+                        spacing: 8,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           CustomText(
                             AppStaticStrings.tellUsAboutYourRidingExperience.tr,
@@ -158,9 +160,30 @@ class TestRiderProgramPage extends StatelessWidget {
                           ),
                           CustomTextField(
                             maxLines: 3,
-                            hintText: "",
+                            hintText: "Tell us about your experience...",
                             textEditingController: controller.textController,
                             borderColor: Colors.transparent,
+                            fillColor: Colors.transparent,
+                          ),
+                          CustomTextField(
+                            title: "Phone Number",
+                            hintText: "Enter phone number",
+                            textEditingController: controller.numberController,
+                            keyboardType: TextInputType.phone,
+                          ),
+
+                          CustomTextField(
+                            title: "Age",
+                            hintText: "Enter age",
+                            textEditingController: controller.ageController,
+                            keyboardType: TextInputType.number,
+                          ),
+
+                          CustomTextField(
+                            title: "Bike Type",
+                            hintText: "Enter bike type",
+                            textEditingController:
+                                controller.bikeTypeController,
                           ),
                         ],
                       ),

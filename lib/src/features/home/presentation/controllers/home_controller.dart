@@ -13,6 +13,7 @@ class HomeController extends GetxController {
   final Rxn<HomeFeedModel> homeFeedData = Rxn<HomeFeedModel>();
   final RxBool isLoading = false.obs;
   final RxString errorMessage = ''.obs;
+  final RxString todayQuote = ''.obs;
 
   final Rx<File?> selectedRideImage = Rx<File?>(null);
   final ImagePicker _picker = ImagePicker();
@@ -29,6 +30,10 @@ class HomeController extends GetxController {
       isLoading.value = true;
       errorMessage.value = '';
       homeFeedData.value = await _repository.getHomeFeed();
+      final quote = await _repository.getTodayQuote();
+      if (quote.isNotEmpty) {
+        todayQuote.value = quote;
+      }
     } catch (e) {
       errorMessage.value = e.toString();
     } finally {
