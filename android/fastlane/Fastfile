@@ -1,0 +1,45 @@
+default_platform(:android)
+
+platform :android do
+
+  # এটি একটি হেল্পার মেথড যা গুগল প্লে থেকে লেটেস্ট বিল্ড নাম্বার নিয়ে আসবে
+  def get_next_build_number(track_name)
+    begin
+      last_build = google_play_track_version_codes(
+        track: track_name,
+        package_name: 'com.jam.un4seen.app' # আপনার প্যাকেজ নেম
+      ).max
+      return last_build + 1
+    rescue
+      return 1 # যদি প্লে-স্টোরে আগে কোনো বিল্ড না থাকে
+    end
+  end
+
+  desc "Internal Testing-এ আপলোড করার লেন"
+  lane :internal do
+    new_build_num = get_next_build_number('internal')
+    
+    # ফ্ল্যাটার বিল্ড (বোর্ড নাম্বার অটোমেটিক সেট হবে)
+    sh("cd .. && flutter build appbundle --release --build-number=#{new_build_num}")
+
+    upload_to_play_store(
+      track: 'internal',
+      aab: '../build/app/outputs/bundle/release/app-release.aab',
+      skip_upload_metadata: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true
+    )
+  end
+
+  desc "Open Testing (Alpha)-এ আপলোড করার লেন"
+  lane :open do
+    new_build_num = get_next_build_number('alpha') # ওপেন টেস্টিংকে প্লে-স্টোরে 'alpha' বলা হয়
+    
+    sh("cd .. && flutter build appbundle --release --build-number=#{new_build_num}")
+
+    upload_to_play_store(
+      track: 'alpha',
+      aab: '../build/app/outputs/bundle/release/app-release.aab'
+    )
+  end
+end
