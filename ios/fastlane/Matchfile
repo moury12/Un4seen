@@ -1,0 +1,12 @@
+# Matchfile for com.jam.un4seen.app code signing certificates
+
+git_url("https://github.com/moury12/un4seen-ios-certificates.git")
+
+storage_mode("git")
+type("appstore") # Default profile type: appstore, adhoc, enterprise or development
+
+app_identifier(["com.jam.un4seen.app"])
+team_id("4NGYP3MQK3")
+
+# For all available options run `fastlane match --help`
+# Further information: https://docs.fastlane.tools/actions/match/

@@ -1,7 +1,5 @@
 // lib/src/features/un4seen_world/presentation/pages/un4seen_world_page.dart
 
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import '../../../../src_export.dart';
 import '../controllers/un4seen_world_controller.dart';
 import '../widgets/brand_card_widget.dart';
@@ -164,7 +162,7 @@ class Un4seenWorldPage extends StatelessWidget {
                   ],
                 ),
               ),
-              space8H,
+              space36H,
             ],
           ),
         ),

@@ -1,0 +1,8 @@
+# Appfile for com.jam.un4seen.app
+
+app_identifier("com.jam.un4seen.app") # The bundle identifier of your app
+team_id("4NGYP3MQK3") # Developer Portal Team ID
+itc_team_id("4NGYP3MQK3") # App Store Connect Team ID
+
+# For more information about the Appfile, see:
+# https://docs.fastlane.tools/advanced/#appfile

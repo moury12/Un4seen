@@ -1,0 +1,57 @@
+# Fastfile for Flutter iOS app deployment via Fastlane
+default_platform(:ios)
+
+platform :ios do
+  desc "Build and upload a new release to TestFlight"
+  lane :beta do
+    # 1. App Store Connect API Key Authentication
+    api_key = app_store_connect_api_key(
+      key_id: "WNSMV275TJ",
+      issuer_id: "3962a192-f45e-4534-b559-6216d50a9136",
+      key_filepath: File.expand_path("../AuthKey_WNSMV275TJ.p8", __dir__),
+      duration: 1200,
+      in_house: false
+    )
+    match(
+      type: "appstore",
+      readonly: true, # প্রথমবার সার্টিফিকেট তৈরির জন্য এটি false রাখুন
+      api_key: api_key # এটিই পাসওয়ার্ড/কোড ছাড়াই লগইন করাবে
+    ) 
+    # 2. Automatically fetch latest TestFlight build number & increment by 1
+    current_build_number = latest_testflight_build_number(
+      api_key: api_key,
+      app_identifier: "com.jam.un4seen.app"
+    )
+    new_build_number = current_build_number + 1
+    increment_build_number(
+      build_number: new_build_number,
+      xcodeproj: "Runner.xcodeproj"
+    )
+
+    # 3. Code signing using match in readonly mode
+    match(
+      type: "appstore",
+      readonly: true,
+      api_key: api_key
+    )
+
+    # 4. Building the Flutter iOS application
+    # Step 1: Run flutter build ios from project root
+    sh("cd .. && flutter build ios --release --no-codesign")
+
+    # Step 2: Archive and sign using Gym (build_app)
+    build_app(
+      workspace: "Runner.xcworkspace",
+      scheme: "Runner",
+      export_method: "app-store",
+      output_directory: "./build",
+      output_name: "un4seen.ipa"
+    )
+
+    # 5. Deployment to TestFlight
+    upload_to_testflight(
+      api_key: api_key,
+      skip_waiting_for_build_processing: true
+    )
+  end
+end

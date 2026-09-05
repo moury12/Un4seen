@@ -65,9 +65,7 @@ class CustomNetworkImage extends StatelessWidget {
             : BorderRadius.circular(radius ?? 8),
         color: Colors.grey.withValues(alpha: 0.6),
         image: DecorationImage(
-          image: AssetImage(
-            imageErrorUrl ?? 'assets/icons/placeholder.png',
-          ),
+          image: AssetImage(imageErrorUrl ?? 'assets/icons/placeholder.png'),
           fit: BoxFit.cover,
         ),
       ),
@@ -91,13 +89,13 @@ class CustomNetworkImage extends StatelessWidget {
                 child: _isLocalFile
                     ? Image.file(
                         File(_getCleanFilePath(imageUrl)),
-                        fit: BoxFit.contain,
+                        fit: BoxFit.cover,
                         errorBuilder: (context, error, stackTrace) =>
                             _buildFallbackWidget(),
                       )
                     : CachedNetworkImage(
                         imageUrl: imageUrl,
-                        fit: BoxFit.contain,
+                        fit: BoxFit.cover,
                         placeholder: (context, url) => const Center(
                           child: CircularProgressIndicator(color: Colors.white),
                         ),
@@ -128,25 +126,24 @@ class CustomNetworkImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-   final trimmedUrl = imageUrl.trim();
-  
-  // এটা add করো temporarily
-  // debugPrint('🔍 URL received: "$trimmedUrl"');
-  
-  if (trimmedUrl.isEmpty || 
-      trimmedUrl == 'file:///' ||
-      trimmedUrl == 'file://' ||
-      !trimmedUrl.startsWith('http') && !_isLocalFile) {
-    debugPrint('❌ BAD URL blocked: "$trimmedUrl"');
-    return _buildFallbackWidget();
-  }
+    final trimmedUrl = imageUrl.trim();
+
+    // এটা add করো temporarily
+    // debugPrint('🔍 URL received: "$trimmedUrl"');
+
+    if (trimmedUrl.isEmpty ||
+        trimmedUrl == 'file:///' ||
+        trimmedUrl == 'file://' ||
+        !trimmedUrl.startsWith('http') && !_isLocalFile) {
+      debugPrint('❌ BAD URL blocked: "$trimmedUrl"');
+      return _buildFallbackWidget();
+    }
 
     return GestureDetector(
-      onTap: isImagePreview == true
-          ? () {
-              showCustomDialog(context);
-            }
-          : null,
+      onLongPress: () {
+        showCustomDialog(context);
+      },
+
       child: _isLocalFile
           ? Container(
               height: height,
@@ -223,7 +220,6 @@ class CustomNetworkImage extends StatelessWidget {
     );
   }
 }
-
 
 // class ListOfImages extends StatelessWidget {
 //   final bool isNetworkImage ;

@@ -179,6 +179,14 @@ class _PointsPageState extends State<PointsPage> {
                         ),
                       ),
                       space8H,
+                      GestureDetector(
+                        onTap: () => context.push(AppRoutes.referAndEarn),
+                        child: PointsActionCard(
+                          title: AppStaticStrings.referralBonus.tr,
+                          subtitle: AppStaticStrings.referralBonusDesc.tr,
+                          icon: AppIcons.share,
+                        ),
+                      ),
 
                       PointsActionCard(
                         title: AppStaticStrings.completeYourProfile.tr,
@@ -214,15 +222,6 @@ class _PointsPageState extends State<PointsPage> {
                                 ),
                               ),
                       ),
-                      GestureDetector(
-                        onTap: () => context.push(AppRoutes.referAndEarn),
-                        child: PointsActionCard(
-                          title: AppStaticStrings.referralBonus.tr,
-                          subtitle: AppStaticStrings.referralBonusDesc.tr,
-                          icon: AppIcons.share,
-                        ),
-                      ),
-                      space8H,
 
                       CustomText(
                         AppStaticStrings.followLikeSocials.tr,

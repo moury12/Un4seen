@@ -180,10 +180,10 @@ class AppStaticStrings {
       'Create a post on your social media\'s, tag @un4seendecals, show off your bike and your Un4seen products. Head there via the links below to earn your Shred Points.';
   static const String referralBonus = 'Referral Bonus';
   static const String referralBonusDesc = '+\$10 Dollars Store Credit';
-  static const String followLikeSocials = 'Follow & Like Un4seen\'s Socials';
-  static const String shareOnFacebook = 'Share on Facebook';
-  static const String shareOnInstagram = 'Share on Instagram';
-  static const String shareOnTikTok = 'Share on TikTok';
+  static const String followLikeSocials = 'Upload your post & claim points';
+  static const String shareOnFacebook = 'Facebook post';
+  static const String shareOnInstagram = 'Instagram post';
+  static const String shareOnTikTok = 'TikTok post';
   static const String earn100Points = 'Earn 100 points';
   static const String scholarshipTitle =
       '50,000 Active members – MTF Training Facility USA Scholarship';

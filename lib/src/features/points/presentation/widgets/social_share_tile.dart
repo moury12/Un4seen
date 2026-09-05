@@ -169,7 +169,24 @@ class _SubmitProofDialogState extends State<SubmitProofDialog> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Expanded(child: SizedBox.shrink()),
+                    const Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CustomText(
+                            "Claim your points",
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
+                          CustomText(
+                            "Upload a screenshot of your post tagging @un4seendecals",
+                            color: Colors.white,
+                            fontSize: 10,
+                          ),
+                        ],
+                      ),
+                    ),
                     IconButton(
                       onPressed: () => Navigator.pop(context),
                       icon: const Icon(Icons.close, color: Colors.white),
