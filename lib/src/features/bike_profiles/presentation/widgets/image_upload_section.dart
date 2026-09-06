@@ -26,27 +26,37 @@ class ImageUploadSection extends StatelessWidget {
           child: Center(
             child: Obx(() {
               if (controller.profileImage.value != null) {
-                return InteractiveViewer(
-                  panEnabled: true,
-                  scaleEnabled: true,
-                  minScale: 0.5,
-                  maxScale: 4.0,
-                  child: Image.file(
-                    controller.profileImage.value!,
-                    fit: BoxFit.contain,
-                    // height: 100,
+                return AspectRatio(
+                  aspectRatio: 1,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(16),
+                    child: InteractiveViewer(
+                      panEnabled: true,
+                      scaleEnabled: true,
+                      minScale: 0.5,
+                      maxScale: 4.0,
+                      child: Image.file(
+                        controller.profileImage.value!,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
                   ),
                 );
               } else if (initialImageUrl != null && initialImageUrl!.isNotEmpty) {
-                return InteractiveViewer(
-                  panEnabled: true,
-                  scaleEnabled: true,
-                  minScale: 0.5,
-                  maxScale: 4.0,
-                  child: CustomNetworkImage(
-                    imageUrl: initialImageUrl!,
-                    fit: BoxFit.contain,
-                    height:400,
+                return AspectRatio(
+                  aspectRatio: 1,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(16),
+                    child: InteractiveViewer(
+                      panEnabled: true,
+                      scaleEnabled: true,
+                      minScale: 0.5,
+                      maxScale: 4.0,
+                      child: CustomNetworkImage(
+                        imageUrl: initialImageUrl!,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
                   ),
                 );
               } else {

@@ -52,10 +52,12 @@ class BikeOfTheWeekWidget extends StatelessWidget {
                       radius: 16,
                       slantAmount: 6,
                     ),
-                    child: CustomNetworkImage(
-                      imageUrl: ride.image,
-                      height: 200,
-                      width: double.infinity,
+                    child: AspectRatio(
+                      aspectRatio: 16 / 9,
+                      child: CustomNetworkImage(
+                        imageUrl: ride.image,
+                        width: double.infinity,
+                      ),
                     ),
                   ),
                   Padding(

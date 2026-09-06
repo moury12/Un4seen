@@ -82,13 +82,15 @@ class MyBikeProfilePage extends StatelessWidget {
                           ),
                         ),
                         space8H,
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(16),
-                          child: CustomNetworkImage(
-                            imageUrl: bike.image,
-                            height: 200,
-                            width: double.infinity,
-                            fit: BoxFit.cover,
+                        AspectRatio(
+                          aspectRatio: 1,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(16),
+                            child: CustomNetworkImage(
+                              imageUrl: bike.image,
+                              width: double.infinity,
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                         space8H,

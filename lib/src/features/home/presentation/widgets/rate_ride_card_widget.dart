@@ -43,11 +43,13 @@ class _RateRideCardWidgetState extends State<RateRideCardWidget> {
       ),
       child: Stack(
         children: [
-          CustomNetworkImage(
-            imageUrl: ride.image,
-            height: 450,
-            width: double.infinity,
-            radius: 16,
+          AspectRatio(
+            aspectRatio: 16 / 9,
+            child: CustomNetworkImage(
+              imageUrl: ride.image,
+              width: double.infinity,
+              radius: 16,
+            ),
           ),
 
           Positioned.fill(
