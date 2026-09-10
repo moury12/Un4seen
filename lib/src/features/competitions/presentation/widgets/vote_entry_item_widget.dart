@@ -29,7 +29,7 @@ class VoteEntryItemWidget extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(8),
-            child: CustomNetworkImage(imageUrl: image, height: 40, width: 60),
+            child: CustomNetworkImage(imageUrl: image, height: 80, width: 60),
           ),
           space8W,
           Expanded(
@@ -44,7 +44,7 @@ class VoteEntryItemWidget extends StatelessWidget {
                   fontSize: 13,
                 ),
                 CustomText(
-                  "by $author • $synId",
+                  "by $author ",
                   variant: TextVariant.labelSmall,
                   color: Colors.white70,
                 ),

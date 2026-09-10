@@ -1,4 +1,3 @@
-import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../src_export.dart';
 
 class RateRideCardWidget extends StatefulWidget {
@@ -38,164 +37,143 @@ class _RateRideCardWidgetState extends State<RateRideCardWidget> {
 
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.kPrimaryDarkColor3,
+        color: const Color(0xFFF2F4F7),
         borderRadius: BorderRadius.circular(16),
       ),
-      child: Stack(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
-          AspectRatio(
-            aspectRatio: 16 / 9,
-            child: CustomNetworkImage(
-              imageUrl: ride.image,
-              width: double.infinity,
-              radius: 16,
+          // 1. Image in 16:9 ratio with top rounded corners and User info overlay
+          ClipRRect(
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+            child: Stack(
+              children: [
+                AspectRatio(
+                  aspectRatio: 16 / 9,
+                  child: CustomNetworkImage(
+                    imageUrl: ride.image,
+                    width: double.infinity,
+                    radius: 0,
+                  ),
+                ),
+                // Gradient overlay at top for text legibility
+                Positioned.fill(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Colors.black.withValues(alpha: 0.6),
+                          Colors.transparent,
+                          Colors.transparent,
+                        ],
+                        stops: const [0.0, 0.45, 1.0],
+                      ),
+                    ),
+                  ),
+                ),
+                // User info overlay on top-left
+                Positioned(
+                  top: 12,
+                  left: 12,
+                  child: Row(
+                    children: [
+                      CustomNetworkImage(
+                        imageUrl: ride.user.image,
+                        height: 36,
+                        width: 36,
+                        radius: 99,
+                      ),
+                      space8W,
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CustomText(
+                            ride.user.fullName,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
+                          CustomText(
+                            ride.user.memberNumber.startsWith('#')
+                                ? ride.user.memberNumber
+                                : "#${ride.user.memberNumber}",
+                            color: AppColors.kPrimaryColor,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
 
-          Positioned.fill(
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [Colors.transparent, Colors.black.withAlpha(204)],
+          // 2. Rating section below image
+          Padding(
+            padding: const EdgeInsets.all(14),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CustomText(
+                  AppStaticStrings.yourRating.tr,
+                  color: AppColors.kTextColor,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 13,
                 ),
-              ),
-            ),
-          ),
-          Positioned(
-            top: 12,
-            left: 12,
-            child: Container(
-              padding: EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: Colors.black.withAlpha(80),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Row(
-                children: [
-                  CustomNetworkImage(
-                    imageUrl: ride.user.image,
-                    height: 32,
-                    width: 32,
-                    radius: 99,
-                  ),
-                  // const CircleAvatar(
-                  //   radius: 16,
-                  //   backgroundImage: NetworkImage(
-                  //     'https://i.pravatar.cc/150?u=jake',
-                  //   ),
-                  // ),
-                  space8W,
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      CustomText(
-                        ride.user.fullName,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
-                      ),
-                      CustomText(
-                        "${ride.user.memberNumber}",
-                        color: AppColors.kPrimaryColor,
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Positioned(
-            bottom: 20,
-            left: 0,
-            right: 0,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Column(
-                children: [
-                  CustomText(
-                    "${ride.bikeModel} - ${ride.description}",
-                    color: Colors.white,
-                    fontSize: 13,
-                    maxLines: 2,
-                  ),
-                  space12H,
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      CustomText(
-                        AppStaticStrings.yourRating.tr,
-                        color: Colors.white,
-                        fontSize: 11,
-                      ),
-                      Row(
-                        children: List.generate(
-                          ride.averageRating.ceil(),
-                          (index) => Padding(
-                            padding: const EdgeInsets.only(left: 4),
-                            child: SvgPicture.asset(
-                              AppIcons.fire,
-                              height: 12,
-                              colorFilter: const ColorFilter.mode(
-                                AppColors.kPrimaryColor,
-                                BlendMode.srcIn,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  space8H,
-                  SliderTheme(
-                    data: SliderTheme.of(context).copyWith(
-                      activeTrackColor: AppColors.kPrimaryColor,
-                      inactiveTrackColor: Colors.white24,
-                      thumbColor: Colors.white,
-                      trackHeight: 4,
-                    ),
-                    child: Slider(
-                      value: _currentRating,
-                      min: 0,
-                      max: 10,
-                      divisions: 10,
-                      onChanged: (v) {
-                        setState(() {
-                          _currentRating = v;
-                        });
-                      },
-                      onChangeEnd: (v) {
-                        controller.submitVote(widget.index, v.toInt());
-                      },
+                SliderTheme(
+                  data: SliderTheme.of(context).copyWith(
+                    activeTrackColor: AppColors.kPrimaryColor,
+                    inactiveTrackColor: const Color(0xFFE2E8F0),
+                    thumbColor: Colors.white,
+                    overlayColor: AppColors.kPrimaryColor.withValues(alpha: 0.12),
+                    trackHeight: 5,
+                    thumbShape: const RoundSliderThumbShape(
+                      enabledThumbRadius: 10,
+                      elevation: 2,
                     ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const CustomText(
-                        "0",
-                        color: Colors.white70,
-                        fontSize: 10,
-                      ),
-                      CustomText(
-                        "${_currentRating.toInt()} / 10",
-                        color: AppColors.kPrimaryColor,
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      const CustomText(
-                        "10",
-                        color: Colors.white70,
-                        fontSize: 10,
-                      ),
-                    ],
+                  child: Slider(
+                    value: _currentRating,
+                    min: 0,
+                    max: 10,
+                    divisions: 10,
+                    onChanged: (v) {
+                      setState(() {
+                        _currentRating = v;
+                      });
+                    },
+                    onChangeEnd: (v) {
+                      controller.submitVote(widget.index, v.toInt());
+                    },
                   ),
-                ],
-              ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const CustomText(
+                      "0",
+                      color: Colors.grey,
+                      fontSize: 11,
+                    ),
+                    CustomText(
+                      "${_currentRating.toInt()} / 10",
+                      color: AppColors.kPrimaryColor,
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    const CustomText(
+                      "10",
+                      color: Colors.grey,
+                      fontSize: 11,
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
         ],

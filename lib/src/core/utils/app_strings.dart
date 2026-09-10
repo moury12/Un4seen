@@ -18,7 +18,7 @@ class AppStaticStrings {
   static const String platform = 'Platform';
   static const String postLink = 'Post Link';
   static const String viewAll = 'View All';
-  static const String claimed= "Claimed";
+  static const String claimed = "Claimed";
   static const String updateBike = 'Update Bike Profile';
   static const String dontHaveAccountRegister =
       "Don't have an account? Register";
@@ -116,13 +116,14 @@ class AppStaticStrings {
   static const String rateMyRide = 'Rate My Ride';
   static const String rateMyRideTitle = 'Rate My Ride';
   static const String rateMyRideDesc =
-      'Upload your best photo of your bike and be into win shred points & You must have Un4seen decals on your bike to enter.';
-  static const String votingEndsSunday = 'Week 18 - Voting Ends Sunday';
+      'Upload your ride and let the Syndicate rate it! The highest-rated bike when voting closes Sunday will be crowned Bike of the Week. Un4seen decals must be fitted to enter.';
+  static const String votingEndsSunday =
+      'Week 18 . Voting Ends Sunday . Highest Rating Wins';
   static const String flames = 'flames';
-  static const String yourRating = 'Your Rating:';
+  static const String yourRating = 'Rate This Ride:';
   static const String chooseBestBikePhoto =
       'Choose your best bike photo to enter Rate My Ride';
-  static const String uploadEnterCompetition = 'Upload & Enter Competition';
+  static const String uploadEnterCompetition = 'CLAIM MY +100 SHRED POINTS';
   static const String bikeTypeLabel = 'Bike Type';
   static const String bikeDescriptionHint =
       'eg 2022 YZ450f - Full Decal kit, Custom Seat Cover';
@@ -402,7 +403,7 @@ class AppStaticStrings {
   static const String ebikeChallenge = 'Ebike Front Plate Graphics Challenge';
   static const String bmxToEbike = 'bmx to Ebike';
   static const String howCompetitionsWorkDesc = 'How Competitions Work';
-  
+
   static const String submitPhase =
       'Submit Phase: Upload your design during the open entry window';
   static const String votingPhase =
@@ -417,14 +418,14 @@ class AppStaticStrings {
       'Prize Delivery: Winner receives their custom made product (pay freight only)';
   static const String winnersCircle = 'Winner\'s Circle';
   static const String thisWeek = 'This Week';
-  static const String viewEntries = 'View Entries';
-  static const String grandPrize = 'GRAND PRIZE';
+  static const String viewEntries = 'View Entries & Vote';
+  static const String grandPrize = 'WIN YOUR OWN CUSTOM GRAPHICS KIT';
   static const String votingNow = 'VOTING NOW';
   static const String openForEntries = 'OPEN FOR ENTRIES';
   static const String ended = 'ENDED';
   static const String howCompetitionsWork = 'How Competitions Work';
   static const String submitYourDesign = 'Submit Your Design';
-  static const String uploadDesignImage = 'upload screen shot image of review';
+  static const String uploadDesignImage = 'Upload screenshot of your post';
   static const String designNameLabel = 'Design Name';
   static const String designNameHint = 'e.g., Flame Thunder, Neon Storm...';
   static const String submitEntry = 'Submit Entry';

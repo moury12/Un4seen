@@ -174,13 +174,13 @@ class _SubmitProofDialogState extends State<SubmitProofDialog> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           CustomText(
-                            "Claim your points",
+                            "Claim Your Shred Points",
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
                             fontSize: 14,
                           ),
                           CustomText(
-                            "Upload a screenshot of your post tagging @un4seendecals",
+                            "Upload a screenshot of your social media post showing that you tagged @un4seendecals.",
                             color: Colors.white,
                             fontSize: 10,
                           ),

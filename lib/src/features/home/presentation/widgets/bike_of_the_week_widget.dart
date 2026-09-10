@@ -30,6 +30,7 @@ class BikeOfTheWeekWidget extends StatelessWidget {
               CustomText(
                 AppStaticStrings.bikeOfTheWeek.tr,
                 variant: TextVariant.titleLarge,
+                fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
             ],

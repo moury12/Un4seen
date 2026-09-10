@@ -1,4 +1,3 @@
-import 'package:go_router/go_router.dart';
 import '../../../../src_export.dart';
 import '../widgets/upload_ride_dialog.dart';
 
@@ -95,11 +94,13 @@ class RateRidePage extends StatelessWidget {
                                 size: 18,
                               ),
                               space8W,
-                              CustomText(
-                                AppStaticStrings.votingEndsSunday.tr,
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 13,
+                              Expanded(
+                                child: CustomText(
+                                  AppStaticStrings.votingEndsSunday.tr,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 13,
+                                ),
                               ),
                             ],
                           ),

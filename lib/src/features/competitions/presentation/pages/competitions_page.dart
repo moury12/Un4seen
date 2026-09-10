@@ -73,7 +73,7 @@ class CompetitionsPage extends StatelessWidget {
                     variant: TextVariant.titleLarge,
                     fontWeight: FontWeight.bold,
                     color: AppColors.kTextColor,
-                    fontSize: 18,
+                    fontSize: 22,
                   ),
                   space4H,
                   ...controller.activeComps.map(

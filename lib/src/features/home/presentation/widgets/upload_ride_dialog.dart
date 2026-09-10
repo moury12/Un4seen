@@ -91,56 +91,65 @@ class _UploadRideDialogState extends State<UploadRideDialog> {
                 return homeController.selectedRideImage.value == null
                     ? ButtonTapWidget(
                         onTap: () => homeController.pickRideImage(),
+                        child: AspectRatio(
+                          aspectRatio: 16 / 9,
+                          child: Container(
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: Colors.black26,
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: const Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.camera_alt_outlined,
+                                  color: AppColors.kPrimaryColor,
+                                  size: 32,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      )
+                    : AspectRatio(
+                        aspectRatio: 16 / 9,
                         child: Container(
-                          height: 100,
                           width: double.infinity,
+                          clipBehavior: Clip.hardEdge,
                           decoration: BoxDecoration(
                             color: Colors.black26,
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          child: const Icon(
-                            Icons.camera_alt_outlined,
-                            color: AppColors.kPrimaryColor,
-                            size: 32,
-                          ),
-                        ),
-                      )
-                    : Container(
-                        height: 250,
-                        width: double.infinity,
-                        clipBehavior: Clip.hardEdge,
-                        decoration: BoxDecoration(
-                          color: Colors.black26,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Stack(
-                          children: [
-                            Positioned.fill(
-                              child: Image.file(
-                                homeController.selectedRideImage.value!,
-                                fit: BoxFit.cover,
+                          child: Stack(
+                            children: [
+                              Positioned.fill(
+                                child: Image.file(
+                                  homeController.selectedRideImage.value!,
+                                  fit: BoxFit.cover,
+                                ),
                               ),
-                            ),
-                            Positioned(
-                              bottom: 8,
-                              right: 8,
-                              child: ButtonTapWidget(
-                                onTap: () => homeController.pickRideImage(),
-                                child: Container(
-                                  padding: const EdgeInsets.all(8),
-                                  decoration: const BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: AppColors.kPrimaryColor,
-                                  ),
-                                  child: const Icon(
-                                    Icons.refresh,
-                                    color: Colors.white,
-                                    size: 20,
+                              Positioned(
+                                bottom: 8,
+                                right: 8,
+                                child: ButtonTapWidget(
+                                  onTap: () => homeController.pickRideImage(),
+                                  child: Container(
+                                    padding: const EdgeInsets.all(8),
+                                    decoration: const BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: AppColors.kPrimaryColor,
+                                    ),
+                                    child: const Icon(
+                                      Icons.refresh,
+                                      color: Colors.white,
+                                      size: 20,
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       );
               }),

@@ -179,6 +179,9 @@ class HomePage extends StatelessWidget {
                   }),
 
                   const QuickActionRowWidget(),
+
+                  if (homeData.majorGiveaway != null)
+                    MajorGiveawayCardWidget(giveaway: homeData.majorGiveaway!),
                   const BikeOfTheWeekWidget(),
 
                   CustomButton(
@@ -187,9 +190,6 @@ class HomePage extends StatelessWidget {
                     rightIcon: Icons.chevron_right,
                     backgroundColor: AppColors.kPrimaryDarkColor3,
                   ),
-
-                  if (homeData.majorGiveaway != null)
-                    MajorGiveawayCardWidget(giveaway: homeData.majorGiveaway!),
 
                   if (homeData.recentWinners.isNotEmpty) ...[
                     CustomText(
