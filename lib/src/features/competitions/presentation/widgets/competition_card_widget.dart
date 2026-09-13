@@ -25,7 +25,7 @@ class _CompetitionCardWidgetState extends State<CompetitionCardWidget> {
       'Nov',
       'Dec',
     ];
-    return '${months[date.month - 1]} ${date.day}, ${date.year}';
+    return '${date.day} ${months[date.month - 1]} ${date.year}';
   }
 
   final controller = Get.find<CompetitionsController>();
@@ -39,11 +39,13 @@ class _CompetitionCardWidgetState extends State<CompetitionCardWidget> {
   Widget build(BuildContext context) {
     final bool isVoting = widget.model.canVote;
     final bool isOpen = widget.model.canSubmit;
+    final bool isEnded = widget.model.status.toLowerCase() == 'ended';
 
     final String statusLabel = widget.model.statusLabel;
 
-    final String dateRange =
-        "${_formatDate(widget.model.startDate)} ➔ ${_formatDate(widget.model.endDate)}";
+    final String dateDisplay = isEnded
+        ? "Ended: ${_formatDate(widget.model.endDate)}"
+        : "Entries Close: ${_formatDate(widget.model.endDate)}";
 
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
@@ -170,7 +172,7 @@ class _CompetitionCardWidgetState extends State<CompetitionCardWidget> {
                       size: 14,
                     ),
                     space8W,
-                    CustomText(dateRange, color: Colors.white, fontSize: 12),
+                    CustomText(dateDisplay, color: Colors.white, fontSize: 12),
                   ],
                 ),
                 // if (isVoting)
@@ -205,7 +207,9 @@ class _CompetitionCardWidgetState extends State<CompetitionCardWidget> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               CustomText(
-                                AppStaticStrings.viewEntries.tr,
+                                isEnded
+                                    ? AppStaticStrings.viewWinnerAndResults.tr
+                                    : AppStaticStrings.viewEntriesAndVote.tr,
                                 color: AppColors.kPrimaryColor,
                                 fontSize: 12,
                                 fontWeight: FontWeight.bold,
@@ -235,8 +239,7 @@ class _CompetitionCardWidgetState extends State<CompetitionCardWidget> {
                             : controller.entries.length,
                         (index) => VoteEntryItemWidget(
                           title: controller.entries[index].designName,
-                          author:
-                              controller.entries[index].user.fullName ?? "--",
+                          author: controller.entries[index].user.fullName,
                           synId: controller.entries[index].id,
                           likes: controller.entries[index].heartCount
                               .toString(),

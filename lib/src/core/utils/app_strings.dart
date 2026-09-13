@@ -389,6 +389,8 @@ class AppStaticStrings {
   static const String competitionsTitle = 'Competitions';
   static const String designUploadVoteWin = 'Design, upload, vote, and win!';
   static const String activeCompetitions = 'Active Competitions';
+  static const String upcomingCompetitions = 'Upcoming Competitions';
+  static const String endedCompetitions = 'Ended Competitions';
   static const String voteForYourFavorite = 'Vote for Your Favorite';
   static const String designSickestKit = 'Design the Sickest Graphics Kit';
   static const String designSickestKitDesc =
@@ -419,6 +421,8 @@ class AppStaticStrings {
   static const String winnersCircle = 'Winner\'s Circle';
   static const String thisWeek = 'This Week';
   static const String viewEntries = 'View Entries & Vote';
+  static const String viewEntriesAndVote = 'VIEW ENTRIES & VOTE';
+  static const String viewWinnerAndResults = 'VIEW WINNER & RESULTS';
   static const String grandPrize = 'WIN YOUR OWN CUSTOM GRAPHICS KIT';
   static const String votingNow = 'VOTING NOW';
   static const String openForEntries = 'OPEN FOR ENTRIES';
@@ -451,7 +455,7 @@ class AppStaticStrings {
   static const String automaticEntryTitle =
       'Automatic Entry for Syndicate Members';
   static const String automaticEntryDesc =
-      'Every active paid Syndicate member is automatically in the draw. No extra steps needed just stay subscribed and you\'re in! 👊';
+      'You’re already in!\nEvery active paid Syndicate member is automatically entered. Just keep your membership active until the draw. 👊';
   static const String giveawaysComingUp = 'Giveaways Coming Up 🔥';
   static const String days = 'Days';
   static const String hours = 'Hours';
