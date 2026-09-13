@@ -73,7 +73,7 @@ class CompetitionsPage extends StatelessWidget {
                     variant: TextVariant.titleLarge,
                     fontWeight: FontWeight.bold,
                     color: AppColors.kTextColor,
-                    fontSize: 22,
+                    fontSize: 20,
                   ),
                   space4H,
                   ...controller.activeComps.map(
@@ -83,15 +83,15 @@ class CompetitionsPage extends StatelessWidget {
 
                 // Upcoming Competitions
                 if (controller.upcomingComps.isNotEmpty) ...[
-                  space4H,
-                  const CustomText(
-                    'Upcoming Competitions',
+                  space8H,
+                  CustomText(
+                    AppStaticStrings.upcomingCompetitions.tr,
                     variant: TextVariant.titleLarge,
                     fontWeight: FontWeight.bold,
                     color: AppColors.kTextColor,
-                    fontSize: 18,
+                    fontSize: 20,
                   ),
-                  space8H,
+                  space4H,
                   ...controller.upcomingComps.map(
                     (comp) => CompetitionCardWidget(model: comp),
                   ),
@@ -101,15 +101,15 @@ class CompetitionsPage extends StatelessWidget {
                 if (controller.endedComps.isNotEmpty) ...[
                   space8H,
                   CustomText(
-                    AppStaticStrings.ended.tr,
+                    AppStaticStrings.endedCompetitions.tr,
                     variant: TextVariant.titleLarge,
                     fontWeight: FontWeight.bold,
                     color: AppColors.kTextColor,
-                    fontSize: 18,
+                    fontSize: 20,
                   ),
                   space4H,
                   ...controller.endedComps.map(
-                    (comp) => _buildEndedTile(context, comp),
+                    (comp) => CompetitionCardWidget(model: comp),
                   ),
                 ],
 
@@ -147,50 +147,7 @@ class CompetitionsPage extends StatelessWidget {
     );
   }
 
-  Widget _buildEndedTile(BuildContext context, CompetitionModel comp) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 16),
-      padding: const EdgeInsets.all(12),
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: AppColors.kPrimaryColor,
-        borderRadius: BorderRadius.circular(appRadius16),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              const Icon(
-                Icons.check_circle_outline,
-                color: Colors.white,
-                size: 16,
-              ),
-              space4W,
-              CustomText(
-                AppStaticStrings.ended.tr,
-                color: Colors.white,
-                fontSize: 12,
-                fontWeight: FontWeight.bold,
-              ),
-            ],
-          ),
-          space4H,
-          CustomText(
-            comp.title,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
-          CustomText(
-            comp.description,
-            color: Colors.white70,
-            fontSize: 12,
-            maxLines: 2,
-          ),
-        ],
-      ),
-    );
-  }
+
 
   Widget _buildShimmer(BuildContext context) {
     return SingleChildScrollView(

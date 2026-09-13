@@ -9,7 +9,8 @@ class MajorGiveawayCardWidget extends StatefulWidget {
   const MajorGiveawayCardWidget({super.key, required this.giveaway});
 
   @override
-  State<MajorGiveawayCardWidget> createState() => _MajorGiveawayCardWidgetState();
+  State<MajorGiveawayCardWidget> createState() =>
+      _MajorGiveawayCardWidgetState();
 }
 
 class _MajorGiveawayCardWidgetState extends State<MajorGiveawayCardWidget> {
@@ -40,10 +41,18 @@ class _MajorGiveawayCardWidgetState extends State<MajorGiveawayCardWidget> {
     final diff = widget.giveaway.endDate.difference(_now);
     final isNegative = diff.isNegative;
 
-    final String mo = isNegative ? '00' : (diff.inDays ~/ 30).toString().padLeft(2, '0');
-    final String d = isNegative ? '00' : (diff.inDays % 30).toString().padLeft(2, '0');
-    final String h = isNegative ? '00' : (diff.inHours % 24).toString().padLeft(2, '0');
-    final String m = isNegative ? '00' : (diff.inMinutes % 60).toString().padLeft(2, '0');
+    final String mo = isNegative
+        ? '00'
+        : (diff.inDays ~/ 30).toString().padLeft(2, '0');
+    final String d = isNegative
+        ? '00'
+        : (diff.inDays % 30).toString().padLeft(2, '0');
+    final String h = isNegative
+        ? '00'
+        : (diff.inHours % 24).toString().padLeft(2, '0');
+    final String m = isNegative
+        ? '00'
+        : (diff.inMinutes % 60).toString().padLeft(2, '0');
 
     return Container(
       decoration: BoxDecoration(
@@ -123,7 +132,7 @@ class _MajorGiveawayCardWidgetState extends State<MajorGiveawayCardWidget> {
                         ),
                         space8W,
                         CustomText(
-                          "DRAW IN: Only $mo Months Away",
+                          "DRAW CLOSES IN: Only $mo Months Away",
                           color: Colors.white,
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
@@ -138,27 +147,17 @@ class _MajorGiveawayCardWidgetState extends State<MajorGiveawayCardWidget> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   spacing: 12,
                   children: [
-                    CountdownUnitWidget(value: mo, label: "MO"),
-                    CountdownUnitWidget(value: d, label: "D"),
-                    CountdownUnitWidget(value: h, label: "H"),
-                    CountdownUnitWidget(value: m, label: "M"),
+                    CountdownUnitWidget(value: mo, label: "MONTHS"),
+                    CountdownUnitWidget(value: d, label: "DAYS"),
+                    CountdownUnitWidget(value: h, label: "HRS"),
+                    CountdownUnitWidget(value: m, label: "MINS"),
                   ],
                 ),
-                space12H,
-                CustomText(
-                  widget.giveaway.title,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-                CustomText(
-                  widget.giveaway.prizeDescription,
-                  color: Colors.white70,
-                  fontSize: 12,
-                ),
+
                 space12H,
                 const CustomText(
                   "GRAND PRIZE",
-                  color: AppColors.kPrimaryColor,
+                  color: AppColors.kWhiteTextColor,
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
                 ),

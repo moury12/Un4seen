@@ -7,18 +7,15 @@ class QuickActionRowWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 140, // Container height to hold both scrollview and fixed arrow
+      height: 95, // Reduced container height to eliminate excess white space
       child: Stack(
-        alignment: Alignment.centerRight, // ডানপাশে অ্যারো এলাইন করার জন্য
+        alignment: Alignment.centerRight,
         children: [
-          // ১. আপনার মূল স্ক্রোলযোগ্য তালিকা
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: SizedBox(
-              height: 140,
-              width:
-                  75.0 * 8 +
-                  20, // আপনার টোটাল ৮টি আইটেম অনুযায়ী উইডথ অ্যাডজাস্ট করা হয়েছে
+              height: 95,
+              width: 75.0 * 8 + 20,
               child: Stack(
                 children: [
                   _actionItem(
@@ -87,19 +84,14 @@ class QuickActionRowWidget extends StatelessWidget {
             ),
           ),
 
-          // ২. ক্লায়েন্টের চাহিদা অনুযায়ী ডানপাশের অ্যারো ডিজাইন (Fixed Indicator)
           Positioned(
             right: 8,
-            // আইটেমগুলোর স্লোপ/স্টেকিং ইফেক্টের সাথে মেলানোর জন্য পজিশন সামান্য নিচে নামানো হয়েছে
-            bottom: 40,
+            bottom: 24,
             child: IgnorePointer(
-              // এতে অ্যারোটির ওপর ক্লিক করলেও নিচের স্ক্রোল কাজ করবে
               child: Container(
                 padding: const EdgeInsets.all(6),
                 decoration: BoxDecoration(
-                  color: AppColors.kPrimaryColor.withValues(
-                    alpha: .5,
-                  ), // হালকা ব্যাকগ্রাউন্ড যাতে নিচে দেখা যায়
+                  color: AppColors.kPrimaryColor.withValues(alpha: .5),
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(
@@ -123,7 +115,7 @@ class QuickActionRowWidget extends StatelessWidget {
   }) {
     return Positioned(
       left: (idx * 75.0),
-      bottom: idx * 12.0,
+      bottom: idx * 6.0,
       child: Container(
         width: 65,
         decoration: BoxDecoration(

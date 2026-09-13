@@ -19,12 +19,13 @@ class HomePage extends StatelessWidget {
 
     return CustomScaffold(
       appBar: AppBar(
+        leadingWidth: 70,
         leading: Padding(
           padding: const EdgeInsets.only(left: 8.0),
           child: Obx(() {
             return CustomNetworkImage(
-              height: 40,
-              width: 40,
+              height: 70,
+              width: 70,
               imageUrl: homeController.homeFeedData.value?.user?.image ?? "",
               boxShape: BoxShape.circle,
             );
@@ -155,10 +156,10 @@ class HomePage extends StatelessWidget {
               }
 
               return Column(
-                spacing: 8,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const HomeHeaderWidget(),
+                  space8H,
                   // We still use giveawayController for currentWeekly as requested
                   Obx(() {
                     if (giveawayController.isLoading.value) {
@@ -171,18 +172,26 @@ class HomePage extends StatelessWidget {
                       );
                     }
                     final gData = giveawayController.pageData.value;
-                    if (gData == null || gData.currentWeekly == null)
+                    if (gData == null || gData.currentWeekly == null) {
                       return const SizedBox.shrink();
-                    return WeeklyPrizeCardWidget(
-                      giveaway: gData.currentWeekly!,
+                    }
+                    return Column(
+                      children: [
+                        WeeklyPrizeCardWidget(giveaway: gData.currentWeekly!),
+                        space8H,
+                      ],
                     );
                   }),
 
                   const QuickActionRowWidget(),
+                  space8H,
 
-                  if (homeData.majorGiveaway != null)
+                  if (homeData.majorGiveaway != null) ...[
                     MajorGiveawayCardWidget(giveaway: homeData.majorGiveaway!),
+                    space8H,
+                  ],
                   const BikeOfTheWeekWidget(),
+                  space8H,
 
                   CustomButton(
                     text: AppStaticStrings.rateMyRide.tr,
@@ -190,6 +199,7 @@ class HomePage extends StatelessWidget {
                     rightIcon: Icons.chevron_right,
                     backgroundColor: AppColors.kPrimaryDarkColor3,
                   ),
+                  space12H,
 
                   if (homeData.recentWinners.isNotEmpty) ...[
                     CustomText(
@@ -197,21 +207,27 @@ class HomePage extends StatelessWidget {
                       variant: TextVariant.titleLarge,
                       fontWeight: FontWeight.bold,
                     ),
+                    space8H,
                     ...homeData.recentWinners.map(
-                      (winner) => WeeklyWinnerCardWidget(
-                        week: "WEEK ${winner.weekNumber} WINNER",
-                        name: winner.winner?.fullName ?? "",
-                        prize: winner.title,
-                        image:
-                            winner.winner?.image ?? "https://i.pravatar.cc/150",
-                        onTap: () {
-                          context.push(
-                            AppRoutes.memberDetails,
-                            extra: winner.winner?.id,
-                          );
-                        },
+                      (winner) => Padding(
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        child: WeeklyWinnerCardWidget(
+                          week: "WEEK ${winner.weekNumber} WINNER",
+                          name: winner.winner?.fullName ?? "",
+                          prize: winner.title,
+                          image:
+                              winner.winner?.image ??
+                              "https://i.pravatar.cc/150",
+                          onTap: () {
+                            context.push(
+                              AppRoutes.memberDetails,
+                              extra: winner.winner?.id,
+                            );
+                          },
+                        ),
                       ),
                     ),
+                    space8H,
                   ],
 
                   if (homeData.thisWeekStats != null) ...[
@@ -220,6 +236,7 @@ class HomePage extends StatelessWidget {
                       variant: TextVariant.titleLarge,
                       fontWeight: FontWeight.bold,
                     ),
+                    space8H,
                     ButtonTapWidget(
                       onTap: () {
                         if (Get.isRegistered<NavigationController>()) {
@@ -233,6 +250,7 @@ class HomePage extends StatelessWidget {
                         subtitle: AppStaticStrings.keepShredding.tr,
                       ),
                     ),
+                    space8H,
                     ActivitySummaryTileWidget(
                       icon: AppIcons.camera,
                       title:
