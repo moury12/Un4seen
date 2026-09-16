@@ -135,10 +135,12 @@ class _StoryFullPageState extends State<StoryFullPage>
               if (controller.activeStories.isEmpty) return const SizedBox();
               final story =
                   controller.activeStories[controller.currentStoryIndex.value];
+              // The uploaded story is already a rendered 9:16 canvas PNG,
+              // so BoxFit.contain displays it without any secondary cropping.
               return Positioned.fill(
                 child: CustomNetworkImage(
                   imageUrl: story.content,
-                  fit: BoxFit.cover,
+                  fit: BoxFit.contain,
                 ),
               );
             }),

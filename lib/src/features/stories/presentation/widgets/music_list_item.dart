@@ -19,7 +19,8 @@ class MusicListItem extends StatelessWidget {
     final controller = Get.find<MusicController>();
 
     return Obx(() {
-      final bool isCurrentPlaying = controller.currentPlayingId.value == music.id;
+      final bool isCurrentPlaying =
+          controller.currentPlayingId.value == music.id;
       final bool isPlaying = isCurrentPlaying && controller.isPlaying.value;
 
       return ListTile(
@@ -38,8 +39,16 @@ class MusicListItem extends StatelessWidget {
             ),
           ),
         ),
-        title: CustomText(music.title, color: Colors.white, fontWeight: FontWeight.bold),
-        subtitle: CustomText(music.category, color: Colors.white70, fontSize: 12),
+        title: CustomText(
+          music.title,
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+        ),
+        subtitle: CustomText(
+          music.category,
+          color: Colors.white70,
+          fontSize: 12,
+        ),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -57,12 +66,19 @@ class MusicListItem extends StatelessWidget {
               ButtonTapWidget(
                 onTap: onSelect,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
                     border: Border.all(color: AppColors.kPrimaryColor),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: CustomText("Select", color: AppColors.kPrimaryColor, fontSize: 10),
+                  child: CustomText(
+                    "Select",
+                    color: AppColors.kPrimaryColor,
+                    fontSize: 10,
+                  ),
                 ),
               ),
           ],

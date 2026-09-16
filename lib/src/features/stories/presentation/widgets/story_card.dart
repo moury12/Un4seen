@@ -17,7 +17,8 @@ class StoryCard extends StatelessWidget {
     super.key,
     required this.isLeft,
     required this.story,
-    this.isFromSaved = false, required this.index,
+    this.isFromSaved = false,
+    required this.index,
   });
 
   @override
@@ -25,10 +26,7 @@ class StoryCard extends StatelessWidget {
     return GestureDetector(
       onTap: () => context.push(
         AppRoutes.storyFull,
-        extra: {
-          'initialIndex': index,
-          'isFromSaved': isFromSaved,
-        },
+        extra: {'initialIndex': index, 'isFromSaved': isFromSaved},
       ),
       child: GenericSlantedCard(
         isLeft: isLeft,

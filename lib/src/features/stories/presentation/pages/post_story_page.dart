@@ -2,6 +2,7 @@ import 'package:un4seen/src/features/stories/presentation/controllers/music_cont
 import 'package:un4seen/src/features/stories/presentation/controllers/story_controller.dart';
 import 'package:un4seen/src/features/stories/presentation/widgets/category_selection_sheet.dart';
 import 'package:un4seen/src/features/stories/presentation/widgets/music_selection_sheet.dart';
+import 'package:un4seen/src/features/stories/presentation/widgets/story_canvas_widget.dart';
 import 'package:un4seen/src/src_export.dart';
 import '../widgets/post_story_header.dart';
 import 'package:flutter/foundation.dart';
@@ -14,7 +15,8 @@ class PostStoryPage extends StatefulWidget {
   State<PostStoryPage> createState() => _PostStoryPageState();
 }
 
-class _PostStoryPageState extends State<PostStoryPage> with WidgetsBindingObserver {
+class _PostStoryPageState extends State<PostStoryPage>
+    with WidgetsBindingObserver {
   late final StoryController controller;
   late final MusicController musicController;
 
@@ -35,7 +37,8 @@ class _PostStoryPageState extends State<PostStoryPage> with WidgetsBindingObserv
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.paused || state == AppLifecycleState.inactive) {
+    if (state == AppLifecycleState.paused ||
+        state == AppLifecycleState.inactive) {
       musicController.pause();
     }
   }
@@ -177,17 +180,12 @@ class _PostStoryPageState extends State<PostStoryPage> with WidgetsBindingObserv
         Expanded(
           child: Stack(
             children: [
-              // Full Image Display
-              Positioned.fill(
-                child: GestureDetector(
-                  onTap: () =>
-                      _openEditor(context), // Tap image to open full editor
-                  child: Image.file(
-                    controller.selectedImage.value!,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
+              // ── Story Canvas ────────────────────────────────────────────
+              // The canvas handles its own gestures (pinch/zoom/drag/rotate)
+              // and is the single source of truth for the story composition.
+              // It is also wrapped in a RepaintBoundary that is rendered to
+              // PNG bytes at upload time via StoryController.renderCanvasToBytes().
+              Positioned.fill(child: const StoryCanvasWidget()),
               // Top Left Back Button
               Positioned(
                 top: 16,
@@ -201,6 +199,7 @@ class _PostStoryPageState extends State<PostStoryPage> with WidgetsBindingObserv
                   return Row(
                     children: [
                       _buildCircularIconButton(Icons.arrow_back_ios_new, () {
+                        controller.resetTransform();
                         controller.selectedImage.value = null;
                       }),
                       space12W,

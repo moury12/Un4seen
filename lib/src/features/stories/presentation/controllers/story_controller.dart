@@ -2,7 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:typed_data';
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:dio/dio.dart' as dio;
 import 'dart:io';
@@ -37,6 +39,77 @@ class StoryController extends GetxController {
   final RxBool isLoading = false.obs;
   final RxString loadingStatus = ''.obs;
   final ImagePicker _picker = ImagePicker();
+
+  // ── Story Canvas Transformation State ─────────────────────────────────────
+  /// The key used by StoryCanvasWidget's RepaintBoundary for canvas rendering.
+  final GlobalKey storyCanvasKey = GlobalKey();
+
+  /// Current scale applied to the story image inside the canvas.
+  final RxDouble storyScale = 1.0.obs;
+
+  /// Current rotation (radians) applied to the story image inside the canvas.
+  final RxDouble storyRotation = 0.0.obs;
+
+  /// Current horizontal translation (logical pixels) of the story image.
+  final RxDouble storyOffsetX = 0.0.obs;
+
+  /// Current vertical translation (logical pixels) of the story image.
+  final RxDouble storyOffsetY = 0.0.obs;
+
+  /// Cached original aspect ratio of the selected image (width / height).
+  /// Used by StoryCanvasWidget to compute the initial width-based scale.
+  final RxDouble imageAspectRatio = 1.0.obs;
+
+  /// Resets all canvas transformation values.
+  /// Call this every time a completely new image is selected.
+  void resetTransform() {
+    storyScale.value = 1.0;
+    storyRotation.value = 0.0;
+    storyOffsetX.value = 0.0;
+    storyOffsetY.value = 0.0;
+    imageAspectRatio.value = 1.0;
+  }
+
+  /// Reads the pixel dimensions of [file] and caches the aspect ratio.
+  Future<void> _cacheImageAspectRatio(File file) async {
+    try {
+      final bytes = await file.readAsBytes();
+      final codec = await ui.instantiateImageCodec(bytes);
+      final frame = await codec.getNextFrame();
+      final img = frame.image;
+      imageAspectRatio.value = img.width / img.height;
+      img.dispose();
+    } catch (e) {
+      debugPrint('Could not read image dimensions: $e');
+    }
+  }
+
+  /// Renders the story canvas (RepaintBoundary keyed with [storyCanvasKey])
+  /// to a PNG [Uint8List] at device pixel ratio quality.
+  /// Returns null if the canvas is not attached to the widget tree.
+  Future<Uint8List?> renderCanvasToBytes() async {
+    try {
+      final context = storyCanvasKey.currentContext;
+      if (context == null) {
+        debugPrint('StoryCanvas: canvas context is null.');
+        return null;
+      }
+      final renderObject = context.findRenderObject();
+      if (renderObject == null || renderObject is! RenderRepaintBoundary) {
+        debugPrint('StoryCanvas: RepaintBoundary not found in widget tree.');
+        return null;
+      }
+      // Use pixelRatio 3.0 for good quality without being excessive.
+      final image = await renderObject.toImage(pixelRatio: 3.0);
+      final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+      image.dispose();
+      return byteData?.buffer.asUint8List();
+    } catch (e) {
+      debugPrint('StoryCanvas: render error: $e');
+      return null;
+    }
+  }
+
   // Feed States
   final RxList<StoryModel> stories = <StoryModel>[].obs;
   final RxList<StoryModel> myStories = <StoryModel>[].obs;
@@ -48,7 +121,9 @@ class StoryController extends GetxController {
   List<StoryModel> get allStories {
     final List<StoryModel> combined = [];
     combined.addAll(myStories);
-    combined.addAll(stories.where((s) => !myStories.any((ms) => ms.id == s.id)));
+    combined.addAll(
+      stories.where((s) => !myStories.any((ms) => ms.id == s.id)),
+    );
     return combined;
   }
 
@@ -161,16 +236,20 @@ class StoryController extends GetxController {
   Future<void> pickImage() async {
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
     if (image != null) {
+      resetTransform();
       selectedImage.value = File(image.path);
       isEditingDetails.value = false;
+      await _cacheImageAspectRatio(selectedImage.value!);
     }
   }
 
   Future<void> pickImageFromCamera() async {
     final XFile? image = await _picker.pickImage(source: ImageSource.camera);
     if (image != null) {
+      resetTransform();
       selectedImage.value = File(image.path);
       isEditingDetails.value = false;
+      await _cacheImageAspectRatio(selectedImage.value!);
     }
   }
 
@@ -186,11 +265,21 @@ class StoryController extends GetxController {
         return false;
       }
 
-      final Uint8List imageBytes = await selectedImage.value!.readAsBytes();
+      loadingStatus.value = "Composing story...";
+
+      // Render the exact story canvas composition to PNG bytes.
+      // This ensures the uploaded image matches the preview exactly.
+      Uint8List? imageBytes = await renderCanvasToBytes();
+
+      if (imageBytes == null) {
+        // Fallback: if canvas is not in the tree for some reason, use raw file.
+        debugPrint('StoryCanvas: falling back to raw image bytes.');
+        imageBytes = await selectedImage.value!.readAsBytes();
+      }
 
       loadingStatus.value = "Uploading to Syndicate...";
 
-      // Payload matching your specific request
+      // Payload — unchanged from original API contract.
       final Map<String, dynamic> data = {
         "contentType": "image",
         if (selectedCategory.value.isNotEmpty)
@@ -211,8 +300,8 @@ class StoryController extends GetxController {
 
       if (res.data['success'] == true) {
         CustomSnackbar.showSuccess(res.data['message']);
-        
-        // Reset state after successful creation
+
+        // Reset all state after successful creation.
         selectedImage.value = null;
         editedImageBytes.value = null;
         selectedCategory.value = '';
@@ -223,7 +312,8 @@ class StoryController extends GetxController {
         storyText.value = '';
         textController.clear();
         selectedMusicModel.value = null;
-        
+        resetTransform();
+
         return true;
       } else {
         CustomSnackbar.showError(res.data['message']);

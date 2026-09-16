@@ -29,10 +29,10 @@ class StoryModel {
     // 1. Identify if the data is nested (for "my-saved" endpoint)
     // We check if 'story' exists and is actually a Map
     final bool hasNestedStory = json['story'] != null && json['story'] is Map;
-    
+
     // 2. Safely extract the Map. If nested, use json['story'], otherwise use the root json.
-    final Map<String, dynamic> data = hasNestedStory 
-        ? Map<String, dynamic>.from(json['story']) 
+    final Map<String, dynamic> data = hasNestedStory
+        ? Map<String, dynamic>.from(json['story'])
         : json;
 
     return StoryModel(
@@ -42,22 +42,25 @@ class StoryModel {
       contentType: data['contentType']?.toString() ?? 'image',
       category: data['category']?.toString() ?? 'Bikes',
       heartCount: data['heartCount'] is int ? data['heartCount'] : 0,
-      
+
       // In saved stories, these flags are at the root level (json), not inside 'story' (data)
       isHearted: json['isHearted'] ?? data['isHearted'] ?? false,
       isOwnStory: json['isOwnStory'] ?? data['isOwnStory'] ?? false,
-      isSaved: json['isSaved'] ?? data['isSaved'] ?? hasNestedStory, 
-      
+      isSaved: json['isSaved'] ?? data['isSaved'] ?? hasNestedStory,
+
       // Pick timeAgo from the root json first, then fallback to nested data
-      timeAgo: json['timeAgo']?.toString() ?? data['timeAgo']?.toString() ?? 'Just now',
-      
+      timeAgo:
+          json['timeAgo']?.toString() ??
+          data['timeAgo']?.toString() ??
+          'Just now',
+
       // Handle User object safely
       user: StoryUser.fromJson(
-        (data['user'] != null && data['user'] is Map) 
-            ? Map<String, dynamic>.from(data['user']) 
-            : {}
+        (data['user'] != null && data['user'] is Map)
+            ? Map<String, dynamic>.from(data['user'])
+            : {},
       ),
-      
+
       // Handle Music object safely
       music: (data['music'] != null && data['music'] is Map)
           ? StoryMusic.fromJson(Map<String, dynamic>.from(data['music']))
@@ -73,10 +76,10 @@ class StoryUser {
   final String image;
 
   StoryUser({
-    required this.id, 
-    required this.fullName, 
-    required this.memberNumber, 
-    required this.image
+    required this.id,
+    required this.fullName,
+    required this.memberNumber,
+    required this.image,
   });
 
   factory StoryUser.fromJson(Map<String, dynamic> json) {
