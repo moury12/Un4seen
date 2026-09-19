@@ -15,8 +15,10 @@ class ProfileHeaderWidget extends StatelessWidget {
   final String followers;
   final String following;
   final bool isCurrentUser;
- final bool isFollowing;
- final String? userId;
+  final bool isFollowing;
+  final String? userId;
+  final VoidCallback? onProfileTap;
+
   const ProfileHeaderWidget({
     super.key,
     required this.name,
@@ -27,23 +29,30 @@ class ProfileHeaderWidget extends StatelessWidget {
     required this.points,
     required this.followers,
     required this.following,
-    this.isCurrentUser = false,  this.isFollowing=false, this.userId,
+    this.isCurrentUser = false,
+    this.isFollowing = false,
+    this.userId,
+    this.onProfileTap,
   });
 
   @override
   Widget build(BuildContext context) {
-        final controller = Get.find<ProfileController>();
+    final controller = Get.find<ProfileController>();
 
     return Row(
       spacing: 6,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Profile Picture
-        CustomNetworkImage(
-          imageUrl: image,
-          height: 80,
-          width: 80,
-          boxShape: BoxShape.circle,
+        ButtonTapWidget(
+          onTap: onProfileTap,
+          shape: const CircleBorder(),
+          child: CustomNetworkImage(
+            imageUrl: image,
+            height: 80,
+            width: 80,
+            boxShape: BoxShape.circle,
+          ),
         ),
 
         // Container(
@@ -66,14 +75,18 @@ class ProfileHeaderWidget extends StatelessWidget {
               Row(
                 spacing: 8,
                 children: [
-                  CustomText(
-                    name,
-                    fontSize: 18,
-                    variant: TextVariant.headlineMedium,
-                    fontWeight: FontWeight.bold,
+                  Expanded(
+                    child: ButtonTapWidget(
+                      onTap: onProfileTap,
+                      child: CustomText(
+                        name,
+                        fontSize: 18,
+                        variant: TextVariant.headlineMedium,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
                   // const CustomText('🇺🇸', fontSize: 16),
-                  const Spacer(),
                   if (isCurrentUser)
                     ButtonTapWidget(
                       onTap: () => context.push(AppRoutes.settings),
@@ -182,60 +195,68 @@ context.push(
                if (!isCurrentUser)   space4H,
 
               // ID and Membership Pills
-              Row(
-                spacing: 6,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 4,
+              ButtonTapWidget(
+                onTap: onProfileTap,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      spacing: 6,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 4,
+                          ),
+                          decoration: BoxDecoration(
+                            color: AppColors.kPrimaryColor,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: CustomText(
+                            syndicateId,
+                            color: Colors.white,
+                            variant: TextVariant.labelSmall,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 4,
+                          ),
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              colors: [Color(0xFF00A6FF), Color(0xFF0066CC)],
+                            ),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: CustomText(
+                            memberType,
+                            color: Colors.white,
+                            variant: TextVariant.labelSmall,
+                            fontWeight: FontWeight.bold,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
                     ),
-                    decoration: BoxDecoration(
-                      color: AppColors.kPrimaryColor,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: CustomText(
-                      syndicateId,
-                      color: Colors.white,
-                      variant: TextVariant.labelSmall,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 4,
-                    ),
-                    decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        colors: [Color(0xFF00A6FF), Color(0xFF0066CC)],
-                      ),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: CustomText(
-                      memberType,
-                      color: Colors.white,
-                      variant: TextVariant.labelSmall,
-                      fontWeight: FontWeight.bold,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                ],
-              ),
-              space4H,
+                    space4H,
 
-              // Location
-              Row(
-                children: [
-                  const Icon(
-                    Icons.location_on_outlined,
-                    color: AppColors.kTextColor,
-                    size: 16,
-                  ),
-                  const SizedBox(width: 4),
-                  CustomText(location, variant: TextVariant.labelMedium),
-                ],
+                    // Location
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.location_on_outlined,
+                          color: AppColors.kTextColor,
+                          size: 16,
+                        ),
+                        const SizedBox(width: 4),
+                        CustomText(location, variant: TextVariant.labelMedium),
+                      ],
+                    ),
+                  ],
+                ),
               ),
               space4H,
 

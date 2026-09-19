@@ -66,7 +66,8 @@ class MemberDetailsPage extends StatelessWidget {
                     points: user.shredPoints.toString(),
                     followers: user.followerCount.toString(),
                     following: user.followingCount.toString(),
-                    isCurrentUser: false,
+                    isCurrentUser: user.id == controller.userProfile.value.id ||
+                        userId == controller.userProfile.value.id,
                     isFollowing: user.isFollowing,
                     userId: user.id,
                   ),

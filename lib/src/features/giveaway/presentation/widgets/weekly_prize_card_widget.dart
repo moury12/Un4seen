@@ -24,10 +24,12 @@ class WeeklyPrizeCardWidget extends StatelessWidget {
                 borderRadius: const BorderRadius.vertical(
                   top: Radius.circular(appRadius16),
                 ),
-                child: CustomNetworkImage(
-                  imageUrl: giveaway.image,
-                  height: 180,
-                  width: double.infinity,
+                child: AspectRatio(
+                  aspectRatio: 16 / 9,
+                  child: CustomNetworkImage(
+                    imageUrl: giveaway.image,
+                    width: double.infinity,
+                  ),
                 ),
               ),
               Positioned(

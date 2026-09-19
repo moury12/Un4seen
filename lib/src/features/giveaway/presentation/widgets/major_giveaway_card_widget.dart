@@ -68,10 +68,13 @@ class _MajorGiveawayCardWidgetState extends State<MajorGiveawayCardWidget> {
                 borderRadius: const BorderRadius.vertical(
                   top: Radius.circular(appRadius16),
                 ),
-                child: CustomNetworkImage(
-                  imageUrl: widget.giveaway.image,
-                  height: 200,
-                  width: double.infinity,
+                child: AspectRatio(
+                  aspectRatio: 16 / 9,
+                  child: CustomNetworkImage(
+                    imageUrl: widget.giveaway.image,
+                    // height: 200,
+                    width: double.infinity,
+                  ),
                 ),
               ),
               Positioned(

@@ -19,174 +19,230 @@ class BikeOfTheWeekWidget extends StatelessWidget {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // ── Header Section ──────────────────────────────────────────
           Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const Icon(
-                Icons.emoji_events_outlined,
+                Icons.emoji_events,
                 color: AppColors.kPrimaryColor,
-                size: 22,
+                size: 38,
               ),
-              space4W,
-              CustomText(
-                AppStaticStrings.bikeOfTheWeek.tr,
-                variant: TextVariant.titleLarge,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ],
-          ),
-          space12H,
-          ClipPath(
-            clipper: BikeOfTheWeekShapeClipper(radius: 16, slantAmount: 6),
-            child: Container(
-              decoration: BoxDecoration(
-                color: AppColors.kPrimaryDarkColor.withValues(alpha: .5),
-                border: Border.all(
-                  color: AppColors.kPrimaryDarkColor2,
-                  width: 1,
-                ),
-              ),
-              child: Column(
-                children: [
-                  ClipPath(
-                    clipper: BikeOfTheWeekShapeClipper(
-                      radius: 16,
-                      slantAmount: 6,
-                    ),
-                    child: AspectRatio(
-                      aspectRatio: 16 / 9,
-                      child: CustomNetworkImage(
-                        imageUrl: ride.image,
-                        width: double.infinity,
+              const SizedBox(width: 8),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Transform(
+                      transform: Matrix4.skewX(-0.25),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 2,
+                        ),
+                        decoration: BoxDecoration(
+                          color: AppColors.kPrimaryColor,
+                          borderRadius: BorderRadius.circular(3),
+                        ),
+                        child: const Text(
+                          "WEEKLY WINNER ///",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w900,
+                            fontStyle: FontStyle.italic,
+                            fontSize: 10,
+                            letterSpacing: 0.5,
+                          ),
+                        ),
                       ),
                     ),
+                    const SizedBox(height: 2),
+                    RichText(
+                      text: const TextSpan(
+                        children: [
+                          TextSpan(
+                            text: "BIKE ",
+                            style: TextStyle(
+                              color: AppColors.kPrimaryColor,
+                              fontWeight: FontWeight.w900,
+                              fontStyle: FontStyle.italic,
+                              fontSize: 22,
+                              letterSpacing: -0.5,
+                            ),
+                          ),
+                          TextSpan(
+                            text: "OF THE WEEK",
+                            style: TextStyle(
+                              color: Color(0xFF0F172A),
+                              fontWeight: FontWeight.w900,
+                              fontStyle: FontStyle.italic,
+                              fontSize: 22,
+                              letterSpacing: -0.5,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                height: 28,
+                width: 1.5,
+                color: AppColors.kPrimaryColor.withValues(alpha: 0.6),
+              ),
+              const SizedBox(width: 6),
+              const Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    "REAL RIDES",
+                    style: TextStyle(
+                      color: Color(0xFF64748B),
+                      fontSize: 7.5,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: 0.5,
+                      height: 1.15,
+                    ),
                   ),
-                  Padding(
-                    padding: AppPadding.getPadding12(context),
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            CustomNetworkImage(
-                              imageUrl: ride.user.image,
-                              height: 36,
-                              width: 36,
-                              radius: 99,
-                            ),
-                            space8W,
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  CustomText(
-                                    "${ride.user.fullName} ${ride.user.memberNumber}",
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14,
-                                  ),
-                                  CustomText(
-                                    "${ride.rideType} • ${AppStaticStrings.customBuild.tr} ${ride.user.country}",
-                                    color: Colors.white70,
-                                    fontSize: 12,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SvgPicture.asset(
-                              AppIcons.fire,
-                              height: 20,
-                              colorFilter: const ColorFilter.mode(
-                                AppColors.kPrimaryColor,
-                                BlendMode.srcIn,
-                              ),
-                            ),
-                            space4W,
-                            CustomText(
-                              "${ride.averageRating}",
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14,
-                            ),
-                          ],
-                        ),
-                        space12H,
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: ButtonTapWidget(
-                            onTap: () {},
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const Icon(
-                                    Icons.emoji_events,
-                                    color: AppColors.kGoldColor,
-                                    size: 16,
-                                  ),
-                                  space8W,
-                                  CustomText(
-                                    AppStaticStrings.bonusShredPointsAwarded.tr,
-                                    color: AppColors.kPrimaryColor,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 11,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
+                  Text(
+                    "REAL PEOPLE",
+                    style: TextStyle(
+                      color: Color(0xFF64748B),
+                      fontSize: 7.5,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: 0.5,
+                      height: 1.15,
+                    ),
+                  ),
+                  Text(
+                    "UN4SEEN",
+                    style: TextStyle(
+                      color: Color(0xFF64748B),
+                      fontSize: 7.5,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: 0.5,
+                      height: 1.15,
                     ),
                   ),
                 ],
               ),
+            ],
+          ),
+          space8H,
+
+          // ── Main Bike Card ──────────────────────────────────────────
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: const Color(0xFF6B9BBF),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Bike Image (16:9 with rounded corners)
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(14),
+                  child: AspectRatio(
+                    aspectRatio: 16 / 9,
+                    child: CustomNetworkImage(
+                      imageUrl: ride.image,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10),
+
+                // User Info Row
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  child: Row(
+                    children: [
+                      ClipOval(
+                        child: CustomNetworkImage(
+                          imageUrl: ride.user.image,
+                          height: 40,
+                          width: 40,
+                          radius: 99,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      space8W,
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            CustomText(
+                              "${ride.user.fullName} ${ride.user.memberNumber}",
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                            ),
+                            const SizedBox(height: 2),
+                            CustomText(
+                              "${ride.rideType} • ${AppStaticStrings.customBuild.tr} ${ride.user.country}",
+                              color: Colors.white.withValues(alpha: 0.8),
+                              fontSize: 11,
+                            ),
+                          ],
+                        ),
+                      ),
+                      SvgPicture.asset(
+                        AppIcons.fire,
+                        height: 20,
+                        colorFilter: const ColorFilter.mode(
+                          Color(0xFF00D2FF),
+                          BlendMode.srcIn,
+                        ),
+                      ),
+                      space4W,
+                      CustomText(
+                        "${ride.averageRating}",
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15,
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 10),
+
+                // Bonus Shred Points Awarded Pill
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(
+                        Icons.emoji_events,
+                        color: Color(0xFFF59E0B),
+                        size: 18,
+                      ),
+                      space8W,
+                      CustomText(
+                        AppStaticStrings.bonusShredPointsAwarded.tr,
+                        color: AppColors.kPrimaryColor,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
         ],
       );
     });
   }
-}
-
-class BikeOfTheWeekShapeClipper extends CustomClipper<Path> {
-  final double slantAmount;
-  final double radius;
-
-  BikeOfTheWeekShapeClipper({required this.slantAmount, required this.radius});
-
-  @override
-  Path getClip(Size size) {
-    final path = Path();
-
-    // ১. উপরের বাম কোণা থেকে শুরু
-    path.moveTo(0, slantAmount + radius);
-    path.quadraticBezierTo(0, slantAmount, radius, slantAmount);
-
-    // ২. উপরের ডান কোণা (এটিকে আমরা নিচু করেছি slantAmount দিয়ে)
-    path.lineTo(size.width - radius, 0);
-    path.quadraticBezierTo(size.width, 0, size.width, radius);
-
-    // ৩. নিচের ডান কোণা
-    path.lineTo(size.width, size.height - radius);
-    path.quadraticBezierTo(
-      size.width,
-      size.height,
-      size.width - radius,
-      size.height,
-    );
-
-    // ৪. নিচের বাম কোণা
-    path.lineTo(radius, size.height);
-    path.quadraticBezierTo(0, size.height, 0, size.height - radius);
-
-    path.close();
-    return path;
-  }
-
-  @override
-  bool shouldReclip(covariant CustomClipper<Path> oldClipper) => true;
 }

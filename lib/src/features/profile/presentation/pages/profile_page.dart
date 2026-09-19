@@ -46,6 +46,13 @@ class ProfilePage extends StatelessWidget {
                     followers: profileCtrl.followerCount.value.toString(),
                     following: profileCtrl.followingCount.value.toString(),
                     isCurrentUser: true,
+                    userId: profileCtrl.userProfile.value.id,
+                    onProfileTap: () {
+                      final userId = profileCtrl.userProfile.value.id;
+                      if (userId != null && userId.isNotEmpty) {
+                        context.push(AppRoutes.memberDetails, extra: userId);
+                      }
+                    },
                   ),
                 ),
                 space4H,

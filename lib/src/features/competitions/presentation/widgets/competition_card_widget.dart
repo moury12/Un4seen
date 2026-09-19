@@ -62,10 +62,13 @@ class _CompetitionCardWidgetState extends State<CompetitionCardWidget> {
                 borderRadius: const BorderRadius.vertical(
                   top: Radius.circular(appRadius16),
                 ),
-                child: CustomNetworkImage(
-                  imageUrl: widget.model.image,
-                  height: 180,
-                  width: double.infinity,
+                child: AspectRatio(
+                  aspectRatio: 16 / 9,
+                  child: CustomNetworkImage(
+                    imageUrl: widget.model.image,
+
+                    width: double.infinity,
+                  ),
                 ),
               ),
 

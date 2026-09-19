@@ -166,7 +166,7 @@ class SyndicateJourneyWidget extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              border: Border.all(color: accentColor.withOpacity(0.5)),
+              border: Border.all(color: accentColor.withValues(alpha: 0.5)),
               borderRadius: BorderRadius.circular(12),
               gradient: LinearGradient(
                 colors: [

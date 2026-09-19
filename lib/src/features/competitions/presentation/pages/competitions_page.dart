@@ -147,8 +147,6 @@ class CompetitionsPage extends StatelessWidget {
     );
   }
 
-
-
   Widget _buildShimmer(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
@@ -161,7 +159,7 @@ class CompetitionsPage extends StatelessWidget {
   Widget _buildShimmerCard() {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
-      height: 300,
+    
       decoration: BoxDecoration(
         color: AppColors.kPrimaryDarkColor2,
         borderRadius: BorderRadius.circular(appRadius16),
@@ -169,14 +167,16 @@ class CompetitionsPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            height: 160,
+          AspectRatio(
+      aspectRatio: 16 / 9,
+      child: Container(
             decoration: const BoxDecoration(
               color: AppColors.kPrimaryDarkColor3,
               borderRadius: BorderRadius.vertical(
                 top: Radius.circular(appRadius16),
               ),
             ),
+          ),
           ),
           Padding(
             padding: const EdgeInsets.all(12),
