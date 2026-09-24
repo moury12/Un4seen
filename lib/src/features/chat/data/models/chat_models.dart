@@ -1,4 +1,3 @@
-
 class ChatSidebarModel {
   final List<ChatGroupModel> groups;
   final List<DirectMessageModel> directMessages;
@@ -7,12 +6,16 @@ class ChatSidebarModel {
 
   factory ChatSidebarModel.fromJson(Map<String, dynamic> json) {
     return ChatSidebarModel(
-      groups: (json['groups'] as List?)
+      groups:
+          (json['groups'] as List?)
               ?.map((e) => ChatGroupModel.fromJson(e))
-              .toList() ?? [],
-      directMessages: (json['directMessages'] as List?)
+              .toList() ??
+          [],
+      directMessages:
+          (json['directMessages'] as List?)
               ?.map((e) => DirectMessageModel.fromJson(e))
-              .toList() ?? [],
+              .toList() ??
+          [],
     );
   }
 }
@@ -22,7 +25,11 @@ class ChatGroupModel {
   final String name;
   final int onlineCount;
 
-  ChatGroupModel({required this.id, required this.name, required this.onlineCount});
+  ChatGroupModel({
+    required this.id,
+    required this.name,
+    required this.onlineCount,
+  });
 
   factory ChatGroupModel.fromJson(Map<String, dynamic> json) {
     return ChatGroupModel(
@@ -41,8 +48,11 @@ class DirectMessageModel {
   final bool isOnline;
 
   DirectMessageModel({
-    required this.id, required this.userId, required this.name, 
-    required this.image, required this.isOnline
+    required this.id,
+    required this.userId,
+    required this.name,
+    required this.image,
+    required this.isOnline,
   });
 
   factory DirectMessageModel.fromJson(Map<String, dynamic> json) {
@@ -55,12 +65,13 @@ class DirectMessageModel {
     );
   }
 }
+
 class ChatMessageModel {
   final String id;
   final String channelId;
   final ChatSender sender;
   final String? text;
-  final String? file;      // ← nullable রাখো, empty string না
+  final String? file; // ← nullable রাখো, empty string না
   final bool isRead;
   final bool isReported;
   final DateTime createdAt;
@@ -78,43 +89,53 @@ class ChatMessageModel {
     required this.updatedAt,
   });
 
-  bool get hasImage => file != null && file!.isNotEmpty && file!.startsWith('http');
-  bool get hasText  => text != null && text!.isNotEmpty;
+  bool get hasImage =>
+      file != null && file!.isNotEmpty && file!.startsWith('http');
+  bool get hasText => text != null && text!.isNotEmpty;
 
   factory ChatMessageModel.fromJson(Map<String, dynamic> json) {
     // file field safe parse
     final rawFile = json['file'];
-    final safeFile = (rawFile is String && rawFile.isNotEmpty && rawFile.startsWith('http'))
+    final safeFile =
+        (rawFile is String && rawFile.isNotEmpty && rawFile.startsWith('http'))
         ? rawFile
-        : null;   // ← http না হলে null করে দাও
+        : null; // ← http না হলে null করে দাও
 
     return ChatMessageModel(
-      id:        json['_id'] ?? '',
+      id: json['_id'] ?? '',
       channelId: json['channel'] ?? '',
-      sender:    ChatSender.fromJson(json['sender'] as Map<String, dynamic>),
-      text:      json['text'] is String && (json['text'] as String).isNotEmpty
-                     ? json['text']
-                     : null,
-      file:      safeFile,   // ← এটাই fix
-      isRead:    json['isRead'] ?? false,
+      sender: ChatSender.fromJson(json['sender'] as Map<String, dynamic>),
+      text: json['text'] is String && (json['text'] as String).isNotEmpty
+          ? json['text']
+          : null,
+      file: safeFile, // ← এটাই fix
+      isRead: json['isRead'] ?? false,
       isReported: json['isReported'] ?? false,
       createdAt: DateTime.parse(json['createdAt']),
       updatedAt: DateTime.parse(json['updatedAt']),
     );
   }
 }
+
 class ChatSender {
   final String id;
   final String fullName;
   final String image;
   final String memberNumber;
 
-  ChatSender({required this.id, required this.fullName, required this.image, required this.memberNumber});
+  ChatSender({
+    required this.id,
+    required this.fullName,
+    required this.image,
+    required this.memberNumber,
+  });
 
   factory ChatSender.fromJson(Map<String, dynamic> json) {
     return ChatSender(
       id: json['_id'] ?? '',
-      fullName: json['fullName'] ?? "${json['firstName'] ?? ''} ${json['lastName'] ?? ''}".trim(),
+      fullName:
+          json['fullName'] ??
+          "${json['firstName'] ?? ''} ${json['lastName'] ?? ''}".trim(),
       image: json['image'] ?? '',
       memberNumber: json['memberNumber'] ?? '',
     );

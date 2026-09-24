@@ -3,6 +3,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 class LocalStorageService {
   static const String _accessTokenKey = 'access_token';
   static const String _refreshTokenKey = 'refresh_token';
+  static const String _lastViewedAnnouncementIdKey =
+      'last_viewed_announcement_id';
 
   late SharedPreferences _prefs;
 
@@ -18,6 +20,13 @@ class LocalStorageService {
 
   String? get accessToken => _prefs.getString(_accessTokenKey);
   String? get refreshToken => _prefs.getString(_refreshTokenKey);
+
+  String? get lastViewedAnnouncementId =>
+      _prefs.getString(_lastViewedAnnouncementIdKey);
+
+  Future<void> saveLastViewedAnnouncementId(String id) async {
+    await _prefs.setString(_lastViewedAnnouncementIdKey, id);
+  }
 
   Future<void> clear() async {
     await _prefs.remove(_accessTokenKey);

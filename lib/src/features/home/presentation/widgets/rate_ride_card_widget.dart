@@ -130,7 +130,9 @@ class _RateRideCardWidgetState extends State<RateRideCardWidget> {
                     activeTrackColor: AppColors.kPrimaryColor,
                     inactiveTrackColor: const Color(0xFFE2E8F0),
                     thumbColor: Colors.white,
-                    overlayColor: AppColors.kPrimaryColor.withValues(alpha: 0.12),
+                    overlayColor: AppColors.kPrimaryColor.withValues(
+                      alpha: 0.12,
+                    ),
                     trackHeight: 5,
                     thumbShape: const RoundSliderThumbShape(
                       enabledThumbRadius: 10,
@@ -155,22 +157,14 @@ class _RateRideCardWidgetState extends State<RateRideCardWidget> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const CustomText(
-                      "0",
-                      color: Colors.grey,
-                      fontSize: 11,
-                    ),
+                    const CustomText("0", color: Colors.grey, fontSize: 11),
                     CustomText(
                       "${_currentRating.toInt()} / 10",
                       color: AppColors.kPrimaryColor,
                       fontSize: 13,
                       fontWeight: FontWeight.bold,
                     ),
-                    const CustomText(
-                      "10",
-                      color: Colors.grey,
-                      fontSize: 11,
-                    ),
+                    const CustomText("10", color: Colors.grey, fontSize: 11),
                   ],
                 ),
               ],

@@ -6,9 +6,9 @@ class ClipboardUtils {
 
   static Future<void> copyText(String text) async {
     if (text.isEmpty) return;
-    
+
     await Clipboard.setData(ClipboardData(text: text));
-    
+
     // Using your existing custom snackbar logic
     CustomSnackbar.showSuccess("Copied to clipboard!");
   }

@@ -27,14 +27,20 @@ class CrewChoiceController extends GetxController {
 
       if (responses[0].data['success']) {
         final List data = responses[0].data['data'];
-        activePolls.assignAll(data.map((e) => CrewChoiceModel.fromJson(e)).toList());
+        activePolls.assignAll(
+          data.map((e) => CrewChoiceModel.fromJson(e)).toList(),
+        );
       }
       if (responses[1].data['success']) {
         final List data = responses[1].data['data'];
-        pastPolls.assignAll(data.map((e) => CrewChoiceModel.fromJson(e)).toList());
+        pastPolls.assignAll(
+          data.map((e) => CrewChoiceModel.fromJson(e)).toList(),
+        );
       }
     } catch (e) {
-      print('❌ CrewChoice Error: $e | lib/src/features/home/presentation/controllers/crew_choice_controller.dart:36');
+      print(
+        '❌ CrewChoice Error: $e | lib/src/features/home/presentation/controllers/crew_choice_controller.dart:36',
+      );
     } finally {
       isLoading.value = false;
     }
@@ -43,10 +49,10 @@ class CrewChoiceController extends GetxController {
   Future<void> castVote(String pollId, int optionIndex) async {
     try {
       isVoting.value = true;
-      final res = await _api.patch('/crew-choices/vote', data: {
-        "pollId": pollId,
-        "optionIndex": optionIndex,
-      });
+      final res = await _api.patch(
+        '/crew-choices/vote',
+        data: {"pollId": pollId, "optionIndex": optionIndex},
+      );
 
       if (res.data['success']) {
         CustomSnackbar.showSuccess(res.data['message']);

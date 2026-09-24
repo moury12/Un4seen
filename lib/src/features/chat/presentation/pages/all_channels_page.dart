@@ -15,10 +15,7 @@ class AllChannelsPage extends StatelessWidget {
     final controller = Get.find<ChatController>();
 
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        title: Text(AppStaticStrings.channels.tr),
-      ),
+      appBar: AppBar(elevation: 0, title: Text(AppStaticStrings.channels.tr)),
       body: RefreshIndicator(
         onRefresh: () => controller.fetchSidebar(),
         color: AppColors.kPrimaryColor,
@@ -53,7 +50,10 @@ class AllChannelsPage extends StatelessWidget {
             ),
             slivers: [
               SliverPadding(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 12,
+                ),
                 sliver: SliverList(
                   delegate: SliverChildBuilderDelegate((context, index) {
                     final group = controller.groupsList[index];

@@ -15,11 +15,27 @@ class AppContentController extends GetxController {
   final RxBool isTermsLoading = false.obs;
   final RxBool isAboutLoading = false.obs;
 
-  Future<void> fetchPrivacyPolicy() => _loadContent('/privacy/retrive', 'privacyPolicy', privacyPolicy, isPrivacyLoading);
-  Future<void> fetchTermsCondition() => _loadContent('/terms/retrive', 'termsCondition', termsCondition, isTermsLoading);
-  Future<void> fetchAboutUs() => _loadContent('/about/retrive', 'aboutUs', aboutUs, isAboutLoading);
+  Future<void> fetchPrivacyPolicy() => _loadContent(
+    '/privacy/retrive',
+    'privacyPolicy',
+    privacyPolicy,
+    isPrivacyLoading,
+  );
+  Future<void> fetchTermsCondition() => _loadContent(
+    '/terms/retrive',
+    'termsCondition',
+    termsCondition,
+    isTermsLoading,
+  );
+  Future<void> fetchAboutUs() =>
+      _loadContent('/about/retrive', 'aboutUs', aboutUs, isAboutLoading);
 
-  Future<void> _loadContent(String path, String key, Rxn<AppContentModel> target, RxBool loader) async {
+  Future<void> _loadContent(
+    String path,
+    String key,
+    Rxn<AppContentModel> target,
+    RxBool loader,
+  ) async {
     try {
       loader.value = true;
       final res = await _api.get(path);

@@ -46,7 +46,10 @@ class HomeController extends GetxController {
   Future<void> pickRideImage() async {
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
     if (image != null) {
-      final cropped = await ImageCropperUtils.cropImage(image.path, is16x9: true);
+      final cropped = await ImageCropperUtils.cropImage(
+        image.path,
+        is16x9: true,
+      );
       if (cropped != null) {
         selectedRideImage.value = cropped;
       }
@@ -56,7 +59,10 @@ class HomeController extends GetxController {
   Future<void> pickRideImageFromCamera() async {
     final XFile? image = await _picker.pickImage(source: ImageSource.camera);
     if (image != null) {
-      final cropped = await ImageCropperUtils.cropImage(image.path, is16x9: true);
+      final cropped = await ImageCropperUtils.cropImage(
+        image.path,
+        is16x9: true,
+      );
       if (cropped != null) {
         selectedRideImage.value = cropped;
       }

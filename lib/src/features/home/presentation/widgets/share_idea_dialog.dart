@@ -100,7 +100,8 @@ class _ShareIdeaDialogState extends State<ShareIdeaDialog> {
                   ? controller.categories.toList()
                   : categories;
               // Reset if selected category is not in the list anymore
-              if (selectedCategory != null && !list.contains(selectedCategory)) {
+              if (selectedCategory != null &&
+                  !list.contains(selectedCategory)) {
                 selectedCategory = null;
               }
               return Container(
@@ -173,33 +174,35 @@ class _ShareIdeaDialogState extends State<ShareIdeaDialog> {
               hintStyle: const TextStyle(fontSize: 12, color: Colors.white),
             ),
             space8H,
-            Obx(() => CustomButton(
-                  text: AppStaticStrings.submitIdea.tr,
-                  isLoading: controller.isSubmitting.value,
-                  onPressed: () async {
-                    if (selectedCategory == null || selectedCategory!.isEmpty) {
-                      CustomSnackbar.showError("Please select a category");
-                      return;
-                    }
-                    if (titleController.text.trim().isEmpty) {
-                      CustomSnackbar.showError("Please enter a title");
-                      return;
-                    }
-                    if (descController.text.trim().isEmpty) {
-                      CustomSnackbar.showError("Please enter a description");
-                      return;
-                    }
-                    final success = await controller.submitIdea(
-                      selectedCategory!,
-                      titleController.text.trim(),
-                      descController.text.trim(),
-                    );
-                    if (success && context.mounted) {
-                      Navigator.pop(context);
-                    }
-                  },
-                  backgroundColor: AppColors.kPrimaryColor,
-                )),
+            Obx(
+              () => CustomButton(
+                text: AppStaticStrings.submitIdea.tr,
+                isLoading: controller.isSubmitting.value,
+                onPressed: () async {
+                  if (selectedCategory == null || selectedCategory!.isEmpty) {
+                    CustomSnackbar.showError("Please select a category");
+                    return;
+                  }
+                  if (titleController.text.trim().isEmpty) {
+                    CustomSnackbar.showError("Please enter a title");
+                    return;
+                  }
+                  if (descController.text.trim().isEmpty) {
+                    CustomSnackbar.showError("Please enter a description");
+                    return;
+                  }
+                  final success = await controller.submitIdea(
+                    selectedCategory!,
+                    titleController.text.trim(),
+                    descController.text.trim(),
+                  );
+                  if (success && context.mounted) {
+                    Navigator.pop(context);
+                  }
+                },
+                backgroundColor: AppColors.kPrimaryColor,
+              ),
+            ),
             space8H,
             Center(
               child: CustomText(

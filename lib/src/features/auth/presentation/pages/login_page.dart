@@ -12,6 +12,7 @@ class LoginPage extends StatefulWidget {
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
+
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   final emailCtrl = TextEditingController(
@@ -129,7 +130,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
 
                 space12H,
-       ],
+              ],
             ),
           ),
         ),

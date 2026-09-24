@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:un4seen/src/core/routes/app_routes.dart';
 import 'package:un4seen/src/core/widgets/custom_scaffold.dart';
 import 'package:un4seen/src/features/auth/presentation/auth_presentation_export.dart';
+import 'package:un4seen/src/features/profile/presentation/controllers/un4seen_updates_controller.dart';
 import 'package:un4seen/src/features/profile/presentation/widgets/point_blance_card_widget.dart';
 import '../../../../core/core_export.dart';
 import '../widgets/profile_menu_tile.dart';
@@ -21,12 +22,19 @@ class ProfilePage extends StatelessWidget {
         ? Get.find<ProfileController>()
         : Get.put(ProfileController());
 
+    final updatesCtrl = Get.isRegistered<Un4seenUpdatesController>()
+        ? Get.find<Un4seenUpdatesController>()
+        : Get.put(Un4seenUpdatesController(), permanent: true);
+
     return CustomScaffold(
       // isPaddingNeeded: false,
       body: SafeArea(
         child: RefreshIndicator(
           onRefresh: () async {
-            await profileCtrl.fetchProfile();
+            await Future.wait([
+              profileCtrl.fetchProfile(),
+              updatesCtrl.fetchAnnouncements(isRefresh: true),
+            ]);
           },
           child: SingleChildScrollView(
             physics: const AlwaysScrollableScrollPhysics(),
@@ -66,6 +74,18 @@ class ProfilePage extends StatelessWidget {
                 space8H,
 
                 // ── Menu tiles ────────────────────────────
+                Obx(
+                  () => ProfileMenuTile(
+                    title: AppStaticStrings.un4seenUpdates.tr,
+                    iconWidget: const Icon(
+                      Icons.campaign,
+                      color: AppColors.kPrimaryColor,
+                      size: 24,
+                    ),
+                    showBadge: updatesCtrl.hasUnreadUpdates.value,
+                    onTap: () => context.push(AppRoutes.un4seenUpdates),
+                  ),
+                ),
                 ProfileMenuTile(
                   title: AppStaticStrings.myOrders,
                   icon: AppIcons.cell,

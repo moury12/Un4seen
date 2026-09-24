@@ -6,6 +6,7 @@ class ProfileMenuTile extends StatelessWidget {
   final String title;
   final String? icon;
   final Widget? iconWidget;
+  final bool showBadge;
   final VoidCallback onTap;
 
   const ProfileMenuTile({
@@ -13,6 +14,7 @@ class ProfileMenuTile extends StatelessWidget {
     required this.title,
     this.icon,
     this.iconWidget,
+    this.showBadge = false,
     required this.onTap,
   });
 
@@ -42,41 +44,85 @@ class ProfileMenuTile extends StatelessWidget {
           child: Row(
             children: [
               // ── Circular icon container ──────────────────
-              Container(
-                width: 44,
-                height: 44,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColors.kSurfaceColor,
-                  border: Border.all(color: AppColors.kPrimaryColor, width: 1),
-                ),
-                child: Center(
-                  child:
-                      iconWidget ??
-                      (icon != null
-                          ? SvgPicture.asset(
-                              icon!,
-                              height: 20,
-                              width: 20,
-                              colorFilter: const ColorFilter.mode(
-                                AppColors.kPrimaryColor,
-                                BlendMode.srcIn,
-                              ),
-                            )
-                          : const SizedBox.shrink()),
-                ),
+              Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  Container(
+                    width: 44,
+                    height: 44,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: AppColors.kSurfaceColor,
+                      border: Border.all(
+                        color: AppColors.kPrimaryColor,
+                        width: 1,
+                      ),
+                    ),
+                    child: Center(
+                      child:
+                          iconWidget ??
+                          (icon != null
+                              ? SvgPicture.asset(
+                                  icon!,
+                                  height: 20,
+                                  width: 20,
+                                  colorFilter: const ColorFilter.mode(
+                                    AppColors.kPrimaryColor,
+                                    BlendMode.srcIn,
+                                  ),
+                                )
+                              : const SizedBox.shrink()),
+                    ),
+                  ),
+                  if (showBadge)
+                    Positioned(
+                      top: 0,
+                      right: 0,
+                      child: Container(
+                        width: 10,
+                        height: 10,
+                        decoration: BoxDecoration(
+                          color: AppColors.kRedColor,
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: AppColors.kPrimaryDarkColor,
+                            width: 1.5,
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
               ),
               const SizedBox(width: 8),
 
               // ── Title ────────────────────────────────────
               Expanded(
-                child: Text(
-                  title,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
+                child: Row(
+                  children: [
+                    Flexible(
+                      child: Text(
+                        title,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    if (showBadge) ...[
+                      const SizedBox(width: 8),
+                      Container(
+                        width: 8,
+                        height: 8,
+                        decoration: const BoxDecoration(
+                          color: AppColors.kRedColor,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                    ],
+                  ],
                 ),
               ),
 

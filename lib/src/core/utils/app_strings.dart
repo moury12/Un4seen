@@ -342,6 +342,7 @@ class AppStaticStrings {
   static const String postYourStory = 'Post Your Story';
   static const String shareYourRide = 'Share your ride';
   static const String announcements = 'Announcements';
+  static const String un4seenUpdates = 'Un4seen Updates';
   static const String all = 'All';
   static const String unseen = 'Unseen';
   static const String seen = 'Seen';

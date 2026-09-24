@@ -1,4 +1,3 @@
-
 import '../../../../src_export.dart';
 import '../controllers/crew_choice_controller.dart';
 import '../widgets/poll_card_widget.dart';
@@ -15,8 +14,16 @@ class CrewChoicePage extends StatelessWidget {
       appBar: AppBar(
         title: Column(
           children: [
-            CustomText(AppStaticStrings.crewChoice.tr, variant: TextVariant.titleLarge, fontWeight: FontWeight.bold),
-            CustomText(AppStaticStrings.syndicateCallsShots.tr, variant: TextVariant.labelSmall, color: AppColors.kSecondaryTextColor),
+            CustomText(
+              AppStaticStrings.crewChoice.tr,
+              variant: TextVariant.titleLarge,
+              fontWeight: FontWeight.bold,
+            ),
+            CustomText(
+              AppStaticStrings.syndicateCallsShots.tr,
+              variant: TextVariant.labelSmall,
+              color: AppColors.kSecondaryTextColor,
+            ),
           ],
         ),
       ),
@@ -35,7 +42,8 @@ class CrewChoicePage extends StatelessWidget {
                 padding: AppPadding.getPadding12(context),
                 sliver: SliverList(
                   delegate: SliverChildBuilderDelegate(
-                    (context, index) => PollCardWidget(model: controller.activePolls[index]),
+                    (context, index) =>
+                        PollCardWidget(model: controller.activePolls[index]),
                     childCount: controller.activePolls.length,
                   ),
                 ),
@@ -45,8 +53,15 @@ class CrewChoicePage extends StatelessWidget {
               if (controller.pastPolls.isNotEmpty)
                 SliverToBoxAdapter(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                    child: CustomText("Past Results".tr, variant: TextVariant.titleMedium, fontWeight: FontWeight.bold),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 8,
+                    ),
+                    child: CustomText(
+                      "Past Results".tr,
+                      variant: TextVariant.titleMedium,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
 
@@ -68,7 +83,8 @@ class CrewChoicePage extends StatelessWidget {
               const SliverToBoxAdapter(
                 child: Padding(
                   padding: EdgeInsets.all(12.0),
-                  child: HowItWorksWidget(), // Your existing how it works widget
+                  child:
+                      HowItWorksWidget(), // Your existing how it works widget
                 ),
               ),
               const SliverToBoxAdapter(child: SizedBox(height: 40)),

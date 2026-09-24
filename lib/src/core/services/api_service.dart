@@ -7,7 +7,7 @@ import 'local_storage_service.dart';
 class ApiService {
   final Dio _dio = Dio(
     BaseOptions(
-     baseUrl: 'http://13.238.237.114/api/v1',
+      baseUrl: 'http://13.238.237.114/api/v1',
       //  baseUrl: 'https://un4seen-backend.vercel.app/api/v1',
       connectTimeout: const Duration(seconds: 30),
       receiveTimeout: const Duration(seconds: 30),

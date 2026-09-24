@@ -9,7 +9,11 @@ class PostFeedResponse {
   final int totalPage;
   final int page;
 
-  PostFeedResponse({required this.result, required this.totalPage, required this.page});
+  PostFeedResponse({
+    required this.result,
+    required this.totalPage,
+    required this.page,
+  });
 
   factory PostFeedResponse.fromJson(Map<String, dynamic> json) {
     return PostFeedResponse(
@@ -31,7 +35,7 @@ class PostModel {
   final List<String> likes;
   final String timeAgo;
   final List<PostComment> recentComments;
-  
+
   // 1. Convert these fields into Rx observables
   final RxInt likeCount;
   final RxBool isLiked;
@@ -67,6 +71,7 @@ class PostModel {
     );
   }
 }
+
 class PostUser {
   final String id;
   final String firstName;
@@ -76,7 +81,13 @@ class PostUser {
 
   String get fullName => '$firstName $lastName'.trim();
 
-  PostUser({required this.id, required this.firstName, required this.lastName, this.memberNumber, this.image});
+  PostUser({
+    required this.id,
+    required this.firstName,
+    required this.lastName,
+    this.memberNumber,
+    this.image,
+  });
 
   factory PostUser.fromJson(Map<String, dynamic> json) {
     return PostUser(
@@ -96,7 +107,13 @@ class PostComment {
   final String text;
   final String createdAt;
 
-  PostComment({required this.id, required this.post, required this.user, required this.text, required this.createdAt});
+  PostComment({
+    required this.id,
+    required this.post,
+    required this.user,
+    required this.text,
+    required this.createdAt,
+  });
 
   factory PostComment.fromJson(Map<String, dynamic> json) {
     return PostComment(

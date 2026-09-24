@@ -22,9 +22,10 @@ class BikeProfileTileWidget extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         if (hasBike && activeBike!.id != null) {
-          context.push('${AppRoutes.singleBikeDetails}/${activeBike!.id}', extra: {
-            'fromMember': true
-          } );
+          context.push(
+            '${AppRoutes.singleBikeDetails}/${activeBike!.id}',
+            extra: {'fromMember': true},
+          );
         } else {
           CustomSnackbar.showError("No active bike profile found");
         }

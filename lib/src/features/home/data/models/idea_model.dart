@@ -8,7 +8,9 @@ class IdeaFeedModel {
 
   factory IdeaFeedModel.fromJson(Map<String, dynamic> json) {
     return IdeaFeedModel(
-      result: (json['result'] as List).map((e) => IdeaModel.fromJson(e)).toList(),
+      result: (json['result'] as List)
+          .map((e) => IdeaModel.fromJson(e))
+          .toList(),
       meta: PaginationMeta.fromJson(json['meta']),
     );
   }

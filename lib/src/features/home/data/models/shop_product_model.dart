@@ -1,7 +1,3 @@
-
-
-
-
 class ProductModel {
   final int id;
   final String title;
@@ -15,9 +11,15 @@ class ProductModel {
   final String productUrl;
 
   ProductModel({
-    required this.id, required this.title, required this.handle,
-    required this.price, this.compareAtPrice, this.discountPercentage,
-    required this.image, required this.brand, required this.category,
+    required this.id,
+    required this.title,
+    required this.handle,
+    required this.price,
+    this.compareAtPrice,
+    this.discountPercentage,
+    required this.image,
+    required this.brand,
+    required this.category,
     required this.productUrl,
   });
 

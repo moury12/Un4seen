@@ -48,8 +48,8 @@ class NotificationItem {
       message: json['message'] ?? '',
       type: json['type'] ?? 'general',
       isRead: json['isRead'] ?? false,
-      createdAt: json['createdAt'] != null 
-          ? DateTime.parse(json['createdAt']) 
+      createdAt: json['createdAt'] != null
+          ? DateTime.parse(json['createdAt'])
           : DateTime.now(),
     );
   }

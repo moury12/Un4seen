@@ -27,19 +27,20 @@ class NotificationService {
     // Initialize Local Notifications
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');
-    
+
     const DarwinInitializationSettings initializationSettingsIOS =
         DarwinInitializationSettings(
-      requestSoundPermission: true,
-      requestBadgePermission: true,
-      requestAlertPermission: true,
-    );
-    
-    const InitializationSettings initializationSettings = InitializationSettings(
-      android: initializationSettingsAndroid,
-      iOS: initializationSettingsIOS,
-    );
-    
+          requestSoundPermission: true,
+          requestBadgePermission: true,
+          requestAlertPermission: true,
+        );
+
+    const InitializationSettings initializationSettings =
+        InitializationSettings(
+          android: initializationSettingsAndroid,
+          iOS: initializationSettingsIOS,
+        );
+
     await localNotificationsPlugin.initialize(settings: initializationSettings);
 
     String? token = await messaging.getToken();
@@ -69,17 +70,17 @@ class NotificationService {
 
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
         AndroidNotificationDetails(
-      'high_importance_channel', // id
-      'High Importance Notifications', // title
-      importance: Importance.max,
-      priority: Priority.high, 
-      icon: '@mipmap/ic_launcher',
-    );
-    
+          'high_importance_channel', // id
+          'High Importance Notifications', // title
+          importance: Importance.max,
+          priority: Priority.high,
+          icon: '@mipmap/ic_launcher',
+        );
+
     const NotificationDetails platformChannelSpecifics = NotificationDetails(
       android: androidPlatformChannelSpecifics,
     );
-    
+
     await localNotificationsPlugin.show(
       id: message.notification.hashCode,
       title: message.notification?.title,

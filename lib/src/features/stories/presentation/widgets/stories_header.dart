@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:un4seen/src/core/core_export.dart';
 import 'package:get/get.dart';
-import 'package:un4seen/src/features/stories/presentation/widgets/announcements_button.dart';
 
 class StoriesHeader extends StatelessWidget {
   const StoriesHeader({super.key});
@@ -27,8 +26,6 @@ class StoriesHeader extends StatelessWidget {
             color: AppColors.kSecondaryTextColor,
           ),
         ),
-        // const SizedBox(width: 4),
-        const AnnouncementsButton(),
       ],
     );
   }

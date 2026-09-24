@@ -4,7 +4,7 @@ import '../theme/app_colors.dart';
 
 class CustomSnackbar {
   // You can safely remove messengerKey from here and your MaterialApp if you aren't using it elsewhere
-  
+
   static void showSuccess(String message) {
     _show(message, AppColors.kGreenColor);
   }
@@ -16,7 +16,7 @@ class CustomSnackbar {
   static void _show(String message, Color color) {
     Get.rawSnackbar(
       messageText: Text(
-        message, 
+        message,
         style: const TextStyle(color: Colors.white, fontSize: 14),
       ),
       backgroundColor: color,

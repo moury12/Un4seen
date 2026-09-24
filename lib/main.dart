@@ -21,21 +21,22 @@ import 'src/features/profile/presentation/bindings/profile_binding.dart';
 import 'src/features/orders/presentation/bindings/orders_binding.dart';
 import 'src/features/subscription/presentation/bindings/subscription_binding.dart';
 import 'src/features/bike_profiles/presentation/bindings/bike_profiles_binding.dart';
+
 @pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
 
   print(message.messageId);
 }
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-FirebaseMessaging.onBackgroundMessage(
-    firebaseMessagingBackgroundHandler);
-    await NotificationService().initialize();
-    String? token = await FirebaseMessaging.instance.getToken();
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+  await NotificationService().initialize();
+  String? token = await FirebaseMessaging.instance.getToken();
 
-print(token);
+  print(token);
   final storage = await LocalStorageService().init();
   Get.put(storage, permanent: true);
 

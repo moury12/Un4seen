@@ -6,7 +6,10 @@ class AppContentModel {
 
   AppContentModel({required this.id, required this.content});
 
-  factory AppContentModel.fromJson(Map<String, dynamic> json, String contentKey) {
+  factory AppContentModel.fromJson(
+    Map<String, dynamic> json,
+    String contentKey,
+  ) {
     return AppContentModel(
       id: json['_id'] ?? '',
       content: json[contentKey] ?? '', // Retain raw HTML fields directly

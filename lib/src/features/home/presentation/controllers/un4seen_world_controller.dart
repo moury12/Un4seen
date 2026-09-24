@@ -21,17 +21,23 @@ class Un4seenWorldController extends GetxController {
     try {
       isLoading.value = true;
       // Replaces hardcoded values with your new relative endpoint
-      final response = await _apiService.get('/un4seen-world'); 
-      
+      final response = await _apiService.get('/un4seen-world');
+
       if (response.data != null && response.data['success'] == true) {
         final List dynamicList = response.data['data']['result'] ?? [];
-        brands.assignAll(dynamicList.map((e) => BrandModel.fromJson(e)).toList());
+        brands.assignAll(
+          dynamicList.map((e) => BrandModel.fromJson(e)).toList(),
+        );
       } else {
-        CustomSnackbar.showError(response.data['message'] ?? 'Failed to load brands');
+        CustomSnackbar.showError(
+          response.data['message'] ?? 'Failed to load brands',
+        );
       }
     } catch (e) {
       print('Error fetching brands: $e');
-      CustomSnackbar.showError('Something went wrong while fetching partner brands');
+      CustomSnackbar.showError(
+        'Something went wrong while fetching partner brands',
+      );
     } finally {
       isLoading.value = false;
     }

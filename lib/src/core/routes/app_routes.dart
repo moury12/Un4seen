@@ -47,4 +47,5 @@ class AppRoutes {
   static const String allChannels = '/all-channels';
   static const String channelMembers = '/channel-members';
   static const String notification = '/notification';
+  static const String un4seenUpdates = '/un4seen-updates';
 }

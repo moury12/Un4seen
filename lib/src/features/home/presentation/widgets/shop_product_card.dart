@@ -33,19 +33,42 @@ class ShopProductCard extends StatelessWidget {
                   ),
                   if (product.discountPercentage != null)
                     Positioned(
-                      top: 8, right: 8,
+                      top: 8,
+                      right: 8,
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                        decoration: BoxDecoration(color: AppColors.kPrimaryColor, borderRadius: BorderRadius.circular(4)),
-                        child: CustomText("-${product.discountPercentage}%", color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 6,
+                          vertical: 2,
+                        ),
+                        decoration: BoxDecoration(
+                          color: AppColors.kPrimaryColor,
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: CustomText(
+                          "-${product.discountPercentage}%",
+                          color: Colors.white,
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   Positioned(
-                    bottom: 8, left: 8,
+                    bottom: 8,
+                    left: 8,
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                      decoration: BoxDecoration(color: Colors.black45, borderRadius: BorderRadius.circular(4)),
-                      child: CustomText(product.category, color: Colors.white, fontSize: 8),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 6,
+                        vertical: 2,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.black45,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: CustomText(
+                        product.category,
+                        color: Colors.white,
+                        fontSize: 8,
+                      ),
                     ),
                   ),
                 ],
@@ -56,14 +79,30 @@ class ShopProductCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  CustomText(product.title, color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13, maxLines: 2),
+                  CustomText(
+                    product.title,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 13,
+                    maxLines: 2,
+                  ),
                   space4H,
                   Row(
                     children: [
-                      CustomText("\$${product.price}nzd", color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12),
+                      CustomText(
+                        "\$${product.price}nzd",
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
+                      ),
                       if (product.compareAtPrice != null) ...[
                         space4W,
-                        CustomText("\$${product.compareAtPrice}", color: Colors.white60, fontSize: 10, decoration: TextDecoration.lineThrough),
+                        CustomText(
+                          "\$${product.compareAtPrice}",
+                          color: Colors.white60,
+                          fontSize: 10,
+                          decoration: TextDecoration.lineThrough,
+                        ),
                       ],
                     ],
                   ),

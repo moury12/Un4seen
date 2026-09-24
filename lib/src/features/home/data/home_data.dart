@@ -32,10 +32,7 @@ class ThisWeekStats {
   final int pointsEarned;
   final int newStoriesPosted;
 
-  ThisWeekStats({
-    required this.pointsEarned,
-    required this.newStoriesPosted,
-  });
+  ThisWeekStats({required this.pointsEarned, required this.newStoriesPosted});
 
   factory ThisWeekStats.fromJson(Map<String, dynamic> json) {
     return ThisWeekStats(
@@ -65,14 +62,23 @@ class HomeFeedModel {
   factory HomeFeedModel.fromJson(Map<String, dynamic> json) {
     return HomeFeedModel(
       user: json['user'] != null ? HomeFeedUser.fromJson(json['user']) : null,
-      weeklyGiveaway: json['weeklyGiveaway'] != null ? GiveawayItem.fromJson(json['weeklyGiveaway']) : null,
-      bikeOfTheWeek: json['bikeOfTheWeek'] != null ? RideModel.fromJson(json['bikeOfTheWeek']) : null,
-      majorGiveaway: json['majorGiveaway'] != null ? GiveawayItem.fromJson(json['majorGiveaway']) : null,
-      recentWinners: (json['recentWinners'] as List?)
+      weeklyGiveaway: json['weeklyGiveaway'] != null
+          ? GiveawayItem.fromJson(json['weeklyGiveaway'])
+          : null,
+      bikeOfTheWeek: json['bikeOfTheWeek'] != null
+          ? RideModel.fromJson(json['bikeOfTheWeek'])
+          : null,
+      majorGiveaway: json['majorGiveaway'] != null
+          ? GiveawayItem.fromJson(json['majorGiveaway'])
+          : null,
+      recentWinners:
+          (json['recentWinners'] as List?)
               ?.map((e) => GiveawayItem.fromJson(e))
               .toList() ??
           [],
-      thisWeekStats: json['thisWeekStats'] != null ? ThisWeekStats.fromJson(json['thisWeekStats']) : null,
+      thisWeekStats: json['thisWeekStats'] != null
+          ? ThisWeekStats.fromJson(json['thisWeekStats'])
+          : null,
     );
   }
 }

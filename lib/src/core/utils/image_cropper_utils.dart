@@ -19,20 +19,20 @@ class ImageCropperUtils {
           initAspectRatio: is16x9
               ? CropAspectRatioPreset.ratio16x9
               : (isProfile
-                  ? CropAspectRatioPreset.square
-                  : CropAspectRatioPreset.original),
+                    ? CropAspectRatioPreset.square
+                    : CropAspectRatioPreset.original),
           lockAspectRatio: is16x9 || isProfile,
           aspectRatioPresets: is16x9
               ? [CropAspectRatioPreset.ratio16x9]
               : (isProfile
-                  ? [CropAspectRatioPreset.square]
-                  : [
-                      CropAspectRatioPreset.square,
-                      CropAspectRatioPreset.ratio3x2,
-                      CropAspectRatioPreset.original,
-                      CropAspectRatioPreset.ratio4x3,
-                      CropAspectRatioPreset.ratio16x9,
-                    ]),
+                    ? [CropAspectRatioPreset.square]
+                    : [
+                        CropAspectRatioPreset.square,
+                        CropAspectRatioPreset.ratio3x2,
+                        CropAspectRatioPreset.original,
+                        CropAspectRatioPreset.ratio4x3,
+                        CropAspectRatioPreset.ratio16x9,
+                      ]),
         ),
         IOSUiSettings(
           title: 'Crop Image',
@@ -41,14 +41,14 @@ class ImageCropperUtils {
           aspectRatioPresets: is16x9
               ? [CropAspectRatioPreset.ratio16x9]
               : (isProfile
-                  ? [CropAspectRatioPreset.square]
-                  : [
-                      CropAspectRatioPreset.square,
-                      CropAspectRatioPreset.ratio3x2,
-                      CropAspectRatioPreset.original,
-                      CropAspectRatioPreset.ratio4x3,
-                      CropAspectRatioPreset.ratio16x9,
-                    ]),
+                    ? [CropAspectRatioPreset.square]
+                    : [
+                        CropAspectRatioPreset.square,
+                        CropAspectRatioPreset.ratio3x2,
+                        CropAspectRatioPreset.original,
+                        CropAspectRatioPreset.ratio4x3,
+                        CropAspectRatioPreset.ratio16x9,
+                      ]),
         ),
       ],
     );

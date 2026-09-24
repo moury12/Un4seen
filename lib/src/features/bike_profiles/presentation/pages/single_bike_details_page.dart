@@ -37,27 +37,27 @@ class SingleBikeDetailsPage extends StatelessWidget {
                     color: AppColors.kPrimaryDarkColor2,
                     shape: BoxShape.circle,
                   ),
-                  child: Obx(
-                    ()  {
-                      final bike = controller.singleBikeDetails.value;
-                  final isSaved = bike?.isSaved ?? false;
-                      return ButtonTapWidget(
-                        onTap: bike == null 
-                        ? null 
-                        : () => controller.toggleSaveBike(bike.id),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Icon(
-                          (controller.singleBikeDetails.value?.isSaved ?? false) ==
+                  child: Obx(() {
+                    final bike = controller.singleBikeDetails.value;
+                    final isSaved = bike?.isSaved ?? false;
+                    return ButtonTapWidget(
+                      onTap: bike == null
+                          ? null
+                          : () => controller.toggleSaveBike(bike.id),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Icon(
+                          (controller.singleBikeDetails.value?.isSaved ??
+                                      false) ==
                                   false
                               ? Icons.bookmark_outline
                               : Icons.bookmark,
                           color: AppColors.kWhiteTextColor,
                           size: 20,
-                                              ),
                         ),
-                      );}
-                  ),
+                      ),
+                    );
+                  }),
                 )
               : const SizedBox.shrink(),
         ],

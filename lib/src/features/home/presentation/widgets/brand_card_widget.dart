@@ -38,12 +38,14 @@ class BrandCardWidget extends StatelessWidget {
         children: [
           // Dynamic Image Section from Cloudinary API Payload
           if (brand.image.isNotEmpty) ...[
-            CustomNetworkImage(
-              imageUrl: brand.image,
-              height: 140,
-              width: double.infinity,
-              radius: 12,
-              fit: BoxFit.cover,
+            AspectRatio(
+              aspectRatio: 16 / 9,
+              child: CustomNetworkImage(
+                imageUrl: brand.image,
+                width: double.infinity,
+                radius: 12,
+                fit: BoxFit.cover,
+              ),
             ),
             space8H,
           ],

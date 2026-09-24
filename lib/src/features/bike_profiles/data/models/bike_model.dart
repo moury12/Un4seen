@@ -73,7 +73,7 @@ class BikeModel {
   final List<String> gallery;
   final bool isRetired;
   final bool isSaved;
-  final BikeOwner? user; 
+  final BikeOwner? user;
 
   BikeModel({
     required this.id,
@@ -114,9 +114,11 @@ class BikeModel {
       model: json['model'] ?? '',
       bikeType: json['bikeType'] ?? '',
       color: json['color'] ?? '',
-      upgrades: (json['upgrades'] as List?)
+      upgrades:
+          (json['upgrades'] as List?)
               ?.map((e) => BikeUpgrade.fromJson(e))
-              .toList() ?? [],
+              .toList() ??
+          [],
       gallery: List<String>.from(json['gallery'] ?? []),
       isRetired: json['isRetired'] ?? false,
       isSaved: json['isSaved'] ?? false,

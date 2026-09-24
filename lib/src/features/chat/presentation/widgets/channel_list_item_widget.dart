@@ -19,7 +19,8 @@ class ChannelListItemWidget extends StatelessWidget {
     required this.onTap,
     this.img,
     this.profileImg,
-    this.fromChannel = false, this.channelId="",
+    this.fromChannel = false,
+    this.channelId = "",
   });
 
   @override
@@ -108,10 +109,10 @@ class ChannelListItemWidget extends StatelessWidget {
                 ),
                 child: ButtonTapWidget(
                   onTap: () {
-                    context.push(AppRoutes.buildsMods,extra:{
-                      "channelId":channelId,
-                      "channelName":title,
-                    } );
+                    context.push(
+                      AppRoutes.buildsMods,
+                      extra: {"channelId": channelId, "channelName": title},
+                    );
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),

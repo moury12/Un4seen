@@ -44,13 +44,15 @@ class NotificationController extends GetxController {
 
       if (response.data['success'] == true) {
         final dataContainer = response.data['data'];
-        
+
         if (dataContainer != null) {
           final meta = NotificationMeta.fromJson(dataContainer['meta'] ?? {});
           _totalPage = meta.totalPage;
 
           final List rawItems = dataContainer['result'] ?? [];
-          final items = rawItems.map((e) => NotificationItem.fromJson(e)).toList();
+          final items = rawItems
+              .map((e) => NotificationItem.fromJson(e))
+              .toList();
 
           if (isRefresh) {
             notifications.assignAll(items);
@@ -68,7 +70,8 @@ class NotificationController extends GetxController {
   }
 
   void _scrollListener() {
-    if (scrollController.position.pixels >= scrollController.position.maxScrollExtent - 200) {
+    if (scrollController.position.pixels >=
+        scrollController.position.maxScrollExtent - 200) {
       if (!isLoadingMore.value && _currentPage < _totalPage) {
         _currentPage++;
         fetchNotifications(isRefresh: false);

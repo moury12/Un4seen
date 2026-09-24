@@ -13,7 +13,8 @@ class PollOptionWidget extends StatelessWidget {
     required this.title,
     required this.percentage,
     this.isSelected = false,
-    this.onTap, required this.option,
+    this.onTap,
+    required this.option,
   });
 
   @override
@@ -28,7 +29,8 @@ class PollOptionWidget extends StatelessWidget {
           width: 2,
         ),
       ),
-      child: ButtonTapWidget( // Added Ripple effect
+      child: ButtonTapWidget(
+        // Added Ripple effect
         onTap: onTap,
         radius: 12,
         child: Padding(
@@ -60,14 +62,22 @@ class PollOptionWidget extends StatelessWidget {
                 child: LinearProgressIndicator(
                   value: percentage,
                   minHeight: 8,
-                  backgroundColor: isSelected ? Colors.white24 : AppColors.kAccentColor.withOpacity(0.3),
-                  valueColor: const AlwaysStoppedAnimation<Color>(AppColors.kPrimaryColor),
+                  backgroundColor: isSelected
+                      ? Colors.white24
+                      : AppColors.kAccentColor.withOpacity(0.3),
+                  valueColor: const AlwaysStoppedAnimation<Color>(
+                    AppColors.kPrimaryColor,
+                  ),
                 ),
               ),
               if (!isSelected && onTap != null) ...[
                 space4H,
-                CustomText("Tap to vote".tr, color: AppColors.kSecondaryTextColor, fontSize: 10),
-              ]
+                CustomText(
+                  "Tap to vote".tr,
+                  color: AppColors.kSecondaryTextColor,
+                  fontSize: 10,
+                ),
+              ],
             ],
           ),
         ),

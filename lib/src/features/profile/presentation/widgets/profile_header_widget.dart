@@ -99,100 +99,104 @@ class ProfileHeaderWidget extends StatelessWidget {
                     ),
                 ],
               ),
- if (!isCurrentUser) Row(spacing: 6,
-   children: [
-     Container(
-                    padding: AppPadding.getPadding4(context),
-                    decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        colors: [
-                          AppColors.kPrimaryColor,
-                          AppColors.kPrimaryDarkColor,
-                        ],
+              if (!isCurrentUser)
+                Row(
+                  spacing: 6,
+                  children: [
+                    Container(
+                      padding: AppPadding.getPadding4(context),
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          colors: [
+                            AppColors.kPrimaryColor,
+                            AppColors.kPrimaryDarkColor,
+                          ],
+                        ),
+                        borderRadius: BorderRadius.circular(appRadius6),
                       ),
-                      borderRadius: BorderRadius.circular(appRadius6),
-                    ),
-                    child: ButtonTapWidget(
-                      onTap: () {
-                     
-context.push(
-                          AppRoutes.chat,
-                          extra: ChatPageArgs.direct(
-                            id: userId??'',
-                            title: name,
-                            avatarUrl: image,
-                          ),
-                        );                    
-                      },
-                      radius: appRadius6,
-                      child: Row(
-                        spacing: 6,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          SvgPicture.asset(
-                           AppIcons.chat ,
-                            height: 15,
-                          ),
-                          CustomText(
-                            AppStaticStrings.messageUn4seen.tr ,
-                              
-                            variant: TextVariant.labelSmall,
-                            color: AppColors.kWhiteTextColor,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          if (!isCurrentUser) space4W,
-                        ],
-                      ),
-                    ),
-                  ),
-  
-   Container(
-                padding: AppPadding.getPadding4(context),
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [
-                      AppColors.kPrimaryColor,
-                      AppColors.kPrimaryDarkColor,
-                    ],
-                  ),
-                  borderRadius: BorderRadius.circular(appRadius6),
-                ),
-                child: ButtonTapWidget(
-                  onTap: () {
-                    if (isCurrentUser) {
-                      context.push(AppRoutes.chat);
-                    } else {
-                                            controller.toggleFollow(controller.targetMemberDetails.value!);
+                      child: ButtonTapWidget(
+                        onTap: () {
+                          context.push(
+                            AppRoutes.chat,
+                            extra: ChatPageArgs.direct(
+                              id: userId ?? '',
+                              title: name,
+                              avatarUrl: image,
+                            ),
+                          );
+                        },
+                        radius: appRadius6,
+                        child: Row(
+                          spacing: 6,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            SvgPicture.asset(AppIcons.chat, height: 15),
+                            CustomText(
+                              AppStaticStrings.messageUn4seen.tr,
 
-                    }
-                  },
-                  radius: appRadius6,
-                  child: Row(
-                    spacing: 6,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      SvgPicture.asset(
-                        isCurrentUser ? AppIcons.chat : (isFollowing ? AppIcons.checked : AppIcons.addMember),
-                        height: 15,
+                              variant: TextVariant.labelSmall,
+                              color: AppColors.kWhiteTextColor,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            if (!isCurrentUser) space4W,
+                          ],
+                        ),
                       ),
-                      CustomText(
-                       isCurrentUser 
-                          ? AppStaticStrings.messageUn4seen.tr 
-                          : (isFollowing ? AppStaticStrings.unfollow.tr : AppStaticStrings.follow.tr),
-                        variant: TextVariant.labelSmall,
-                        color: AppColors.kWhiteTextColor,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      if (!isCurrentUser) space4W,
-                    ],
-                  ),
-                ),
-              ),
-           ],
- ),
-            
+                    ),
 
-               if (!isCurrentUser)   space4H,
+                    Container(
+                      padding: AppPadding.getPadding4(context),
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          colors: [
+                            AppColors.kPrimaryColor,
+                            AppColors.kPrimaryDarkColor,
+                          ],
+                        ),
+                        borderRadius: BorderRadius.circular(appRadius6),
+                      ),
+                      child: ButtonTapWidget(
+                        onTap: () {
+                          if (isCurrentUser) {
+                            context.push(AppRoutes.chat);
+                          } else {
+                            controller.toggleFollow(
+                              controller.targetMemberDetails.value!,
+                            );
+                          }
+                        },
+                        radius: appRadius6,
+                        child: Row(
+                          spacing: 6,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            SvgPicture.asset(
+                              isCurrentUser
+                                  ? AppIcons.chat
+                                  : (isFollowing
+                                        ? AppIcons.checked
+                                        : AppIcons.addMember),
+                              height: 15,
+                            ),
+                            CustomText(
+                              isCurrentUser
+                                  ? AppStaticStrings.messageUn4seen.tr
+                                  : (isFollowing
+                                        ? AppStaticStrings.unfollow.tr
+                                        : AppStaticStrings.follow.tr),
+                              variant: TextVariant.labelSmall,
+                              color: AppColors.kWhiteTextColor,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            if (!isCurrentUser) space4W,
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+
+              if (!isCurrentUser) space4H,
 
               // ID and Membership Pills
               ButtonTapWidget(
@@ -282,40 +286,46 @@ context.push(
                   StatItemWidget(
                     value: followers,
                     label: AppStaticStrings.followers.tr,
-                    onTap: ()  {
+                    onTap: () {
                       if (!isCurrentUser) {
-                      controller.fetchOtherFollowers(userId!);
-                    }
+                        controller.fetchOtherFollowers(userId!);
+                      }
                       context.push(
-                      AppRoutes.members,
-                      extra: {
-                        'title': AppStaticStrings.followers.tr,
-                        'list':isCurrentUser? Get.find<ProfileController>().followersList : controller.userfollowersList,
-                       'refresh': () => isCurrentUser 
-                          ? controller.fetchFollowers() 
-                          : controller.fetchOtherFollowers(userId!),
-                      },
-                    );}
+                        AppRoutes.members,
+                        extra: {
+                          'title': AppStaticStrings.followers.tr,
+                          'list': isCurrentUser
+                              ? Get.find<ProfileController>().followersList
+                              : controller.userfollowersList,
+                          'refresh': () => isCurrentUser
+                              ? controller.fetchFollowers()
+                              : controller.fetchOtherFollowers(userId!),
+                        },
+                      );
+                    },
                   ),
                   const StatDividerWidget(),
                   StatItemWidget(
                     value: following,
                     label: 'Following',
-                    onTap: () { if (!isCurrentUser) {
-                      controller.fetchOtherFollowing(userId!);
-                    }
-                      
-                      context.push(
+                    onTap: () {
+                      if (!isCurrentUser) {
+                        controller.fetchOtherFollowing(userId!);
+                      }
 
-                      AppRoutes.members,
-                      extra: {
-                        'title': 'Following',
-                         'list':  isCurrentUser ? controller.followingList : controller.userfollowingList,
-                      'refresh': () => isCurrentUser 
-                          ? controller.fetchFollowing() 
-                          : controller.fetchOtherFollowing(userId!),
-                      },
-                    );}
+                      context.push(
+                        AppRoutes.members,
+                        extra: {
+                          'title': 'Following',
+                          'list': isCurrentUser
+                              ? controller.followingList
+                              : controller.userfollowingList,
+                          'refresh': () => isCurrentUser
+                              ? controller.fetchFollowing()
+                              : controller.fetchOtherFollowing(userId!),
+                        },
+                      );
+                    },
                   ),
                 ],
               ),

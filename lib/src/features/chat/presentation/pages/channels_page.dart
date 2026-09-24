@@ -117,31 +117,39 @@ class ChannelsPage extends StatelessWidget {
                 SliverPadding(
                   padding: const EdgeInsets.symmetric(horizontal: 12),
                   sliver: SliverList(
-                    delegate: SliverChildBuilderDelegate((context, index) {
-                      final group = controller.groupsList[index];
-                      return ChannelListItemWidget(
-                        img: "assets/icons/hash_con.svg",
-                        title: group.name,
-                        fromChannel: true,
-                        channelId: group.id,
-                        subtitle:
-                            "${group.onlineCount} ${AppStaticStrings.online.tr}",
-                        onTap: () => context.push(
-                          AppRoutes.chat,
-                          extra: ChatPageArgs.channel(
-                            id: group.id,
-                            title: group.name,
-                            onlineCount: group.onlineCount,
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        final group = controller.groupsList[index];
+                        return ChannelListItemWidget(
+                          img: "assets/icons/hash_con.svg",
+                          title: group.name,
+                          fromChannel: true,
+                          channelId: group.id,
+                          subtitle:
+                              "${group.onlineCount} ${AppStaticStrings.online.tr}",
+                          onTap: () => context.push(
+                            AppRoutes.chat,
+                            extra: ChatPageArgs.channel(
+                              id: group.id,
+                              title: group.name,
+                              onlineCount: group.onlineCount,
+                            ),
                           ),
-                        ),
-                      );
-                    }, childCount: controller.groupsList.length > 2 ? 2 : controller.groupsList.length),
+                        );
+                      },
+                      childCount: controller.groupsList.length > 2
+                          ? 2
+                          : controller.groupsList.length,
+                    ),
                   ),
                 ),
                 if (controller.groupsList.length > 2)
                   SliverToBoxAdapter(
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 8,
+                      ),
                       child: ButtonTapWidget(
                         onTap: () => context.push(AppRoutes.allChannels),
                         child: Row(

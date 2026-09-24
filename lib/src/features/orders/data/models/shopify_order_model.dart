@@ -16,7 +16,9 @@ class ShopifyOrderResponse {
       success: json['success'] ?? false,
       message: json['message'] ?? '',
       statusCode: json['statusCode'] ?? 0,
-      data: json['data'] != null ? ShopifyOrderData.fromJson(json['data']) : null,
+      data: json['data'] != null
+          ? ShopifyOrderData.fromJson(json['data'])
+          : null,
     );
   }
 }
@@ -25,10 +27,7 @@ class ShopifyOrderData {
   final ShopifyMeta meta;
   final List<ShopifyOrder> result;
 
-  ShopifyOrderData({
-    required this.meta,
-    required this.result,
-  });
+  ShopifyOrderData({required this.meta, required this.result});
 
   factory ShopifyOrderData.fromJson(Map<String, dynamic> json) {
     return ShopifyOrderData(
@@ -136,11 +135,7 @@ class OrderItem {
   final int quantity;
   final String price;
 
-  OrderItem({
-    required this.title,
-    required this.quantity,
-    required this.price,
-  });
+  OrderItem({required this.title, required this.quantity, required this.price});
 
   factory OrderItem.fromJson(Map<String, dynamic> json) {
     return OrderItem(

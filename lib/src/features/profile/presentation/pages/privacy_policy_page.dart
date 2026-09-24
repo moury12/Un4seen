@@ -13,13 +13,15 @@ class PrivacyPolicyPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.put(AppContentController());
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => controller.fetchPrivacyPolicy());
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) => controller.fetchPrivacyPolicy(),
+    );
 
     return Scaffold(
       body: SafeArea(
         child: Obx(() {
           final hasData = controller.privacyPolicy.value != null;
-          
+
           if (controller.isPrivacyLoading.value && !hasData) {
             return const Center(child: CircularProgressIndicator());
           }
@@ -42,7 +44,12 @@ class PrivacyPolicyPage extends StatelessWidget {
                 if (!hasData && !controller.isPrivacyLoading.value)
                   SliverFillRemaining(
                     hasScrollBody: false,
-                    child: Center(child: Text("No Policy data found".tr, style: const TextStyle(color: Colors.grey))),
+                    child: Center(
+                      child: Text(
+                        "No Policy data found".tr,
+                        style: const TextStyle(color: Colors.grey),
+                      ),
+                    ),
                   )
                 else
                   SliverPadding(

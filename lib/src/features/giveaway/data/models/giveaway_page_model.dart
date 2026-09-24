@@ -86,7 +86,9 @@ class GiveawayItem {
         json['endDate'] ?? DateTime.now().toIso8601String(),
       ),
       isMajorGiveaway: json['isMajorGiveaway'] ?? false,
-      winner: json['winner'] != null ? GiveawayWinner.fromJson(json['winner']) : null,
+      winner: json['winner'] != null
+          ? GiveawayWinner.fromJson(json['winner'])
+          : null,
     );
   }
 }

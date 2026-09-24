@@ -8,7 +8,7 @@ class SocketService extends GetxService {
   final LocalStorageService _storage = Get.find<LocalStorageService>();
 
   void initSocket() {
-    if (socket != null && socket!.connected) return; 
+    if (socket != null && socket!.connected) return;
 
     final token = _storage.accessToken;
     if (token == null) return;
@@ -18,7 +18,8 @@ class SocketService extends GetxService {
       IO.OptionBuilder()
           .setTransports(['websocket'])
           .setQuery({'token': token})
-          .enableAutoConnect() .enableForceNew()
+          .enableAutoConnect()
+          .enableForceNew()
           .build(),
     );
 

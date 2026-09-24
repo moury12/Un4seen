@@ -13,7 +13,9 @@ class TermsAndConditionsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.put(AppContentController());
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => controller.fetchTermsCondition());
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) => controller.fetchTermsCondition(),
+    );
 
     return Scaffold(
       body: SafeArea(
@@ -42,7 +44,12 @@ class TermsAndConditionsPage extends StatelessWidget {
                 if (!hasData && !controller.isTermsLoading.value)
                   SliverFillRemaining(
                     hasScrollBody: false,
-                    child: Center(child: Text("No Terms data found".tr, style: const TextStyle(color: Colors.grey))),
+                    child: Center(
+                      child: Text(
+                        "No Terms data found".tr,
+                        style: const TextStyle(color: Colors.grey),
+                      ),
+                    ),
                   )
                 else
                   SliverPadding(

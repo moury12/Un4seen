@@ -76,7 +76,9 @@ class IdeasController extends GetxController {
 
     // Optimistic UI update
     idea.isUpvoted = !idea.isUpvoted;
-    idea.upvoteCount = idea.isUpvoted ? idea.upvoteCount + 1 : idea.upvoteCount - 1;
+    idea.upvoteCount = idea.isUpvoted
+        ? idea.upvoteCount + 1
+        : idea.upvoteCount - 1;
     ideas[index] = idea;
     ideas.refresh();
 
@@ -96,20 +98,27 @@ class IdeasController extends GetxController {
   }
 
   Future<bool> submitIdea(String category, String title, String desc) async {
-    if (category.trim().isEmpty || title.trim().isEmpty || desc.trim().isEmpty) {
+    if (category.trim().isEmpty ||
+        title.trim().isEmpty ||
+        desc.trim().isEmpty) {
       CustomSnackbar.showError("Please fill in all fields");
       return false;
     }
 
     try {
       isSubmitting.value = true;
-      final res = await _api.post('/ideas/submit', data: {
-        "category": category.trim(),
-        "title": title.trim(),
-        "description": desc.trim(),
-      });
+      final res = await _api.post(
+        '/ideas/submit',
+        data: {
+          "category": category.trim(),
+          "title": title.trim(),
+          "description": desc.trim(),
+        },
+      );
       if (res.data['success'] == true) {
-        CustomSnackbar.showSuccess(res.data['message'] ?? "Idea submitted successfully!");
+        CustomSnackbar.showSuccess(
+          res.data['message'] ?? "Idea submitted successfully!",
+        );
         fetchIdeas(isRefresh: true);
         return true;
       } else {

@@ -21,16 +21,19 @@ class _MyRidesPageState extends State<MyRidesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: const Text("My Ride Uploads"),
-      ),
+      appBar: AppBar(title: const Text("My Ride Uploads")),
       body: Obx(() {
         if (controller.isMyRidesLoading.value) {
           return const Center(child: CircularProgressIndicator());
         }
-        
+
         if (controller.myRides.isEmpty) {
-          return Center(child: CustomText("No rides uploaded yet.", color: AppColors.kTextColor));
+          return Center(
+            child: CustomText(
+              "No rides uploaded yet.",
+              color: AppColors.kTextColor,
+            ),
+          );
         }
 
         return ListView.builder(

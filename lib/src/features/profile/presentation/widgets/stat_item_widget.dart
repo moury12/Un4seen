@@ -6,11 +6,12 @@ class StatItemWidget extends StatelessWidget {
   final String label;
   final VoidCallback? onTap;
 
-  const StatItemWidget(
-    {super.key,
+  const StatItemWidget({
+    super.key,
     required this.value,
     required this.label,
-    this.onTap});
+    this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {

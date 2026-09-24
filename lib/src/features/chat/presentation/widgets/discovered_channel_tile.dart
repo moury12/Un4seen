@@ -26,17 +26,21 @@ class DiscoveredChannelTile extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CustomText(model.name, fontWeight: FontWeight.bold),
-                CustomText("${model.onlineCount} online", fontSize: 11, color: AppColors.kSecondaryTextColor),
+                CustomText(
+                  "${model.onlineCount} online",
+                  fontSize: 11,
+                  color: AppColors.kSecondaryTextColor,
+                ),
               ],
             ),
           ),
           GestureDetector(
             onTap: () {
-             if(model.isJoined){
-              //  context.push(AppRoutes.chat);
-             } else if (!model.isPending) {
-               Get.find<ChatController>().requestJoinChannel(model.id);
-             }
+              if (model.isJoined) {
+                //  context.push(AppRoutes.chat);
+              } else if (!model.isPending) {
+                Get.find<ChatController>().requestJoinChannel(model.id);
+              }
             },
             child: Container(
               padding: AppPadding.getPadding6(context),
@@ -44,11 +48,15 @@ class DiscoveredChannelTile extends StatelessWidget {
                 color: model.isJoined ? Colors.grey : AppColors.kPrimaryColor,
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: CustomText(model.isJoined ? "Joined" : (model.isPending ? "Pending" : "Join"), fontSize: 12, color: Colors.white),
+              child: CustomText(
+                model.isJoined
+                    ? "Joined"
+                    : (model.isPending ? "Pending" : "Join"),
+                fontSize: 12,
+                color: Colors.white,
+              ),
             ),
-          )
-       
-          
+          ),
         ],
       ),
     );

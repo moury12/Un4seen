@@ -6,6 +6,7 @@ import '../../../../core/utils/app_strings.dart';
 import '../../../../core/widgets/button_tap_widget.dart';
 import '../../../../core/widgets/custom_text.dart';
 import '../../../../core/widgets/custom_network_image.dart';
+
 class ChannelMemberItemWidget extends StatelessWidget {
   final String name;
   final String? memberNumber;
@@ -75,7 +76,10 @@ class ChannelMemberItemWidget extends StatelessWidget {
             ButtonTapWidget(
               onTap: onToggle!,
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 6,
+                ),
                 decoration: BoxDecoration(
                   color: isAdded
                       ? AppColors.kBackgroundColor
@@ -83,7 +87,9 @@ class ChannelMemberItemWidget extends StatelessWidget {
                   borderRadius: BorderRadius.circular(appRadius),
                 ),
                 child: CustomText(
-                  isAdded ? AppStaticStrings.remove.tr : AppStaticStrings.add.tr,
+                  isAdded
+                      ? AppStaticStrings.remove.tr
+                      : AppStaticStrings.add.tr,
                   color: isAdded
                       ? AppColors.kTextColor
                       : AppColors.kWhiteTextColor,

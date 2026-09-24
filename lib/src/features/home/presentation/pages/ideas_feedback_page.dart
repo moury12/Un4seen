@@ -78,7 +78,6 @@ class IdeasFeedbackPage extends StatelessWidget {
                       ),
                     ),
                   )
-
                 // 2. Empty State
                 else if (controller.ideas.isEmpty)
                   const SliverFillRemaining(
@@ -91,22 +90,18 @@ class IdeasFeedbackPage extends StatelessWidget {
                       ),
                     ),
                   )
-
                 // 3. The List
                 else
                   SliverPadding(
                     padding: AppPadding.getPadding12(context),
                     sliver: SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                        (context, index) {
-                          final idea = controller.ideas[index];
-                          return IdeaCardWidget(
-                            model: idea,
-                            onUpvote: () => controller.toggleUpvote(index),
-                          );
-                        },
-                        childCount: controller.ideas.length,
-                      ),
+                      delegate: SliverChildBuilderDelegate((context, index) {
+                        final idea = controller.ideas[index];
+                        return IdeaCardWidget(
+                          model: idea,
+                          onUpvote: () => controller.toggleUpvote(index),
+                        );
+                      }, childCount: controller.ideas.length),
                     ),
                   ),
 
@@ -126,9 +121,7 @@ class IdeasFeedbackPage extends StatelessWidget {
                 // 5. How It Works Widget at bottom
                 const SliverPadding(
                   padding: EdgeInsets.symmetric(horizontal: 12),
-                  sliver: SliverToBoxAdapter(
-                    child: HowItWorksWidget(),
-                  ),
+                  sliver: SliverToBoxAdapter(child: HowItWorksWidget()),
                 ),
                 const SliverToBoxAdapter(child: SizedBox(height: 30)),
               ],

@@ -88,77 +88,107 @@ class SyndicateJourneyWidget extends StatelessWidget {
           space12H,
 
           // --- Dynamic Timeline UI ---
-          LayoutBuilder(builder: (context, constraints) {
-            return Stack(
-              alignment: Alignment.center,
-              clipBehavior: Clip.none,
-              children: [
-                // Background Track
-                Container(
-                  height: 4,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: Colors.white24,
-                    borderRadius: BorderRadius.circular(2),
+          LayoutBuilder(
+            builder: (context, constraints) {
+              return Stack(
+                alignment: Alignment.center,
+                clipBehavior: Clip.none,
+                children: [
+                  // Background Track
+                  Container(
+                    height: 4,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: Colors.white24,
+                      borderRadius: BorderRadius.circular(2),
+                    ),
                   ),
-                ),
-                // Active Progress (Dynamic Width)
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: FractionallySizedBox(
-                    widthFactor: progress,
-                    child: Container(
-                      height: 4,
-                      decoration: BoxDecoration(
-                        color: accentColor,
-                        borderRadius: BorderRadius.circular(2),
+                  // Active Progress (Dynamic Width)
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: FractionallySizedBox(
+                      widthFactor: progress,
+                      child: Container(
+                        height: 4,
+                        decoration: BoxDecoration(
+                          color: accentColor,
+                          borderRadius: BorderRadius.circular(2),
+                        ),
                       ),
                     ),
                   ),
-                ),
-                // Bike Marker (Positioned based on progress)
-                Positioned(
-                  left: (constraints.maxWidth * progress) - 15,
-                  top: -15,
-                  child: Column(
-                    children: [
-                      const Icon(
-                        Icons.keyboard_arrow_down,
-                        color: Colors.blue,
-                        size: 16,
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(4),
-                        decoration: const BoxDecoration(
+                  // Bike Marker (Positioned based on progress)
+                  Positioned(
+                    left: (constraints.maxWidth * progress) - 15,
+                    top: -15,
+                    child: Column(
+                      children: [
+                        const Icon(
+                          Icons.keyboard_arrow_down,
                           color: Colors.blue,
-                          shape: BoxShape.circle,
+                          size: 16,
                         ),
-                        child: const Icon(
-                          Icons.directions_bike,
-                          color: Colors.white,
-                          size: 14,
+                        Container(
+                          padding: const EdgeInsets.all(4),
+                          decoration: const BoxDecoration(
+                            color: Colors.blue,
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(
+                            Icons.directions_bike,
+                            color: Colors.white,
+                            size: 14,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            );
-          }),
-          
+                ],
+              );
+            },
+          ),
+
           space16H,
-          
+
           // Dynamic Milestones
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _buildMilestone("3mo", milestones?.is3moReached ?? false, accentColor),
-              _buildMilestone("6mo", milestones?.is6moReached ?? false, accentColor),
-              _buildMilestone("1yr", milestones?.is1yrReached ?? false, accentColor),
-              _buildMilestone("2yr", milestones?.is2yrReached ?? false, accentColor),
-              _buildMilestone("3yr", milestones?.is3yrReached ?? false, accentColor),
-              _buildMilestone("4yr", milestones?.is4yrReached ?? false, accentColor),
-              _buildMilestone("5yr", milestones?.is5yrReached ?? false, accentColor),
+              _buildMilestone(
+                "3mo",
+                milestones?.is3moReached ?? false,
+                accentColor,
+              ),
+              _buildMilestone(
+                "6mo",
+                milestones?.is6moReached ?? false,
+                accentColor,
+              ),
+              _buildMilestone(
+                "1yr",
+                milestones?.is1yrReached ?? false,
+                accentColor,
+              ),
+              _buildMilestone(
+                "2yr",
+                milestones?.is2yrReached ?? false,
+                accentColor,
+              ),
+              _buildMilestone(
+                "3yr",
+                milestones?.is3yrReached ?? false,
+                accentColor,
+              ),
+              _buildMilestone(
+                "4yr",
+                milestones?.is4yrReached ?? false,
+                accentColor,
+              ),
+              _buildMilestone(
+                "5yr",
+                milestones?.is5yrReached ?? false,
+                accentColor,
+              ),
             ],
           ),
 

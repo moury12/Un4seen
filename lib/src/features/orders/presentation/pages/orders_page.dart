@@ -17,8 +17,18 @@ class OrdersPage extends StatelessWidget {
     try {
       final dateTime = DateTime.parse(dateStr);
       final months = [
-        'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Aug',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dec',
       ];
       return "${months[dateTime.month - 1]} ${dateTime.day}, ${dateTime.year}";
     } catch (e) {
@@ -52,9 +62,7 @@ class OrdersPage extends StatelessWidget {
       body: Obx(() {
         if (controller.isLoading.value) {
           return const Center(
-            child: CircularProgressIndicator(
-              color: AppColors.kPrimaryColor,
-            ),
+            child: CircularProgressIndicator(color: AppColors.kPrimaryColor),
           );
         }
 
@@ -68,10 +76,7 @@ class OrdersPage extends StatelessWidget {
                 const Center(
                   child: Text(
                     'No orders found.',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.grey,
-                    ),
+                    style: TextStyle(fontSize: 16, color: Colors.grey),
                   ),
                 ),
               ],
@@ -101,9 +106,10 @@ class OrdersPage extends StatelessWidget {
     final title = order.items.isNotEmpty
         ? order.items.map((e) => e.title).join(', ')
         : 'No items';
-    
-    final orderDetail = 'Order ${order.orderNumber} • ${_formatDate(order.date)}';
-    
+
+    final orderDetail =
+        'Order ${order.orderNumber} • ${_formatDate(order.date)}';
+
     String estimatedDelivery = 'Not available';
     try {
       final orderDate = DateTime.parse(order.date);
@@ -112,13 +118,17 @@ class OrdersPage extends StatelessWidget {
     } catch (_) {}
 
     final lowercaseTitle = title.toLowerCase();
-    final isGraphicsKit = lowercaseTitle.contains('graphics') || lowercaseTitle.contains('kit');
-    
+    final isGraphicsKit =
+        lowercaseTitle.contains('graphics') || lowercaseTitle.contains('kit');
+
     final List<_OrderStepModel> steps = isGraphicsKit
         ? [
             _OrderStepModel(title: 'Order Placed', icon: AppIcons.cell),
             _OrderStepModel(title: 'In Print Que', icon: AppIcons.cell),
-            _OrderStepModel(title: 'Lamination & Cut Process', icon: AppIcons.checked),
+            _OrderStepModel(
+              title: 'Lamination & Cut Process',
+              icon: AppIcons.checked,
+            ),
             _OrderStepModel(title: 'Packaging', icon: AppIcons.checked),
             _OrderStepModel(title: 'Ready', icon: AppIcons.checked),
             _OrderStepModel(title: 'Shipped', icon: AppIcons.car),
@@ -177,7 +187,10 @@ class OrdersPage extends StatelessWidget {
                 ),
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(20),
@@ -210,9 +223,14 @@ class OrdersPage extends StatelessWidget {
                         width: 40,
                         height: 40,
                         decoration: BoxDecoration(
-                          color: isStepCurrent ? Colors.white : AppColors.kPrimaryColor,
+                          color: isStepCurrent
+                              ? Colors.white
+                              : AppColors.kPrimaryColor,
                           shape: BoxShape.circle,
-                          border: Border.all(color: Colors.white.withOpacity(0.2), width: 1),
+                          border: Border.all(
+                            color: Colors.white.withOpacity(0.2),
+                            width: 1,
+                          ),
                         ),
                         child: Center(
                           child: SvgPicture.asset(
@@ -245,9 +263,13 @@ class OrdersPage extends StatelessWidget {
                         Text(
                           step.title,
                           style: TextStyle(
-                            color: Colors.white.withOpacity(isStepCompleted ? 1 : 0.6),
+                            color: Colors.white.withOpacity(
+                              isStepCompleted ? 1 : 0.6,
+                            ),
                             fontSize: 13,
-                            fontWeight: isStepCompleted ? FontWeight.w500 : FontWeight.normal,
+                            fontWeight: isStepCompleted
+                                ? FontWeight.w500
+                                : FontWeight.normal,
                           ),
                         ),
                         if (!isLast) const SizedBox(height: 24),
@@ -268,19 +290,26 @@ class OrdersPage extends StatelessWidget {
               ),
             ),
           ),
-          if (order.trackingInfo != null && order.trackingInfo!.url.isNotEmpty) ...[
+          if (order.trackingInfo != null &&
+              order.trackingInfo!.url.isNotEmpty) ...[
             const SizedBox(height: 16),
             Center(
               child: ElevatedButton.icon(
-                onPressed: () => UrlLauncherUtils.launchExternalUrl(order.trackingInfo!.url),
-                icon: const Icon(Icons.track_changes, color: AppColors.kPrimaryColor),
+                onPressed: () =>
+                    UrlLauncherUtils.launchExternalUrl(order.trackingInfo!.url),
+                icon: const Icon(
+                  Icons.track_changes,
+                  color: AppColors.kPrimaryColor,
+                ),
                 label: Text(
                   'Track Order (${order.trackingInfo!.company})',
                   style: const TextStyle(color: AppColors.kPrimaryColor),
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                 ),
               ),
             ),

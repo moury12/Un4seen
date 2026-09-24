@@ -5,11 +5,7 @@ class MyRideCardWidget extends StatelessWidget {
   final RideModel ride;
   final int index;
 
-  const MyRideCardWidget({
-    super.key,
-    required this.ride,
-    required this.index,
-  });
+  const MyRideCardWidget({super.key, required this.ride, required this.index});
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +37,7 @@ class MyRideCardWidget extends StatelessWidget {
               ),
             ),
           ),
-          
+
           Positioned(
             top: 12,
             right: 12,
@@ -113,7 +109,10 @@ class MyRideCardWidget extends StatelessWidget {
     );
   }
 
-  void _showDeleteDialog(BuildContext context, RateMyRideController controller) {
+  void _showDeleteDialog(
+    BuildContext context,
+    RateMyRideController controller,
+  ) {
     showDialog(
       context: context,
       builder: (context) {

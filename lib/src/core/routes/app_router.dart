@@ -48,14 +48,16 @@ import '../../features/chat/presentation/pages/all_channels_page.dart';
 import '../../features/chat/presentation/pages/chat_page.dart';
 import '../../features/chat/presentation/pages/channel_members_page.dart';
 import '../../features/chat/presentation/pages/builds_mods_page.dart';
+import '../../features/profile/presentation/pages/un4seen_updates_page.dart';
 
 class AppRouter {
   AppRouter._();
-static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+  static final GlobalKey<NavigatorState> navigatorKey =
+      GlobalKey<NavigatorState>();
   static final GoRouter router = GoRouter(
     initialLocation: AppRoutes.splash,
     navigatorKey: Get.key,
-    
+
     debugLogDiagnostics: true,
     routes: [
       GoRoute(
@@ -225,8 +227,8 @@ static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>(
         name: 'singleBikeDetails',
         builder: (context, state) {
           final id = state.pathParameters['id'] ?? '';
-           final extra = state.extra as Map<String, dynamic>;
-           final fromMember = extra['fromMember'] ?? false;
+          final extra = state.extra as Map<String, dynamic>;
+          final fromMember = extra['fromMember'] ?? false;
           return SingleBikeDetailsPage(bikeId: id, fromMember: fromMember);
         },
       ),
@@ -235,10 +237,15 @@ static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>(
         name: 'postStory',
         builder: (context, state) => PostStoryPage(),
       ),
-   GoRoute(
+      GoRoute(
         path: AppRoutes.notification,
         name: 'notification',
         builder: (context, state) => const NotificationsPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.un4seenUpdates,
+        name: 'un4seenUpdates',
+        builder: (context, state) => const Un4seenUpdatesPage(),
       ),
       // Add this inside the routes list
       GoRoute(
@@ -290,11 +297,11 @@ static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>(
         path: AppRoutes.buildsMods,
         name: 'buildsMods',
         builder: (context, state) {
-           final extra = state.extra as Map<String, dynamic>;
+          final extra = state.extra as Map<String, dynamic>;
 
           return BuildsModsPage(
-            channelId: extra['channelId']??"",
-            channelName: extra['channelName']??"",
+            channelId: extra['channelId'] ?? "",
+            channelName: extra['channelName'] ?? "",
           );
         },
       ),
@@ -304,28 +311,28 @@ static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>(
         builder: (context, state) => const SearchChatPage(),
       ),
       // Generic List Route
-GoRoute(
-  path: AppRoutes.members,
+      GoRoute(
+        path: AppRoutes.members,
         name: 'members',
-  builder: (context, state) {
-    final extra = state.extra as Map<String, dynamic>;
-    return MembersPage(
-      title: extra['title'],
-      users: extra['list'],
-      onRefresh: extra['refresh'],
-    );
-  },
-),
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>;
+          return MembersPage(
+            title: extra['title'],
+            users: extra['list'],
+            onRefresh: extra['refresh'],
+          );
+        },
+      ),
 
-// Member Details updated to use ID
-GoRoute(
-  path: AppRoutes.memberDetails,
-  name: 'memberDetails',
-  builder: (context, state) {
-    final userId = state.extra as String;
-    return MemberDetailsPage(userId: userId);
-  },
-),
+      // Member Details updated to use ID
+      GoRoute(
+        path: AppRoutes.memberDetails,
+        name: 'memberDetails',
+        builder: (context, state) {
+          final userId = state.extra as String;
+          return MemberDetailsPage(userId: userId);
+        },
+      ),
       GoRoute(
         path: AppRoutes.chat,
         name: 'chat',

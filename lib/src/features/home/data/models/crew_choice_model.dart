@@ -37,9 +37,11 @@ class CrewChoiceModel {
       totalVotes: json['totalVotes'] ?? 0,
       hasVoted: json['hasVoted'] ?? false,
       mySelectionIndex: json['mySelectionIndex'] ?? -1,
-      options: (json['options'] as List?)
+      options:
+          (json['options'] as List?)
               ?.map((e) => PollOption.fromJson(e))
-              .toList() ?? [],
+              .toList() ??
+          [],
     );
   }
 }
@@ -49,7 +51,11 @@ class PollOption {
   final int voteCount;
   final double percentage;
 
-  PollOption({required this.label, required this.voteCount, required this.percentage});
+  PollOption({
+    required this.label,
+    required this.voteCount,
+    required this.percentage,
+  });
 
   factory PollOption.fromJson(Map<String, dynamic> json) {
     return PollOption(

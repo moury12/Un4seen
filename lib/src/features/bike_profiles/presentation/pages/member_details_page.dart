@@ -29,10 +29,7 @@ class MemberDetailsPage extends StatelessWidget {
     const Color highlightBlue = AppColors.kPrimaryColor;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(AppStaticStrings.details.tr),
-        
-      ),
+      appBar: AppBar(title: Text(AppStaticStrings.details.tr)),
       body: SafeArea(
         child: Obx(() {
           // 1. Show loading state
@@ -66,7 +63,8 @@ class MemberDetailsPage extends StatelessWidget {
                     points: user.shredPoints.toString(),
                     followers: user.followerCount.toString(),
                     following: user.followingCount.toString(),
-                    isCurrentUser: user.id == controller.userProfile.value.id ||
+                    isCurrentUser:
+                        user.id == controller.userProfile.value.id ||
                         userId == controller.userProfile.value.id,
                     isFollowing: user.isFollowing,
                     userId: user.id,
@@ -103,7 +101,6 @@ class MemberDetailsPage extends StatelessWidget {
                     bgColor: cardBg,
                     accentColor: highlightBlue,
                     activeBike: user.activeBike,
-
                   ),
                   space8H,
                 ],

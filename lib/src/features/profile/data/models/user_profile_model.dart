@@ -117,10 +117,18 @@ class UserProfileModel {
       isFollowing: json['isFollowing'] ?? false,
       createdAt: json['createdAt'],
       updatedAt: json['updatedAt'],
-      address: json['address'] != null ? Address.fromJson(json['address']) : null,
-      rideInfo: json['rideInfo'] != null ? RideInfo.fromJson(json['rideInfo']) : null,
-      activeBike: json['activeBike'] != null ? ActiveBike.fromJson(json['activeBike']) : null,
-      journey: json['journey'] != null ? Journey.fromJson(json['journey']) : null,
+      address: json['address'] != null
+          ? Address.fromJson(json['address'])
+          : null,
+      rideInfo: json['rideInfo'] != null
+          ? RideInfo.fromJson(json['rideInfo'])
+          : null,
+      activeBike: json['activeBike'] != null
+          ? ActiveBike.fromJson(json['activeBike'])
+          : null,
+      journey: json['journey'] != null
+          ? Journey.fromJson(json['journey'])
+          : null,
     );
   }
 }
@@ -149,7 +157,12 @@ class RideInfo {
   final List<String> rideType;
   final String? ridingLevel;
 
-  RideInfo({this.bikeModel, this.year, this.rideType = const [], this.ridingLevel});
+  RideInfo({
+    this.bikeModel,
+    this.year,
+    this.rideType = const [],
+    this.ridingLevel,
+  });
 
   factory RideInfo.fromJson(Map<String, dynamic> json) {
     return RideInfo(
@@ -192,7 +205,9 @@ class Journey {
     return Journey(
       memberSince: json['memberSince'],
       totalDuration: json['totalDuration'],
-      milestones: json['milestones'] != null ? Milestones.fromJson(json['milestones']) : null,
+      milestones: json['milestones'] != null
+          ? Milestones.fromJson(json['milestones'])
+          : null,
     );
   }
 }

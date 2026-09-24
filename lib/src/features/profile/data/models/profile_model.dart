@@ -108,8 +108,12 @@ class ProfileModel {
       referrals: List<String>.from(json['referrals'] ?? []),
       createdAt: json['createdAt'],
       updatedAt: json['updatedAt'],
-      address: json['address'] != null ? Address.fromJson(json['address']) : null,
-      rideInfo: json['rideInfo'] != null ? RideInfo.fromJson(json['rideInfo']) : null,
+      address: json['address'] != null
+          ? Address.fromJson(json['address'])
+          : null,
+      rideInfo: json['rideInfo'] != null
+          ? RideInfo.fromJson(json['rideInfo'])
+          : null,
     );
   }
 }

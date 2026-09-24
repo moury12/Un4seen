@@ -3,7 +3,7 @@ import '../../../../core/core_export.dart';
 
 class AboutMeWidget extends StatelessWidget {
   final Color bgColor;
-  final String? aboutMe; 
+  final String? aboutMe;
 
   const AboutMeWidget({super.key, required this.bgColor, this.aboutMe});
 
@@ -16,10 +16,10 @@ class AboutMeWidget extends StatelessWidget {
         color: bgColor,
         borderRadius: BorderRadius.circular(16),
       ),
-      child:  Column(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-        const  CustomText(
+          const CustomText(
             "About",
             variant: TextVariant.titleMedium,
             fontWeight: FontWeight.bold,

@@ -32,4 +32,3 @@ class OrdersController extends GetxController {
     }
   }
 }
-

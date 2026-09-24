@@ -13,7 +13,9 @@ class AboutUsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.put(AppContentController());
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => controller.fetchAboutUs());
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) => controller.fetchAboutUs(),
+    );
 
     return Scaffold(
       body: SafeArea(
@@ -42,7 +44,12 @@ class AboutUsPage extends StatelessWidget {
                 if (!hasData && !controller.isAboutLoading.value)
                   SliverFillRemaining(
                     hasScrollBody: false,
-                    child: Center(child: Text("No Profile data found".tr, style: const TextStyle(color: Colors.grey))),
+                    child: Center(
+                      child: Text(
+                        "No Profile data found".tr,
+                        style: const TextStyle(color: Colors.grey),
+                      ),
+                    ),
                   )
                 else
                   SliverPadding(

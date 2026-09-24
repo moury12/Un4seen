@@ -159,7 +159,7 @@ class CompetitionsPage extends StatelessWidget {
   Widget _buildShimmerCard() {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
-    
+
       decoration: BoxDecoration(
         color: AppColors.kPrimaryDarkColor2,
         borderRadius: BorderRadius.circular(appRadius16),
@@ -168,15 +168,15 @@ class CompetitionsPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           AspectRatio(
-      aspectRatio: 16 / 9,
-      child: Container(
-            decoration: const BoxDecoration(
-              color: AppColors.kPrimaryDarkColor3,
-              borderRadius: BorderRadius.vertical(
-                top: Radius.circular(appRadius16),
+            aspectRatio: 16 / 9,
+            child: Container(
+              decoration: const BoxDecoration(
+                color: AppColors.kPrimaryDarkColor3,
+                borderRadius: BorderRadius.vertical(
+                  top: Radius.circular(appRadius16),
+                ),
               ),
             ),
-          ),
           ),
           Padding(
             padding: const EdgeInsets.all(12),

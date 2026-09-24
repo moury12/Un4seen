@@ -157,26 +157,14 @@ class BuildsModsController extends GetxController {
     }
   }
 
-// lib/src/features/chat/presentation/controllers/builds_mods_controller.dart
+  // lib/src/features/chat/presentation/controllers/builds_mods_controller.dart
 
-Future<void> toggleLike(String postId) async {
-  // Find the targeting post object item references directly
-  final post = posts.firstWhereOrNull((p) => p.id == postId);
-  if (post == null) return;
+  Future<void> toggleLike(String postId) async {
+    // Find the targeting post object item references directly
+    final post = posts.firstWhereOrNull((p) => p.id == postId);
+    if (post == null) return;
 
-  // Optimistic UI updates targeting direct reactive observable mutations
-  if (post.isLiked.value) {
-    post.isLiked.value = false;
-    post.likeCount.value -= 1;
-  } else {
-    post.isLiked.value = true;
-    post.likeCount.value += 1;
-  }
-
-  try {
-    await _api.patch('/posts/$postId/like');
-  } catch (e) {
-    // Revert state safely back if the API endpoint errors out
+    // Optimistic UI updates targeting direct reactive observable mutations
     if (post.isLiked.value) {
       post.isLiked.value = false;
       post.likeCount.value -= 1;
@@ -184,9 +172,21 @@ Future<void> toggleLike(String postId) async {
       post.isLiked.value = true;
       post.likeCount.value += 1;
     }
-    print("❌ Error processing post like payload sync: $e");
+
+    try {
+      await _api.patch('/posts/$postId/like');
+    } catch (e) {
+      // Revert state safely back if the API endpoint errors out
+      if (post.isLiked.value) {
+        post.isLiked.value = false;
+        post.likeCount.value -= 1;
+      } else {
+        post.isLiked.value = true;
+        post.likeCount.value += 1;
+      }
+      print("❌ Error processing post like payload sync: $e");
+    }
   }
-}
 
   Future<void> addComment(String postId) async {
     final controller = getCommentController(postId);

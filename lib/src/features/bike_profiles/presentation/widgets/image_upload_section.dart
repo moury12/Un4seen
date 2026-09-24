@@ -42,7 +42,8 @@ class ImageUploadSection extends StatelessWidget {
                     ),
                   ),
                 );
-              } else if (initialImageUrl != null && initialImageUrl!.isNotEmpty) {
+              } else if (initialImageUrl != null &&
+                  initialImageUrl!.isNotEmpty) {
                 return AspectRatio(
                   aspectRatio: 1,
                   child: ClipRRect(

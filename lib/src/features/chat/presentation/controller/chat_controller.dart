@@ -142,9 +142,7 @@ class ChatController extends GetxController {
         return true;
       }
 
-      CustomSnackbar.showError(
-        res.data['message'] ?? 'Failed to send request',
-      );
+      CustomSnackbar.showError(res.data['message'] ?? 'Failed to send request');
       return false;
     } catch (e) {
       CustomSnackbar.showError(e.toString());
@@ -179,10 +177,7 @@ class ChatController extends GetxController {
     try {
       final res = await _api.patch(
         '/channels/handle-request',
-        data: {
-          'requestId': requestId,
-          'status': status,
-        },
+        data: {'requestId': requestId, 'status': status},
       );
 
       if (res.data['success'] == true) {
@@ -200,19 +195,21 @@ class ChatController extends GetxController {
     }
   }
 
-  Future<bool> reportMessage(String messageId, String reason, String details) async {
+  Future<bool> reportMessage(
+    String messageId,
+    String reason,
+    String details,
+  ) async {
     try {
       final res = await _api.post(
         '/channels/report',
-        data: {
-          'message': messageId,
-          'reason': reason,
-          'details': details,
-        },
+        data: {'message': messageId, 'reason': reason, 'details': details},
       );
 
       if (res.data['success'] == true) {
-        CustomSnackbar.showSuccess(res.data['message'] ?? 'Message reported successfully');
+        CustomSnackbar.showSuccess(
+          res.data['message'] ?? 'Message reported successfully',
+        );
         return true;
       }
 

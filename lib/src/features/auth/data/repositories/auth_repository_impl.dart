@@ -11,9 +11,8 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Map<String, dynamic>> login({
     required String email,
     required String password,
-    required String token
-  }) =>
-      _remote.login(email: email, password: password, token: token);
+    required String token,
+  }) => _remote.login(email: email, password: password, token: token);
 
   @override
   Future<String> forgotPassword({required String email}) =>
