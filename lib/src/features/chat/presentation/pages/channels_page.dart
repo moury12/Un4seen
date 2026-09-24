@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:un4seen/src/core/core_export.dart';
 import '../../../../core/routes/app_routes.dart';
 import '../controller/chat_controller.dart';
+import '../controller/support_chat_controller.dart';
 import 'chat_page.dart';
 import '../widgets/channel_list_item_widget.dart';
 import '../widgets/create_channel_dialog.dart';
@@ -14,6 +15,7 @@ class ChannelsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(ChatController());
+    final supportController = Get.put(SupportChatController());
 
     return Scaffold(
       appBar: AppBar(
@@ -41,7 +43,12 @@ class ChannelsPage extends StatelessWidget {
         ],
       ),
       body: RefreshIndicator(
-        onRefresh: () => controller.fetchSidebar(),
+        onRefresh: () async {
+          await Future.wait([
+            controller.fetchSidebar(),
+            supportController.fetchSupportChat(),
+          ]);
+        },
         color: AppColors.kPrimaryColor,
         child: Obx(() {
           // Determine if we should show initial loading
@@ -166,6 +173,142 @@ class ChannelsPage extends StatelessWidget {
                     ),
                   ),
               ],
+
+              // ─── 1.5. SUPPORT CHAT SECTION (PLACED BEFORE DIRECT MESSAGES) ───
+              SliverPadding(
+                padding: AppPadding.getPadding12H(context),
+                sliver: SliverToBoxAdapter(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      space12H,
+                      const CustomText(
+                        "Support Chat",
+                        variant: TextVariant.headlineSmall,
+                        color: AppColors.kTextColor,
+                      ),
+                      const CustomText(
+                        "Direct assistance & help from Un4seen Admin",
+                        variant: TextVariant.labelSmall,
+                        color: AppColors.kTextColor,
+                      ),
+                      space8H,
+                      Obx(() {
+                        final session = supportController.session.value;
+                        final String lastMsg =
+                            session?.lastMessage ??
+                            (supportController.messages.isNotEmpty
+                                ? supportController.messages.last.text
+                                : "Tap to open support chat");
+                        final String status = session?.status ?? "Open";
+                        final int unread = session?.unreadCountUser ?? 0;
+
+                        return ButtonTapWidget(
+                          onTap: () => context.push(AppRoutes.supportChat),
+                          child: Container(
+                            padding: AppPadding.getPadding12(context),
+                            decoration: BoxDecoration(
+                              color: AppColors.kPrimaryColor.withValues(
+                                alpha: .2,
+                              ),
+                              borderRadius: BorderRadius.circular(appRadius),
+                              border: Border.all(
+                                color: AppColors.kPrimaryColor,
+                                width: 1,
+                              ),
+                            ),
+                            child: Row(
+                              children: [
+                                Container(
+                                  width: 44,
+                                  height: 44,
+                                  decoration: const BoxDecoration(
+                                    color: AppColors.kPrimaryColor,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: const Icon(
+                                    Icons.support_agent,
+                                    color: Colors.white,
+                                    size: 24,
+                                  ),
+                                ),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          const CustomText(
+                                            "Admin Support",
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 15,
+                                            color: AppColors.kTextColor,
+                                          ),
+                                          const SizedBox(width: 8),
+                                          Container(
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 6,
+                                              vertical: 2,
+                                            ),
+                                            decoration: BoxDecoration(
+                                              color: Colors.green.withValues(
+                                                alpha: 0.2,
+                                              ),
+                                              borderRadius:
+                                                  BorderRadius.circular(4),
+                                            ),
+                                            child: CustomText(
+                                              status.capitalizeFirst ?? status,
+                                              color: Colors.green,
+                                              fontSize: 10,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 4),
+                                      CustomText(
+                                        lastMsg,
+                                        fontSize: 12,
+                                        color: AppColors.kSecondaryTextColor,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                if (unread > 0)
+                                  Container(
+                                    padding: const EdgeInsets.all(6),
+                                    decoration: const BoxDecoration(
+                                      color: AppColors.kRedColor,
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: CustomText(
+                                      '$unread',
+                                      color: Colors.white,
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                const SizedBox(width: 4),
+                                const Icon(
+                                  Icons.arrow_forward_ios,
+                                  color: AppColors.kSecondaryTextColor,
+                                  size: 16,
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      }),
+                      space12H,
+                    ],
+                  ),
+                ),
+              ),
 
               // ─── 2. DIRECT MESSAGES SECTION ───
               SliverPadding(

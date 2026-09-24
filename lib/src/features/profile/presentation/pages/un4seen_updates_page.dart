@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:un4seen/src/core/core_export.dart';
-import 'package:un4seen/src/core/widgets/app_loader.dart';
-import 'package:un4seen/src/core/widgets/custom_scaffold.dart';
 import 'package:un4seen/src/features/profile/presentation/controllers/un4seen_updates_controller.dart';
 import 'package:un4seen/src/features/profile/presentation/widgets/announcement_video_player.dart';
 

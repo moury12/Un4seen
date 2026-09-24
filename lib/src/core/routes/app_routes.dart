@@ -48,4 +48,5 @@ class AppRoutes {
   static const String channelMembers = '/channel-members';
   static const String notification = '/notification';
   static const String un4seenUpdates = '/un4seen-updates';
+  static const String supportChat = '/support-chat';
 }

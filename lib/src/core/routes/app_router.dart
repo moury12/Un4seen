@@ -48,6 +48,7 @@ import '../../features/chat/presentation/pages/all_channels_page.dart';
 import '../../features/chat/presentation/pages/chat_page.dart';
 import '../../features/chat/presentation/pages/channel_members_page.dart';
 import '../../features/chat/presentation/pages/builds_mods_page.dart';
+import '../../features/chat/presentation/pages/support_chat_page.dart';
 import '../../features/profile/presentation/pages/un4seen_updates_page.dart';
 
 class AppRouter {
@@ -246,6 +247,11 @@ class AppRouter {
         path: AppRoutes.un4seenUpdates,
         name: 'un4seenUpdates',
         builder: (context, state) => const Un4seenUpdatesPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.supportChat,
+        name: 'supportChat',
+        builder: (context, state) => const SupportChatPage(),
       ),
       // Add this inside the routes list
       GoRoute(
