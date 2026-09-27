@@ -120,7 +120,7 @@ class _SupportChatPageState extends State<SupportChatPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const CustomText(
-                    'Support Chat',
+                    'Chat with Un4Seen',
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                     color: Colors.black,

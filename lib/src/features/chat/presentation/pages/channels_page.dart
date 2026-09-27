@@ -183,7 +183,7 @@ class ChannelsPage extends StatelessWidget {
                     children: [
                       space12H,
                       const CustomText(
-                        "Support Chat",
+                        "Chat with Un4Seen",
                         variant: TextVariant.headlineSmall,
                         color: AppColors.kTextColor,
                       ),
@@ -241,7 +241,7 @@ class ChannelsPage extends StatelessWidget {
                                       Row(
                                         children: [
                                           const CustomText(
-                                            "Admin Support",
+                                            "Chat with Un4Seen",
                                             fontWeight: FontWeight.bold,
                                             fontSize: 15,
                                             color: AppColors.kTextColor,

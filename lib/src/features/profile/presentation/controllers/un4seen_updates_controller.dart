@@ -21,6 +21,7 @@ class Un4seenUpdatesController extends GetxController {
   final RxBool hasUnreadUpdates = false.obs;
 
   // Story Viewer state
+  final RxBool isViewerOpen = false.obs;
   Timer? _storyTimer;
   final RxInt currentAnnouncementIndex = 0.obs;
   final RxDouble currentProgress = 0.0.obs;
@@ -67,7 +68,7 @@ class Un4seenUpdatesController extends GetxController {
         // Check unread badge state
         _checkUnreadBadge();
 
-        if (announcements.isNotEmpty) {
+        if (announcements.isNotEmpty && isViewerOpen.value) {
           startStoryTimer(0);
         }
       } else {
@@ -202,6 +203,7 @@ class Un4seenUpdatesController extends GetxController {
   }
 
   void closeViewer() {
+    isViewerOpen.value = false;
     _storyTimer?.cancel();
     _audioPlayer.stop();
     currentProgress.value = 0.0;
