@@ -70,6 +70,10 @@ class _Un4seenUpdatesPageState extends State<Un4seenUpdatesPage>
     // Mark updates as read after frame build
     WidgetsBinding.instance.addPostFrameCallback((_) {
       controller.markAsRead();
+      controller.isViewerOpen.value = true;
+      if (controller.announcements.isNotEmpty) {
+        controller.startStoryTimer(0);
+      }
     });
   }
 
