@@ -86,8 +86,8 @@ class GiveawayItem {
         json['endDate'] ?? DateTime.now().toIso8601String(),
       ),
       isMajorGiveaway: json['isMajorGiveaway'] ?? false,
-      winner: json['winner'] != null
-          ? GiveawayWinner.fromJson(json['winner'])
+      winner: (json['winner'] != null && json['winner'] is Map<String, dynamic>)
+          ? GiveawayWinner.fromJson(json['winner'] as Map<String, dynamic>)
           : null,
     );
   }

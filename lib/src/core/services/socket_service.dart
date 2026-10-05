@@ -14,7 +14,7 @@ class SocketService extends GetxService {
     if (token == null) return;
 
     socket = IO.io(
-      'http://13.238.237.114',
+      'https://api.un4seenworld.com',
       IO.OptionBuilder()
           .setTransports(['websocket'])
           .setQuery({'token': token})

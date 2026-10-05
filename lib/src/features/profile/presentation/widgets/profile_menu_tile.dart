@@ -8,6 +8,7 @@ class ProfileMenuTile extends StatelessWidget {
   final Widget? iconWidget;
   final bool showBadge;
   final VoidCallback onTap;
+  final TextStyle? titleStyle;
 
   const ProfileMenuTile({
     super.key,
@@ -16,6 +17,7 @@ class ProfileMenuTile extends StatelessWidget {
     this.iconWidget,
     this.showBadge = false,
     required this.onTap,
+    this.titleStyle,
   });
 
   @override
@@ -102,11 +104,13 @@ class ProfileMenuTile extends StatelessWidget {
                     Flexible(
                       child: Text(
                         title,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
+                        style:
+                            titleStyle ??
+                            const TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),

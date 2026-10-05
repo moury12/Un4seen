@@ -10,6 +10,56 @@ import 'package:un4seen/src/features/profile/profile_export.dart';
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
 
+  void _showDeleteAccountDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: Text(AppStaticStrings.deleteAccountConfirmTitle.tr),
+        content: Text(AppStaticStrings.deleteAccountConfirmMessage.tr),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: Text(
+              AppStaticStrings.no.tr,
+              style: const TextStyle(color: AppColors.kSecondaryTextColor),
+            ),
+          ),
+          Obx(
+            () => ElevatedButton(
+              onPressed:
+                  Get.find<ProfileController>().isDeleteAccountLoading.value
+                  ? null
+                  : () async {
+                      Navigator.pop(ctx);
+                      await Get.find<ProfileController>().deleteAccount();
+                    },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.kRedColor,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              child: Get.find<ProfileController>().isDeleteAccountLoading.value
+                  ? const SizedBox(
+                      width: 16,
+                      height: 16,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: Colors.white,
+                      ),
+                    )
+                  : Text(
+                      AppStaticStrings.deleteAccount.tr,
+                      style: const TextStyle(color: Colors.white),
+                    ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final MembersController controller = Get.put(MembersController());
@@ -112,6 +162,20 @@ class SettingsPage extends StatelessWidget {
                   size: 20,
                 ),
                 onTap: () => context.push(AppRoutes.termsAndConditions),
+              ),
+              // const SizedBox(height: 8),
+              ProfileMenuTile(
+                title: AppStaticStrings.deleteAccount.tr,
+                iconWidget: const Icon(
+                  Icons.delete_forever_outlined,
+                  color: AppColors.kPrimaryColor,
+                  size: 20,
+                ),
+                // titleStyle: const TextStyle(
+                //   color: AppColors.kRedColor,
+                //   fontWeight: FontWeight.w500,
+                // ),
+                onTap: () => _showDeleteAccountDialog(context),
               ),
             ],
           ),

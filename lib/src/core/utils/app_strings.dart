@@ -228,6 +228,10 @@ class AppStaticStrings {
   static const String no = 'No';
   static const String yes = 'Yes';
   static const String logoutPopup = 'Logout Popup';
+  static const String deleteAccount = 'Delete Account';
+  static const String deleteAccountConfirmTitle = 'Delete Account';
+  static const String deleteAccountConfirmMessage =
+      'Are you sure you want to permanently delete your account? This action cannot be undone.';
 
   // Form fields
   static const String aboutMe = 'About';

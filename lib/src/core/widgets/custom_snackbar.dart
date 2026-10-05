@@ -3,8 +3,8 @@ import 'package:get/get.dart'; // 1. Added GetX Import
 import '../theme/app_colors.dart';
 
 class CustomSnackbar {
-  // You can safely remove messengerKey from here and your MaterialApp if you aren't using it elsewhere
-
+  static final GlobalKey<ScaffoldMessengerState> messengerKey =
+      GlobalKey<ScaffoldMessengerState>();
   static void showSuccess(String message) {
     _show(message, AppColors.kGreenColor);
   }
@@ -14,17 +14,18 @@ class CustomSnackbar {
   }
 
   static void _show(String message, Color color) {
-    Get.rawSnackbar(
-      messageText: Text(
-        message,
-        style: const TextStyle(color: Colors.white, fontSize: 14),
+    messengerKey.currentState?.showSnackBar(
+      SnackBar(
+        content: Text(
+          message,
+          style: const TextStyle(color: Colors.white, fontSize: 14),
+        ),
+        backgroundColor: color,
+        behavior: SnackBarBehavior.floating,
+        margin: const EdgeInsets.all(12),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        duration: const Duration(seconds: 3),
       ),
-      backgroundColor: color,
-      snackPosition: SnackPosition.BOTTOM,
-      margin: const EdgeInsets.all(12),
-      borderRadius: 8,
-      duration: const Duration(seconds: 3),
-      forwardAnimationCurve: Curves.easeOutBack,
     );
   }
 }

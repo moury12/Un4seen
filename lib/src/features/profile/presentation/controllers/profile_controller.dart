@@ -7,8 +7,12 @@ import 'package:image_picker/image_picker.dart';
 import 'package:un4seen/src/core/utils/image_cropper_utils.dart';
 import 'package:un4seen/src/features/profile/data/models/user_profile_model.dart';
 import '../../../../core/routes/app_router.dart';
+import '../../../../core/routes/app_routes.dart';
 import '../../../../core/services/api_service.dart';
+import '../../../../core/services/local_storage_service.dart';
+import '../../../../core/services/socket_service.dart';
 import '../../../../core/widgets/custom_snackbar.dart';
+import '../../../auth/presentation/bindings/auth_binding.dart';
 import '../../data/models/profile_model.dart';
 
 class ProfileController extends GetxController {
@@ -108,6 +112,49 @@ class ProfileController extends GetxController {
       CustomSnackbar.showError('Something went wrong. Please try again.');
     } finally {
       isPasswordLoading.value = false;
+    }
+  }
+
+  // ── Delete Account ────────────────────────────────────
+  final RxBool isDeleteAccountLoading = false.obs;
+
+  Future<void> deleteAccount() async {
+    try {
+      isDeleteAccountLoading.value = true;
+      final response = await _api.delete('/user/my-account');
+      final dynamic data = response.data;
+      final bool isSuccess = data['success'] ?? false;
+      final String message = data['message'] ?? 'Account deleted';
+
+      if (isSuccess) {
+        CustomSnackbar.showSuccess(message);
+        // Perform the same logout flow to clear all state
+        await _logoutAfterDeletion();
+      } else {
+        CustomSnackbar.showError(message);
+      }
+    } catch (e) {
+      print('Error at deleteAccount inside ProfileController: $e');
+      CustomSnackbar.showError('Something went wrong. Please try again.');
+    } finally {
+      isDeleteAccountLoading.value = false;
+    }
+  }
+
+  Future<void> _logoutAfterDeletion() async {
+    try {
+      final storage = Get.find<LocalStorageService>();
+      await storage.clear();
+      Get.reset();
+      final newStorage = await LocalStorageService().init();
+      Get.put(newStorage, permanent: true);
+      Get.put(SocketService(), permanent: true);
+      AuthBinding().dependencies();
+      await Future.delayed(const Duration(milliseconds: 100));
+      AppRouter.router.go(AppRoutes.login);
+    } catch (e) {
+      print('Error during post-delete logout: $e');
+      AppRouter.router.go(AppRoutes.login);
     }
   }
 

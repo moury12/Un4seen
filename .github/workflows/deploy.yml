@@ -1,0 +1,135 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches:
+      - production    # এই branch এ push → auto production deploy
+  workflow_dispatch:  # GitHub UI থেকে manual trigger
+    inputs:
+      platform:
+        description: 'Platform to deploy'
+        required: true
+        default: 'both'
+        type: choice
+        options:
+          - both
+          - android
+          - ios
+      lane:
+        description: 'Fastlane lane'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+          - production
+          - internal
+          - beta
+          - promote_to_production
+
+jobs:
+  # ── Android ─────────────────────────────────────────────
+  deploy-android:
+    name: Android Deploy
+    runs-on: ubuntu-latest
+    if: |
+      github.event.inputs.platform == 'android' ||
+      github.event.inputs.platform == 'both' ||
+      github.event.inputs.platform == ''
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.32.0'
+          channel: 'stable'
+          cache: true
+
+      - name: Flutter pub get
+        run: flutter pub get
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          bundler-cache: true
+          working-directory: android
+
+      - name: Create google-key.json
+        run: echo '${{ secrets.GOOGLE_PLAY_KEY_JSON }}' > android/fastlane/google-key.json
+
+      - name: Decode Keystore
+        run: |
+          echo '${{ secrets.KEYSTORE_BASE64 }}' | base64 --decode > android/app/upload-keystore.jks
+
+      - name: Create key.properties
+        run: |
+          cat > android/key.properties << EOF
+          storePassword=${{ secrets.KEYSTORE_PASSWORD }}
+          keyPassword=${{ secrets.KEY_PASSWORD }}
+          keyAlias=${{ secrets.KEY_ALIAS }}
+          storeFile=upload-keystore.jks
+          EOF
+
+      - name: Run Fastlane
+        working-directory: android
+        run: |
+          LANE="${{ github.event.inputs.lane }}"
+          bundle exec fastlane ${LANE:-production}
+
+  # ── iOS ─────────────────────────────────────────────────
+  deploy-ios:
+    name: iOS Deploy
+    runs-on: macos-latest
+    if: |
+      github.event.inputs.platform == 'ios' ||
+      github.event.inputs.platform == 'both' ||
+      github.event.inputs.platform == ''
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.32.0'
+          channel: 'stable'
+          cache: true
+
+      - name: Flutter pub get
+        run: flutter pub get
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          bundler-cache: true
+          working-directory: ios
+
+      - name: Create AuthKey
+        run: |
+          echo '${{ secrets.APP_STORE_API_KEY_CONTENT }}' > ios/fastlane/AuthKey_WNSMV275TJ.p8
+
+      - name: Setup SSH for Match
+        run: |
+          mkdir -p ~/.ssh
+          echo '${{ secrets.MATCH_DEPLOY_KEY }}' > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+      - name: Run Fastlane
+        working-directory: ios
+        env:
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+        run: |
+          LANE="${{ github.event.inputs.lane }}"
+          bundle exec fastlane ${LANE:-production}

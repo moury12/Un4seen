@@ -71,7 +71,7 @@ class MyApp extends StatelessWidget {
 
     return GetMaterialApp.router(
       title: 'UN4SEEN',
-      // scaffoldMessengerKey: CustomSnackbar.messengerKey,
+      scaffoldMessengerKey: CustomSnackbar.messengerKey,
       debugShowCheckedModeBanner: false,
       theme: AppTheme.light,
       routeInformationProvider: AppRouter.router.routeInformationProvider,

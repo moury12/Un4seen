@@ -424,7 +424,7 @@ class _AddNewBikePageState extends State<AddNewBikePage> {
                                         color: AppColors.kPrimaryColor,
                                       ),
                                       label: const CustomText(
-                                        "+ Add another upgrade",
+                                        " Add another upgrade",
                                         color: AppColors.kPrimaryColor,
                                         fontSize: 12,
                                       ),
@@ -439,7 +439,7 @@ class _AddNewBikePageState extends State<AddNewBikePage> {
 
                       // Outlined Add Build Note Button
                       CustomButton(
-                        text: "+ Add another category",
+                        text: "Add another category",
                         onPressed: () {
                           controller.addNewBuildNote();
                         },

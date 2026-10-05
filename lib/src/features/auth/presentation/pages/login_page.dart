@@ -15,12 +15,17 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
+  // final emailCtrl = TextEditingController(
+  //   text: kDebugMode ? 'sitekan463@cwsgear.com' : '',
+  // );
   final emailCtrl = TextEditingController(
-    text: kDebugMode ? 'fefixe3255@cadebek.com' : '',
+    text: kDebugMode ? "yixohit549@deertees.com" : '',
   );
-  final passwordCtrl = TextEditingController(
-    text: kDebugMode ? '8dydq5hm@MX' : '',
-  );
+  // final passwordCtrl = TextEditingController(
+  //   text: kDebugMode ? 'ykmg29ev@MX' : '',
+  // );
+  final passwordCtrl = TextEditingController
+  (text: kDebugMode ? 'db5rtt9i@MX' : '');
 
   @override
   void dispose() {
