@@ -21,15 +21,23 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 [bundle exec] fastlane android internal
 ```
 
-Internal Testing-এ আপলোড করার লেন
+Internal Testing
 
-### android open
+### android production
 
 ```sh
-[bundle exec] fastlane android open
+[bundle exec] fastlane android production
 ```
 
-Open Testing (Alpha)-এ আপলোড করার লেন
+Production (Live)
+
+### android promote_to_production
+
+```sh
+[bundle exec] fastlane android promote_to_production
+```
+
+Internal → Production promote
 
 ----
 
