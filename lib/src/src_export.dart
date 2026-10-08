@@ -15,7 +15,6 @@ export 'features/points/points_export.dart';
 export 'features/stories/stories_export.dart';
 export 'features/profile/profile_export.dart';
 export 'features/orders/orders_export.dart';
-export 'features/subscription/subscription_export.dart';
 export 'features/bike_profiles/bike_profiles_export.dart';
 export 'features/navigation/navigation_export.dart';
 

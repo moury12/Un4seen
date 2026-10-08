@@ -19,7 +19,6 @@ import 'src/features/points/presentation/bindings/points_binding.dart';
 import 'src/features/stories/presentation/bindings/stories_binding.dart';
 import 'src/features/profile/presentation/bindings/profile_binding.dart';
 import 'src/features/orders/presentation/bindings/orders_binding.dart';
-import 'src/features/subscription/presentation/bindings/subscription_binding.dart';
 import 'src/features/bike_profiles/presentation/bindings/bike_profiles_binding.dart';
 
 @pragma('vm:entry-point')
@@ -66,7 +65,6 @@ class MyApp extends StatelessWidget {
     StoriesBinding().dependencies();
     ProfileBinding().dependencies();
     OrdersBinding().dependencies();
-    SubscriptionBinding().dependencies();
     BikeProfilesBinding().dependencies();
 
     return GetMaterialApp.router(

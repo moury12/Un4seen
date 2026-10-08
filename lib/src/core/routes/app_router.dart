@@ -19,7 +19,6 @@ import '../../features/profile/presentation/pages/setup_profile_page.dart';
 import '../../features/profile/presentation/pages/setup_ride_page.dart';
 import '../../features/navigation/presentation/pages/navigation_page.dart';
 import '../../features/orders/presentation/pages/orders_page.dart';
-import '../../features/subscription/presentation/pages/subscription_page.dart';
 import '../../features/stories/presentation/pages/saved_stories_page.dart';
 import '../../features/bike_profiles/presentation/pages/saved_bike_profiles_page.dart';
 import '../../features/profile/presentation/pages/settings_page.dart';
@@ -127,11 +126,7 @@ class AppRouter {
         name: 'orders',
         builder: (context, state) => const OrdersPage(),
       ),
-      GoRoute(
-        path: AppRoutes.subscription,
-        name: 'subscription',
-        builder: (context, state) => const SubscriptionPage(),
-      ),
+     
       GoRoute(
         path: AppRoutes.savedStories,
         name: 'savedStories',

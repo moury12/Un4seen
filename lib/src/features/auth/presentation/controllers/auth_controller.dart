@@ -127,7 +127,6 @@ class AuthController extends getx.GetxController {
     StoriesBinding().dependencies();
     ProfileBinding().dependencies();
     OrdersBinding().dependencies();
-    SubscriptionBinding().dependencies();
     BikeProfilesBinding().dependencies();
   }
 
